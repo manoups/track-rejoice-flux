@@ -1,0 +1,5 @@
+{
+  "@class": "AbortOrder",
+  "orderId": "order-1",
+  "reason": "test"
+}

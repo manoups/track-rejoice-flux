@@ -1,0 +1,8 @@
+{
+  "@class" : "CreateClassifiedsAd",
+  "classifiedsAdId": "classifieds-ad-1",
+  "details": {
+    "@class" : "Keys",
+    "description": "Leather keychain"
+  }
+}

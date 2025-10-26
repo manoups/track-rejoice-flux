@@ -1,0 +1,10 @@
+{
+  "@class" : "CreateClassifiedsAd",
+  "classifiedsAdId": "classifieds-ad-1",
+  "details": {
+    "@class" : "Pet",
+    "name": "Fritz",
+    "gender": "MALE",
+    "breed": "Labrador Retriever"
+  }
+}

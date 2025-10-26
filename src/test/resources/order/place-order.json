@@ -1,0 +1,7 @@
+{
+  "@class": "PlaceOrder",
+  "orderId": "order-1",
+  "details": {
+    "classifiedsAdId": "classifieds-ad-1"
+  }
+}

@@ -1,0 +1,6 @@
+{
+  "@class": "Pet",
+  "name": "Fritz",
+  "gender": "MALE",
+  "breed": "Labrador Retriever"
+}
