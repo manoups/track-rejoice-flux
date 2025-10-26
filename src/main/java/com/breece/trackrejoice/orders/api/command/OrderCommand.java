@@ -1,13 +1,11 @@
-package com.breece.trackrejoice.orders.api;
+package com.breece.trackrejoice.orders.api.command;
 
 import com.breece.trackrejoice.orders.api.model.OrderId;
 import io.fluxzero.sdk.Fluxzero;
-import io.fluxzero.sdk.tracking.TrackSelf;
 import io.fluxzero.sdk.tracking.handling.HandleCommand;
 import jakarta.validation.constraints.NotNull;
 
-@TrackSelf
-public interface OrderUpdate {
+public interface OrderCommand {
     @NotNull
     OrderId orderId();
 

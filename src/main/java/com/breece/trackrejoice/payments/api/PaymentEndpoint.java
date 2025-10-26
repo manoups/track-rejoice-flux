@@ -1,6 +1,7 @@
 package com.breece.trackrejoice.payments.api;
 
 import com.breece.trackrejoice.classifiedsad.model.ClassifiedsAdId;
+import com.breece.trackrejoice.payments.api.model.PaymentId;
 import io.fluxzero.sdk.Fluxzero;
 import io.fluxzero.sdk.web.HandlePost;
 import io.fluxzero.sdk.web.Path;
@@ -10,8 +11,8 @@ import org.springframework.stereotype.Component;
 @Component
 @Path("/payments")
 public class PaymentEndpoint {
-    @HandlePost(value = {"/accepted/{classifiedsAdId}/{pspReference}","/accepted/{classifiedsAdId}/{pspReference}/"})
-    void paymentAccepted(@PathParam ClassifiedsAdId classifiedsAdId, @PathParam String pspReference) {
-        Fluxzero.publishEvent(new PaymentConfirmed(classifiedsAdId, pspReference));
+    @HandlePost(value = {"/accepted/{paymentId}/{pspReference}","/accepted/{paymentId}/{pspReference}/"})
+    void paymentAccepted(@PathParam PaymentId paymentId, @PathParam String pspReference) {
+        Fluxzero.publishEvent(new PaymentAccepted(paymentId, pspReference));
     }
 }

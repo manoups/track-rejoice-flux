@@ -4,6 +4,6 @@ import io.fluxzero.sdk.modeling.Id;
 
 public class OrderId  extends Id<Order> {
     public OrderId(String functionalId) {
-        super(functionalId);
+        super(functionalId, "order-");
     }
 }

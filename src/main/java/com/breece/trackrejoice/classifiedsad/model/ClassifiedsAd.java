@@ -6,5 +6,5 @@ import io.fluxzero.sdk.modeling.EntityId;
 import lombok.With;
 
 @Aggregate(searchable = true)
-public record ClassifiedsAd(@EntityId ClassifiedsAdId classifiedsAdId, @With ExtraDetails details, UserId ownerId) {
+public record ClassifiedsAd(@EntityId ClassifiedsAdId classifiedsAdId, @With ExtraDetails details, UserId ownerId, @With boolean online) {
 }

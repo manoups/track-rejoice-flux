@@ -1,8 +1,6 @@
-package com.breece.trackrejoice.orders.api;
+package com.breece.trackrejoice.orders.api.command;
 
-import com.breece.trackrejoice.classifiedsad.model.ClassifiedsAd;
-import com.breece.trackrejoice.classifiedsad.model.ClassifiedsAdId;
-import com.breece.trackrejoice.classifiedsad.model.ExtraDetails;
+import com.breece.trackrejoice.orders.api.OrderErrors;
 import com.breece.trackrejoice.orders.api.model.Order;
 import com.breece.trackrejoice.orders.api.model.OrderDetails;
 import com.breece.trackrejoice.orders.api.model.OrderId;
@@ -13,7 +11,7 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 
 @NoUserRequired
-public record PlaceOrder(OrderId orderId, @NotNull @Valid OrderDetails details) implements OrderUpdate {
+public record PlaceOrder(OrderId orderId, @NotNull @Valid OrderDetails details) implements OrderCommand {
 
     @AssertLegal
     void assertNew(Order order) { throw OrderErrors.alreadyExists;}

@@ -16,6 +16,6 @@ public record CreateClassifiedsAd(@NotNull ClassifiedsAdId classifiedsAdId, @Val
 
     @Apply
     ClassifiedsAd create(Sender sender) {
-        return new ClassifiedsAd(classifiedsAdId, details, sender.userId());
+        return new ClassifiedsAd(classifiedsAdId, details, sender.userId(), false);
     }
 }

@@ -1,6 +1,6 @@
 {
   "@class" : "UpdateClassifiedsAd",
-  "classifiedsAdId": "classifieds-ad-1",
+  "classifiedsAdId": "1",
   "details": {
     "@class" : "Pet",
     "name": "Fritz",

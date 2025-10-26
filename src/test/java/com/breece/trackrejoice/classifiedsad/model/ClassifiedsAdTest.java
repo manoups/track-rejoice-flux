@@ -4,9 +4,8 @@ import com.breece.trackrejoice.classifiedsad.ClassifiedsAdEndpoint;
 import com.breece.trackrejoice.classifiedsad.ClassifiedsAdScheduler;
 import com.breece.trackrejoice.classifiedsad.ExecutePayment;
 import com.breece.trackrejoice.classifiedsad.command.CreateClassifiedsAd;
-import com.breece.trackrejoice.classifiedsad.command.DeleteClassifiedsAd;
+import com.breece.trackrejoice.classifiedsad.command.TakeClassifiedsAdOffline;
 import com.breece.trackrejoice.classifiedsad.query.GetClassifiedAds;
-import com.breece.trackrejoice.orders.api.PaymentProcess;
 import io.fluxzero.sdk.test.TestFixture;
 import org.junit.jupiter.api.*;
 
@@ -102,11 +101,11 @@ class ClassifiedsAdTest {
 
         @Test
         void createClassifiedsAdDetails() {
-            testFixture
-                    .whenEvent("/classifiedsad/payment-confirmed.json")
+            testFixture.givenCommands("/order/place-order.json")
+                    .whenEvent("/classifiedsad/payment-accepted.json")
                     .andThen()
                     .whenTimeElapses(Duration.ofDays(90))
-                    .expectEvents(DeleteClassifiedsAd.class);
+                    .expectEvents(TakeClassifiedsAdOffline.class);
         }
     }
 
@@ -114,7 +113,7 @@ class ClassifiedsAdTest {
     class ClassifiedsAdStateTests {
         @BeforeEach
         void setUp() {
-            testFixture.registerHandlers(PaymentProcess.class).givenCommands("/classifiedsad/create-classifieds-ad.json");
+            testFixture.registerHandlers().givenCommands("/classifiedsad/create-classifieds-ad.json");
         }
 
         @Disabled

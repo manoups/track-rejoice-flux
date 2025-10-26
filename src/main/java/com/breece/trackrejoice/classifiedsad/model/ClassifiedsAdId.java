@@ -8,6 +8,6 @@ public class ClassifiedsAdId extends Id<ClassifiedsAd> {
         this(Fluxzero.generateId());
     }
     public ClassifiedsAdId(String id) {
-        super(id);
+        super(id, "ad-");
     }
 }

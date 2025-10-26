@@ -5,8 +5,6 @@ import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import lombok.Getter;
 
-import java.time.Duration;
-
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "@class")
 @JsonSubTypes({
         @JsonSubTypes.Type(value = Pet.class, name = "Pet"),
@@ -14,6 +12,5 @@ import java.time.Duration;
 })
 @Getter
 public abstract class ExtraDetails {
-    Duration deadline = Duration.ofDays(90);
     PaymentId paymentId;
 }
