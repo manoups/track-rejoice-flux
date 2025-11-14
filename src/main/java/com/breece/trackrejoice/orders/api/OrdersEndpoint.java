@@ -18,5 +18,5 @@ public class OrdersEndpoint {
     void placeOrder(OrderDetails details) {
         Fluxzero.sendCommandAndWait(new PlaceOrder(Fluxzero.generateId(OrderId.class), details.withUpdatedAt(Fluxzero.currentTime()).withDuration(Duration.ofDays(90))));
     }
-//TODO: Add todo
+
 }
