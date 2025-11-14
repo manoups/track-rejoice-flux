@@ -1,10 +1,6 @@
 package com.breece.trackrejoice.common;
 
-import com.breece.trackrejoice.authentication.Sender;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import io.fluxzero.sdk.Fluxzero;
-import io.fluxzero.sdk.tracking.handling.HandleCommand;
-import io.fluxzero.sdk.tracking.handling.HandleQuery;
 import io.fluxzero.sdk.tracking.handling.IllegalCommandException;
 import io.fluxzero.sdk.tracking.handling.authentication.UnauthorizedException;
 import io.fluxzero.sdk.tracking.handling.validation.ValidationException;
@@ -17,16 +13,6 @@ import java.util.Set;
 import static java.lang.String.format;
 
 public abstract class SendWebRequest {
-    protected abstract WebRequest.Builder buildRequest(WebRequest.Builder requestBuilder, Sender sender);
-
-    @HandleQuery
-    @HandleCommand
-    public Object handle(Sender sender) {
-        WebRequest request = buildRequest(WebRequest.builder(), sender).build()
-                .addMetadata("$thread", Thread.currentThread().getName());
-        WebResponse webResponse = Fluxzero.get().webRequestGateway().sendAndWait(request, requestSettings());
-        return handleResponse(webResponse, request);
-    }
 
     @JsonIgnore
     protected String getProxyConsumer() {

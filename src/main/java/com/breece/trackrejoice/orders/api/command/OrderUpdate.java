@@ -10,7 +10,7 @@ import java.util.Objects;
 
 @TrackSelf
 public interface OrderUpdate extends OrderCommand{
-    @AssertLegal(priority = Integer.MAX_VALUE)
+    @AssertLegal(priority = AssertLegal.HIGHEST_PRIORITY)
     default void assertExists(@Nullable Order classifiedsAd) {
         if (Objects.isNull(classifiedsAd)) {
             throw OrderErrors.notFound;

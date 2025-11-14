@@ -1,7 +1,7 @@
 package com.breece.trackrejoice.payments.api;
 
 import com.breece.trackrejoice.authentication.Sender;
-import com.breece.trackrejoice.common.SendWebRequest;
+import com.breece.trackrejoice.common.SendWebRequestWithoutMetadata;
 import com.breece.trackrejoice.payments.api.model.PaymentId;
 import com.fasterxml.jackson.databind.JsonNode;
 import io.fluxzero.common.serialization.JsonUtils;
@@ -22,7 +22,7 @@ import static io.fluxzero.sdk.configuration.ApplicationProperties.requirePropert
 @Value
 @TrackSelf
 @Consumer(name = "validate-payment-consumer", errorHandler = ForeverRetryingErrorHandler.class)
-public class ValidatePayment extends SendWebRequest implements Request<Boolean> {
+public class ValidatePayment extends SendWebRequestWithoutMetadata implements Request<Boolean> {
     String proxyConsumer = "proxy-payments";
 
     @NotNull

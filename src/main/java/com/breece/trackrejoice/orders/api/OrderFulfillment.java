@@ -1,12 +1,14 @@
 package com.breece.trackrejoice.orders.api;
 
 import com.breece.trackrejoice.classifiedsad.PublishClassifiedsAd;
+import com.breece.trackrejoice.common.PaypalAuthenticate;
 import com.breece.trackrejoice.orders.api.command.AbortOrder;
 import com.breece.trackrejoice.orders.api.command.PlaceOrder;
+import com.breece.trackrejoice.orders.api.command.ValidateOrder;
 import com.breece.trackrejoice.orders.api.model.Order;
 import com.breece.trackrejoice.payments.api.PaymentAccepted;
 import com.breece.trackrejoice.payments.api.PaymentRejected;
-import com.breece.trackrejoice.payments.api.ValidatePayment;
+import io.fluxzero.common.api.Metadata;
 import io.fluxzero.sdk.Fluxzero;
 import io.fluxzero.sdk.tracking.handling.HandleEvent;
 import org.springframework.stereotype.Component;
@@ -16,7 +18,8 @@ public class OrderFulfillment {
 
     @HandleEvent
     void handle(PlaceOrder event) {
-        Fluxzero.sendAndForgetCommand(new ValidatePayment(event.details().paymentId(), event.orderId().toString()));
+        String token = Fluxzero.queryAndWait(new PaypalAuthenticate());
+        Fluxzero.sendAndForgetCommand(new ValidateOrder(event.orderId(), event.orderId().toString()), Metadata.of("token", token));
     }
 
     @HandleEvent

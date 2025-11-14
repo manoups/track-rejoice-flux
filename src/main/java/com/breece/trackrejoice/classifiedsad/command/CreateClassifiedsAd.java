@@ -7,9 +7,11 @@ import com.breece.trackrejoice.classifiedsad.model.ClassifiedsAdId;
 import com.breece.trackrejoice.classifiedsad.model.ExtraDetails;
 import io.fluxzero.sdk.modeling.AssertLegal;
 import io.fluxzero.sdk.persisting.eventsourcing.Apply;
+import io.fluxzero.sdk.tracking.handling.authentication.RequiresUser;
 import jakarta.validation.Valid;
 import org.wildfly.common.annotation.NotNull;
 
+@RequiresUser
 public record CreateClassifiedsAd(@NotNull ClassifiedsAdId classifiedsAdId, @Valid @NotNull ExtraDetails details) implements ClassifiedsAdCommand {
     @AssertLegal
     void assertNew(ClassifiedsAd classifiedsAd) { throw ClassifiedAdErrors.alreadyExists; }
