@@ -6,6 +6,7 @@ import com.breece.trackrejoice.classifiedsad.ExecutePayment;
 import com.breece.trackrejoice.classifiedsad.command.CreateClassifiedsAd;
 import com.breece.trackrejoice.classifiedsad.command.TakeClassifiedsAdOffline;
 import com.breece.trackrejoice.classifiedsad.query.GetClassifiedAds;
+import com.breece.trackrejoice.classifiedsad.query.GetClassifiedsAdsStats;
 import io.fluxzero.sdk.test.TestFixture;
 import org.junit.jupiter.api.*;
 
@@ -36,8 +37,6 @@ class ClassifiedsAdTest {
                 .expectEvents("update-classifieds-ad.json");
     }
 
-
-
     @Test
     void deleteClassifiedsAd() {
         testFixture.givenCommands("create-classifieds-ad.json")
@@ -52,6 +51,34 @@ class ClassifiedsAdTest {
             testFixture.givenCommands("create-classifieds-ad.json")
                     .whenQuery(new GetClassifiedAds())
                     .expectResult(hasSize(1));
+        }
+
+        @Test
+        void searchPaginatedClassifiedsAd() {
+            final int SIZE = 25;
+            CreateClassifiedsAd[] ads = new CreateClassifiedsAd[SIZE];
+            for(int i=0; i< 15; ++i)
+                ads[i] = new CreateClassifiedsAd(new ClassifiedsAdId(), new Pet("Maya", "Cocker Spaniel", GenderEnum.FEMALE));
+            for(int i=15; i< SIZE; ++i)
+                ads[i] = new CreateClassifiedsAd(new ClassifiedsAdId(), new Keys("Square Key"));
+
+            testFixture.givenCommands(ads)
+                    .whenQuery(new GetClassifiedAds())
+                    .expectResult(hasSize(10))
+                    .andThen()
+                    .whenQuery(new GetClassifiedAds(1, 10))
+                    .expectResult(hasSize(10))
+                    .andThen()
+                    .whenQuery(new GetClassifiedAds(2, 10))
+                    .expectResult(hasSize(5))
+                    .andThen()
+                    .whenQuery(new GetClassifiedAds(0, 30))
+                    .expectResult(hasSize(25))
+                    .andThen()
+                    .whenQuery(new GetClassifiedsAdsStats())
+                    .expectResult(facetStats -> facetStats.size() == 2 &&
+                            facetStats.stream().filter(it -> it.getValue().equals("pet")).findFirst().orElseThrow(() -> new AssertionError("No pet facet found")).getCount() == 15 &&
+                            facetStats.stream().filter(it -> it.getValue().equals("keys")).findFirst().orElseThrow(() -> new AssertionError("No keys facet found")).getCount() == 10);
         }
     }
 

@@ -21,4 +21,11 @@ public class Pet extends MobileTarget {
     String description;
     String location;
     String image;
+
+    public Pet(String name, String breed, @NonNull GenderEnum gender) {
+        this.subtype = "pet";
+        this.name = name;
+        this.breed = breed;
+        this.gender = gender;
+    }
 }
