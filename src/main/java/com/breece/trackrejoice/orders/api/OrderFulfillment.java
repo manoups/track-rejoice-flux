@@ -19,8 +19,13 @@ public class OrderFulfillment {
     @HandleEvent
     void handle(PlaceOrder event) {
         String token = Fluxzero.queryAndWait(new PaypalAuthenticate());
+//        Supplier<String> memoizedSupplier = Suppliers.memoizeWithExpiration(this::authenticate, 30, TimeUnit.SECONDS);
         Fluxzero.sendAndForgetCommand(new ValidateOrder(event.orderId(), event.orderId().toString()), Metadata.of("token", token));
     }
+
+    /*private String authenticate() {
+        return Fluxzero.queryAndWait(new PaypalAuthenticate());
+    }*/
 
     @HandleEvent
     void handle(PaymentRejected event) {

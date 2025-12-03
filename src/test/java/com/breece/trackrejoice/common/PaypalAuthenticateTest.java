@@ -9,17 +9,25 @@ import com.breece.trackrejoice.orders.api.model.OrderDetails;
 import com.breece.trackrejoice.orders.api.model.OrderId;
 import com.breece.trackrejoice.payments.api.PayPalEndpoint;
 import com.breece.trackrejoice.payments.api.model.PaymentId;
+import com.google.common.base.Supplier;
+import com.google.common.base.Suppliers;
 import io.fluxzero.common.FileUtils;
+import io.fluxzero.sdk.Fluxzero;
 import io.fluxzero.sdk.test.TestFixture;
 import io.fluxzero.sdk.tracking.handling.authentication.UnauthorizedException;
 import io.fluxzero.sdk.web.HandlePost;
 import io.fluxzero.sdk.web.WebResponse;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import java.time.Duration;
 import java.time.Instant;
+import java.util.concurrent.TimeUnit;
+
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.*;
 
 class PaypalAuthenticateTest {
     @Nested
@@ -27,15 +35,18 @@ class PaypalAuthenticateTest {
         static class EndpointMock {
             @HandlePost("https://api-m.sandbox.paypal.com/v1/oauth2/token")
             WebResponse authenticationToken() {
+                /*try {
+                    TimeUnit.SECONDS.sleep(2);
+                } catch (InterruptedException e) {}*/
                 return WebResponse.builder()
-                        .payload(FileUtils.loadFile("/common/auth-response.json"))
+                        .payload(FileUtils.loadFile("/com/breece/trackrejoice/common/auth-response.json"))
                         .build();
             }
 
             @HandlePost("https://api-m.sandbox.paypal.com/v2/checkout/orders")
             WebResponse placeOrder() {
                 return WebResponse.builder()
-                        .payload(FileUtils.loadFile("/common/checkout-order.json"))
+                        .payload(FileUtils.loadFile("/com/breece/trackrejoice/common/checkout-order.json"))
                         .build();
             }
         }
@@ -50,11 +61,41 @@ class PaypalAuthenticateTest {
                     .expectResult("A21AALDt0z1oWeRUxAALcnBjR6qjIq6Vs1mWnMKzrdvs59Sj6jMu8f_H09IxiV9XQSZZ9RP_cOQdBVHWcWQjo0ZYKwqqBLBAw"::equals);
         }
 
+        @Disabled
+        @Test
+        public void givenMemoizedSupplier_whenGet_thenSubsequentGetsAreFast() {
+            Supplier<String> memoizedSupplier = Suppliers.memoizeWithExpiration(this::authenticate, 30, TimeUnit.SECONDS);
+            String expectedValue = "A21AALDt0z1oWeRUxAALcnBjR6qjIq6Vs1mWnMKzrdvs59Sj6jMu8f_H09IxiV9XQSZZ9RP_cOQdBVHWcWQjo0ZYKwqqBLBAw";
+            assertSupplierGetExecutionResultAndDuration(
+                    memoizedSupplier, expectedValue, 2000D);
+            assertSupplierGetExecutionResultAndDuration(
+                    memoizedSupplier, expectedValue, 0D);
+            assertSupplierGetExecutionResultAndDuration(
+                    memoizedSupplier, expectedValue, 0D);
+        }
+
+        private <T> void assertSupplierGetExecutionResultAndDuration(
+                Supplier<T> supplier, T expectedValue, double expectedDurationInMs) {
+            Instant start = Instant.now();
+            T value = supplier.get();
+            Long durationInMs = Duration.between(start, Instant.now()).toMillis();
+            double marginOfErrorInMs = 100D;
+
+            assertThat(value, is(equalTo(expectedValue)));
+            assertThat(
+                    durationInMs.doubleValue(),
+                    is(closeTo(expectedDurationInMs, marginOfErrorInMs)));
+        }
+
+        String authenticate() {
+            return Fluxzero.queryAndWait(new PaypalAuthenticate());
+        }
+
         @Test
         void sendOrder() {
             PlaceOrder order1 = new PlaceOrder(new OrderId("1"), new OrderDetails(
                     new ClassifiedsAdId("1"), new PaymentId("1"), Instant.now(), Duration.ofDays(90)));
-            testFixture.whenCommand(order1)
+            testFixture.givenCommands("/com/breece/trackrejoice/classifiedsad/model/create-classifieds-ad.json").whenCommand(order1)
                     .expectEvents(PlaceOrder.class)
                     .expectCommands(ValidateOrder.class, UpdateOrder.class);
         }
@@ -70,7 +111,7 @@ class PaypalAuthenticateTest {
             @Test
             void sendOrderEndpoint() {
                 testFixture.
-                        givenCommands("/classifiedsad/create-classifieds-ad.json")
+                        givenCommands("/com/breece/trackrejoice/classifiedsad/model/create-classifieds-ad.json")
                         .whenPost("/payments/paypal/orders/ad-1")
                         .expectEvents(PlaceOrder.class)
                         .expectCommands(ValidateOrder.class, UpdateOrder.class);
@@ -85,7 +126,7 @@ class PaypalAuthenticateTest {
             WebResponse authenticationToken() {
                 return WebResponse.builder()
                         .status(401)
-                        .payload(FileUtils.loadFile("/common/auth-response-error.json"))
+                        .payload(FileUtils.loadFile("/com/breece/trackrejoice/common/auth-response-error.json"))
                         .build();
             }
         }

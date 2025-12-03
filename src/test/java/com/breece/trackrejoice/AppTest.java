@@ -17,13 +17,13 @@ class AppTest {
 
 	@Test
 	void createUser() {
-		testFixture.whenCommand("/user/create-user.json")
-				.expectEvents("/user/create-user.json");
+		testFixture.whenCommand("/com/breece/trackrejoice/user/create-user.json")
+				.expectEvents("/com/breece/trackrejoice/user/create-user.json");
 	}
 
 	@Test
 	void getUsers() {
-		testFixture.givenCommands("/user/create-user.json")
+		testFixture.givenCommands("/com/breece/trackrejoice/user/create-user.json")
 				.whenQuery(new GetUsers())
 				.expectResult(r -> r.size() == 1);
 	}

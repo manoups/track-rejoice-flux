@@ -19,37 +19,37 @@ class ClassifiedsAdTest {
 
     @Test
     void createClassifiedsAd() {
-        testFixture.whenCommand("/classifiedsad/create-classifieds-ad.json")
-                .expectEvents("/classifiedsad/create-classifieds-ad.json");
+        testFixture.whenCommand("create-classifieds-ad.json")
+                .expectEvents("create-classifieds-ad.json");
     }
 
     @Test
     void createClassifiedsAdKeys() {
-        testFixture.whenCommand("/classifiedsad/create-classifieds-ad-keys.json")
-                .expectEvents("/classifiedsad/create-classifieds-ad-keys.json");
+        testFixture.whenCommand("create-classifieds-ad-keys.json")
+                .expectEvents("create-classifieds-ad-keys.json");
     }
 
     @Test
     void updateClassifiedsAd() {
-        testFixture.givenCommands("/classifiedsad/create-classifieds-ad.json")
-                .whenCommand("/classifiedsad/update-classifieds-ad.json")
-                .expectEvents("/classifiedsad/update-classifieds-ad.json");
+        testFixture.givenCommands("create-classifieds-ad.json")
+                .whenCommand("update-classifieds-ad.json")
+                .expectEvents("update-classifieds-ad.json");
     }
 
 
 
     @Test
     void deleteClassifiedsAd() {
-        testFixture.givenCommands("/classifiedsad/create-classifieds-ad.json")
-                .whenCommand("/classifiedsad/delete-classifieds-ad.json")
-                .expectEvents("/classifiedsad/delete-classifieds-ad.json");
+        testFixture.givenCommands("create-classifieds-ad.json")
+                .whenCommand("delete-classifieds-ad.json")
+                .expectEvents("delete-classifieds-ad.json");
     }
 
     @Nested
     class ClassifiedsAdQueryTests {
         @Test
         void searchForClassifiedsAd() {
-            testFixture.givenCommands("/classifiedsad/create-classifieds-ad.json")
+            testFixture.givenCommands("create-classifieds-ad.json")
                     .whenQuery(new GetClassifiedAds())
                     .expectResult(hasSize(1));
         }
@@ -59,12 +59,12 @@ class ClassifiedsAdTest {
     class ClassifiedsAdIntegrationTests {
         @Test
         void deleteClassifiedsAd() {
-            testFixture.givenCommands("/classifiedsad/create-classifieds-ad.json")
+            testFixture.givenCommands("create-classifieds-ad.json")
                 .whenQuery(new GetClassifiedAds())
                 .expectResult(hasSize(1))
                 .andThen()
-                    .whenCommand("/classifiedsad/delete-classifieds-ad.json")
-                    .expectEvents("/classifiedsad/delete-classifieds-ad.json")
+                    .whenCommand("delete-classifieds-ad.json")
+                    .expectEvents("delete-classifieds-ad.json")
                 .andThen()
                 .whenQuery(new GetClassifiedAds())
                 .expectResult(List::isEmpty);
@@ -80,14 +80,14 @@ class ClassifiedsAdTest {
 
         @Test
         void createClassifiedsAd() {
-            testFixture.whenPost("/classifieds-ads", "/classifiedsad/classifieds-ad-details.json")
+            testFixture.whenPost("classifieds-ads", "/com/breece/trackrejoice/classifiedsad/model/classifieds-ad-details.json")
                     .expectResult(ClassifiedsAdId.class).expectEvents(CreateClassifiedsAd.class);
         }
 
         @Test
         void getClassifiedsAds() {
-            testFixture.givenPost("/classifieds-ads", "/classifiedsad/classifieds-ad-details.json")
-                    .whenGet("/classifieds-ads")
+            testFixture.givenPost("classifieds-ads", "/com/breece/trackrejoice/classifiedsad/model/classifieds-ad-details.json")
+                    .whenGet("classifieds-ads")
                     .expectResult(hasSize(1));
         }
     }
@@ -96,13 +96,13 @@ class ClassifiedsAdTest {
     class ClassifiedsAdSchedulerTests {
         @BeforeEach
         void setUp() {
-            testFixture.registerHandlers(new ClassifiedsAdScheduler()).givenCommands("/classifiedsad/create-classifieds-ad.json");
+            testFixture.registerHandlers(new ClassifiedsAdScheduler()).givenCommands("create-classifieds-ad.json");
         }
 
         @Test
         void createClassifiedsAdDetails() {
-            testFixture.givenCommands("/order/place-order.json")
-                    .whenEvent("/classifiedsad/payment-accepted.json")
+            testFixture.givenCommands("/com/breece/trackrejoice/orders/api/model/place-order.json")
+                    .whenEvent("payment-accepted.json")
                     .andThen()
                     .whenTimeElapses(Duration.ofDays(90))
                     .expectEvents(TakeClassifiedsAdOffline.class);
@@ -113,14 +113,14 @@ class ClassifiedsAdTest {
     class ClassifiedsAdStateTests {
         @BeforeEach
         void setUp() {
-            testFixture.registerHandlers().givenCommands("/classifiedsad/create-classifieds-ad.json");
+            testFixture.registerHandlers().givenCommands("create-classifieds-ad.json");
         }
 
         @Disabled
         @Timeout(15)
         @Test
         void createClassifiedsAdDetails() {
-            testFixture.whenEvent("/classifiedsad/payment-initiated.json")
+            testFixture.whenEvent("payment-initiated.json")
                     .expectEvents(ExecutePayment.class);
         }
     }

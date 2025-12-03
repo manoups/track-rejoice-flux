@@ -15,7 +15,7 @@ import java.time.Duration;
 import java.time.Instant;
 
 class PlaceOrderTest {
-    TestFixture testFixture = TestFixture.create().givenCommands("/classifiedsad/create-classifieds-ad.json");
+    TestFixture testFixture = TestFixture.create().givenCommands("/com/breece/trackrejoice/classifiedsad/model/create-classifieds-ad.json");
 
     PlaceOrder order1 = new PlaceOrder(new OrderId("1"), new OrderDetails(
             new ClassifiedsAdId("1"), new PaymentId("1"), Instant.now(), Duration.ofDays(90)));
