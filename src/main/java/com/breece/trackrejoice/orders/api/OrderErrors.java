@@ -10,5 +10,6 @@ public interface OrderErrors {
             notFound = new IllegalCommandException("Order not found"),
             tooOld = new IllegalCommandException("Order cancellation expired"),
             productNotFound = new IllegalCommandException("Product not found"),
+            serviceNotFound = new IllegalCommandException("Service not found"),
             jsonProcessingException = new IllegalCommandException("JsonProcessingException");
 }

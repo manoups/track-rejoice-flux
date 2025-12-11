@@ -53,7 +53,7 @@ class PaypalAuthenticateTest {
         }
 
 
-        TestFixture testFixture = TestFixture.create(new OrderFulfillment(), new EndpointMock()).withProperty("pgp", "paypal");
+        TestFixture testFixture = TestFixture.create(new OrderFulfillment(), new EndpointMock()).withProperty("pgp", "paypal").givenCommands("/com/breece/trackrejoice/service/api/model/create-service.json");
 
         @Test
         void paypalAuthenticate() {

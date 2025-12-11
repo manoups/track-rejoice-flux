@@ -6,6 +6,7 @@ import com.breece.trackrejoice.orders.api.OrderErrors;
 import com.breece.trackrejoice.orders.api.model.Order;
 import com.breece.trackrejoice.orders.api.model.OrderDetails;
 import com.breece.trackrejoice.orders.api.model.OrderId;
+import com.breece.trackrejoice.service.api.model.Service;
 import io.fluxzero.sdk.Fluxzero;
 import io.fluxzero.sdk.modeling.AssertLegal;
 import io.fluxzero.sdk.persisting.eventsourcing.Apply;
@@ -35,6 +36,17 @@ public record PlaceOrder(@NotNull OrderId orderId, @NotNull @Valid OrderDetails 
                 .count()) {
             throw OrderErrors.productNotFound;
         }
+    }
+
+    @AssertLegal
+    void assertExistingService() {
+        details.serviceIds().forEach(serviceId -> {
+            if (1 != Fluxzero.search(Service.class)
+                    .match(serviceId, "serviceId")
+                    .count()) {
+                throw OrderErrors.serviceNotFound;
+            }
+        });
     }
 
     @Apply

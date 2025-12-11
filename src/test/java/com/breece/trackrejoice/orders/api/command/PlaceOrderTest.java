@@ -17,7 +17,7 @@ import java.time.Instant;
 import static org.hibernate.internal.util.collections.CollectionHelper.listOf;
 
 class PlaceOrderTest {
-    TestFixture testFixture = TestFixture.create().givenCommands("/com/breece/trackrejoice/content/model/create-content.json");
+    TestFixture testFixture = TestFixture.create().givenCommands("/com/breece/trackrejoice/service/api/model/create-service.json","/com/breece/trackrejoice/content/model/create-content.json");
 
     PlaceOrder order1 = new PlaceOrder(new OrderId("1"), new OrderDetails(
             new ContentId("1"), listOf(new ServiceId("1")), Instant.now(), Duration.ofDays(90)));

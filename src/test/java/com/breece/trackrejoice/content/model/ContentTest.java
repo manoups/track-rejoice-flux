@@ -124,7 +124,7 @@ class ContentTest {
     class ContentSchedulerTests {
         @BeforeEach
         void setUp() {
-            testFixture.registerHandlers(new ContentScheduler()).givenCommands("create-content.json");
+            testFixture.registerHandlers(new ContentScheduler()).givenCommands("/com/breece/trackrejoice/service/api/model/create-service.json","create-content.json");
         }
 
         @Test

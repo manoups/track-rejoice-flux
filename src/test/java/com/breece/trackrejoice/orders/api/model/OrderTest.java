@@ -18,7 +18,7 @@ import java.time.temporal.ChronoUnit;
 
 class OrderTest {
     final TestFixture testFixture = TestFixture.create(new OrderFulfillment(), new EndpointMock()).withClock(Clock.fixed(Instant.parse("2025-01-01T00:00:00Z"), ZoneId.systemDefault()))
-            .givenCommands("/com/breece/trackrejoice/content/model/create-content.json");
+            .givenCommands("/com/breece/trackrejoice/service/api/model/create-service.json", "/com/breece/trackrejoice/content/model/create-content.json");
 
 
     @Test
