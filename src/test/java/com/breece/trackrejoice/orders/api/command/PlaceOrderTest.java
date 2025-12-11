@@ -4,6 +4,7 @@ import com.breece.trackrejoice.content.model.ContentId;
 import com.breece.trackrejoice.orders.api.OrderErrors;
 import com.breece.trackrejoice.orders.api.model.OrderDetails;
 import com.breece.trackrejoice.orders.api.model.OrderId;
+import com.breece.trackrejoice.service.api.command.UpdateService;
 import com.breece.trackrejoice.service.api.model.ServiceId;
 import com.breece.trackrejoice.user.api.UserId;
 import com.breece.trackrejoice.user.api.model.UserDetails;
@@ -11,6 +12,7 @@ import com.breece.trackrejoice.user.api.model.UserProfile;
 import io.fluxzero.sdk.test.TestFixture;
 import org.junit.jupiter.api.Test;
 
+import java.math.BigDecimal;
 import java.time.Duration;
 import java.time.Instant;
 
@@ -42,5 +44,12 @@ class PlaceOrderTest {
     void payForOtherUser() {
         testFixture.whenCommandByUser(new UserProfile(new UserId("1"), new UserDetails("name", "email"), null), order1)
                 .expectError(OrderErrors.productNotFound);
+    }
+
+    @Test
+    void placeOrderForOfflineService() {
+        testFixture.givenCommands(new UpdateService(new ServiceId("1"), "name", "description", BigDecimal.ZERO, false))
+                .whenCommand(order1)
+                .expectError(OrderErrors.serviceNotFound);
     }
 }

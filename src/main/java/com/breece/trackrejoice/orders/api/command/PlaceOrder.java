@@ -9,6 +9,7 @@ import com.breece.trackrejoice.orders.api.model.OrderId;
 import com.breece.trackrejoice.service.api.model.Service;
 import io.fluxzero.sdk.Fluxzero;
 import io.fluxzero.sdk.modeling.AssertLegal;
+import io.fluxzero.sdk.modeling.Entity;
 import io.fluxzero.sdk.persisting.eventsourcing.Apply;
 import io.fluxzero.sdk.tracking.handling.authentication.RequiresUser;
 import jakarta.validation.Valid;
@@ -18,35 +19,31 @@ import jakarta.validation.constraints.NotNull;
 public record PlaceOrder(@NotNull OrderId orderId, @NotNull @Valid OrderDetails details) implements OrderCommand {
 
     @AssertLegal
-    void assertNew(Order order) { throw OrderErrors.alreadyExists;}
+    void assertNew(Order order) {
+        throw OrderErrors.alreadyExists;
+    }
 
     @AssertLegal
     void assertUnique() {
 //        if (Fluxzero.loadAggregate(contentId).get().orders().stream().anyMatch(it -> !it.paid))
         if (0 < Fluxzero.search(Order.class).match(details.contentId(), "details.contentId").count()) {
-            throw  OrderErrors.alreadyPlaced;
+            throw OrderErrors.alreadyPlaced;
         }
     }
 
     @AssertLegal
     void assertExistingProduct(Sender sender) {
-        if (1 != Fluxzero.search(Content.class)
-                .match(details.contentId(), "contentId")
-                .match(sender.isAdmin() ? null : sender.userId(), "ownerId")
-                .count()) {
+        Entity<Content> contentEntity = Fluxzero.loadAggregate(details.contentId());
+        if (!contentEntity.isPresent() || (!sender.isAdmin() && !contentEntity.get().ownerId().equals(sender.userId()))){
             throw OrderErrors.productNotFound;
         }
     }
 
     @AssertLegal
     void assertExistingService() {
-        details.serviceIds().forEach(serviceId -> {
-            if (1 != Fluxzero.search(Service.class)
-                    .match(serviceId, "serviceId")
-                    .count()) {
-                throw OrderErrors.serviceNotFound;
-            }
-        });
+        if (details.serviceIds().stream().map(Fluxzero::loadAggregate).anyMatch(it -> !it.isPresent() || !it.get().online())) {
+            throw OrderErrors.serviceNotFound;
+        }
     }
 
     @Apply
