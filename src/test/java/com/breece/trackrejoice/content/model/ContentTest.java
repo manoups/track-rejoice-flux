@@ -1,0 +1,155 @@
+package com.breece.trackrejoice.content.model;
+
+import com.breece.trackrejoice.content.ContentEndpoint;
+import com.breece.trackrejoice.content.ContentScheduler;
+import com.breece.trackrejoice.content.ExecutePayment;
+import com.breece.trackrejoice.content.command.CreateContent;
+import com.breece.trackrejoice.content.command.TakeContentOffline;
+import com.breece.trackrejoice.content.query.GetContents;
+import com.breece.trackrejoice.content.query.GetContentStats;
+import com.breece.trackrejoice.geo.GeometryUtil;
+import io.fluxzero.sdk.test.TestFixture;
+import org.junit.jupiter.api.*;
+
+import java.time.Duration;
+import java.util.List;
+
+import static org.hamcrest.Matchers.hasSize;
+
+class ContentTest {
+    final TestFixture testFixture = TestFixture.create();
+
+    @Test
+    void createContent() {
+        testFixture.whenCommand("create-content.json")
+                .expectEvents("create-content.json");
+    }
+
+    @Test
+    void createContentKeys() {
+        testFixture.whenCommand("create-content-keys.json")
+                .expectEvents("create-content-keys.json");
+    }
+
+    @Test
+    void updateContent() {
+        testFixture.givenCommands("create-content.json")
+                .whenCommand("update-content.json")
+                .expectEvents("update-content.json");
+    }
+
+    @Test
+    void deleteContent() {
+        testFixture.givenCommands("create-content.json")
+                .whenCommand("delete-content.json")
+                .expectEvents("delete-content.json");
+    }
+
+    @Nested
+    class ContentQueryTests {
+        @Test
+        void searchForContent() {
+            testFixture.givenCommands("create-content.json")
+                    .whenQuery(new GetContents())
+                    .expectResult(hasSize(1));
+        }
+
+        @Test
+        void searchPaginatedContent() {
+            final int SIZE = 25;
+            CreateContent[] ads = new CreateContent[SIZE];
+            for(int i=0; i< 15; ++i)
+                ads[i] = new CreateContent(new ContentId(), new Pet("Maya", "Cocker Spaniel", GenderEnum.FEMALE, GeometryUtil.parseLocation(0.0, 0.0)));
+            for(int i=15; i< SIZE; ++i)
+                ads[i] = new CreateContent(new ContentId(), new Keys("Square Key", GeometryUtil.parseLocation(0.0, 0.0)));
+
+            testFixture.givenCommands(ads)
+                    .whenQuery(new GetContents())
+                    .expectResult(hasSize(10))
+                    .andThen()
+                    .whenQuery(new GetContents(1, 10))
+                    .expectResult(hasSize(10))
+                    .andThen()
+                    .whenQuery(new GetContents(2, 10))
+                    .expectResult(hasSize(5))
+                    .andThen()
+                    .whenQuery(new GetContents(0, 30))
+                    .expectResult(hasSize(25))
+                    .andThen()
+                    .whenQuery(new GetContentStats())
+                    .expectResult(facetStats -> facetStats.size() == 2 &&
+                            facetStats.stream().filter(it -> it.getValue().equals("pet")).findFirst().orElseThrow(() -> new AssertionError("No pet facet found")).getCount() == 15 &&
+                            facetStats.stream().filter(it -> it.getValue().equals("keys")).findFirst().orElseThrow(() -> new AssertionError("No keys facet found")).getCount() == 10);
+        }
+    }
+
+    @Nested
+    class ContentIntegrationTests {
+        @Test
+        void deleteContent() {
+            testFixture.givenCommands("create-content.json")
+                .whenQuery(new GetContents())
+                .expectResult(hasSize(1))
+                .andThen()
+                    .whenCommand("delete-content.json")
+                    .expectEvents("delete-content.json")
+                .andThen()
+                .whenQuery(new GetContents())
+                .expectResult(List::isEmpty);
+        }
+    }
+
+    @Nested
+    class ContentEndpointTests {
+        @BeforeEach
+        void setUp() {
+            testFixture.registerHandlers(new ContentEndpoint());
+        }
+
+        @Test
+        void createContent() {
+            testFixture.whenPost("classifieds-ads", "/com/breece/trackrejoice/content/model/content-details.json")
+                    .expectResult(ContentId.class).expectEvents(CreateContent.class);
+        }
+
+        @Test
+        void getContents() {
+            testFixture.givenPost("classifieds-ads", "/com/breece/trackrejoice/content/model/content-details.json")
+                    .whenGet("classifieds-ads")
+                    .expectResult(hasSize(1));
+        }
+    }
+
+    @Nested
+    class ContentSchedulerTests {
+        @BeforeEach
+        void setUp() {
+            testFixture.registerHandlers(new ContentScheduler()).givenCommands("create-content.json");
+        }
+
+        @Test
+        void createContentDetails() {
+            testFixture.givenCommands("/com/breece/trackrejoice/orders/api/model/place-order.json")
+                    .whenEvent("payment-accepted.json")
+                    .andThen()
+                    .whenTimeElapses(Duration.ofDays(90))
+                    .expectEvents(TakeContentOffline.class);
+        }
+    }
+
+    @Nested
+    class ContentStateTests {
+        @BeforeEach
+        void setUp() {
+            testFixture.registerHandlers().givenCommands("create-content.json");
+        }
+
+        @Disabled
+        @Timeout(15)
+        @Test
+        void createContentDetails() {
+            testFixture.whenEvent("payment-initiated.json")
+                    .expectEvents(ExecutePayment.class);
+        }
+    }
+}

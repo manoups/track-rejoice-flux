@@ -1,6 +1,5 @@
 package com.breece.trackrejoice.payments.api;
 
-import com.breece.trackrejoice.classifiedsad.model.ClassifiedsAdId;
 import com.breece.trackrejoice.payments.api.model.PaymentId;
 import io.fluxzero.sdk.Fluxzero;
 import io.fluxzero.sdk.web.HandlePost;

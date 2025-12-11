@@ -1,6 +1,6 @@
 package com.breece.trackrejoice.orders.api;
 
-import com.breece.trackrejoice.classifiedsad.PublishClassifiedsAd;
+import com.breece.trackrejoice.content.PublishContent;
 import com.breece.trackrejoice.common.PaypalAuthenticate;
 import com.breece.trackrejoice.orders.api.command.AbortOrder;
 import com.breece.trackrejoice.orders.api.command.PlaceOrder;
@@ -36,6 +36,6 @@ public class OrderFulfillment {
     @HandleEvent
     void handle(PaymentAccepted event) {
         var order = Fluxzero.<Order>loadEntityValue(event.reference());
-        Fluxzero.sendAndForgetCommand(new PublishClassifiedsAd(order.details().classifiedsAdId(), order.orderId()));
+        Fluxzero.sendAndForgetCommand(new PublishContent(order.details().contentId(), order.orderId()));
     }
 }

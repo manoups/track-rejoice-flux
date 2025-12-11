@@ -1,0 +1,24 @@
+package com.breece.trackrejoice.service.api.command;
+
+import com.breece.trackrejoice.authentication.RequiresRole;
+import com.breece.trackrejoice.authentication.Role;
+import com.breece.trackrejoice.service.api.ServiceErrors;
+import com.breece.trackrejoice.service.api.model.Service;
+import com.breece.trackrejoice.service.api.model.ServiceDetails;
+import com.breece.trackrejoice.service.api.model.ServiceId;
+import io.fluxzero.sdk.modeling.AssertLegal;
+import io.fluxzero.sdk.persisting.eventsourcing.Apply;
+import jakarta.validation.constraints.NotNull;
+
+import java.math.BigDecimal;
+
+@RequiresRole(Role.ADMIN)
+public record CreateService (@NotNull
+        ServiceId serviceId, String name, String description, BigDecimal price) implements ServiceCommand {
+
+    @AssertLegal
+    void assertNew(Service service) { throw ServiceErrors.alreadyExists; }
+
+    @Apply
+    Service apply() { return new Service(serviceId, new ServiceDetails(name, description, price), true); }
+}

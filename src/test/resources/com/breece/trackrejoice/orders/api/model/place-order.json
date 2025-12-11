@@ -2,7 +2,8 @@
   "@class": "PlaceOrder",
   "orderId": "1",
   "details": {
-    "classifiedsAdId": "1",
+    "contentId": "1",
+    "serviceIds": ["1"],
     "paymentId": "payment1",
     "updatedAt": "2025-01-01T00:00:00Z",
     "duration": "P90D"

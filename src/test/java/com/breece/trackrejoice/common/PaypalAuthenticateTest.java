@@ -1,6 +1,6 @@
 package com.breece.trackrejoice.common;
 
-import com.breece.trackrejoice.classifiedsad.model.ClassifiedsAdId;
+import com.breece.trackrejoice.content.model.ContentId;
 import com.breece.trackrejoice.orders.api.OrderFulfillment;
 import com.breece.trackrejoice.orders.api.command.PlaceOrder;
 import com.breece.trackrejoice.orders.api.command.UpdateOrder;
@@ -8,7 +8,7 @@ import com.breece.trackrejoice.orders.api.command.ValidateOrder;
 import com.breece.trackrejoice.orders.api.model.OrderDetails;
 import com.breece.trackrejoice.orders.api.model.OrderId;
 import com.breece.trackrejoice.payments.api.PayPalEndpoint;
-import com.breece.trackrejoice.payments.api.model.PaymentId;
+import com.breece.trackrejoice.service.api.model.ServiceId;
 import com.google.common.base.Supplier;
 import com.google.common.base.Suppliers;
 import io.fluxzero.common.FileUtils;
@@ -28,6 +28,7 @@ import java.util.concurrent.TimeUnit;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
+import static org.hibernate.internal.util.collections.CollectionHelper.listOf;
 
 class PaypalAuthenticateTest {
     @Nested
@@ -93,9 +94,8 @@ class PaypalAuthenticateTest {
 
         @Test
         void sendOrder() {
-            PlaceOrder order1 = new PlaceOrder(new OrderId("1"), new OrderDetails(
-                    new ClassifiedsAdId("1"), new PaymentId("1"), Instant.now(), Duration.ofDays(90)));
-            testFixture.givenCommands("/com/breece/trackrejoice/classifiedsad/model/create-classifieds-ad.json").whenCommand(order1)
+            PlaceOrder order1 = new PlaceOrder(new OrderId("1"), new OrderDetails(new ContentId("1"), listOf(new ServiceId("1")), Instant.now(), Duration.ofDays(90)));
+            testFixture.givenCommands("/com/breece/trackrejoice/content/model/create-content.json").whenCommand(order1)
                     .expectEvents(PlaceOrder.class)
                     .expectCommands(ValidateOrder.class, UpdateOrder.class);
         }
@@ -111,7 +111,7 @@ class PaypalAuthenticateTest {
             @Test
             void sendOrderEndpoint() {
                 testFixture.
-                        givenCommands("/com/breece/trackrejoice/classifiedsad/model/create-classifieds-ad.json")
+                        givenCommands("/com/breece/trackrejoice/content/model/create-content.json")
                         .whenPost("/payments/paypal/orders/ad-1")
                         .expectEvents(PlaceOrder.class)
                         .expectCommands(ValidateOrder.class, UpdateOrder.class);

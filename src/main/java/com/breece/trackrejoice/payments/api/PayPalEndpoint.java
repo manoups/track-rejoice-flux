@@ -1,10 +1,11 @@
 package com.breece.trackrejoice.payments.api;
 
-import com.breece.trackrejoice.classifiedsad.model.ClassifiedsAdId;
+import com.breece.trackrejoice.content.model.ContentId;
 import com.breece.trackrejoice.orders.api.command.PlaceOrder;
 import com.breece.trackrejoice.orders.api.model.OrderDetails;
 import com.breece.trackrejoice.orders.api.model.OrderId;
 import com.breece.trackrejoice.payments.api.model.PaymentId;
+import com.breece.trackrejoice.service.api.model.ServiceId;
 import io.fluxzero.sdk.Fluxzero;
 import io.fluxzero.sdk.configuration.spring.ConditionalOnProperty;
 import io.fluxzero.sdk.web.HandlePost;
@@ -15,15 +16,16 @@ import org.springframework.stereotype.Component;
 
 import java.time.Duration;
 import java.time.Instant;
+import java.util.List;
 
 @Component
 @Path("/payments/paypal")
 @RequiredArgsConstructor
 @ConditionalOnProperty(value = "pgp", pattern = "paypal")
 public class PayPalEndpoint {
-    @HandlePost("/orders/{classifiedsAdId}")
-    void createOrder(@PathParam ClassifiedsAdId classifiedsAdId) {
-            Fluxzero.publishEvent(new PlaceOrder(new OrderId(), new OrderDetails(classifiedsAdId, null, Instant.now(), Duration.ofDays(90))));
+    @HandlePost("/orders/{content-id}")
+    void createOrder(@PathParam(value = "content-id") ContentId contentId, List<ServiceId> serviceIds) {
+            Fluxzero.publishEvent(new PlaceOrder(new OrderId(), new OrderDetails(contentId, serviceIds, Instant.now(), Duration.ofDays(90))));
     }
 
     @HandlePost("/orders/{orderID}/{announcementId}/capture")

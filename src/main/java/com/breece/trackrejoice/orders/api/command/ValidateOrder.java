@@ -61,7 +61,7 @@ public class ValidateOrder extends SendWebRequestWithMetadata {
     protected String handleResponse(WebResponse response, WebRequest request, Metadata metadata) {
         String stringResult = (String) super.handleResponse(response, request);
         JsonNode result = JsonUtils.fromJson(stringResult, JsonNode.class);
-        Fluxzero.sendAndForgetCommand(new UpdateOrder(orderId, result.get("id").asText(), result.get("status").asText()));
+        Fluxzero.sendAndForgetCommand(new UpdateOrder(orderId, result.get("status").asText()));
         return result.get("id").asText();
     }
 }

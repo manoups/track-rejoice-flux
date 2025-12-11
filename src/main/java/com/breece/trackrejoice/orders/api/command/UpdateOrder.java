@@ -8,9 +8,9 @@ import io.fluxzero.sdk.persisting.eventsourcing.Apply;
 import jakarta.validation.constraints.NotNull;
 
 @RequiresRole(Role.ADMIN)
-public record UpdateOrder(@NotNull OrderId orderId, String pgpId, String status) implements OrderUpdate{
+public record UpdateOrder(@NotNull OrderId orderId, String status) implements OrderUpdate{
     @Apply
     public Order apply(Order order) {
-        return order.withPgpId(pgpId).withStatus(status);
+        return order.withStatus(status);
     }
 }

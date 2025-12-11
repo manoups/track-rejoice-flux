@@ -2,17 +2,12 @@ package com.breece.trackrejoice.orders.api.model;
 
 import com.breece.trackrejoice.orders.api.OrderErrors;
 import com.breece.trackrejoice.orders.api.OrderFulfillment;
-import com.breece.trackrejoice.orders.api.command.PlaceOrder;
 import com.breece.trackrejoice.orders.api.command.UpdateOrder;
 import com.breece.trackrejoice.orders.api.command.ValidateOrder;
-import com.breece.trackrejoice.payments.api.PaymentAccepted;
-import com.breece.trackrejoice.payments.api.ValidatePayment;
 import io.fluxzero.common.FileUtils;
-import io.fluxzero.common.serialization.JsonUtils;
 import io.fluxzero.sdk.test.TestFixture;
 import io.fluxzero.sdk.web.HandlePost;
 import io.fluxzero.sdk.web.WebResponse;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.time.Clock;
@@ -20,11 +15,10 @@ import java.time.Duration;
 import java.time.Instant;
 import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
-import java.util.Map;
 
 class OrderTest {
     final TestFixture testFixture = TestFixture.create(new OrderFulfillment(), new EndpointMock()).withClock(Clock.fixed(Instant.parse("2025-01-01T00:00:00Z"), ZoneId.systemDefault()))
-            .givenCommands("/com/breece/trackrejoice/classifiedsad/model/create-classifieds-ad.json");
+            .givenCommands("/com/breece/trackrejoice/content/model/create-content.json");
 
 
     @Test

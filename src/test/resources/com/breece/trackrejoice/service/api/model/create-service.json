@@ -1,0 +1,7 @@
+{
+  "@class": "com.breece.trackrejoice.service.api.command.CreateService",
+  "serviceId": "1",
+  "name": "service1",
+  "description": "service1 description",
+  "price": 100
+}

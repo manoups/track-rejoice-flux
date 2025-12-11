@@ -1,12 +1,14 @@
 package com.breece.trackrejoice.orders.api.model;
 
-import com.breece.trackrejoice.classifiedsad.model.ClassifiedsAdId;
-import com.breece.trackrejoice.payments.api.model.PaymentId;
+import com.breece.trackrejoice.content.model.ContentId;
+import com.breece.trackrejoice.service.api.model.ServiceId;
+import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.With;
 
 import java.time.Duration;
 import java.time.Instant;
+import java.util.List;
 
-public record OrderDetails(@NotNull ClassifiedsAdId classifiedsAdId, @NotNull PaymentId paymentId, @With Instant updatedAt, @NotNull @With Duration duration) {
+public record OrderDetails(@NotNull ContentId contentId, @NotEmpty List<ServiceId> serviceIds, @With Instant updatedAt, @NotNull @With Duration duration) {
 }

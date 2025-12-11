@@ -1,6 +1,6 @@
 package com.breece.trackrejoice.payments.api.model;
 
-import com.breece.trackrejoice.classifiedsad.ExecutePayment;
+import com.breece.trackrejoice.content.ExecutePayment;
 import com.breece.trackrejoice.payments.api.PaymentAccepted;
 import com.breece.trackrejoice.payments.api.PaymentInitiated;
 import io.fluxzero.sdk.Fluxzero;
