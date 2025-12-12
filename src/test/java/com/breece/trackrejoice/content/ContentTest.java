@@ -1,10 +1,11 @@
-package com.breece.trackrejoice.content.model;
+package com.breece.trackrejoice.content;
 
-import com.breece.trackrejoice.content.ContentEndpoint;
-import com.breece.trackrejoice.content.ContentScheduler;
-import com.breece.trackrejoice.content.ExecutePayment;
 import com.breece.trackrejoice.content.command.CreateContent;
 import com.breece.trackrejoice.content.command.TakeContentOffline;
+import com.breece.trackrejoice.content.model.ContentId;
+import com.breece.trackrejoice.content.model.GenderEnum;
+import com.breece.trackrejoice.content.model.Keys;
+import com.breece.trackrejoice.content.model.Pet;
 import com.breece.trackrejoice.content.query.GetContents;
 import com.breece.trackrejoice.content.query.GetContentStats;
 import com.breece.trackrejoice.geo.GeometryUtil;
@@ -108,13 +109,13 @@ class ContentTest {
 
         @Test
         void createContent() {
-            testFixture.whenPost("classifieds-ads", "/com/breece/trackrejoice/content/model/content-details.json")
+            testFixture.whenPost("classifieds-ads", "/com/breece/trackrejoice/content/content-details.json")
                     .expectResult(ContentId.class).expectEvents(CreateContent.class);
         }
 
         @Test
         void getContents() {
-            testFixture.givenPost("classifieds-ads", "/com/breece/trackrejoice/content/model/content-details.json")
+            testFixture.givenPost("classifieds-ads", "/com/breece/trackrejoice/content/content-details.json")
                     .whenGet("classifieds-ads")
                     .expectResult(hasSize(1));
         }
@@ -124,12 +125,12 @@ class ContentTest {
     class ContentSchedulerTests {
         @BeforeEach
         void setUp() {
-            testFixture.registerHandlers(new ContentScheduler()).givenCommands("/com/breece/trackrejoice/service/api/model/create-service.json","create-content.json");
+            testFixture.registerHandlers(new ContentScheduler()).givenCommands("/com/breece/trackrejoice/service/create-service.json","create-content.json");
         }
 
         @Test
         void createContentDetails() {
-            testFixture.givenCommands("/com/breece/trackrejoice/orders/api/model/place-order.json")
+            testFixture.givenCommands("/com/breece/trackrejoice/orders/place-order.json")
                     .whenEvent("payment-accepted.json")
                     .andThen()
                     .whenTimeElapses(Duration.ofDays(90))

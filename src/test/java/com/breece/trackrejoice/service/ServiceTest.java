@@ -1,4 +1,4 @@
-package com.breece.trackrejoice.service.api.model;
+package com.breece.trackrejoice.service;
 
 import io.fluxzero.sdk.test.TestFixture;
 import org.junit.jupiter.api.Test;

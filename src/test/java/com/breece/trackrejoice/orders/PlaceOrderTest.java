@@ -1,7 +1,8 @@
-package com.breece.trackrejoice.orders.api.command;
+package com.breece.trackrejoice.orders;
 
 import com.breece.trackrejoice.content.model.ContentId;
 import com.breece.trackrejoice.orders.api.OrderErrors;
+import com.breece.trackrejoice.orders.api.command.PlaceOrder;
 import com.breece.trackrejoice.orders.api.model.OrderDetails;
 import com.breece.trackrejoice.orders.api.model.OrderId;
 import com.breece.trackrejoice.service.api.command.UpdateService;
@@ -19,7 +20,7 @@ import java.time.Instant;
 import static org.hibernate.internal.util.collections.CollectionHelper.listOf;
 
 class PlaceOrderTest {
-    TestFixture testFixture = TestFixture.create().givenCommands("/com/breece/trackrejoice/service/api/model/create-service.json","/com/breece/trackrejoice/content/model/create-content.json");
+    TestFixture testFixture = TestFixture.create().givenCommands("/com/breece/trackrejoice/service/create-service.json", "/com/breece/trackrejoice/content/create-content.json");
 
     PlaceOrder order1 = new PlaceOrder(new OrderId("1"), new OrderDetails(
             new ContentId("1"), listOf(new ServiceId("1")), Instant.now(), Duration.ofDays(90)));

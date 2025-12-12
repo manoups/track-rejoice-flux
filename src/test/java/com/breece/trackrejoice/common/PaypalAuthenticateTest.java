@@ -53,7 +53,7 @@ class PaypalAuthenticateTest {
         }
 
 
-        TestFixture testFixture = TestFixture.create(new OrderFulfillment(), new EndpointMock()).withProperty("pgp", "paypal").givenCommands("/com/breece/trackrejoice/service/api/model/create-service.json");
+        TestFixture testFixture = TestFixture.create(new OrderFulfillment(), new EndpointMock()).withProperty("pgp", "paypal").givenCommands("/com/breece/trackrejoice/service/create-service.json");
 
         @Test
         void paypalAuthenticate() {
@@ -95,7 +95,7 @@ class PaypalAuthenticateTest {
         @Test
         void sendOrder() {
             PlaceOrder order1 = new PlaceOrder(new OrderId("1"), new OrderDetails(new ContentId("1"), listOf(new ServiceId("1")), Instant.now(), Duration.ofDays(90)));
-            testFixture.givenCommands("/com/breece/trackrejoice/content/model/create-content.json").whenCommand(order1)
+            testFixture.givenCommands("/com/breece/trackrejoice/content/create-content.json").whenCommand(order1)
                     .expectEvents(PlaceOrder.class)
                     .expectCommands(ValidateOrder.class, UpdateOrder.class);
         }
@@ -111,7 +111,7 @@ class PaypalAuthenticateTest {
             @Test
             void sendOrderEndpoint() {
                 testFixture.
-                        givenCommands("/com/breece/trackrejoice/content/model/create-content.json")
+                        givenCommands("/com/breece/trackrejoice/content/create-content.json")
                         .whenPost("/payments/paypal/orders/ad-1")
                         .expectEvents(PlaceOrder.class)
                         .expectCommands(ValidateOrder.class, UpdateOrder.class);

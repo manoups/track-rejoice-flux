@@ -25,7 +25,6 @@ public record PlaceOrder(@NotNull OrderId orderId, @NotNull @Valid OrderDetails 
 
     @AssertLegal
     void assertUnique() {
-//        if (Fluxzero.loadAggregate(contentId).get().orders().stream().anyMatch(it -> !it.paid))
         if (0 < Fluxzero.search(Order.class).match(details.contentId(), "details.contentId").count()) {
             throw OrderErrors.alreadyPlaced;
         }
