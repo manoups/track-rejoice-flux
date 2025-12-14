@@ -1,12 +1,16 @@
 {
   "@class" : "CreateContent",
-  "contentId": "1",
+  "contentId": "2",
   "details": {
     "@class" : "Keys",
     "description": "Leather keychain",
-    "lastSeenLocation": {
-      "type": "Point",
-      "coordinates": [0.0, 0.0]
+    "sighting": {
+      "@class": "Sighting",
+      "sightingId": "2",
+      "spottedLocation": {
+        "type": "Point",
+        "coordinates": [0.0, 0.0]
+      }
     }
   }
 }

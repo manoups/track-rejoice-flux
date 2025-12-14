@@ -1,14 +1,18 @@
 {
-  "@class" : "CreateContent",
+  "@class": "CreateContent",
   "contentId": "1",
   "details": {
-    "@class" : "Pet",
+    "@class": "Pet",
     "name": "Fritz",
     "gender": "MALE",
     "breed": "Labrador Retriever",
-    "lastSeenLocation": {
-      "type": "Point",
-      "coordinates": [0.0, 0.0]
+    "sighting": {
+      "@class": "Sighting",
+      "sightingId": "1",
+      "spottedLocation": {
+        "type": "Point",
+        "coordinates": [0.0, 0.0]
+      }
     }
   }
 }

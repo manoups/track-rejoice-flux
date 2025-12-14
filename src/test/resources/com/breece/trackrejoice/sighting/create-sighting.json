@@ -1,0 +1,8 @@
+{
+  "@class": "com.breece.trackrejoice.sighting.CreateSighting",
+  "sightingId": "1",
+  "spottedLocation": {
+    "type": "Point",
+    "coordinates": [123.456, 78.901]
+  }
+}

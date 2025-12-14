@@ -6,9 +6,13 @@
     "name": "Fritz",
     "gender": "MALE",
     "breed": "Golden Retriever",
-    "lastSeenLocation": {
-      "type": "Point",
-      "coordinates": [0.0, 0.0]
+    "sighting": {
+      "@class": "Sighting",
+      "sightingId": "1",
+      "spottedLocation": {
+        "type": "Point",
+        "coordinates": [0.0, 0.0]
+      }
     }
   }
 }

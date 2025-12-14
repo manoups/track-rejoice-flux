@@ -17,6 +17,6 @@ public class UpdateOrderHandler {
     @HandleEvent
     void handle(PlaceOrder placeOrder) {
         Content content = Fluxzero.loadAggregate(placeOrder.details().contentId()).get();
-        repository.save(GeoJsonPost.builder().orderId(content.contentId().toString()).lastSeenLocation(content.details().getLastSeenLocation()).build());
+        repository.save(GeoJsonPost.builder().orderId(content.contentId().toString()).lastSeenLocation(content.details().getSighting().spottedLocation()).build());
     }
 }

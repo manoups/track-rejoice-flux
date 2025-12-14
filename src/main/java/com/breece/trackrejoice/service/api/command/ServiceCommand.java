@@ -2,9 +2,11 @@ package com.breece.trackrejoice.service.api.command;
 
 import com.breece.trackrejoice.service.api.model.ServiceId;
 import io.fluxzero.sdk.Fluxzero;
+import io.fluxzero.sdk.tracking.TrackSelf;
 import io.fluxzero.sdk.tracking.handling.HandleCommand;
 import jakarta.validation.constraints.NotNull;
 
+@TrackSelf
 public interface ServiceCommand {
     @NotNull
     ServiceId serviceId();
