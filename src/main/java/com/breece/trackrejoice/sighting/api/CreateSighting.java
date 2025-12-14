@@ -1,5 +1,6 @@
-package com.breece.trackrejoice.sighting;
+package com.breece.trackrejoice.sighting.api;
 
+import com.breece.trackrejoice.sighting.SightingErrors;
 import com.breece.trackrejoice.sighting.api.model.Sighting;
 import com.breece.trackrejoice.sighting.api.model.SightingDetails;
 import com.breece.trackrejoice.sighting.api.model.SightingId;
@@ -18,6 +19,6 @@ public record CreateSighting(@NotNull SightingId sightingId, Geometry spottedLoc
 
     @Apply
     Sighting create() {
-        return new Sighting(sightingId, new SightingDetails(spottedLocation), false);
+        return new Sighting(sightingId, new SightingDetails(spottedLocation));
     }
 }

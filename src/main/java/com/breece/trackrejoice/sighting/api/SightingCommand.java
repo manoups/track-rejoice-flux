@@ -1,4 +1,4 @@
-package com.breece.trackrejoice.sighting;
+package com.breece.trackrejoice.sighting.api;
 
 import com.breece.trackrejoice.sighting.api.model.SightingId;
 import io.fluxzero.sdk.Fluxzero;

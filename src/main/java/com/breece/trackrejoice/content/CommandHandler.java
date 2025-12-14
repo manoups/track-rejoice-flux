@@ -1,8 +1,8 @@
 package com.breece.trackrejoice.content;
 
 import com.breece.trackrejoice.content.command.CreateContent;
-import com.breece.trackrejoice.sighting.ClaimSighting;
-import com.breece.trackrejoice.sighting.CreateSighting;
+import com.breece.trackrejoice.sighting.api.ClaimSighting;
+import com.breece.trackrejoice.sighting.api.CreateSighting;
 import com.breece.trackrejoice.sighting.api.model.Sighting;
 import com.breece.trackrejoice.sighting.api.model.SightingId;
 import io.fluxzero.sdk.Fluxzero;

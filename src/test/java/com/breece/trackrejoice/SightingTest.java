@@ -2,8 +2,9 @@ package com.breece.trackrejoice;
 
 import com.breece.trackrejoice.content.ContentErrors;
 import com.breece.trackrejoice.content.model.ContentId;
-import com.breece.trackrejoice.sighting.ClaimSighting;
-import com.breece.trackrejoice.sighting.GetOpenSightings;
+import com.breece.trackrejoice.sighting.SightingState;
+import com.breece.trackrejoice.sighting.api.ClaimSighting;
+import com.breece.trackrejoice.sighting.api.GetOpenSightings;
 import com.breece.trackrejoice.sighting.SightingErrors;
 import com.breece.trackrejoice.sighting.api.model.SightingId;
 import com.breece.trackrejoice.user.api.UserId;
@@ -16,7 +17,7 @@ import java.util.List;
 import static org.hamcrest.Matchers.hasSize;
 
 public class SightingTest {
-    final TestFixture testFixture = TestFixture.create().givenCommands("user/create-user.json").givenCommands("user/create-another-user.json");
+    final TestFixture testFixture = TestFixture.create(SightingState.class).givenCommands("user/create-user.json").givenCommands("user/create-another-user.json");
     final UserProfile viewer = new UserProfile(new UserId("viewer"), null, null);
 
     @Test

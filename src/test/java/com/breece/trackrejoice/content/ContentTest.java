@@ -61,17 +61,17 @@ class ContentTest {
         @Test
         void searchPaginatedContent() {
             final int SIZE = 25;
-            CreateContent[] ads = new CreateContent[SIZE];
+            CreateContent[] contents = new CreateContent[SIZE];
             for(int i=0; i< 15; ++i) {
                 ContentId contentId = new ContentId();
-                ads[i] = new CreateContent(contentId, new Pet("Maya", "Cocker Spaniel", GenderEnum.FEMALE, new Sighting(new SightingId("1"), new SightingDetails(GeometryUtil.parseLocation(0.0, 0.0)), true)));
+                contents[i] = new CreateContent(contentId, new Pet("Maya", "Cocker Spaniel", GenderEnum.FEMALE, new Sighting(new SightingId("1"), new SightingDetails(GeometryUtil.parseLocation(0.0, 0.0)))));
             }
             for(int i=15; i< SIZE; ++i) {
                 ContentId contentId = new ContentId();
-                ads[i] = new CreateContent(contentId, new Keys("Square Key", new Sighting(new SightingId("1"), new SightingDetails(GeometryUtil.parseLocation(0.0, 0.0)), true)));
+                contents[i] = new CreateContent(contentId, new Keys("Square Key", new Sighting(new SightingId("1"), new SightingDetails(GeometryUtil.parseLocation(0.0, 0.0)))));
             }
 
-            testFixture.givenCommands(ads)
+            testFixture.givenCommands(contents)
                     .whenQuery(new GetContents())
                     .expectResult(hasSize(10))
                     .andThen()

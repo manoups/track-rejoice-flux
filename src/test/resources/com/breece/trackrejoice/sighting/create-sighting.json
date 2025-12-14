@@ -1,5 +1,5 @@
 {
-  "@class": "com.breece.trackrejoice.sighting.CreateSighting",
+  "@class": "com.breece.trackrejoice.sighting.api.CreateSighting",
   "sightingId": "1",
   "spottedLocation": {
     "type": "Point",
