@@ -1,6 +1,6 @@
 package com.breece.trackrejoice.content.model;
 
-import com.breece.trackrejoice.sighting.api.model.ClaimedSighting;
+import com.breece.trackrejoice.sighting.api.model.Sighting;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import io.fluxzero.common.search.Facet;
@@ -19,6 +19,6 @@ public abstract class ExtraDetails {
     String subtype;
     @NotNull
     @Member
-    ClaimedSighting sighting;
+    Sighting sighting;
 
 }

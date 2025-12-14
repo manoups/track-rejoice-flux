@@ -1,6 +1,6 @@
 package com.breece.trackrejoice.content.model;
 
-import com.breece.trackrejoice.sighting.api.model.ClaimedSighting;
+import com.breece.trackrejoice.sighting.api.model.Sighting;
 import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 
@@ -23,7 +23,7 @@ public class Pet extends MobileTarget {
     String location;
     String image;
 
-    public Pet(String name, String breed, @NonNull GenderEnum gender, ClaimedSighting sighting) {
+    public Pet(String name, String breed, @NonNull GenderEnum gender, Sighting sighting) {
         this.subtype = "pet";
         this.name = name;
         this.breed = breed;
