@@ -1,6 +1,7 @@
 package com.breece.trackrejoice.sighting;
 
 import com.breece.trackrejoice.sighting.api.model.Sighting;
+import com.breece.trackrejoice.sighting.api.model.SightingDetails;
 import com.breece.trackrejoice.sighting.api.model.SightingId;
 import io.fluxzero.sdk.modeling.AssertLegal;
 import io.fluxzero.sdk.persisting.eventsourcing.Apply;
@@ -17,6 +18,6 @@ public record CreateSighting(@NotNull SightingId sightingId, Geometry spottedLoc
 
     @Apply
     Sighting create() {
-        return new Sighting(sightingId, spottedLocation, null);
+        return new Sighting(sightingId, new SightingDetails(spottedLocation), false);
     }
 }

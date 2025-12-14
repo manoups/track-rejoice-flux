@@ -11,6 +11,7 @@ import io.fluxzero.sdk.modeling.AssertLegal;
 import io.fluxzero.sdk.modeling.Entity;
 import io.fluxzero.sdk.persisting.eventsourcing.Apply;
 import jakarta.validation.constraints.NotNull;
+import org.apache.commons.lang3.BooleanUtils;
 
 import java.util.Objects;
 
@@ -25,13 +26,13 @@ public record ClaimSighting(@NotNull ContentId contentId, @NotNull SightingId si
 
     @AssertLegal
     void assertSightingNotAssigned(Sighting sighting) {
-        if (Objects.nonNull(sighting.contentId())) {
+        if (sighting.claimed()) {
             throw SightingErrors.alreadyClaimed;
         }
     }
 
     @Apply
     Sighting assign(Sighting sighting) {
-        return sighting.withContentId(contentId);
+        return sighting.withClaimed(true);
     }
 }

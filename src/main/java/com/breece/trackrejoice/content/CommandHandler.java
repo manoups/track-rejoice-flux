@@ -13,7 +13,7 @@ import org.springframework.stereotype.Component;
 public class CommandHandler {
     @HandleEvent
     void handle(CreateContent event) {
-        Sighting sighting = Fluxzero.sendCommandAndWait(new CreateSighting(new SightingId(), event.details().getSighting().spottedLocation()));
+        Sighting sighting = Fluxzero.sendCommandAndWait(new CreateSighting(new SightingId(), event.details().getSighting().details().spottedLocation()));
         Fluxzero.sendAndForgetCommand(new ClaimSighting(event.contentId(), sighting.sightingId()));
     }
 }

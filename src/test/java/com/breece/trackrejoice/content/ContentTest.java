@@ -10,6 +10,7 @@ import com.breece.trackrejoice.content.query.GetContentStats;
 import com.breece.trackrejoice.content.query.GetContents;
 import com.breece.trackrejoice.geo.GeometryUtil;
 import com.breece.trackrejoice.sighting.api.model.Sighting;
+import com.breece.trackrejoice.sighting.api.model.SightingDetails;
 import com.breece.trackrejoice.sighting.api.model.SightingId;
 import io.fluxzero.sdk.test.TestFixture;
 import org.junit.jupiter.api.*;
@@ -63,11 +64,11 @@ class ContentTest {
             CreateContent[] ads = new CreateContent[SIZE];
             for(int i=0; i< 15; ++i) {
                 ContentId contentId = new ContentId();
-                ads[i] = new CreateContent(contentId, new Pet("Maya", "Cocker Spaniel", GenderEnum.FEMALE, new Sighting(new SightingId("1"), GeometryUtil.parseLocation(0.0, 0.0), contentId)));
+                ads[i] = new CreateContent(contentId, new Pet("Maya", "Cocker Spaniel", GenderEnum.FEMALE, new Sighting(new SightingId("1"), new SightingDetails(GeometryUtil.parseLocation(0.0, 0.0)), true)));
             }
             for(int i=15; i< SIZE; ++i) {
                 ContentId contentId = new ContentId();
-                ads[i] = new CreateContent(contentId, new Keys("Square Key", new Sighting(new SightingId("1"), GeometryUtil.parseLocation(0.0, 0.0), contentId)));
+                ads[i] = new CreateContent(contentId, new Keys("Square Key", new Sighting(new SightingId("1"), new SightingDetails(GeometryUtil.parseLocation(0.0, 0.0)), true)));
             }
 
             testFixture.givenCommands(ads)

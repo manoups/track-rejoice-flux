@@ -19,7 +19,7 @@ public record GetOpenSightings(@PositiveOrZero Integer page, @Positive Integer p
     @HandleQuery
     List<Sighting> getSightings() {
         return Fluxzero.search(Sighting.class)
-                .match(null,"contentId")
+                .match(false,"claimed")
                 .sortBy("id")
                 .skip(page * pageSize)
                 .fetch(pageSize);
