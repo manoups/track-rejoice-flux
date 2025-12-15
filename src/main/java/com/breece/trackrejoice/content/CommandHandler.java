@@ -13,7 +13,10 @@ import org.springframework.stereotype.Component;
 public class CommandHandler {
     @HandleEvent
     void handle(CreateContent event) {
-        Sighting sighting = Fluxzero.sendCommandAndWait(new CreateSighting(new SightingId(), event.details().getSighting().details().spottedLocation()));
+//        TODO: Either add a boolean condition on Sighting state or
+//        create different publication path. Proceed with the following 2 steps only after payment
+//        Potentially when Content state changes from draft to paid
+        Sighting sighting = Fluxzero.sendCommandAndWait(new CreateSighting(new SightingId(), event.details().getSighting().details()));
         Fluxzero.sendAndForgetCommand(new ClaimSighting(event.contentId(), sighting.sightingId()));
     }
 }

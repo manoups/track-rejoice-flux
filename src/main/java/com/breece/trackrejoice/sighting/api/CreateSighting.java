@@ -8,10 +8,9 @@ import io.fluxzero.sdk.modeling.AssertLegal;
 import io.fluxzero.sdk.persisting.eventsourcing.Apply;
 import io.fluxzero.sdk.tracking.handling.authentication.RequiresUser;
 import jakarta.validation.constraints.NotNull;
-import org.locationtech.jts.geom.Geometry;
 
 @RequiresUser
-public record CreateSighting(@NotNull SightingId sightingId, Geometry spottedLocation) implements SightingCommand {
+public record CreateSighting(@NotNull SightingId sightingId, SightingDetails sightingDetails) implements SightingCommand {
     @AssertLegal
     void assertNew(Sighting sighting) {
         throw SightingErrors.alreadyExists;
@@ -19,6 +18,6 @@ public record CreateSighting(@NotNull SightingId sightingId, Geometry spottedLoc
 
     @Apply
     Sighting create() {
-        return new Sighting(sightingId, new SightingDetails(spottedLocation));
+        return new Sighting(sightingId, sightingDetails);
     }
 }

@@ -1,0 +1,33 @@
+package com.breece.trackrejoice.orders.api;
+
+import com.breece.trackrejoice.geo.model.GeoJsonPost;
+import com.breece.trackrejoice.geo.repositories.GeoJsonPostRepository;
+import com.breece.trackrejoice.sighting.LinkSightingToContent;
+import com.breece.trackrejoice.sighting.api.PostSighting;
+import io.fluxzero.sdk.tracking.handling.HandleEvent;
+import io.jooby.annotation.Transactional;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Component;
+
+import java.util.Optional;
+
+@Component
+@RequiredArgsConstructor
+public class SightingSyncHandler {
+    private final GeoJsonPostRepository repository;
+
+    @HandleEvent
+    void handle(PostSighting postSighting) {
+        repository.save(GeoJsonPost.builder().sightingId(postSighting.sightingId().getId()).lastSeenLocation(postSighting.sightingDetails().spottedLocation()).build());
+    }
+
+    @HandleEvent
+    @Transactional
+    void handle(LinkSightingToContent linkSightingToContent) {
+        repository.findByContentId(linkSightingToContent.contentId().getId()).ifPresent(repository::delete);
+        GeoJsonPost geoJsonPost = repository.findBySightingId(linkSightingToContent.sightingId().getId()).orElseThrow(() -> new RuntimeException("Sighting not found"));
+        geoJsonPost.setContentId(linkSightingToContent.contentId().getId());
+        geoJsonPost.setDetails(linkSightingToContent.details().toString());
+        repository.save(geoJsonPost);
+    }
+}
