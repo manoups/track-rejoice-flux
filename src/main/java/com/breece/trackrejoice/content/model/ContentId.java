@@ -8,6 +8,6 @@ public class ContentId extends Id<Content> {
         this(Fluxzero.generateId());
     }
     public ContentId(String id) {
-        super(id, "ad-");
+        super(id, "content-");
     }
 }

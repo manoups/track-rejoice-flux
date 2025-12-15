@@ -4,6 +4,12 @@ import com.breece.trackrejoice.content.command.CreateContent;
 import com.breece.trackrejoice.content.command.DeleteContent;
 import com.breece.trackrejoice.orders.api.command.PlaceOrder;
 import com.breece.trackrejoice.orders.api.command.ValidateOrder;
+import com.breece.trackrejoice.orders.api.model.Order;
+import com.breece.trackrejoice.sighting.api.ClaimSighting;
+import com.breece.trackrejoice.sighting.api.CreateSighting;
+import com.breece.trackrejoice.sighting.api.model.Sighting;
+import com.breece.trackrejoice.sighting.api.model.SightingId;
+import io.fluxzero.sdk.Fluxzero;
 import io.fluxzero.sdk.modeling.EntityId;
 import io.fluxzero.sdk.tracking.Consumer;
 import io.fluxzero.sdk.tracking.handling.Association;
@@ -27,6 +33,11 @@ public record ContentState(@Association @EntityId ContentId contentId, @With Con
 
     @HandleEvent
     ContentState on(ValidateOrder order) {
+        Order order1 = Fluxzero.loadEntity(order.getOrderId()).get();
+        Content content = Fluxzero.loadAggregate(order1.details().contentId()).get();
+        Sighting sighting = Fluxzero.sendCommandAndWait(new CreateSighting(new SightingId(), content.details().getSighting().details()));
+        Fluxzero.sendAndForgetCommand(new ClaimSighting(content.contentId(), sighting.sightingId()));
+
         return withStatus(ContentStatus.ENABLED);
     }
 
