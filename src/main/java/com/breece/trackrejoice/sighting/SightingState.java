@@ -6,7 +6,6 @@ import com.breece.trackrejoice.sighting.api.CreateSighting;
 import com.breece.trackrejoice.sighting.api.PostSighting;
 import com.breece.trackrejoice.sighting.api.model.SightingId;
 import io.fluxzero.sdk.Fluxzero;
-import io.fluxzero.sdk.modeling.Entity;
 import io.fluxzero.sdk.modeling.EntityId;
 import io.fluxzero.sdk.tracking.Consumer;
 import io.fluxzero.sdk.tracking.handling.Association;
@@ -14,6 +13,7 @@ import io.fluxzero.sdk.tracking.handling.HandleEvent;
 import io.fluxzero.sdk.tracking.handling.Stateful;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.With;
 
 @Stateful
 @Consumer(name = "sighting-state", ignoreSegment = true)
@@ -23,6 +23,7 @@ public class SightingState {
     @EntityId
     @Association
     private final SightingId sightingId;
+    @With
     boolean claimed;
 
     @HandleEvent
@@ -33,9 +34,8 @@ public class SightingState {
 
     @HandleEvent
     SightingState on(ClaimSighting event) {
-        claimed = true;
         Content contentEntity = Fluxzero.loadAggregate(event.contentId()).get();
         Fluxzero.publishEvent(new LinkSightingToContent(contentEntity.contentId(), contentEntity.details(), event.sightingId()));
-        return this;
+        return withClaimed(true);
     }
 }

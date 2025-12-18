@@ -1,6 +1,7 @@
 package com.breece.trackrejoice.common;
 
 import com.breece.trackrejoice.content.model.ContentId;
+import com.breece.trackrejoice.content.model.ContentState;
 import com.breece.trackrejoice.orders.api.OrderFulfillment;
 import com.breece.trackrejoice.orders.api.command.PlaceOrder;
 import com.breece.trackrejoice.orders.api.command.UpdateOrder;
@@ -53,7 +54,7 @@ class PaypalAuthenticateTest {
         }
 
 
-        TestFixture testFixture = TestFixture.create(new OrderFulfillment(), new EndpointMock()).withProperty("pgp", "paypal").givenCommands("/com/breece/trackrejoice/service/create-service.json");
+        TestFixture testFixture = TestFixture.create(ContentState.class, new OrderFulfillment(), new EndpointMock()).withProperty("pgp", "paypal").givenCommands("/com/breece/trackrejoice/service/create-service.json");
 
         @Test
         void paypalAuthenticate() {
@@ -94,7 +95,7 @@ class PaypalAuthenticateTest {
 
         @Test
         void sendOrder() {
-            PlaceOrder order1 = new PlaceOrder(new OrderId("1"), new OrderDetails(new ContentId("1"), listOf(new ServiceId("1")), Instant.now(), Duration.ofDays(90)));
+            PlaceOrder order1 = new PlaceOrder(new OrderId("1"), new ContentId("1"), new OrderDetails(listOf(new ServiceId("1")), Instant.now(), Duration.ofDays(90)));
             testFixture.givenCommands("/com/breece/trackrejoice/content/create-content.json").whenCommand(order1)
                     .expectEvents(PlaceOrder.class)
                     .expectCommands(ValidateOrder.class, UpdateOrder.class);

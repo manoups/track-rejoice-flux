@@ -31,7 +31,7 @@ class ContentStateTest {
     @Test
     void onValidateOrder() {
         testFixture.givenCommands("orders/place-order.json")
-                .givenEvents(new ValidateOrder(new OrderId("1"), "some reference"))
+                .givenEvents(new ValidateOrder(new OrderId("1"), new ContentId("1"),"some reference"))
                 .whenQuery(new GetClassifiedAdState(new ContentId("1")))
                 .expectResult(ContentState.class)
                 .expectResult(state -> ContentStatus.PENDING_PAYMENT == state.status());

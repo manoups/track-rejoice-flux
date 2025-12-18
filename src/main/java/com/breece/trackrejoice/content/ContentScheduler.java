@@ -14,7 +14,7 @@ public class ContentScheduler {
     void handle(PaymentAccepted event) {
         Fluxzero.loadAggregate(event.reference(), Order.class).ifPresent(orderEntity ->
         {
-            Fluxzero.scheduleCommand(new TakeContentOffline(orderEntity.get().details().contentId()),
+            Fluxzero.scheduleCommand(new TakeContentOffline(orderEntity.get().contentId()),
                     orderEntity.get().details().duration());
             return orderEntity;
         });

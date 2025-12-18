@@ -29,7 +29,7 @@ public record GetOpenSightings(@PositiveOrZero Integer page, @Positive Integer p
                 .skip(page * pageSize)
                 .fetch(pageSize);
         return Fluxzero.search(Sighting.class)
-                .any(fetch.stream().map(res -> match(res.getSightingId(), "id")).toArray(Constraint[]::new))
+                .any(fetch.stream().map(res -> match(res.getSightingId(), "sightingId")).toArray(Constraint[]::new))
                 .fetchAll();
     }
 }

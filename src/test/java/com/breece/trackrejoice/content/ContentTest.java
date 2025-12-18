@@ -2,10 +2,7 @@ package com.breece.trackrejoice.content;
 
 import com.breece.trackrejoice.content.command.CreateContent;
 import com.breece.trackrejoice.content.command.TakeContentOffline;
-import com.breece.trackrejoice.content.model.ContentId;
-import com.breece.trackrejoice.content.model.GenderEnum;
-import com.breece.trackrejoice.content.model.Keys;
-import com.breece.trackrejoice.content.model.Pet;
+import com.breece.trackrejoice.content.model.*;
 import com.breece.trackrejoice.content.query.GetContentStats;
 import com.breece.trackrejoice.content.query.GetContents;
 import com.breece.trackrejoice.geo.GeometryUtil;
@@ -21,7 +18,7 @@ import java.util.List;
 import static org.hamcrest.Matchers.hasSize;
 
 class ContentTest {
-    final TestFixture testFixture = TestFixture.create();
+    final TestFixture testFixture = TestFixture.create(ContentState.class);
 
     @Test
     void createContent() {

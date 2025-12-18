@@ -2,6 +2,7 @@ package com.breece.trackrejoice.orders.api.command;
 
 import com.breece.trackrejoice.authentication.Sender;
 import com.breece.trackrejoice.common.SendWebRequestWithMetadata;
+import com.breece.trackrejoice.content.model.ContentId;
 import com.breece.trackrejoice.orders.api.model.OrderId;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.paypal.sdk.models.*;
@@ -28,6 +29,9 @@ public class ValidateOrder extends SendWebRequestWithMetadata {
 
     @NotNull
     OrderId orderId;
+
+    @NotNull
+    ContentId contentId;
 
     @NotNull
     String reference;

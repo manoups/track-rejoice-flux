@@ -3,5 +3,6 @@
   "serviceId": "1",
   "name": "service1",
   "description": "service1 description",
-  "price": 100
+  "price": 100,
+  "basic": true
 }

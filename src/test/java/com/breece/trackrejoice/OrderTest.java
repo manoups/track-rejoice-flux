@@ -1,5 +1,6 @@
 package com.breece.trackrejoice;
 
+import com.breece.trackrejoice.content.model.ContentState;
 import com.breece.trackrejoice.orders.api.OrderErrors;
 import com.breece.trackrejoice.orders.api.OrderFulfillment;
 import com.breece.trackrejoice.orders.api.command.UpdateOrder;
@@ -17,7 +18,7 @@ import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
 
 class OrderTest {
-    final TestFixture testFixture = TestFixture.create(new OrderFulfillment(), new EndpointMock()).withClock(Clock.fixed(Instant.parse("2025-01-01T00:00:00Z"), ZoneId.systemDefault()))
+    final TestFixture testFixture = TestFixture.create(new OrderFulfillment(), ContentState.class, new EndpointMock()).withClock(Clock.fixed(Instant.parse("2025-01-01T00:00:00Z"), ZoneId.systemDefault()))
             .givenCommands("service/create-service.json", "content/create-content.json");
 
 

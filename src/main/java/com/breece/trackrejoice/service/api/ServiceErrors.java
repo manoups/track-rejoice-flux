@@ -9,5 +9,6 @@ public interface ServiceErrors {
             alreadyPlaced = new IllegalCommandException("Service has already been placed"),
             notFound = new IllegalCommandException("Service not found"),
             tooOld = new IllegalCommandException("Service cancellation expired"),
-            productNotFound = new IllegalCommandException("Product not found");
+            productNotFound = new IllegalCommandException("Service not found"),
+            basicServiceRequired = new IllegalCommandException("Basic service required");
 }

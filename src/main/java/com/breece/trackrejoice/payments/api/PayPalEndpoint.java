@@ -25,7 +25,7 @@ import java.util.List;
 public class PayPalEndpoint {
     @HandlePost("/orders/{content-id}")
     void createOrder(@PathParam(value = "content-id") ContentId contentId, List<ServiceId> serviceIds) {
-            Fluxzero.publishEvent(new PlaceOrder(new OrderId(), new OrderDetails(contentId, serviceIds, Instant.now(), Duration.ofDays(90))));
+            Fluxzero.publishEvent(new PlaceOrder(new OrderId(), contentId, new OrderDetails(serviceIds, Instant.now(), Duration.ofDays(90))));
     }
 
     @HandlePost("/orders/{orderID}/{announcementId}/capture")

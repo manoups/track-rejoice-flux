@@ -1,6 +1,7 @@
 package com.breece.trackrejoice.orders;
 
 import com.breece.trackrejoice.content.model.ContentId;
+import com.breece.trackrejoice.content.model.ContentState;
 import com.breece.trackrejoice.orders.api.OrderErrors;
 import com.breece.trackrejoice.orders.api.command.PlaceOrder;
 import com.breece.trackrejoice.orders.api.model.OrderDetails;
@@ -20,12 +21,12 @@ import java.time.Instant;
 import static org.hibernate.internal.util.collections.CollectionHelper.listOf;
 
 class PlaceOrderTest {
-    TestFixture testFixture = TestFixture.create().givenCommands("/com/breece/trackrejoice/service/create-service.json", "/com/breece/trackrejoice/content/create-content.json");
+    TestFixture testFixture = TestFixture.create(ContentState.class).givenCommands("/com/breece/trackrejoice/service/create-service.json", "/com/breece/trackrejoice/content/create-content.json");
 
-    PlaceOrder order1 = new PlaceOrder(new OrderId("1"), new OrderDetails(
-            new ContentId("1"), listOf(new ServiceId("1")), Instant.now(), Duration.ofDays(90)));
-    PlaceOrder order2 = new PlaceOrder(new OrderId("2"), new OrderDetails(
-            new ContentId("1"), listOf(new ServiceId("1")), Instant.now(), Duration.ofDays(90)));
+    PlaceOrder order1 = new PlaceOrder(new OrderId("1"), new ContentId("1"), new OrderDetails(
+            listOf(new ServiceId("1")), Instant.now(), Duration.ofDays(90)));
+    PlaceOrder order2 = new PlaceOrder(new OrderId("2"), new ContentId("1"), new OrderDetails(
+            listOf(new ServiceId("1")), Instant.now(), Duration.ofDays(90)));
 
     @Test
     void duplicateCreation() {

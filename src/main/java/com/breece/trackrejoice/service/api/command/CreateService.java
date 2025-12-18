@@ -16,11 +16,11 @@ import java.math.BigDecimal;
 
 @RequiresRole(Role.ADMIN)
 public record CreateService (@NotNull
-        ServiceId serviceId, @NotBlank String name, @NotBlank String description, @PositiveOrZero BigDecimal price) implements ServiceCommand {
+        ServiceId serviceId, @NotBlank String name, @NotBlank String description, @PositiveOrZero BigDecimal price, boolean basic) implements ServiceCommand {
 
     @AssertLegal
     void assertNew(Service service) { throw ServiceErrors.alreadyExists; }
 
     @Apply
-    Service apply() { return new Service(serviceId, new ServiceDetails(name, description, price), true); }
+    Service apply() { return new Service(serviceId, new ServiceDetails(name, description, price), basic, true); }
 }
