@@ -10,6 +10,7 @@ import io.fluxzero.sdk.tracking.handling.Request;
 import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.PositiveOrZero;
 
+import java.util.Collections;
 import java.util.List;
 
 import static io.fluxzero.common.api.search.constraints.MatchConstraint.match;
@@ -28,7 +29,7 @@ public record GetOpenSightings(@PositiveOrZero Integer page, @Positive Integer p
                 .sortBy("id")
                 .skip(page * pageSize)
                 .fetch(pageSize);
-        return Fluxzero.search(Sighting.class)
+        return fetch.isEmpty() ? Collections.emptyList() : Fluxzero.search(Sighting.class)
                 .any(fetch.stream().map(res -> match(res.getSightingId(), "sightingId")).toArray(Constraint[]::new))
                 .fetchAll();
     }
