@@ -11,7 +11,6 @@ import com.breece.trackrejoice.orders.api.model.Order;
 import com.breece.trackrejoice.orders.api.model.OrderDetails;
 import com.breece.trackrejoice.orders.api.model.OrderId;
 import com.breece.trackrejoice.service.api.ServiceErrors;
-import com.breece.trackrejoice.service.api.model.Service;
 import io.fluxzero.sdk.Fluxzero;
 import io.fluxzero.sdk.modeling.AssertLegal;
 import io.fluxzero.sdk.modeling.Entity;

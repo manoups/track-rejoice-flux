@@ -12,8 +12,10 @@ import io.fluxzero.sdk.Fluxzero;
 import io.fluxzero.sdk.modeling.AssertLegal;
 import io.fluxzero.sdk.modeling.Entity;
 import io.fluxzero.sdk.persisting.eventsourcing.Apply;
+import io.fluxzero.sdk.tracking.handling.authentication.RequiresUser;
 import jakarta.validation.constraints.NotNull;
 
+@RequiresUser
 public record ClaimSighting(@NotNull ContentId contentId, @NotNull SightingId sightingId) implements SightingUpdate {
     @AssertLegal
     void assertContentOwnership(Sender sender) {

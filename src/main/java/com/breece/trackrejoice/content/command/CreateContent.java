@@ -11,7 +11,6 @@ import io.fluxzero.sdk.tracking.handling.authentication.RequiresUser;
 import jakarta.validation.Valid;
 import org.wildfly.common.annotation.NotNull;
 
-@RequiresUser
 public record CreateContent(@NotNull ContentId contentId, @Valid @NotNull ExtraDetails details) implements ContentCommand {
     @AssertLegal
     void assertNew(Content content) { throw ContentErrors.alreadyExists; }

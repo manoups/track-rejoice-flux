@@ -13,7 +13,6 @@ import jakarta.validation.constraints.PositiveOrZero;
 import java.math.BigDecimal;
 
 @RequiresRole(Role.ADMIN)
-
 public record UpdateService(@NotNull ServiceId serviceId, @NotBlank String name, @NotBlank String description, @PositiveOrZero BigDecimal price, boolean online) implements ServiceUpdate{
     @Apply
     public Service apply(Service service) {

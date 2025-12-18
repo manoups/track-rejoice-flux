@@ -9,6 +9,8 @@ import com.breece.trackrejoice.geo.GeometryUtil;
 import com.breece.trackrejoice.sighting.api.model.Sighting;
 import com.breece.trackrejoice.sighting.api.model.SightingDetails;
 import com.breece.trackrejoice.sighting.api.model.SightingId;
+import com.breece.trackrejoice.user.api.UserId;
+import com.breece.trackrejoice.user.api.model.UserProfile;
 import io.fluxzero.sdk.test.TestFixture;
 import org.junit.jupiter.api.*;
 
@@ -44,6 +46,14 @@ class ContentTest {
         testFixture.givenCommands("create-content.json")
                 .whenCommand("delete-content.json")
                 .expectEvents("delete-content.json");
+    }
+
+    @Test
+    void deleteContentNonOwner() {
+        testFixture.givenCommands("/com/breece/trackrejoice/user/create-user.json", "/com/breece/trackrejoice/user/create-another-user.json")
+                .givenCommandsByUser(new UserProfile(new UserId("viewer"), null, null),"create-content.json")
+                .whenCommandByUser(new UserProfile(new UserId("user2"), null, null),"delete-content.json")
+                .expectExceptionalResult(ContentErrors.unauthorized);
     }
 
     @Nested

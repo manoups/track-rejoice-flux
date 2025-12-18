@@ -4,6 +4,7 @@ import com.breece.trackrejoice.content.model.ContentId;
 import io.fluxzero.sdk.Fluxzero;
 import io.fluxzero.sdk.tracking.TrackSelf;
 import io.fluxzero.sdk.tracking.handling.HandleCommand;
+import io.fluxzero.sdk.tracking.handling.authentication.RequiresUser;
 import jakarta.validation.constraints.NotNull;
 
 @TrackSelf
