@@ -1,5 +1,5 @@
 {
-  "@class": "com.breece.trackrejoice.sighting.api.ClaimSighting",
+  "@class": "com.breece.trackrejoice.content.command.ClaimSighting",
   "sightingId": "1",
   "contentId": "1"
 }

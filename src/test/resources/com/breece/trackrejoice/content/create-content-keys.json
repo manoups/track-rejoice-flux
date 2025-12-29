@@ -4,10 +4,7 @@
   "details": {
     "@class" : "Keys",
     "description": "Leather keychain",
-    "sighting": {
-      "@class": "Sighting",
-      "sightingId": "2",
-      "spottedLocation": {
+    "lastConfirmedSighting": {
         "type": "Point",
         "coordinates": [0.0, 0.0]
       }

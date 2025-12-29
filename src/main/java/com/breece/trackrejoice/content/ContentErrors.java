@@ -10,5 +10,6 @@ public interface ContentErrors {
             notFound = new IllegalCommandException("Content not found"),
             unauthorized = new UnauthorizedException("Unauthorized for action"),
             taskNotFound = new IllegalCommandException("Task not found"),
-            taskCompleted = new IllegalCommandException("Task has already completed");
+            taskCompleted = new IllegalCommandException("Task has already completed"),
+            sightingNotFound = new IllegalCommandException("Sighting not found");
 }

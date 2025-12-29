@@ -1,11 +1,12 @@
 package com.breece.trackrejoice.content.model;
 
 import com.breece.trackrejoice.sighting.api.model.Sighting;
+import com.breece.trackrejoice.sighting.api.model.SightingDetails;
+import io.fluxzero.sdk.modeling.Member;
 import jakarta.validation.constraints.NotBlank;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import lombok.*;
+
+import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -14,10 +15,13 @@ import lombok.NoArgsConstructor;
 public class Keys extends ImmobileTarget{
     @NotBlank
     String description;
+    @Member
+    @With
+    List<Sighting> proposedSightings;
 
-    public Keys(String description, Sighting lastSeenLocation) {
+    public Keys(String description, SightingDetails lastSeenLocation) {
         this.subtype = "keys";
         this.description = description;
-        this.sighting = lastSeenLocation;
+        this.lastConfirmedSighting = lastSeenLocation;
     }
 }

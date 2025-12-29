@@ -4,18 +4,8 @@ import com.breece.trackrejoice.authentication.Sender;
 import com.breece.trackrejoice.content.ContentErrors;
 import com.breece.trackrejoice.content.model.Content;
 import io.fluxzero.sdk.modeling.AssertLegal;
-import jakarta.annotation.Nullable;
 
-import java.util.Objects;
-
-public interface ContentUpdate extends ContentCommand {
-    @AssertLegal
-    default void assertExists(@Nullable Content content) {
-        if (Objects.isNull(content)) {
-            throw ContentErrors.notFound;
-        }
-    }
-
+public interface ContentUpdate extends ContentInteract {
     @AssertLegal
     default void assertAuthorized(Content content, Sender sender) {
         if (!sender.isAuthorizedFor(content.ownerId())) {

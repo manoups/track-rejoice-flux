@@ -1,5 +1,6 @@
 package com.breece.trackrejoice.sighting.api;
 
+import com.breece.trackrejoice.authentication.Sender;
 import com.breece.trackrejoice.sighting.SightingErrors;
 import com.breece.trackrejoice.sighting.api.model.Sighting;
 import com.breece.trackrejoice.sighting.api.model.SightingDetails;
@@ -17,7 +18,7 @@ public record CreateSighting(@NotNull SightingId sightingId, SightingDetails sig
     }
 
     @Apply
-    Sighting create() {
-        return new Sighting(sightingId, sightingDetails);
+    Sighting create(Sender sender) {
+        return new Sighting(sightingId, sender.userId(), sightingDetails);
     }
 }

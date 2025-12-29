@@ -3,6 +3,7 @@ package com.breece.trackrejoice.sighting.api;
 
 import com.breece.trackrejoice.sighting.SightingState;
 import com.breece.trackrejoice.sighting.api.model.Sighting;
+import com.breece.trackrejoice.sighting.api.model.SightingStatus;
 import io.fluxzero.common.api.search.Constraint;
 import io.fluxzero.sdk.Fluxzero;
 import io.fluxzero.sdk.tracking.handling.HandleQuery;
@@ -25,7 +26,7 @@ public record GetOpenSightings(@PositiveOrZero Integer page, @Positive Integer p
     @HandleQuery
     List<Sighting> getSightings() {
         List<SightingState> fetch = Fluxzero.search(SightingState.class)
-                .match(false, "claimed")
+                .match(SightingStatus.OPEN, "status")
                 .sortBy("id")
                 .skip(page * pageSize)
                 .fetch(pageSize);

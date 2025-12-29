@@ -3,7 +3,7 @@ package com.breece.trackrejoice;
 import com.breece.trackrejoice.content.ContentErrors;
 import com.breece.trackrejoice.content.model.ContentId;
 import com.breece.trackrejoice.sighting.SightingState;
-import com.breece.trackrejoice.sighting.api.ClaimSighting;
+import com.breece.trackrejoice.content.command.ClaimSighting;
 import com.breece.trackrejoice.sighting.api.GetOpenSightings;
 import com.breece.trackrejoice.sighting.SightingErrors;
 import com.breece.trackrejoice.sighting.api.model.SightingId;

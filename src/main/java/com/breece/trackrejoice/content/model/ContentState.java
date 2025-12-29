@@ -6,7 +6,7 @@ import com.breece.trackrejoice.orders.api.command.PlaceOrder;
 import com.breece.trackrejoice.orders.api.command.ValidateOrder;
 import com.breece.trackrejoice.orders.api.model.Order;
 import com.breece.trackrejoice.service.api.model.Service;
-import com.breece.trackrejoice.sighting.api.ClaimSighting;
+import com.breece.trackrejoice.content.command.ClaimSighting;
 import com.breece.trackrejoice.sighting.api.CreateSighting;
 import com.breece.trackrejoice.sighting.api.model.Sighting;
 import com.breece.trackrejoice.sighting.api.model.SightingId;
@@ -45,7 +45,7 @@ public record ContentState(@Association @EntityId ContentId contentId, @With Con
     ContentState on(ValidateOrder order) {
         Order order1 = Fluxzero.loadEntity(order.getOrderId()).get();
         Content content = Fluxzero.loadAggregate(order1.contentId()).get();
-        Sighting sighting = Fluxzero.sendCommandAndWait(new CreateSighting(new SightingId(), content.details().getSighting().details()));
+        Sighting sighting = Fluxzero.sendCommandAndWait(new CreateSighting(new SightingId(), content.details().getLastConfirmedSighting()));
         Fluxzero.sendAndForgetCommand(new ClaimSighting(content.contentId(), sighting.sightingId()));
 
         return withStatus(ContentStatus.ENABLED);
