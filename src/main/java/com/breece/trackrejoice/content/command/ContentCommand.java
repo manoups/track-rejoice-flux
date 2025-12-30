@@ -1,5 +1,6 @@
 package com.breece.trackrejoice.content.command;
 
+import com.breece.trackrejoice.content.model.Content;
 import com.breece.trackrejoice.content.model.ContentId;
 import io.fluxzero.sdk.Fluxzero;
 import io.fluxzero.sdk.tracking.TrackSelf;
@@ -13,8 +14,7 @@ public interface ContentCommand {
     ContentId contentId();
 
     @HandleCommand
-    default ContentId handle(ContentCommand command) {
-        Fluxzero.loadEntity(command.contentId()).assertAndApply(command);
-        return command.contentId();
+    default Content handle(ContentCommand command) {
+        return Fluxzero.loadEntity(command.contentId()).assertAndApply(command).get();
     }
 }

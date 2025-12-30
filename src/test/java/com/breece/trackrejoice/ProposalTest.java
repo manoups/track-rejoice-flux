@@ -6,13 +6,14 @@ import com.breece.trackrejoice.content.command.UpdateContent;
 import com.breece.trackrejoice.content.model.ContentId;
 import com.breece.trackrejoice.content.query.GetContent;
 import com.breece.trackrejoice.geo.GeometryUtil;
+import com.breece.trackrejoice.sighting.SightingState;
 import io.fluxzero.sdk.test.TestFixture;
 import org.junit.jupiter.api.Test;
 
 import java.util.Objects;
 
 public class ProposalTest {
-    final TestFixture testFixture = TestFixture.create();
+    final TestFixture testFixture = TestFixture.create(SightingState.class);
 
     @Test
     void givenNoContent_whenProposalCreated_thenError() {

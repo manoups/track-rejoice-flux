@@ -1,5 +1,6 @@
 package com.breece.trackrejoice.content.command;
 
+import com.breece.trackrejoice.content.model.Content;
 import com.breece.trackrejoice.content.model.ContentId;
 import com.breece.trackrejoice.sighting.api.model.SightingId;
 import io.fluxzero.sdk.Fluxzero;
@@ -9,7 +10,7 @@ import jakarta.validation.constraints.NotNull;
 public record AcceptProposal(@NotNull SightingId sightingId, @NotNull ContentId contentId) implements ContentUpdate {
 
     @Apply
-    void apply() {
-        Fluxzero.sendAndForgetCommand(new ClaimSighting(contentId, sightingId));
+    Content apply() {
+        return Fluxzero.sendCommandAndWait(new ClaimSighting(contentId, sightingId));
     }
 }

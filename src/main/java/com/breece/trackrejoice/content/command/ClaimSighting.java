@@ -16,6 +16,12 @@ import jakarta.validation.constraints.NotNull;
 public record ClaimSighting(@NotNull ContentId contentId, @NotNull SightingId sightingId) implements ContentUpdate {
 
     @AssertLegal
+    void assertSightingExists() {
+        if(Fluxzero.search(SightingState.class).match(sightingId, "sightingId").<SightingState>fetchFirst().isEmpty()) {
+            throw SightingErrors.notFound;
+        }
+    }
+    @AssertLegal
     void assertSightingNotClaimed() {
         Fluxzero.search(SightingState.class).match(sightingId, "sightingId").<SightingState>fetchFirst().ifPresent(
                 state -> {
@@ -26,7 +32,7 @@ public record ClaimSighting(@NotNull ContentId contentId, @NotNull SightingId si
     }
 
     @Apply
-    ContentId assign(Content content) {
+    Content assign(Content content) {
         return Fluxzero.sendCommandAndWait(new UpdateContent(contentId, content.details()));
     }
 }
