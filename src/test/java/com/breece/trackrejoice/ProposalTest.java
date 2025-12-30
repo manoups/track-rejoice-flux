@@ -11,6 +11,7 @@ import com.breece.trackrejoice.sighting.SightingState;
 import io.fluxzero.sdk.test.TestFixture;
 import org.junit.jupiter.api.Test;
 
+import java.util.List;
 import java.util.Objects;
 
 import static org.hamcrest.Matchers.hasSize;
@@ -89,7 +90,16 @@ public class ProposalTest {
         testFixture.givenCommands("sighting/create-sighting.json", "content/create-content.json", "proposal/create-proposal.json")
                 .whenCommand("proposal/reject-proposal.json")
                 .expectNoErrors()
-                .expectNoEvents()
-        ;
+                .expectEvents("proposal/reject-proposal.json");
+    }
+
+    @Test
+    void givenRejectProposal_whenQueryProposedSightings_thenEmptyList() {
+        testFixture.givenCommands("sighting/create-sighting.json", "content/create-content.json", "proposal/create-proposal.json", "proposal/reject-proposal.json")
+                .whenQuery(new GetContent(new ContentId("1")))
+                .expectNoErrors()
+                .expectResult(Objects::nonNull)
+                .mapResult(Content::proposedSightings)
+                .expectResult(List::isEmpty);
     }
 }

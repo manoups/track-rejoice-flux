@@ -1,9 +1,8 @@
-package com.breece.trackrejoice.content.command;
+package com.breece.trackrejoice.sighting.api;
 
 import com.breece.trackrejoice.authentication.Sender;
 import com.breece.trackrejoice.content.ContentErrors;
 import com.breece.trackrejoice.content.model.Content;
-import com.breece.trackrejoice.sighting.api.SightingUpdate;
 import com.breece.trackrejoice.sighting.api.model.Sighting;
 import com.breece.trackrejoice.sighting.api.model.SightingId;
 import io.fluxzero.sdk.Fluxzero;
@@ -23,11 +22,11 @@ public record RejectProposal(@NotNull SightingId sightingId) implements Sighting
 
     @AssertLegal
     void assertAuthorized(Sender sender) {
-        Content contentEntity = Fluxzero.search(Content.class)
-                .match(sightingId, "details.proposedSightings.sightingId")
-                .fetchFirstOrNull();
-        Content objectEntity = Fluxzero.<Content>loadAggregateFor(sightingId, Content.class).get();
-        if (!sender.isAuthorizedFor(objectEntity.ownerId())) {
+        if (Fluxzero.get()
+                .aggregateRepository()
+                .getAggregatesFor(sightingId).entrySet().stream().filter(entry -> entry.getValue() == Content.class)
+                .map(entry -> Fluxzero.<Content>loadAggregateFor(entry.getKey(), entry.getValue()).get())
+                .noneMatch(entry -> sender.isAuthorizedFor(entry.ownerId()))) {
             throw ContentErrors.unauthorized;
         }
     }
