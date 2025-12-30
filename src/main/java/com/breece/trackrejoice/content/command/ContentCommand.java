@@ -13,7 +13,8 @@ public interface ContentCommand {
     ContentId contentId();
 
     @HandleCommand
-    default void handle(ContentCommand command) {
+    default ContentId handle(ContentCommand command) {
         Fluxzero.loadEntity(command.contentId()).assertAndApply(command);
+        return command.contentId();
     }
 }

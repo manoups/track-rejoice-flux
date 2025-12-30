@@ -4,7 +4,6 @@ import com.breece.trackrejoice.content.model.Content;
 import com.breece.trackrejoice.content.model.ContentId;
 import com.breece.trackrejoice.sighting.SightingErrors;
 import com.breece.trackrejoice.sighting.SightingState;
-import com.breece.trackrejoice.sighting.api.model.Sighting;
 import com.breece.trackrejoice.sighting.api.model.SightingId;
 import com.breece.trackrejoice.sighting.api.model.SightingStatus;
 import io.fluxzero.sdk.Fluxzero;
@@ -17,7 +16,7 @@ import jakarta.validation.constraints.NotNull;
 public record ClaimSighting(@NotNull ContentId contentId, @NotNull SightingId sightingId) implements ContentUpdate {
 
     @AssertLegal
-    void assertSightingNotClaimed(Sighting sighting) {
+    void assertSightingNotClaimed() {
         Fluxzero.search(SightingState.class).match(sightingId, "sightingId").<SightingState>fetchFirst().ifPresent(
                 state -> {
                     if (state.getStatus() == SightingStatus.CLAIMED) {
@@ -27,7 +26,7 @@ public record ClaimSighting(@NotNull ContentId contentId, @NotNull SightingId si
     }
 
     @Apply
-    Content assign(Content content) {
+    ContentId assign(Content content) {
         return Fluxzero.sendCommandAndWait(new UpdateContent(contentId, content.details()));
     }
 }
