@@ -4,7 +4,10 @@ import com.breece.trackrejoice.sighting.api.model.SightingDetails;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import io.fluxzero.common.search.Facet;
+import jakarta.validation.constraints.NotNull;
+import lombok.Builder;
 import lombok.Getter;
+import lombok.With;
 
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "@class")
 @JsonSubTypes({
@@ -15,6 +18,7 @@ import lombok.Getter;
 public abstract class ExtraDetails {
     @Facet
     String subtype;
-
-    public abstract SightingDetails getLastConfirmedSighting();
+    @NotNull
+    @With
+    SightingDetails lastConfirmedSighting;
 }

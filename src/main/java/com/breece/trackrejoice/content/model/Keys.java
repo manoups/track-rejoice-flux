@@ -19,13 +19,15 @@ public class Keys extends ImmobileTarget {
     @Member
     @With
     List<Sighting> proposedSightings;
-    @NotNull
-    @With
-    SightingDetails lastConfirmedSighting;
 
     public Keys(String description, SightingDetails lastSeenLocation) {
         this.subtype = "keys";
         this.description = description;
         this.lastConfirmedSighting = lastSeenLocation;
+    }
+
+    @Override
+    public ExtraDetails withLastConfirmedSighting(SightingDetails lastConfirmedSighting) {
+        return new Keys(description, lastConfirmedSighting);
     }
 }
