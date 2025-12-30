@@ -16,12 +16,12 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 
 @Component
-@Path("/classifieds-ads")
+@Path("/content")
 public class ContentEndpoint {
     @HandlePost(value = {"","/"})
-    ContentId createContent(ExtraDetails details) {
+    ContentId createContent(CreateContent content) {
         var contentId = new ContentId();
-        Fluxzero.sendCommandAndWait(new CreateContent(contentId, details));
+        Fluxzero.sendCommandAndWait(new CreateContent(contentId, content.lastConfirmedSighting(), content.details()));
         return contentId;
     }
 

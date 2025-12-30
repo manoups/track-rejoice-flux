@@ -71,11 +71,11 @@ class ContentTest {
             CreateContent[] contents = new CreateContent[SIZE];
             for(int i=0; i< 15; ++i) {
                 ContentId contentId = new ContentId();
-                contents[i] = new CreateContent(contentId, new Pet("Maya", "Cocker Spaniel", GenderEnum.FEMALE, new SightingDetails(0.0, 0.0)));
+                contents[i] = new CreateContent(contentId, new SightingDetails(0.0, 0.0), new Pet("Maya", "Cocker Spaniel", GenderEnum.FEMALE));
             }
             for(int i=15; i< SIZE; ++i) {
                 ContentId contentId = new ContentId();
-                contents[i] = new CreateContent(contentId, new Keys("Square Key", new SightingDetails(0.0, 0.0)));
+                contents[i] = new CreateContent(contentId, new SightingDetails(0.0, 0.0), new Keys("Square Key"));
             }
 
             testFixture.givenCommands(contents)
@@ -123,14 +123,14 @@ class ContentTest {
 
         @Test
         void createContent() {
-            testFixture.whenPost("classifieds-ads", "/com/breece/trackrejoice/content/content-details.json")
+            testFixture.whenPost("content", "/com/breece/trackrejoice/content/content-details.json")
                     .expectResult(ContentId.class).expectEvents(CreateContent.class);
         }
 
         @Test
         void getContents() {
-            testFixture.givenPost("classifieds-ads", "/com/breece/trackrejoice/content/content-details.json")
-                    .whenGet("classifieds-ads")
+            testFixture.givenPost("content", "/com/breece/trackrejoice/content/content-details.json")
+                    .whenGet("content")
                     .expectResult(hasSize(1));
         }
     }

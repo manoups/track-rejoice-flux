@@ -13,7 +13,7 @@ import io.fluxzero.sdk.tracking.handling.authentication.RequiresUser;
 import jakarta.validation.constraints.NotNull;
 
 @RequiresUser
-public record CreateProposal(@NotNull SightingId sightingId, @NotNull SightingDetails sightingDetails, @NotNull ContentId contentId) implements ContentInteract {
+public record CreateProposal(ContentId contentId, @NotNull SightingId sightingId, @NotNull SightingDetails sightingDetails) implements ContentInteract {
     @AssertLegal
     void assertSightingExists() {
         if (!Fluxzero.loadAggregate(sightingId).isPresent()) {

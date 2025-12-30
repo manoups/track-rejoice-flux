@@ -1,13 +1,12 @@
 {
-  "@class" : "CreateContent",
+  "@class": "CreateContent",
   "contentId": "2",
+  "lastConfirmedSighting": {
+    "lat": 0.0,
+    "lng": 0.0
+  },
   "details": {
-    "@class" : "Keys",
-    "description": "Leather keychain",
-    "lastConfirmedSighting": {
-        "type": "Point",
-        "coordinates": [0.0, 0.0]
-      }
-    }
+    "@class": "Keys",
+    "description": "Leather keychain"
   }
 }

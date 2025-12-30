@@ -35,6 +35,6 @@ public record ClaimSighting(@NotNull ContentId contentId, @NotNull SightingId si
     @Apply
     Content assign(Content content) {
         Sighting sighting = Fluxzero.loadEntity(sightingId).get();
-        return content.withDetails(content.details().withLastConfirmedSighting(sighting.details()));
+        return content.withLastConfirmedSighting(sighting.details());
     }
 }

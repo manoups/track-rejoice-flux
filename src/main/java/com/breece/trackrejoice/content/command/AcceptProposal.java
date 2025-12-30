@@ -20,7 +20,7 @@ public record AcceptProposal(@NotNull SightingId sightingId, @NotNull ContentId 
         if (content == null) {
             throw new IllegalArgumentException("Content not found");
         }
-        if (content.details().getProposedSightings().stream().noneMatch(ps -> ps.sightingId().equals(sightingId))) {
+        if (content.proposedSightings().stream().noneMatch(ps -> ps.sightingId().equals(sightingId))) {
             throw new IllegalArgumentException("Sighting not proposed for content");
         }
     }

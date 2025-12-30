@@ -1,14 +1,14 @@
 {
   "@class": "CreateContent",
   "contentId": "1",
+  "lastConfirmedSighting": {
+    "lat": 0.0,
+    "lng": 0.0
+  },
   "details": {
     "@class": "Pet",
     "name": "Fritz",
     "gender": "MALE",
-    "breed": "Labrador Retriever",
-    "lastConfirmedSighting": {
-      "lat": 0.0,
-      "lng": 0.0
-    }
+    "breed": "Labrador Retriever"
   }
 }

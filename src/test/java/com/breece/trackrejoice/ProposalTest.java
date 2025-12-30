@@ -3,6 +3,7 @@ package com.breece.trackrejoice;
 import com.breece.trackrejoice.content.ContentErrors;
 import com.breece.trackrejoice.content.command.ClaimSighting;
 import com.breece.trackrejoice.content.command.UpdateContent;
+import com.breece.trackrejoice.content.model.Content;
 import com.breece.trackrejoice.content.model.ContentId;
 import com.breece.trackrejoice.content.query.GetContent;
 import com.breece.trackrejoice.geo.GeometryUtil;
@@ -38,7 +39,7 @@ public class ProposalTest {
                 .whenQuery(new GetContent(new ContentId("1")))
                 .expectNoErrors()
                 .expectResult(Objects::nonNull)
-                .mapResult(content -> content.details().getLastConfirmedSighting())
+                .mapResult(Content::lastConfirmedSighting)
                 .expectResult(Objects::nonNull)
                 .expectResult(details -> GeometryUtil.parseLocation(details.lat(), details.lng()).within(GeometryUtil.parseLocation(0.0, 0.0)));
     }
@@ -49,7 +50,7 @@ public class ProposalTest {
                 .whenQuery(new GetContent(new ContentId("1")))
                 .expectNoErrors()
                 .expectResult(Objects::nonNull)
-                .mapResult(content -> content.details().getLastConfirmedSighting())
+                .mapResult(Content::lastConfirmedSighting)
                 .expectResult(Objects::nonNull)
                 .expectResult(details -> GeometryUtil.parseLocation(details.lat(), details.lng()).within(GeometryUtil.parseLocation(0.0, 0.0)));
     }
@@ -59,7 +60,7 @@ public class ProposalTest {
         testFixture.givenCommands("content/create-content.json", "sighting/create-sighting.json", "proposal/create-proposal.json")
                 .whenCommand("proposal/accept-proposal.json")
                 .expectNoErrors()
-                .expectCommands(ClaimSighting.class, UpdateContent.class);
+                .expectCommands(ClaimSighting.class);
     }
 
     @Test
@@ -68,7 +69,7 @@ public class ProposalTest {
                 .whenQuery(new GetContent(new ContentId("1")))
                 .expectNoErrors()
                 .expectResult(Objects::nonNull)
-                .mapResult(content -> content.details().getLastConfirmedSighting())
+                .mapResult(Content::lastConfirmedSighting)
                 .expectResult(Objects::nonNull)
                 .expectResult(details -> GeometryUtil.parseLocation(details.lat(), details.lng()).within(GeometryUtil.parseLocation(123.456, 78.901)));
     }
@@ -79,7 +80,7 @@ public class ProposalTest {
                 .whenQuery(new GetContent(new ContentId("1")))
                 .expectNoErrors()
                 .expectResult(Objects::nonNull)
-                .mapResult(content -> content.details().getProposedSightings())
+                .mapResult(Content::proposedSightings)
                 .expectResult(hasSize(1));
     }
 

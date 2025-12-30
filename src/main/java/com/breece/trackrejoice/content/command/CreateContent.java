@@ -5,17 +5,24 @@ import com.breece.trackrejoice.content.ContentErrors;
 import com.breece.trackrejoice.content.model.Content;
 import com.breece.trackrejoice.content.model.ContentId;
 import com.breece.trackrejoice.content.model.ExtraDetails;
+import com.breece.trackrejoice.sighting.api.model.SightingDetails;
 import io.fluxzero.sdk.modeling.AssertLegal;
 import io.fluxzero.sdk.persisting.eventsourcing.Apply;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 
-public record CreateContent(@NotNull ContentId contentId, @Valid @NotNull ExtraDetails details) implements ContentCommand {
+import java.util.List;
+
+
+public record CreateContent(@NotNull ContentId contentId, @Valid @NotNull SightingDetails lastConfirmedSighting,
+                            @Valid @NotNull ExtraDetails details) implements ContentCommand {
     @AssertLegal
-    void assertNew(Content content) { throw ContentErrors.alreadyExists; }
+    void assertNew(Content content) {
+        throw ContentErrors.alreadyExists;
+    }
 
     @Apply
     Content create(Sender sender) {
-        return new Content(contentId, details, sender.userId(), false);
+        return new Content(contentId, lastConfirmedSighting, List.of(), details, sender.userId(), false);
     }
 }
