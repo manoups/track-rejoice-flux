@@ -16,9 +16,6 @@ import java.util.List;
 public class Keys extends ImmobileTarget {
     @NotBlank
     String description;
-    @Member
-    @With
-    List<Sighting> proposedSightings;
 
     public Keys(String description, SightingDetails lastSeenLocation) {
         this.subtype = "keys";
@@ -26,8 +23,20 @@ public class Keys extends ImmobileTarget {
         this.lastConfirmedSighting = lastSeenLocation;
     }
 
+    public Keys(String description, SightingDetails lastSeenLocation, List<Sighting> proposedSightings) {
+        this.subtype = "keys";
+        this.description = description;
+        this.lastConfirmedSighting = lastSeenLocation;
+        this.proposedSightings = proposedSightings;
+    }
+
     @Override
     public ExtraDetails withLastConfirmedSighting(SightingDetails lastConfirmedSighting) {
         return new Keys(description, lastConfirmedSighting);
+    }
+
+    @Override
+    public ExtraDetails withProposedSightings(List<Sighting> proposedSightings) {
+        return new Keys(description, lastConfirmedSighting, proposedSightings);
     }
 }

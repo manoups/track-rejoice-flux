@@ -14,7 +14,6 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = false)
-@Builder(toBuilder = true)
 public class Pet extends MobileTarget {
     @NotBlank
     String name;
@@ -22,10 +21,6 @@ public class Pet extends MobileTarget {
     String breed;
     @NonNull
     GenderEnum gender;
-    @Member
-    @With
-    List<Sighting> proposedSightings;
-
     String age;
     String size;
     String color;
@@ -42,8 +37,22 @@ public class Pet extends MobileTarget {
         this.lastConfirmedSighting = sighting;
     }
 
+    public Pet(String name, String breed, @NonNull GenderEnum gender, @Valid @NotNull SightingDetails sighting, List<Sighting> proposedSightings) {
+        this.subtype = "pet";
+        this.name = name;
+        this.breed = breed;
+        this.gender = gender;
+        this.lastConfirmedSighting = sighting;
+        this.proposedSightings = proposedSightings;
+    }
+
     @Override
     public ExtraDetails withLastConfirmedSighting(SightingDetails lastConfirmedSighting) {
         return new Pet(name, breed, gender, lastConfirmedSighting);
+    }
+
+    @Override
+    public ExtraDetails withProposedSightings(List<Sighting> proposedSightings) {
+        return new Pet(name, breed, gender, lastConfirmedSighting, proposedSightings);
     }
 }
