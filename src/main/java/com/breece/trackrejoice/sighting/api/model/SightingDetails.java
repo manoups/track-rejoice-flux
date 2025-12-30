@@ -1,7 +1,7 @@
 package com.breece.trackrejoice.sighting.api.model;
 
-import org.locationtech.jts.geom.Geometry;
+import jakarta.validation.constraints.NotNull;
 
 //Value Object
-public record SightingDetails(Geometry spottedLocation) {
+public record SightingDetails(@NotNull Double lng, @NotNull Double lat) {
 }

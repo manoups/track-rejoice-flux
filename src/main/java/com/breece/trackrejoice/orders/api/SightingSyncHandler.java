@@ -1,5 +1,6 @@
 package com.breece.trackrejoice.orders.api;
 
+import com.breece.trackrejoice.geo.GeometryUtil;
 import com.breece.trackrejoice.geo.model.GeoJsonPost;
 import com.breece.trackrejoice.geo.repositories.GeoJsonPostRepository;
 import com.breece.trackrejoice.sighting.LinkSightingToContent;
@@ -18,7 +19,7 @@ public class SightingSyncHandler {
 
     @HandleEvent
     void handle(PostSighting postSighting) {
-        repository.save(GeoJsonPost.builder().sightingId(postSighting.sightingId().getId()).lastSeenLocation(postSighting.sightingDetails().spottedLocation()).build());
+        repository.save(GeoJsonPost.builder().sightingId(postSighting.sightingId().getId()).lastSeenLocation(GeometryUtil.parseLocation(postSighting.sightingDetails().lat(), postSighting.sightingDetails().lng())).build());
     }
 
     @HandleEvent

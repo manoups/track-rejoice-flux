@@ -22,7 +22,7 @@ public record GetContents(@NotNull @PositiveOrZero Integer page,
     List<Content> find(Sender sender) {
         return Fluxzero.search(Content.class)
                 .match(sender.isAdmin() ? null : sender.userId(), "ownerId")
-                .sortBy("id")
+                .sortBy("contentId")
                 .skip(page * pageSize)
                 .fetch(pageSize);
     }

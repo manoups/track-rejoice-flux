@@ -7,9 +7,8 @@ import com.breece.trackrejoice.content.model.ContentId;
 import com.breece.trackrejoice.content.model.ExtraDetails;
 import io.fluxzero.sdk.modeling.AssertLegal;
 import io.fluxzero.sdk.persisting.eventsourcing.Apply;
-import io.fluxzero.sdk.tracking.handling.authentication.RequiresUser;
 import jakarta.validation.Valid;
-import org.wildfly.common.annotation.NotNull;
+import jakarta.validation.constraints.NotNull;
 
 public record CreateContent(@NotNull ContentId contentId, @Valid @NotNull ExtraDetails details) implements ContentCommand {
     @AssertLegal

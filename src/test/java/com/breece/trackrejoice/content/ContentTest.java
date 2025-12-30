@@ -71,11 +71,11 @@ class ContentTest {
             CreateContent[] contents = new CreateContent[SIZE];
             for(int i=0; i< 15; ++i) {
                 ContentId contentId = new ContentId();
-                contents[i] = new CreateContent(contentId, new Pet("Maya", "Cocker Spaniel", GenderEnum.FEMALE, new SightingDetails(GeometryUtil.parseLocation(0.0, 0.0))));
+                contents[i] = new CreateContent(contentId, new Pet("Maya", "Cocker Spaniel", GenderEnum.FEMALE, new SightingDetails(0.0, 0.0)));
             }
             for(int i=15; i< SIZE; ++i) {
                 ContentId contentId = new ContentId();
-                contents[i] = new CreateContent(contentId, new Keys("Square Key", new SightingDetails(GeometryUtil.parseLocation(0.0, 0.0))));
+                contents[i] = new CreateContent(contentId, new Keys("Square Key", new SightingDetails(0.0, 0.0)));
             }
 
             testFixture.givenCommands(contents)

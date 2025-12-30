@@ -4,6 +4,7 @@ import com.breece.trackrejoice.sighting.api.model.Sighting;
 import com.breece.trackrejoice.sighting.api.model.SightingDetails;
 import io.fluxzero.sdk.modeling.Member;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
 import java.util.List;
@@ -12,12 +13,15 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = false)
-public class Keys extends ImmobileTarget{
+public class Keys extends ImmobileTarget {
     @NotBlank
     String description;
     @Member
     @With
     List<Sighting> proposedSightings;
+    @NotNull
+    @With
+    SightingDetails lastConfirmedSighting;
 
     public Keys(String description, SightingDetails lastSeenLocation) {
         this.subtype = "keys";

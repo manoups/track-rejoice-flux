@@ -11,8 +11,8 @@ import java.util.List;
 public class GeometryUtil {
     private static final int SRID = 4326;
 
-    public static Point parseLocation(Double lat, Double lon) {
-        return parseLocation(lat, lon, new GeometryFactory(new PrecisionModel(), SRID));
+    public static Point parseLocation(Double lat, Double lng) {
+        return parseLocation(lat, lng, new GeometryFactory(new PrecisionModel(), SRID));
     }
 
     public static MultiPoint makeMultiPoint(List<LatLng> latLngList) {
@@ -21,8 +21,8 @@ public class GeometryUtil {
         return geometryFactory.createMultiPoint(array);
     }
 
-    private static Point parseLocation(Double lat, Double lon, GeometryFactory geometryFactory) {
+    private static Point parseLocation(Double lat, Double lng, GeometryFactory geometryFactory) {
         PackedCoordinateSequenceFactory packedCoordinateSequenceFactory = new PackedCoordinateSequenceFactory();
-        return geometryFactory.createPoint(packedCoordinateSequenceFactory.create(new double[]{lon, lat}, 2));
+        return geometryFactory.createPoint(packedCoordinateSequenceFactory.create(new double[]{lng, lat}, 2));
     }
 }

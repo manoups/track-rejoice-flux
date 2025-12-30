@@ -1,18 +1,10 @@
 package com.breece.trackrejoice.content.model;
 
-import com.breece.trackrejoice.sighting.api.model.Sighting;
 import com.breece.trackrejoice.sighting.api.model.SightingDetails;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import io.fluxzero.common.search.Facet;
-import io.fluxzero.sdk.modeling.Member;
-import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
-import lombok.With;
-
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
 
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "@class")
 @JsonSubTypes({
@@ -23,6 +15,6 @@ import java.util.Set;
 public abstract class ExtraDetails {
     @Facet
     String subtype;
-    @NotNull
-    SightingDetails lastConfirmedSighting;
+
+    public abstract SightingDetails getLastConfirmedSighting();
 }

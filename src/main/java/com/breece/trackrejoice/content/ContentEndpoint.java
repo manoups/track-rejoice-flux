@@ -4,11 +4,13 @@ import com.breece.trackrejoice.content.command.CreateContent;
 import com.breece.trackrejoice.content.model.Content;
 import com.breece.trackrejoice.content.model.ContentId;
 import com.breece.trackrejoice.content.model.ExtraDetails;
+import com.breece.trackrejoice.content.query.GetContent;
 import com.breece.trackrejoice.content.query.GetContents;
 import io.fluxzero.sdk.Fluxzero;
 import io.fluxzero.sdk.web.HandleGet;
 import io.fluxzero.sdk.web.HandlePost;
 import io.fluxzero.sdk.web.Path;
+import io.fluxzero.sdk.web.PathParam;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -24,8 +26,13 @@ public class ContentEndpoint {
     }
 
     @HandleGet(value = {"","/"})
-    List<Content> getUsers() {
+    List<Content> getContents() {
         return Fluxzero.queryAndWait(new GetContents());
+    }
+
+    @HandleGet(value = {"{id}","{id}/"})
+    Content getContent(@PathParam ContentId id) {
+        return Fluxzero.queryAndWait(new GetContent(id));
     }
 
 }
