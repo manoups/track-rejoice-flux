@@ -1,6 +1,8 @@
 package com.breece.trackrejoice;
 
 import com.breece.trackrejoice.content.ContentErrors;
+import com.breece.trackrejoice.content.command.ClaimSighting;
+import com.breece.trackrejoice.content.command.UpdateContent;
 import com.breece.trackrejoice.content.model.ContentId;
 import com.breece.trackrejoice.content.query.GetContent;
 import com.breece.trackrejoice.geo.GeometryUtil;
@@ -39,8 +41,27 @@ public class ProposalTest {
     }
 
     @Test
-    void confirmProposalUpdate() {
+    void givenProposedSighting_whenQueryContent_thenCoordsDoNotChange() {
         testFixture.givenCommands("content/create-content.json", "sighting/create-sighting.json", "proposal/create-proposal.json")
+                .whenQuery(new GetContent(new ContentId("1")))
+                .expectNoErrors()
+                .expectResult(Objects::nonNull)
+                .mapResult(content -> content.details().getLastConfirmedSighting())
+                .expectResult(Objects::nonNull)
+                .expectResult(details -> GeometryUtil.parseLocation(details.lat(), details.lng()).within(GeometryUtil.parseLocation(0.0, 0.0)));
+    }
+
+    @Test
+    void confirmProposalCommands() {
+        testFixture.givenCommands("content/create-content.json", "sighting/create-sighting.json", "proposal/create-proposal.json")
+                .whenCommand("proposal/accept-proposal.json")
+                .expectNoErrors()
+                .expectCommands(ClaimSighting.class, UpdateContent.class);
+    }
+
+    @Test
+    void confirmProposal() {
+        testFixture.givenCommands("content/create-content.json", "sighting/create-sighting.json", "proposal/create-proposal.json", "proposal/accept-proposal.json")
                 .whenQuery(new GetContent(new ContentId("1")))
                 .expectNoErrors()
                 .expectResult(Objects::nonNull)
