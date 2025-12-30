@@ -9,7 +9,6 @@ import com.breece.trackrejoice.sighting.api.model.SightingId;
 import com.breece.trackrejoice.sighting.api.model.SightingStatus;
 import io.fluxzero.sdk.Fluxzero;
 import io.fluxzero.sdk.modeling.AssertLegal;
-import io.fluxzero.sdk.modeling.Entity;
 import io.fluxzero.sdk.persisting.eventsourcing.Apply;
 import io.fluxzero.sdk.tracking.handling.authentication.RequiresUser;
 import jakarta.validation.constraints.NotNull;
@@ -36,6 +35,6 @@ public record ClaimSighting(@NotNull ContentId contentId, @NotNull SightingId si
     @Apply
     Content assign(Content content) {
         Sighting sighting = Fluxzero.loadEntity(sightingId).get();
-        return Fluxzero.sendCommandAndWait(new UpdateContent(contentId, content.details().withLastConfirmedSighting(sighting.details())));
+        return content.withDetails(content.details().withLastConfirmedSighting(sighting.details()));
     }
 }
