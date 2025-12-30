@@ -4,6 +4,7 @@ import com.breece.trackrejoice.authentication.Sender;
 import com.breece.trackrejoice.content.model.ContentId;
 import com.breece.trackrejoice.sighting.SightingErrors;
 import com.breece.trackrejoice.sighting.api.model.Sighting;
+import com.breece.trackrejoice.sighting.api.model.SightingDetails;
 import com.breece.trackrejoice.sighting.api.model.SightingId;
 import io.fluxzero.sdk.Fluxzero;
 import io.fluxzero.sdk.modeling.AssertLegal;
@@ -12,7 +13,7 @@ import io.fluxzero.sdk.tracking.handling.authentication.RequiresUser;
 import jakarta.validation.constraints.NotNull;
 
 @RequiresUser
-public record CreateProposal(@NotNull SightingId sightingId, @NotNull ContentId contentId) implements ContentInteract {
+public record CreateProposal(@NotNull SightingId sightingId, @NotNull SightingDetails sightingDetails, @NotNull ContentId contentId) implements ContentInteract {
     @AssertLegal
     void assertSightingExists() {
         if (!Fluxzero.loadAggregate(sightingId).isPresent()) {
@@ -21,14 +22,15 @@ public record CreateProposal(@NotNull SightingId sightingId, @NotNull ContentId 
     }
 
     @AssertLegal
-    void assertOwner(Sighting sighting, Sender sender) {
+    void assertOwner(Sender sender) {
+        Sighting sighting = Fluxzero.loadAggregate(sightingId).get();
         if (!sender.isAuthorizedFor(sighting.owner())) {
             throw SightingErrors.notOwner;
         }
     }
 
     @Apply
-    Sighting propose(Sighting sighting) {
-        return new Sighting(sightingId, sighting.owner(), sighting.details());
+    Sighting propose(Sender sender) {
+        return new Sighting(sightingId, sender.userId(), sightingDetails);
     }
 }

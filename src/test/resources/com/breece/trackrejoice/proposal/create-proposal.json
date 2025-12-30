@@ -1,5 +1,9 @@
 {
   "@class": "com.breece.trackrejoice.content.command.CreateProposal",
   "sightingId": "1",
+  "sightingDetails": {
+    "lat": 123.456,
+    "lng": 78.901
+  },
   "contentId": "1"
 }

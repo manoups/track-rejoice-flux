@@ -23,6 +23,9 @@ public record RejectProposal(@NotNull SightingId sightingId) implements Sighting
 
     @AssertLegal
     void assertAuthorized(Sender sender) {
+        Content contentEntity = Fluxzero.search(Content.class)
+                .match(sightingId, "details.proposedSightings.sightingId")
+                .fetchFirstOrNull();
         Content objectEntity = Fluxzero.<Content>loadAggregateFor(sightingId, Content.class).get();
         if (!sender.isAuthorizedFor(objectEntity.ownerId())) {
             throw ContentErrors.unauthorized;

@@ -12,6 +12,8 @@ import org.junit.jupiter.api.Test;
 
 import java.util.Objects;
 
+import static org.hamcrest.Matchers.hasSize;
+
 public class ProposalTest {
     final TestFixture testFixture = TestFixture.create(SightingState.class);
 
@@ -69,6 +71,16 @@ public class ProposalTest {
                 .mapResult(content -> content.details().getLastConfirmedSighting())
                 .expectResult(Objects::nonNull)
                 .expectResult(details -> GeometryUtil.parseLocation(details.lat(), details.lng()).within(GeometryUtil.parseLocation(123.456, 78.901)));
+    }
+
+    @Test
+    void givenSighting_whenCreateProposal_thenContentShouldContainTheProposal() {
+        testFixture.givenCommands("content/create-content.json", "sighting/create-sighting.json", "proposal/create-proposal.json")
+                .whenQuery(new GetContent(new ContentId("1")))
+                .expectNoErrors()
+                .expectResult(Objects::nonNull)
+                .mapResult(content -> content.details().getProposedSightings())
+                .expectResult(hasSize(1));
     }
 
     @Test
