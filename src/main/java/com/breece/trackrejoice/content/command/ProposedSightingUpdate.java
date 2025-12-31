@@ -13,14 +13,14 @@ import java.util.Objects;
 public interface ProposedSightingUpdate extends ProposedSightingCommand {
     @AssertLegal
     default void assertExists(@Nullable ProposedSighting proposedSighting) {
-        if (Objects.isNull(proposedSighting)) throw new IllegalCommandException("Proposed sighting does not exist");
+        if (Objects.isNull(proposedSighting)) throw ProposedSightingErrors.notFound;
     }
 
     @AssertLegal
     default void assertOwner(ProposedSighting proposedSighting, Sender sender) {
         Content content = Fluxzero.<Content>loadAggregateFor(proposedSighting.proposedSightingId()).get();
         if(!sender.isAuthorizedFor(content.ownerId())) {
-            throw new IllegalCommandException("Not owner of proposed sighting");
+            throw ProposedSightingErrors.unauthorized;
         }
     }
 }

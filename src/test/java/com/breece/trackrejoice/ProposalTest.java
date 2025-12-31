@@ -2,12 +2,15 @@ package com.breece.trackrejoice;
 
 import com.breece.trackrejoice.content.ContentErrors;
 import com.breece.trackrejoice.content.ProposedSightingHandler;
+import com.breece.trackrejoice.content.command.AcceptProposal;
+import com.breece.trackrejoice.content.command.ProposedSightingErrors;
+import com.breece.trackrejoice.content.command.RemoveMemberProposal;
 import com.breece.trackrejoice.content.model.Content;
 import com.breece.trackrejoice.content.model.ContentId;
+import com.breece.trackrejoice.content.model.ProposedSightingId;
 import com.breece.trackrejoice.content.query.GetContent;
 import com.breece.trackrejoice.geo.GeometryUtil;
 import com.breece.trackrejoice.sighting.SightingErrors;
-import com.breece.trackrejoice.sighting.SightingState;
 import io.fluxzero.sdk.test.TestFixture;
 import io.fluxzero.sdk.tracking.handling.IllegalCommandException;
 import org.junit.jupiter.api.Test;
@@ -18,7 +21,7 @@ import java.util.Objects;
 import static org.hamcrest.Matchers.hasSize;
 
 public class ProposalTest extends TestUtilities{
-    final TestFixture testFixture = TestFixture.create(SightingState.class, ProposedSightingHandler.class);
+    final TestFixture testFixture = TestFixture.create(ProposedSightingHandler.class);
 
     @Test
     void givenNoContent_whenProposalCreated_thenError() {
@@ -150,5 +153,12 @@ public class ProposalTest extends TestUtilities{
         testFixture.givenCommandsByUser(viewer, "sighting/create-sighting.json", "content/create-content.json", "proposal/create-proposal.json")
                 .whenCommandByUser(user2, "proposal/accept-proposal.json")
                 .expectError(ContentErrors.unauthorized);
+    }
+
+    @Test
+    void givenProposal_whenNonExistentProposalRejected_thenError() {
+        testFixture.givenCommands("sighting/create-sighting.json", "content/create-content.json", "proposal/create-proposal.json")
+                .whenCommand(new RemoveMemberProposal(new ProposedSightingId("2")))
+                .expectError(ProposedSightingErrors.notFound);
     }
 }
