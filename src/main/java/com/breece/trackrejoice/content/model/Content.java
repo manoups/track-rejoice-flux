@@ -1,6 +1,5 @@
 package com.breece.trackrejoice.content.model;
 
-import com.breece.trackrejoice.sighting.api.model.Sighting;
 import com.breece.trackrejoice.sighting.api.model.SightingDetails;
 import com.breece.trackrejoice.user.api.UserId;
 import io.fluxzero.common.search.Facet;
@@ -19,7 +18,7 @@ public record Content(@EntityId ContentId contentId,
                       SightingDetails lastConfirmedSighting,
                       @Member
                       @With
-                      List<Sighting> proposedSightings,
+                      List<ProposedSighting> proposedSightings,
                       @With @Facet ExtraDetails details, UserId ownerId,
                       @With boolean online) {
     public Content {

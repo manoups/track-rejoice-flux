@@ -1,5 +1,5 @@
 {
-  "@class": "com.breece.trackrejoice.content.command.RejectMemberProposal",
-  "sightingId": "1",
+  "@class": "com.breece.trackrejoice.content.command.RemoveMemberProposal",
+  "proposedSightingId": "1",
   "contentId": "1"
 }

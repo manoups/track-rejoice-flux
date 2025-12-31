@@ -17,7 +17,7 @@ public interface SightingUpdate extends SightingCommand {
     }
 
     default void assertAuthorized(Sighting sighting, Sender sender) {
-        if (!sender.isAuthorizedFor(sighting.owner())) {
+        if (!sender.isAuthorizedFor(sighting.source())) {
             throw SightingErrors.unauthorized;
         }
     }
