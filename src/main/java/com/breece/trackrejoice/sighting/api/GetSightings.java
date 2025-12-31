@@ -10,10 +10,10 @@ import jakarta.validation.constraints.PositiveOrZero;
 
 import java.util.List;
 
-public record GetOpenSightings(@PositiveOrZero Integer page, @Positive Integer pageSize,
-                               String filter) implements Request<List<Sighting>> {
+public record GetSightings(@PositiveOrZero Integer page, @Positive Integer pageSize,
+                           String filter) implements Request<List<Sighting>> {
 
-    public GetOpenSightings() {
+    public GetSightings() {
         this(0, 10, null);
     }
 

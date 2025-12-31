@@ -1,10 +1,14 @@
 package com.breece.trackrejoice;
 
 import com.breece.trackrejoice.content.ContentErrors;
+import com.breece.trackrejoice.content.ContentHandler;
 import com.breece.trackrejoice.content.command.ClaimSighting;
 import com.breece.trackrejoice.content.model.ContentId;
+import com.breece.trackrejoice.sighting.LinkSightingBackToContent;
 import com.breece.trackrejoice.sighting.SightingErrors;
-import com.breece.trackrejoice.sighting.api.GetOpenSightings;
+import com.breece.trackrejoice.sighting.api.GetSighting;
+import com.breece.trackrejoice.sighting.api.GetSightings;
+import com.breece.trackrejoice.sighting.api.model.Sighting;
 import com.breece.trackrejoice.sighting.api.model.SightingId;
 import com.breece.trackrejoice.user.api.UserId;
 import com.breece.trackrejoice.user.api.model.UserProfile;
@@ -13,11 +17,12 @@ import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
+import java.util.Objects;
 
 import static org.hamcrest.Matchers.hasSize;
 
 public class SightingTest extends TestUtilities{
-    final TestFixture testFixture = TestFixture.create().givenCommands("user/create-user.json").givenCommands("user/create-another-user.json");
+    final TestFixture testFixture = TestFixture.create(ContentHandler.class).givenCommands("user/create-user.json").givenCommands("user/create-another-user.json");
 
 
     @Test
@@ -33,7 +38,13 @@ public class SightingTest extends TestUtilities{
                         "content/create-content.json", "sighting/create-sighting.json")
                 .whenCommandByUser(viewer, "sighting/claim-sighting.json")
                 .expectNoErrors()
-                .expectEvents("sighting/claim-sighting.json");
+                .expectEvents("sighting/claim-sighting.json")
+                .expectCommands(LinkSightingBackToContent.class)
+                .andThen()
+                .whenQuery(new GetSighting(new SightingId("1")))
+                .expectResult(Objects::nonNull)
+                .mapResult(Sighting::linkedContents)
+                .expectResult(hasSize(1));
     }
 
     @Test
@@ -60,7 +71,7 @@ public class SightingTest extends TestUtilities{
     void givenSighting_whenGetSightings_thenOneResults() {
         testFixture
                 .givenCommands("sighting/create-sighting.json")
-                .whenQuery(new GetOpenSightings())
+                .whenQuery(new GetSightings())
                 .expectResult(hasSize(1));
     }
 
@@ -70,7 +81,7 @@ public class SightingTest extends TestUtilities{
         testFixture
                 .givenCommandsByUser(viewer,
                         "content/create-content.json", "sighting/create-sighting.json", "sighting/claim-sighting.json")
-                .whenQuery(new GetOpenSightings())
+                .whenQuery(new GetSightings())
                 .expectResult(List::isEmpty);
     }
 }

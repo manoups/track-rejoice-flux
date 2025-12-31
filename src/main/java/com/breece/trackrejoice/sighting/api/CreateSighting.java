@@ -11,6 +11,8 @@ import io.fluxzero.sdk.tracking.handling.authentication.RequiresUser;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 
+import java.util.List;
+
 @RequiresUser
 public record CreateSighting(@NotNull SightingId sightingId, @Valid @NotNull SightingDetails sightingDetails) implements SightingCommand {
     @AssertLegal
@@ -20,6 +22,6 @@ public record CreateSighting(@NotNull SightingId sightingId, @Valid @NotNull Sig
 
     @Apply
     Sighting create(Sender sender) {
-        return new Sighting(sightingId, sender.userId(), sightingDetails);
+        return new Sighting(sightingId, sender.userId(), sightingDetails, List.of());
     }
 }
