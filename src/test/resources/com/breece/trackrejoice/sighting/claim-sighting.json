@@ -1,9 +1,5 @@
 {
   "@class": "com.breece.trackrejoice.content.command.ClaimSighting",
   "sightingId": "1",
-  "contentId": "1",
-  "sightingDetails": {
-    "lat": 123.456,
-    "lng": 78.901
-  }
+  "contentId": "1"
 }

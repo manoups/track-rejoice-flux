@@ -9,7 +9,6 @@ import com.breece.trackrejoice.sighting.SightingErrors;
 import com.breece.trackrejoice.sighting.api.GetSighting;
 import com.breece.trackrejoice.sighting.api.GetSightings;
 import com.breece.trackrejoice.sighting.api.model.Sighting;
-import com.breece.trackrejoice.sighting.api.model.SightingDetails;
 import com.breece.trackrejoice.sighting.api.model.SightingId;
 import com.breece.trackrejoice.user.api.UserId;
 import com.breece.trackrejoice.user.api.model.UserProfile;
@@ -39,7 +38,7 @@ public class SightingTest extends TestUtilities{
                         "content/create-content.json", "sighting/create-sighting.json")
                 .whenCommandByUser(viewer, "sighting/claim-sighting.json")
                 .expectNoErrors()
-                .expectEvents("sighting/claim-sighting.json")
+                .expectEvents(ClaimSighting.class)
                 .expectCommands(LinkSightingBackToContent.class)
                 .andThen()
                 .whenQuery(new GetSighting(new SightingId("1")))
@@ -64,9 +63,7 @@ public class SightingTest extends TestUtilities{
                 .givenCommandsByUser(viewer,
                         "content/create-content.json", "sighting/create-sighting.json", "sighting/claim-sighting.json")
                 .givenCommandsByUser(user2, "content/create-content-keys.json")
-                .whenCommandByUser(user2, new ClaimSighting(new ContentId("2"), new SightingId("1"), new SightingDetails(
-                        78.901, 123.456
-        )))
+                .whenCommandByUser(user2, new ClaimSighting(new ContentId("2"), new SightingId("1")))
                 .expectExceptionalResult(SightingErrors.alreadyClaimed);
     }
 

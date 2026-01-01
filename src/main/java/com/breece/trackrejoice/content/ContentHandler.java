@@ -10,6 +10,6 @@ import org.springframework.stereotype.Component;
 public class ContentHandler {
     @HandleEvent
     void on(ClaimSighting event) {
-        Fluxzero.sendAndForgetCommand(new LinkSightingBackToContent(event.contentId(), event.sightingId()));
+        Fluxzero.sendAndForgetCommand(new LinkSightingBackToContent(event.contentId(), event.getSightingId()));
     }
 }
