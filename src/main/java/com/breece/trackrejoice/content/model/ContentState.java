@@ -46,7 +46,7 @@ public record ContentState(@Association @EntityId ContentId contentId, @With Con
         Order order1 = Fluxzero.loadEntity(order.getOrderId()).get();
         Content content = Fluxzero.loadAggregate(order1.contentId()).get();
         Sighting sighting = Fluxzero.sendCommandAndWait(new CreateSighting(new SightingId(), content.lastConfirmedSighting()));
-        Fluxzero.sendAndForgetCommand(new ClaimSighting(content.contentId(), sighting.sightingId()));
+        Fluxzero.sendAndForgetCommand(new ClaimSighting(content.contentId(), sighting.sightingId(), content.lastConfirmedSighting()));
 
         return withStatus(ContentStatus.ENABLED);
     }

@@ -4,12 +4,15 @@ import com.breece.trackrejoice.content.model.Content;
 import com.breece.trackrejoice.content.model.ContentId;
 import com.breece.trackrejoice.content.model.ProposedSighting;
 import com.breece.trackrejoice.content.model.ProposedSightingId;
-import io.fluxzero.sdk.Fluxzero;
+import com.breece.trackrejoice.sighting.api.model.SightingDetails;
 import io.fluxzero.sdk.modeling.AssertLegal;
 import io.fluxzero.sdk.persisting.eventsourcing.Apply;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 
-public record AcceptProposal(@NotNull ProposedSightingId proposedSightingId, @NotNull ContentId contentId) implements ContentUpdate {
+public record AcceptProposal(@NotNull ProposedSightingId proposedSightingId,
+                             @NotNull @Valid SightingDetails sightingDetails,
+                             @NotNull ContentId contentId) implements ContentUpdate {
 
     /*@AssertLegal
     void assertLinked() {
@@ -31,9 +34,19 @@ public record AcceptProposal(@NotNull ProposedSightingId proposedSightingId, @No
         }
     }
 
+    @AssertLegal
+    void assertDataMatch(Content content) {
+        content.proposedSightings().stream().filter(p -> p.proposedSightingId().equals(proposedSightingId)).findFirst().ifPresent(
+                proposedSighting -> {
+                    if (!proposedSighting.details().equals(sightingDetails)) {
+                        throw new IllegalArgumentException("Incorrect details provided");
+                    }
+                }
+        );
+    }
+
     @Apply
     Content apply(Content content) {
-        ProposedSighting sighting = Fluxzero.loadEntity(proposedSightingId).get();
-        return content.withLastConfirmedSighting(sighting.details());
+        return content.withLastConfirmedSighting(sightingDetails);
     }
 }
