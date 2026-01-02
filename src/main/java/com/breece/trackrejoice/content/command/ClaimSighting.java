@@ -19,8 +19,8 @@ import lombok.experimental.Accessors;
 
 @RequiresUser
 @Data
+@Accessors(fluent = true)
 public class ClaimSighting implements ContentUpdate {
-    @Accessors(fluent = true)
     @NotNull
     final ContentId contentId;
     @NotNull
@@ -30,7 +30,7 @@ public class ClaimSighting implements ContentUpdate {
     @InterceptApply
     ClaimSighting interceptApply() {
         Fluxzero.loadAggregate(sightingId).ifPresent(entity -> {
-            this.setSightingDetails(entity.get().details());
+            this.sightingDetails(entity.get().details());
             return entity;
         });
         return this;
