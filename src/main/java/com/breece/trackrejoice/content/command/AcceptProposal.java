@@ -6,6 +6,7 @@ import com.breece.trackrejoice.content.model.ProposedSighting;
 import com.breece.trackrejoice.content.model.ProposedSightingId;
 import com.breece.trackrejoice.sighting.api.model.SightingDetails;
 import com.breece.trackrejoice.sighting.api.model.SightingId;
+import io.fluxzero.sdk.Fluxzero;
 import io.fluxzero.sdk.modeling.AssertLegal;
 import io.fluxzero.sdk.persisting.eventsourcing.Apply;
 import jakarta.validation.Valid;
@@ -27,9 +28,16 @@ public record AcceptProposal(@NotNull ProposedSightingId proposedSightingId,
     }
 
     @AssertLegal(priority = -10)
-    void assertSightingExists(Content content) {
+    void assertProposedSightingExists(Content content) {
         if (content.proposedSightings().stream().map(ProposedSighting::proposedSightingId).noneMatch(p -> p.equals(proposedSightingId))) {
             throw new IllegalArgumentException("Sighting not proposed for content");
+        }
+    }
+
+    @AssertLegal
+    void assertSightingStillValid(Content content) {
+        if (Fluxzero.loadAggregate(sightingId).isEmpty()) {
+            throw new IllegalArgumentException("Sighting no longer valid");
         }
     }
 
