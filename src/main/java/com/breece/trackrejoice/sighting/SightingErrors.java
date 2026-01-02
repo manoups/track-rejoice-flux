@@ -9,5 +9,6 @@ public interface SightingErrors {
             notFound = new IllegalCommandException("Sighting not found"),
             alreadyClaimed = new IllegalCommandException("Sighting already claimed"),
             notOwner = new IllegalCommandException("Not source of sighting"),
-            unauthorized = new IllegalCommandException("Unauthorized action");
+            unauthorized = new IllegalCommandException("Unauthorized action"),
+            sightingMismatch = new IllegalCommandException("Sighting details do not match");
 }

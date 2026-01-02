@@ -5,6 +5,7 @@ import com.breece.trackrejoice.content.model.ContentId;
 import com.breece.trackrejoice.content.model.ProposedSighting;
 import com.breece.trackrejoice.content.model.ProposedSightingId;
 import com.breece.trackrejoice.sighting.api.model.SightingDetails;
+import com.breece.trackrejoice.sighting.api.model.SightingId;
 import io.fluxzero.sdk.modeling.AssertLegal;
 import io.fluxzero.sdk.persisting.eventsourcing.Apply;
 import jakarta.validation.Valid;
@@ -12,22 +13,20 @@ import jakarta.validation.constraints.NotNull;
 
 public record AcceptProposal(@NotNull ProposedSightingId proposedSightingId,
                              @NotNull @Valid SightingDetails sightingDetails,
+                             @NotNull SightingId sightingId,
                              @NotNull ContentId contentId) implements ContentUpdate {
 
-    /*@AssertLegal
-    void assertLinked() {
-        Content content = Fluxzero.search(Content.class)
-                .match(contentId, "contentId")
-                .fetchFirstOrNull();
-        if (content == null) {
-            throw new IllegalArgumentException("Content not found");
-        }
-        if (content.proposedSightings().stream().noneMatch(ps -> ps.proposedSightingId().equals(proposedSightingId))) {
-            throw new IllegalArgumentException("Sighting not proposed for content");
-        }
-    }*/
-
     @AssertLegal
+    void assertSightingIdMatch(Content content) {
+        content.proposedSightings().stream().filter(p -> p.proposedSightingId().equals(proposedSightingId)).findFirst().ifPresent(
+                proposedSighting -> {
+                    if (!proposedSighting.sightingId().equals(sightingId)) {
+                        throw new IllegalArgumentException("Incorrect Signing ID provided");
+                    }
+                });
+    }
+
+    @AssertLegal(priority = -10)
     void assertSightingExists(Content content) {
         if (content.proposedSightings().stream().map(ProposedSighting::proposedSightingId).noneMatch(p -> p.equals(proposedSightingId))) {
             throw new IllegalArgumentException("Sighting not proposed for content");

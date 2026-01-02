@@ -87,4 +87,14 @@ public class SightingTest extends TestUtilities{
                 .whenQuery(new GetSightings())
                 .expectResult(List::isEmpty);
     }
+
+    @Test
+    void claimEquality() {
+        testFixture
+                .givenCommands("content/create-content.json", "sighting/create-sighting.json")
+                .whenCommand(new ClaimSighting(new ContentId("1"), new SightingId("1"), new SightingDetails(
+                         123.456, 78.901
+                )))
+                .expectExceptionalResult(SightingErrors.sightingMismatch);
+    }
 }

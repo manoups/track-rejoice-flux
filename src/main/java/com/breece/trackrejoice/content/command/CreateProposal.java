@@ -33,6 +33,6 @@ public record CreateProposal(ContentId contentId, @NotNull SightingId sightingId
 
     @Apply
     ProposedSighting propose() {
-        return new ProposedSighting(proposedSightingId, sightingDetails);
+        return new ProposedSighting(proposedSightingId, sightingId, sightingDetails);
     }
 }
