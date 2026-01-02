@@ -1,3 +1,2 @@
 - [ ] Make shopping basket
-- [ ] additems
-- [x] as 
+- [ ] Immutable objects should support multipoints 
