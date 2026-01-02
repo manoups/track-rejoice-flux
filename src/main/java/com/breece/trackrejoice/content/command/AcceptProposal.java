@@ -4,6 +4,7 @@ import com.breece.trackrejoice.content.model.Content;
 import com.breece.trackrejoice.content.model.ContentId;
 import com.breece.trackrejoice.content.model.ProposedSighting;
 import com.breece.trackrejoice.content.model.ProposedSightingId;
+import com.breece.trackrejoice.sighting.SightingErrors;
 import com.breece.trackrejoice.sighting.api.model.SightingDetails;
 import com.breece.trackrejoice.sighting.api.model.SightingId;
 import io.fluxzero.sdk.Fluxzero;
@@ -30,14 +31,14 @@ public record AcceptProposal(@NotNull ProposedSightingId proposedSightingId,
     @AssertLegal(priority = -10)
     void assertProposedSightingExists(Content content) {
         if (content.proposedSightings().stream().map(ProposedSighting::proposedSightingId).noneMatch(p -> p.equals(proposedSightingId))) {
-            throw new IllegalArgumentException("Sighting not proposed for content");
+            throw SightingErrors.notLinkedToContent;
         }
     }
 
     @AssertLegal
     void assertSightingStillValid(Content content) {
         if (Fluxzero.loadAggregate(sightingId).isEmpty()) {
-            throw new IllegalArgumentException("Sighting no longer valid");
+            throw SightingErrors.notFound;
         }
     }
 
@@ -46,7 +47,7 @@ public record AcceptProposal(@NotNull ProposedSightingId proposedSightingId,
         content.proposedSightings().stream().filter(p -> p.proposedSightingId().equals(proposedSightingId)).findFirst().ifPresent(
                 proposedSighting -> {
                     if (!proposedSighting.details().equals(sightingDetails)) {
-                        throw new IllegalArgumentException("Incorrect details provided");
+                        throw SightingErrors.sightingMismatch;
                     }
                 }
         );

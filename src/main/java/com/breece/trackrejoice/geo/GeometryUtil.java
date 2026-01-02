@@ -6,6 +6,7 @@ import org.locationtech.jts.geom.Point;
 import org.locationtech.jts.geom.PrecisionModel;
 import org.locationtech.jts.geom.impl.PackedCoordinateSequenceFactory;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 public class GeometryUtil {
@@ -13,6 +14,10 @@ public class GeometryUtil {
 
     public static Point parseLocation(Double lat, Double lng) {
         return parseLocation(lat, lng, new GeometryFactory(new PrecisionModel(), SRID));
+    }
+
+    public static Point parseLocation(BigDecimal lat, BigDecimal lng) {
+        return parseLocation(lat.doubleValue(), lng.doubleValue());
     }
 
     public static MultiPoint makeMultiPoint(List<LatLng> latLngList) {

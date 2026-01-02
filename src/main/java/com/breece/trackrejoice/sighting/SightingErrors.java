@@ -7,7 +7,7 @@ public interface SightingErrors {
     FunctionalException
             alreadyExists = new IllegalCommandException("Sighting already exists"),
             notFound = new IllegalCommandException("Sighting not found"),
-            alreadyClaimed = new IllegalCommandException("Sighting already claimed"),
+            notLinkedToContent = new IllegalCommandException("Sighting not linked to content"),
             notOwner = new IllegalCommandException("Not source of sighting"),
             unauthorized = new IllegalCommandException("Unauthorized action"),
             sightingMismatch = new IllegalCommandException("Sighting details do not match");

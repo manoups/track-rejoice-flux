@@ -17,6 +17,7 @@ import io.fluxzero.sdk.test.TestFixture;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Objects;
 
@@ -65,9 +66,9 @@ public class SightingTest extends TestUtilities{
                         "content/create-content.json", "sighting/create-sighting.json", "sighting/claim-sighting.json")
                 .givenCommandsByUser(user2, "content/create-content-keys.json")
                 .whenCommandByUser(user2, new ClaimSighting(new ContentId("2"), new SightingId("1"), new SightingDetails(
-                        78.901, 123.456
+                        new BigDecimal("78.901"), new BigDecimal("123.456")
         )))
-                .expectExceptionalResult(SightingErrors.alreadyClaimed);
+                .expectExceptionalResult(SightingErrors.notLinkedToContent);
     }
 
     @Test
@@ -89,12 +90,22 @@ public class SightingTest extends TestUtilities{
     }
 
     @Test
-    void claimEquality() {
+    void givenSighting_whenClaimSightingWithInvertedCoords_thenError() {
         testFixture
                 .givenCommands("content/create-content.json", "sighting/create-sighting.json")
                 .whenCommand(new ClaimSighting(new ContentId("1"), new SightingId("1"), new SightingDetails(
-                         123.456, 78.901
+                        new BigDecimal("123.456"), new BigDecimal("78.901")
                 )))
                 .expectExceptionalResult(SightingErrors.sightingMismatch);
+    }
+
+    @Test
+    void givenSighting_whenClaimSightingWithExtraDecimals_thenNoError() {
+        testFixture
+                .givenCommands("content/create-content.json", "sighting/create-sighting.json")
+                .whenCommand(new ClaimSighting(new ContentId("1"), new SightingId("1"), new SightingDetails(
+                        new BigDecimal("78.901000"), new BigDecimal("123.456000")
+                )))
+                .expectNoErrors();
     }
 }
