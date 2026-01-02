@@ -7,13 +7,17 @@ import io.fluxzero.sdk.modeling.Aggregate;
 import io.fluxzero.sdk.modeling.EntityId;
 import io.fluxzero.sdk.modeling.Member;
 import jakarta.validation.constraints.NotNull;
+import lombok.Builder;
 import lombok.With;
+import org.locationtech.jts.geom.Geometry;
 
 import java.util.List;
 
 @Aggregate(searchable = true)
+@Builder(toBuilder = true)
 public record Content(@EntityId ContentId contentId,
                       @NotNull
+                      Geometry lostAt,
                       @With
                       SightingDetails lastConfirmedSighting,
                       @Member
@@ -21,9 +25,4 @@ public record Content(@EntityId ContentId contentId,
                       List<ProposedSighting> proposedSightings,
                       @With @Facet ExtraDetails details, UserId ownerId,
                       @With boolean online) {
-    public Content {
-        if (proposedSightings == null) {
-            proposedSightings = List.of();
-        }
-    }
 }

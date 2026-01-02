@@ -5,6 +5,7 @@ import com.breece.trackrejoice.content.ContentErrors;
 import com.breece.trackrejoice.content.model.Content;
 import com.breece.trackrejoice.content.model.ContentId;
 import com.breece.trackrejoice.content.model.ExtraDetails;
+import com.breece.trackrejoice.geo.GeometryUtil;
 import com.breece.trackrejoice.sighting.api.model.SightingDetails;
 import io.fluxzero.sdk.modeling.AssertLegal;
 import io.fluxzero.sdk.persisting.eventsourcing.Apply;
@@ -23,6 +24,7 @@ public record CreateContent(@NotNull ContentId contentId, @Valid @NotNull Sighti
 
     @Apply
     Content create(Sender sender) {
-        return new Content(contentId, lastConfirmedSighting, List.of(), details, sender.userId(), false);
+        return Content.builder().contentId(contentId).lostAt(GeometryUtil.parseLocation(lastConfirmedSighting.lat(), lastConfirmedSighting.lng()))
+                .proposedSightings(List.of()).details(details).ownerId(sender.userId()).online(false).build();
     }
 }

@@ -2,7 +2,6 @@ package com.breece.trackrejoice;
 
 import com.breece.trackrejoice.content.ContentErrors;
 import com.breece.trackrejoice.content.ProposedSightingHandler;
-import com.breece.trackrejoice.content.command.AcceptProposal;
 import com.breece.trackrejoice.content.command.ProposedSightingErrors;
 import com.breece.trackrejoice.content.command.RemoveMemberProposal;
 import com.breece.trackrejoice.content.model.Content;
@@ -44,9 +43,9 @@ public class ProposalTest extends TestUtilities{
                 .whenQuery(new GetContent(new ContentId("1")))
                 .expectNoErrors()
                 .expectResult(Objects::nonNull)
-                .mapResult(Content::lastConfirmedSighting)
+                .mapResult(Content::lostAt)
                 .expectResult(Objects::nonNull)
-                .expectResult(details -> GeometryUtil.parseLocation(details.lat(), details.lng()).within(GeometryUtil.parseLocation(0.0, 0.0)));
+                .expectResult(details -> details.within(GeometryUtil.parseLocation(0.0, 0.0)));
     }
 
     @Test
@@ -56,8 +55,7 @@ public class ProposalTest extends TestUtilities{
                 .expectNoErrors()
                 .expectResult(Objects::nonNull)
                 .mapResult(Content::lastConfirmedSighting)
-                .expectResult(Objects::nonNull)
-                .expectResult(details -> GeometryUtil.parseLocation(details.lat(), details.lng()).within(GeometryUtil.parseLocation(0.0, 0.0)));
+                .expectResult(Objects::isNull);
     }
 
     @Test
