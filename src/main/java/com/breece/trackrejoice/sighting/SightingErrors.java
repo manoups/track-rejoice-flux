@@ -10,5 +10,6 @@ public interface SightingErrors {
             notLinkedToContent = new IllegalCommandException("Sighting not linked to content"),
             notOwner = new IllegalCommandException("Not source of sighting"),
             unauthorized = new IllegalCommandException("Unauthorized action"),
-            sightingMismatch = new IllegalCommandException("Sighting details do not match");
+            sightingMismatch = new IllegalCommandException("Sighting details do not match"),
+            alreadyProposed = new IllegalCommandException("Sighting already proposed");
 }

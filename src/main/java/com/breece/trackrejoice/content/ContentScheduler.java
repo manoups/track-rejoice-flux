@@ -5,10 +5,12 @@ import com.breece.trackrejoice.content.command.TakeContentOffline;
 import com.breece.trackrejoice.orders.api.model.Order;
 import com.breece.trackrejoice.payments.api.PaymentAccepted;
 import io.fluxzero.sdk.Fluxzero;
+import io.fluxzero.sdk.tracking.Consumer;
 import io.fluxzero.sdk.tracking.handling.HandleEvent;
 import org.springframework.stereotype.Component;
 
 @Component
+@Consumer(name = "content-scheduler")
 public class ContentScheduler {
     @HandleEvent
     void handle(PaymentAccepted event) {

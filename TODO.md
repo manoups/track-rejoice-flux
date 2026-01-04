@@ -1,2 +1,3 @@
 - [ ] Make shopping basket
-- [ ] Immutable objects should support multipoints 
+- [x] Immutable objects should support multipoints
+- [x] When a Sighting is deleted, it should remove from all proposed sighings

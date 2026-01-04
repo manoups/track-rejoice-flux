@@ -1,6 +1,7 @@
 package com.breece.trackrejoice;
 
 import com.breece.trackrejoice.content.ContentErrors;
+import com.breece.trackrejoice.content.ContentHandler;
 import com.breece.trackrejoice.content.ProposedSightingHandler;
 import com.breece.trackrejoice.content.command.ProposedSightingErrors;
 import com.breece.trackrejoice.content.command.RemoveMemberProposal;
@@ -10,6 +11,7 @@ import com.breece.trackrejoice.content.model.ProposedSightingId;
 import com.breece.trackrejoice.content.query.GetContent;
 import com.breece.trackrejoice.geo.GeometryUtil;
 import com.breece.trackrejoice.sighting.SightingErrors;
+import com.breece.trackrejoice.sighting.api.SightingHandler;
 import io.fluxzero.sdk.test.TestFixture;
 import io.fluxzero.sdk.tracking.handling.IllegalCommandException;
 import org.junit.jupiter.api.Test;
@@ -20,7 +22,7 @@ import java.util.Objects;
 import static org.hamcrest.Matchers.hasSize;
 
 public class ProposalTest extends TestUtilities{
-    final TestFixture testFixture = TestFixture.create(ProposedSightingHandler.class);
+    final TestFixture testFixture = TestFixture.create(ProposedSightingHandler.class, SightingHandler.class, ContentHandler.class);
 
     @Test
     void givenNoContent_whenProposalCreated_thenError() {
@@ -158,5 +160,50 @@ public class ProposalTest extends TestUtilities{
         testFixture.givenCommands("sighting/create-sighting.json", "content/create-content.json", "proposal/create-proposal.json")
                 .whenCommand(new RemoveMemberProposal(new ProposedSightingId("2")))
                 .expectError(ProposedSightingErrors.notFound);
+    }
+
+    @Test
+    void givenProposal_whenSameProposal_thenError() {
+        testFixture.givenCommands("sighting/create-sighting.json", "content/create-content.json", "proposal/create-proposal.json")
+                .whenCommand("proposal/create-proposal.json")
+                .expectError(SightingErrors.alreadyProposed);
+    }
+
+    @Test
+    void givenClaim_whenSameProposal_thenError() {
+        testFixture.givenCommands("sighting/create-sighting.json", "content/create-content.json", "sighting/claim-sighting.json")
+                .whenCommand("proposal/create-proposal.json")
+                .expectError(SightingErrors.alreadyProposed);
+    }
+
+
+    @Test
+    void givenAProposal_whenDeleteSighting_thenProposalRemoved() {
+        testFixture.givenCommands("content/create-content.json", "sighting/create-sighting.json", "proposal/create-proposal.json")
+                .whenCommand("sighting/delete-sighting.json")
+                .expectNoErrors()
+                .expectEvents("sighting/delete-sighting.json")
+                .expectCommands(RemoveMemberProposal.class)
+                .andThen()
+                .whenQuery(new GetContent(new ContentId("1")))
+                .expectNoErrors()
+                .expectResult(Objects::nonNull)
+                .mapResult(Content::proposedSightings)
+                .expectResult(List::isEmpty);
+    }
+
+    @Test
+    void givenAnAcceptedProposal_whenDeleteSighting_thenProposalUnaffected() {
+        testFixture.givenCommands("content/create-content.json", "sighting/create-sighting.json", "proposal/create-proposal.json", "proposal/accept-proposal.json")
+                .whenCommand("sighting/delete-sighting.json")
+                .expectNoErrors()
+                .expectEvents("sighting/delete-sighting.json")
+                .expectNoCommands()
+                .andThen()
+                .whenQuery(new GetContent(new ContentId("1")))
+                .expectNoErrors()
+                .expectResult(Objects::nonNull)
+                .mapResult(Content::lastConfirmedSighting)
+                .expectResult(Objects::nonNull);
     }
 }

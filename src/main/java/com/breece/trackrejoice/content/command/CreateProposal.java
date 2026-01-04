@@ -1,6 +1,7 @@
 package com.breece.trackrejoice.content.command;
 
 import com.breece.trackrejoice.authentication.Sender;
+import com.breece.trackrejoice.content.model.Content;
 import com.breece.trackrejoice.content.model.ContentId;
 import com.breece.trackrejoice.content.model.ProposedSighting;
 import com.breece.trackrejoice.content.model.ProposedSightingId;
@@ -28,6 +29,20 @@ public record CreateProposal(ContentId contentId, @NotNull SightingId sightingId
         Sighting sighting = Fluxzero.loadAggregate(sightingId).get();
         if (!sender.isAuthorizedFor(sighting.source())) {
             throw SightingErrors.notOwner;
+        }
+    }
+
+    @AssertLegal
+    void assertUnique(Content content) {
+        if (content.proposedSightings().stream().anyMatch(p -> p.sightingId().equals(sightingId))) {
+            throw SightingErrors.alreadyProposed;
+        }
+    }
+
+    @AssertLegal
+    void asserNotLastSeenLocation(Content content){
+        if (sightingDetails.equals(content.lastConfirmedSighting())) {
+            throw SightingErrors.alreadyProposed;
         }
     }
 

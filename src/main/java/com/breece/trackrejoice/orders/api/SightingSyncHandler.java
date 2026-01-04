@@ -5,15 +5,15 @@ import com.breece.trackrejoice.geo.model.GeoJsonPost;
 import com.breece.trackrejoice.geo.repositories.GeoJsonPostRepository;
 import com.breece.trackrejoice.sighting.LinkSightingToContent;
 import com.breece.trackrejoice.sighting.api.PostSighting;
+import io.fluxzero.sdk.tracking.Consumer;
 import io.fluxzero.sdk.tracking.handling.HandleEvent;
 import io.jooby.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
-import java.util.Optional;
-
 @Component
 @RequiredArgsConstructor
+@Consumer(name = "sighting-sync-handler")
 public class SightingSyncHandler {
     private final GeoJsonPostRepository repository;
 
