@@ -206,4 +206,18 @@ public class ProposalTest extends TestUtilities{
                 .mapResult(Content::lastConfirmedSighting)
                 .expectResult(Objects::nonNull);
     }
+
+    @Test
+    void givenAProposal_whenClaim_thenProposalUnaffected() {
+        testFixture.givenCommands("content/create-content.json", "sighting/create-sighting.json", "proposal/create-proposal.json")
+                .whenCommand("sighting/claim-sighting.json")
+                .expectNoErrors()
+                .expectCommands(RemoveMemberProposal.class)
+                .andThen()
+                .whenQuery(new GetContent(new ContentId("1")))
+                .expectNoErrors()
+                .expectResult(Objects::nonNull)
+                .mapResult(Content::proposedSightings)
+                .expectResult(List::isEmpty);
+}
 }
