@@ -1,3 +1,5 @@
 package com.breece.trackrejoice.geo;
 
-public record LatLng(double lat, double lng) {}
+import java.math.BigDecimal;
+
+public record LatLng(BigDecimal lat, BigDecimal lng) {}

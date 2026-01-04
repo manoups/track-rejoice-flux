@@ -3,7 +3,6 @@ package com.breece.trackrejoice.content;
 import com.breece.trackrejoice.content.command.CreateContent;
 import com.breece.trackrejoice.content.model.Content;
 import com.breece.trackrejoice.content.model.ContentId;
-import com.breece.trackrejoice.content.model.ExtraDetails;
 import com.breece.trackrejoice.content.query.GetContent;
 import com.breece.trackrejoice.content.query.GetContents;
 import io.fluxzero.sdk.Fluxzero;
@@ -21,7 +20,7 @@ public class ContentEndpoint {
     @HandlePost(value = {"","/"})
     ContentId createContent(CreateContent content) {
         var contentId = new ContentId();
-        Fluxzero.sendCommandAndWait(new CreateContent(contentId, content.lastConfirmedSighting(), content.details()));
+        Fluxzero.sendCommandAndWait(new CreateContent(contentId, content.lostAt(), content.details()));
         return contentId;
     }
 

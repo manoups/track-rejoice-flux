@@ -1,7 +1,6 @@
 {
   "@class": "com.breece.trackrejoice.content.command.AcceptProposal",
   "proposedSightingId": "1",
-  "sightingId": "1",
   "contentId": "1",
   "sightingDetails": {
     "@class": "com.breece.trackrejoice.sighting.api.model.SightingDetails",

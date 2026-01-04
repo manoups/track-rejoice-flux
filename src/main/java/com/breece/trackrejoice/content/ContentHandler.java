@@ -1,7 +1,7 @@
 package com.breece.trackrejoice.content;
 
-import com.breece.trackrejoice.content.command.AcceptProposal;
 import com.breece.trackrejoice.content.command.ClaimSighting;
+import com.breece.trackrejoice.content.command.CreateProposal;
 import com.breece.trackrejoice.sighting.LinkSightingBackToContent;
 import io.fluxzero.sdk.Fluxzero;
 import io.fluxzero.sdk.tracking.handling.HandleEvent;
@@ -15,7 +15,7 @@ public class ContentHandler {
     }
 
     @HandleEvent
-    void on(AcceptProposal event) {
+    void on(CreateProposal event) {
         Fluxzero.sendAndForgetCommand(new LinkSightingBackToContent(event.contentId(), event.sightingId()));
     }
 }

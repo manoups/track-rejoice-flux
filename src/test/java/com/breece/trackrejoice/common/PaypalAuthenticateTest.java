@@ -113,7 +113,8 @@ class PaypalAuthenticateTest {
             void sendOrderEndpoint() {
                 testFixture.
                         givenCommands("/com/breece/trackrejoice/content/create-content.json")
-                        .whenPost("/payments/paypal/orders/ad-1")
+                        .whenPost("/payments/paypal/orders/content-1")
+                        .expectNoErrors()
                         .expectEvents(PlaceOrder.class)
                         .expectCommands(ValidateOrder.class, UpdateOrder.class);
             }

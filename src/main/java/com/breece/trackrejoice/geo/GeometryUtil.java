@@ -22,7 +22,7 @@ public class GeometryUtil {
 
     public static MultiPoint makeMultiPoint(List<LatLng> latLngList) {
         GeometryFactory geometryFactory = new GeometryFactory(new PrecisionModel(), SRID);
-        Point[] array = latLngList.stream().map(it -> parseLocation(it.lng(), it.lat(), geometryFactory)).toArray(Point[]::new);
+        Point[] array = latLngList.stream().map(it -> parseLocation(it.lng(), it.lat())).toArray(Point[]::new);
         return geometryFactory.createMultiPoint(array);
     }
 
