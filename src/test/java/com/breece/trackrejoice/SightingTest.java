@@ -8,6 +8,7 @@ import com.breece.trackrejoice.sighting.LinkSightingBackToContent;
 import com.breece.trackrejoice.sighting.SightingErrors;
 import com.breece.trackrejoice.sighting.api.GetSighting;
 import com.breece.trackrejoice.sighting.api.GetSightings;
+import com.breece.trackrejoice.sighting.api.SightingHandler;
 import com.breece.trackrejoice.sighting.api.model.Sighting;
 import com.breece.trackrejoice.sighting.api.model.SightingDetails;
 import com.breece.trackrejoice.sighting.api.model.SightingId;
@@ -24,7 +25,7 @@ import java.util.Objects;
 import static org.hamcrest.Matchers.hasSize;
 
 public class SightingTest extends TestUtilities{
-    final TestFixture testFixture = TestFixture.create(ContentHandler.class).givenCommands("user/create-user.json").givenCommands("user/create-another-user.json");
+    final TestFixture testFixture = TestFixture.create(ContentHandler.class, SightingHandler.class ).givenCommands("user/create-user.json").givenCommands("user/create-another-user.json");
 
 
     @Test

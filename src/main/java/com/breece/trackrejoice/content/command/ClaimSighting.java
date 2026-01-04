@@ -3,6 +3,7 @@ package com.breece.trackrejoice.content.command;
 import com.breece.trackrejoice.content.model.Content;
 import com.breece.trackrejoice.content.model.ContentId;
 import com.breece.trackrejoice.sighting.SightingErrors;
+import com.breece.trackrejoice.sighting.api.SightingContentBridge;
 import com.breece.trackrejoice.sighting.api.model.SightingDetails;
 import com.breece.trackrejoice.sighting.api.model.SightingId;
 import io.fluxzero.sdk.Fluxzero;
@@ -12,7 +13,7 @@ import io.fluxzero.sdk.tracking.handling.authentication.RequiresUser;
 import jakarta.validation.constraints.NotNull;
 
 @RequiresUser
-public record ClaimSighting(@NotNull ContentId contentId, @NotNull SightingId sightingId, @NotNull SightingDetails sightingDetails) implements ContentUpdate {
+public record ClaimSighting(@NotNull ContentId contentId, @NotNull SightingId sightingId, @NotNull SightingDetails sightingDetails) implements ContentUpdate, SightingContentBridge {
 
     @AssertLegal
     void assertSightingExists() {

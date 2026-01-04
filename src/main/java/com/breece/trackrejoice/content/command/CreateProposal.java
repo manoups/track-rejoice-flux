@@ -6,6 +6,7 @@ import com.breece.trackrejoice.content.model.ContentId;
 import com.breece.trackrejoice.content.model.ProposedSighting;
 import com.breece.trackrejoice.content.model.ProposedSightingId;
 import com.breece.trackrejoice.sighting.SightingErrors;
+import com.breece.trackrejoice.sighting.api.SightingContentBridge;
 import com.breece.trackrejoice.sighting.api.model.Sighting;
 import com.breece.trackrejoice.sighting.api.model.SightingDetails;
 import com.breece.trackrejoice.sighting.api.model.SightingId;
@@ -16,7 +17,7 @@ import io.fluxzero.sdk.tracking.handling.authentication.RequiresUser;
 import jakarta.validation.constraints.NotNull;
 
 @RequiresUser
-public record CreateProposal(ContentId contentId, @NotNull SightingId sightingId, @NotNull ProposedSightingId proposedSightingId, @NotNull SightingDetails sightingDetails) implements ContentInteract {
+public record CreateProposal(ContentId contentId, @NotNull SightingId sightingId, @NotNull ProposedSightingId proposedSightingId, @NotNull SightingDetails sightingDetails) implements ContentInteract, SightingContentBridge {
     @AssertLegal
     void assertSightingExists() {
         if (!Fluxzero.loadAggregate(sightingId).isPresent()) {
