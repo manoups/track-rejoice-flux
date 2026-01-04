@@ -10,16 +10,9 @@ import org.springframework.stereotype.Component;
 @Component
 @Consumer(name = "content-handler")
 public class ContentHandler {
-/*    @HandleEvent
-    void on(ClaimSighting event) {
-        Fluxzero.sendAndForgetCommand(new LinkSightingBackToContent(event.contentId(), event.sightingId()));
-    }*/
-
     @HandleEvent
     void searchAndRemoveProposals(ClaimSighting event) {
         Fluxzero.loadAggregate(event.contentId()).get().proposedSightings().stream().filter(ps -> ps.sightingId().equals(event.sightingId()))
                 .findFirst().ifPresent(ps -> Fluxzero.sendAndForgetCommand(new RemoveMemberProposal(ps.proposedSightingId())));
     }
-
-
 }
