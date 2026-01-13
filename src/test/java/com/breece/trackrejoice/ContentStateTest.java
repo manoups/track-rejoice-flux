@@ -35,7 +35,7 @@ class ContentStateTest {
                 .whenQuery(new GetClassifiedAdState(new ContentId("1")))
                 .expectNoErrors()
                 .expectResult(ContentState.class)
-                .expectResult(state -> ContentStatus.PENDING_PAYMENT == state.status());
+                .expectResult(state -> ContentStatus.ENABLED == state.status());
     }
 
 }
