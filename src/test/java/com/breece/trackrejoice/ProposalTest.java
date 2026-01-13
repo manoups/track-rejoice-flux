@@ -8,7 +8,7 @@ import com.breece.trackrejoice.content.command.RemoveMemberProposal;
 import com.breece.trackrejoice.content.model.Content;
 import com.breece.trackrejoice.content.model.ContentId;
 import com.breece.trackrejoice.content.model.ProposedSightingId;
-import com.breece.trackrejoice.content.query.GetClassifiedAdHistory;
+import com.breece.trackrejoice.content.query.GetSightingHistoryForContent;
 import com.breece.trackrejoice.content.query.GetContent;
 import com.breece.trackrejoice.geo.GeometryUtil;
 import com.breece.trackrejoice.sighting.SightingErrors;
@@ -228,8 +228,7 @@ public class ProposalTest extends TestUtilities {
     @Test
     void history() {
         testFixture.givenCommands("content/create-content.json", "sighting/create-sighting.json", "proposal/create-proposal.json", "proposal/accept-proposal.json")
-                .whenQuery(new GetClassifiedAdHistory(new ContentId("1")))
-                .mapResult(it -> { it.forEach(itr -> log.info("History: {} - {}", itr.key(), itr.value())); return it; })
+                .whenQuery(new GetSightingHistoryForContent(new ContentId("1")))
                 .expectResult(hasSize(2));
     }
 }
