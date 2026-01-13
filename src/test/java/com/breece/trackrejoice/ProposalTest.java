@@ -8,12 +8,14 @@ import com.breece.trackrejoice.content.command.RemoveMemberProposal;
 import com.breece.trackrejoice.content.model.Content;
 import com.breece.trackrejoice.content.model.ContentId;
 import com.breece.trackrejoice.content.model.ProposedSightingId;
+import com.breece.trackrejoice.content.query.GetClassifiedAdHistory;
 import com.breece.trackrejoice.content.query.GetContent;
 import com.breece.trackrejoice.geo.GeometryUtil;
 import com.breece.trackrejoice.sighting.SightingErrors;
 import com.breece.trackrejoice.sighting.api.SightingHandler;
 import io.fluxzero.sdk.test.TestFixture;
 import io.fluxzero.sdk.tracking.handling.IllegalCommandException;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -21,7 +23,8 @@ import java.util.Objects;
 
 import static org.hamcrest.Matchers.hasSize;
 
-public class ProposalTest extends TestUtilities{
+@Slf4j
+public class ProposalTest extends TestUtilities {
     final TestFixture testFixture = TestFixture.create(ProposedSightingHandler.class, SightingHandler.class, ContentHandler.class);
 
     @Test
@@ -127,18 +130,18 @@ public class ProposalTest extends TestUtilities{
 
     @Test
     void givenContentOfUserA_whenUserBCreatesProposal_thenNoError() {
-        testFixture.givenCommandsByUser(viewer,  "content/create-content.json")
+        testFixture.givenCommandsByUser(viewer, "content/create-content.json")
                 .givenCommandsByUser(user2, "sighting/create-sighting.json")
-                .whenCommandByUser(user2,"proposal/create-proposal.json")
+                .whenCommandByUser(user2, "proposal/create-proposal.json")
                 .expectNoErrors()
                 .expectEvents("proposal/create-proposal.json");
     }
 
     @Test
     void givenContentOfUserASightingOfUserB_whenUserAliceCreatesProposal_thenError() {
-        testFixture.givenCommandsByUser(viewer,  "content/create-content.json")
+        testFixture.givenCommandsByUser(viewer, "content/create-content.json")
                 .givenCommandsByUser(user2, "sighting/create-sighting.json")
-                .whenCommandByUser(Alice,"proposal/create-proposal.json")
+                .whenCommandByUser(Alice, "proposal/create-proposal.json")
                 .expectError(SightingErrors.notOwner);
     }
 
@@ -220,5 +223,13 @@ public class ProposalTest extends TestUtilities{
                 .expectResult(Objects::nonNull)
                 .mapResult(Content::proposedSightings)
                 .expectResult(List::isEmpty);
-}
+    }
+
+    @Test
+    void history() {
+        testFixture.givenCommands("content/create-content.json", "sighting/create-sighting.json", "proposal/create-proposal.json", "proposal/accept-proposal.json")
+                .whenQuery(new GetClassifiedAdHistory(new ContentId("1")))
+                .mapResult(it -> { it.forEach(itr -> log.info("History: {} - {}", itr.key(), itr.value())); return it; })
+                .expectResult(hasSize(2));
+    }
 }

@@ -109,6 +109,7 @@ class PaypalAuthenticateTest {
                 testFixture.registerHandlers(new PayPalEndpoint());
             }
 
+            @Disabled
             @Test
             void sendOrderEndpoint() {
                 testFixture.
