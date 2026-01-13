@@ -14,10 +14,8 @@ import org.locationtech.jts.geom.Geometry;
 import java.util.List;
 
 @Aggregate(searchable = true)
-@Builder(toBuilder = true)
 public record Content(@EntityId ContentId contentId,
                       @NotNull
-                      Geometry lostAt,
                       @With
                       SightingDetails lastConfirmedSighting,
                       @Member

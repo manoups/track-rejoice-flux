@@ -45,9 +45,9 @@ public class ProposalTest extends TestUtilities{
                 .whenQuery(new GetContent(new ContentId("1")))
                 .expectNoErrors()
                 .expectResult(Objects::nonNull)
-                .mapResult(Content::lostAt)
+                .mapResult(Content::lastConfirmedSighting)
                 .expectResult(Objects::nonNull)
-                .expectResult(details -> details.within(GeometryUtil.parseLocation(0.0, 0.0)));
+                .expectResult(details -> GeometryUtil.parseLocation(details.lat(), details.lng()).within(GeometryUtil.parseLocation(0.0, 0.0)));
     }
 
     @Test
@@ -57,7 +57,8 @@ public class ProposalTest extends TestUtilities{
                 .expectNoErrors()
                 .expectResult(Objects::nonNull)
                 .mapResult(Content::lastConfirmedSighting)
-                .expectResult(Objects::isNull);
+                .expectResult(Objects::nonNull)
+                .expectResult(details -> GeometryUtil.parseLocation(details.lat(), details.lng()).within(GeometryUtil.parseLocation(0.0, 0.0)));
     }
 
     @Test

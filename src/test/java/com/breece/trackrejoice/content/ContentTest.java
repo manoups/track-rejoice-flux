@@ -6,6 +6,7 @@ import com.breece.trackrejoice.content.model.*;
 import com.breece.trackrejoice.content.query.GetContentStats;
 import com.breece.trackrejoice.content.query.GetContents;
 import com.breece.trackrejoice.geo.LatLng;
+import com.breece.trackrejoice.sighting.api.model.SightingDetails;
 import com.breece.trackrejoice.user.api.UserId;
 import com.breece.trackrejoice.user.api.model.UserProfile;
 import io.fluxzero.sdk.test.TestFixture;
@@ -69,11 +70,11 @@ class ContentTest {
             CreateContent[] contents = new CreateContent[SIZE];
             for(int i=0; i< 15; ++i) {
                 ContentId contentId = new ContentId();
-                contents[i] = new CreateContent(contentId, List.of(new LatLng(BigDecimal.ZERO, BigDecimal.ZERO)), new Pet("Maya", "Cocker Spaniel", GenderEnum.FEMALE));
+                contents[i] = new CreateContent(contentId, new SightingDetails(BigDecimal.ZERO, BigDecimal.ZERO), new Pet("Maya", "Cocker Spaniel", GenderEnum.FEMALE));
             }
             for(int i=15; i< SIZE; ++i) {
                 ContentId contentId = new ContentId();
-                contents[i] = new CreateContent(contentId, List.of(new LatLng(BigDecimal.ZERO, BigDecimal.ZERO)), new Keys("Square Key"));
+                contents[i] = new CreateContent(contentId, new SightingDetails(BigDecimal.ZERO, BigDecimal.ZERO), new Keys("Square Key"));
             }
 
             testFixture.givenCommands(contents)

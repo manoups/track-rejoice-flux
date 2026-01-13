@@ -20,7 +20,7 @@ public class ContentEndpoint {
     @HandlePost(value = {"","/"})
     ContentId createContent(CreateContent content) {
         var contentId = new ContentId();
-        Fluxzero.sendCommandAndWait(new CreateContent(contentId, content.lostAt(), content.details()));
+        Fluxzero.sendCommandAndWait(new CreateContent(contentId, content.lastConfirmedSighting(), content.details()));
         return contentId;
     }
 

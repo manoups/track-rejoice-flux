@@ -1,7 +1,7 @@
 {
   "@class": "CreateContent",
   "contentId": "1",
-  "lostAt": {
+  "lastConfirmedSighting": {
     "lat": 0.0,
     "lng": 0.0
   },
