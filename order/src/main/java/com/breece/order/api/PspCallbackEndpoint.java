@@ -23,7 +23,7 @@ import java.util.List;
 @Path("/payments/paypal")
 @RequiredArgsConstructor
 @ConditionalOnProperty(value = "pgp", pattern = "paypal")
-public class PayPalEndpoint {
+public class PspCallbackEndpoint {
     @HandlePost("/orders/{content-id}")
     void createOrder(@PathParam(value = "content-id") ContentId contentId, List<ServiceId> serviceIds) {
             Fluxzero.publishEvent(new PlaceOrder(new OrderId(), contentId, new OrderDetails(serviceIds, Instant.now(), Duration.ofDays(90))));

@@ -92,3 +92,4 @@ This example follows FluxZero's event-driven architecture:
 - Contain multiple services for one product
 - Need to validate that a basic subscription is already active or included in the basket
 - A basic subcription order on content with active subscription extends the duration of the subscription 
+- An order binds together a content with entities

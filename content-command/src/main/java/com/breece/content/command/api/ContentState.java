@@ -15,7 +15,7 @@ public record ContentState(@Association @EntityId ContentId contentId, @With Con
 
     @HandleEvent
     static ContentState on(CreateContent event) {
-        return new ContentState(event.contentId(), ContentStatus.DRAFT);
+        return new ContentState(event.contentId(), ContentStatus.OFFLINE);
     }
 
     /*Used only for the basic (publishing) service

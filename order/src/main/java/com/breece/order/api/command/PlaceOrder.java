@@ -57,7 +57,7 @@ public record PlaceOrder(@NotNull OrderId orderId, @NotNull ContentId contentId,
         if (stateOptional.isEmpty()) {
             throw ContentErrors.notFound;
         }
-        if (stateOptional.get().status() == ContentStatus.DRAFT) {
+        if (stateOptional.get().status() == ContentStatus.OFFLINE) {
             if (details.serviceIds().stream().map(Fluxzero::loadAggregate).noneMatch(it -> it.isPresent() && it.get().basic())) {
                 throw ServiceErrors.basicServiceRequired;
             }
