@@ -1,0 +1,41 @@
+package com.breece.order.api;
+
+import com.breece.content.command.api.PublishContent;
+import com.breece.coreapi.common.PaypalAuthenticate;
+import com.breece.coreapi.order.model.Order;
+import com.breece.order.api.command.AbortOrder;
+import com.breece.order.api.command.PlaceOrder;
+import com.breece.order.api.command.ValidateOrder;
+import com.breece.payment.api.PaymentAccepted;
+import com.breece.payment.api.PaymentRejected;
+import io.fluxzero.common.api.Metadata;
+import io.fluxzero.sdk.Fluxzero;
+import io.fluxzero.sdk.tracking.handling.HandleEvent;
+import org.springframework.stereotype.Component;
+
+@Component
+public class OrderFulfillment {
+
+    @HandleEvent
+    void handle(PlaceOrder event) {
+        String token = Fluxzero.queryAndWait(new PaypalAuthenticate());
+//        Supplier<String> memoizedSupplier = Suppliers.memoizeWithExpiration(this::authenticate, 30, TimeUnit.SECONDS);
+        Fluxzero.sendAndForgetCommand(new ValidateOrder(event.orderId(), event.contentId(), event.orderId().toString()), Metadata.of("token", token));
+    }
+
+    /*private String authenticate() {
+        return Fluxzero.queryAndWait(new PaypalAuthenticate());
+    }*/
+
+    @HandleEvent
+    void handle(PaymentRejected event) {
+        var order = Fluxzero.<com.breece.coreapi.order.model.Order>loadEntityValue(event.reference());
+        Fluxzero.sendAndForgetCommand(new AbortOrder(order.orderId(), "Payment rejected"));
+    }
+
+    @HandleEvent
+    void handle(PaymentAccepted event) {
+        Order order = Fluxzero.loadEntityValue(event.reference());
+        Fluxzero.sendAndForgetCommand(new PublishContent(order.contentId(), order.orderId()));
+    }
+}
