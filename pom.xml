@@ -197,9 +197,10 @@
     <module>sighting-ui</module>
     <module>sighting-command</module>
     <module>content-command</module>
-    <module>content-ui</module>
+    <module>content-query</module>
     <module>order</module>
     <module>service</module>
     <module>payment</module>
+    <module>sighting-query</module>
   </modules>
 </project>

@@ -7,11 +7,25 @@
     <artifactId>track-rejoice-flux</artifactId>
     <version>0.0.1-SNAPSHOT</version>
   </parent>
-  <groupId>com.breece</groupId>
   <artifactId>sighting-ui</artifactId>
   <name>sighting-ui</name>
   <url>http://maven.apache.org</url>
   <dependencies>
+    <dependency>
+      <groupId>${project.groupId}</groupId>
+      <artifactId>core-api</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>${project.groupId}</groupId>
+      <artifactId>order</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>${project.groupId}</groupId>
+      <artifactId>content-query</artifactId>
+      <version>${project.version}</version>
+    </dependency>
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
