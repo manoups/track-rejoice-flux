@@ -64,22 +64,6 @@
       <artifactId>sdk</artifactId>
     </dependency>
     <dependency>
-      <groupId>io.fluxzero</groupId>
-      <artifactId>sdk</artifactId>
-      <scope>test</scope>
-      <classifier>tests</classifier>
-    </dependency>
-    <dependency>
-      <groupId>io.fluxzero</groupId>
-      <artifactId>test-server</artifactId>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>io.fluxzero</groupId>
-      <artifactId>proxy</artifactId>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
       <groupId>org.projectlombok</groupId>
       <artifactId>lombok</artifactId>
       <optional>true</optional>

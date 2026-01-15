@@ -1,0 +1,4 @@
+{
+  "@class": "com.breece.sighting.command.api.DeleteSighting",
+  "sightingId": "1"
+}

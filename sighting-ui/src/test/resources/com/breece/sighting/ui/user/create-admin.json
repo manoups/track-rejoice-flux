@@ -1,0 +1,8 @@
+{
+  "@class" : "com.breece.coreapi.user.api.CreateUser",
+  "userId": "admin",
+  "details": {
+    "name": "An admin"
+  },
+  "role": "ADMIN"
+}

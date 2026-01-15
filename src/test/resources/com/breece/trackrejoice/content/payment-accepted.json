@@ -1,5 +1,0 @@
-{
-  "@class": "PaymentAccepted",
-  "paymentId": "1",
-  "reference": "order-1"
-}

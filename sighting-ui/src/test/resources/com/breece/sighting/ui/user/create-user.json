@@ -1,0 +1,7 @@
+{
+  "@class" : "com.breece.coreapi.user.api.CreateUser",
+  "userId": "viewer",
+  "details": {
+    "name": "The viewer"
+  }
+}

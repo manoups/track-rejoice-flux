@@ -1,0 +1,5 @@
+{
+  "@class": "com.breece.order.api.command.AbortOrder",
+  "orderId": "1",
+  "reason": "test"
+}

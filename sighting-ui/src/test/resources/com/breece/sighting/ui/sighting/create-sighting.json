@@ -1,0 +1,8 @@
+{
+  "@class": "com.breece.sighting.command.api.CreateSighting",
+  "sightingId": "1",
+  "sightingDetails": {
+    "lat": 123.456,
+    "lng": 78.901
+  }
+}

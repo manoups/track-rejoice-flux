@@ -1,0 +1,5 @@
+{
+  "@class" : "com.breece.coreapi.user.api.SetRole",
+  "userId": "viewer",
+  "role": "ADMIN"
+}

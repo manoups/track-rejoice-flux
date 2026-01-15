@@ -1,8 +1,0 @@
-{
-  "@class": "com.breece.trackrejoice.sighting.api.CreateSighting",
-  "sightingId": "1",
-  "sightingDetails": {
-    "lat": 123.456,
-    "lng": 78.901
-  }
-}
