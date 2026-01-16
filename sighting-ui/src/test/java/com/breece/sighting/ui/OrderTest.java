@@ -19,7 +19,7 @@ import java.time.temporal.ChronoUnit;
 
 class OrderTest {
     final TestFixture testFixture = TestFixture.create(new OrderFulfillment(), ContentState.class, new EndpointMock()).withClock(Clock.fixed(Instant.parse("2025-01-01T00:00:00Z"), ZoneId.systemDefault()))
-            .givenCommands("service/create-service.json", "content/create-content.json");
+            .givenCommands("service/create-service.json", "content/create-content.json").withProperty("paypal.url", "https://paypal-value");
 
 
     @Test
@@ -46,17 +46,17 @@ class OrderTest {
     }
 
     static class EndpointMock {
-        @HandlePost("https://api-m.sandbox.paypal.com/v1/oauth2/token")
+        @HandlePost("https://paypal-value/v1/oauth2/token")
         WebResponse authenticationToken() {
             return WebResponse.builder()
-                    .payload(FileUtils.loadFile("/com/breece/trackrejoice/common/auth-response.json"))
+                    .payload(FileUtils.loadFile("/com/breece/sighting/ui/common/auth-response.json"))
                     .build();
         }
 
-        @HandlePost("https://api-m.sandbox.paypal.com/v2/checkout/orders")
+        @HandlePost("https://paypal-value/v2/checkout/orders")
         WebResponse placeOrder() {
             return WebResponse.builder()
-                    .payload(FileUtils.loadFile("/com/breece/trackrejoice/common/checkout-order.json"))
+                    .payload(FileUtils.loadFile("/com/breece/sighting/ui/common/checkout-order.json"))
                     .build();
         }
     }

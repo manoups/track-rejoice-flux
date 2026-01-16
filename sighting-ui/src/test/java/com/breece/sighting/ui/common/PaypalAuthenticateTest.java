@@ -36,26 +36,26 @@ class PaypalAuthenticateTest {
     @Nested
     class PaypalOrderTests {
         static class EndpointMock {
-            @HandlePost("https://api-m.sandbox.paypal.com/v1/oauth2/token")
+            @HandlePost("https://paypal-value/v1/oauth2/token")
             WebResponse authenticationToken() {
                 /*try {
                     TimeUnit.SECONDS.sleep(2);
                 } catch (InterruptedException e) {}*/
                 return WebResponse.builder()
-                        .payload(FileUtils.loadFile("/com/breece/trackrejoice/common/auth-response.json"))
+                        .payload(FileUtils.loadFile("/com/breece/sighting/ui/common/auth-response.json"))
                         .build();
             }
 
-            @HandlePost("https://api-m.sandbox.paypal.com/v2/checkout/orders")
+            @HandlePost("https://paypal-value/v2/checkout/orders")
             WebResponse placeOrder() {
                 return WebResponse.builder()
-                        .payload(FileUtils.loadFile("/com/breece/trackrejoice/common/checkout-order.json"))
+                        .payload(FileUtils.loadFile("/com/breece/sighting/ui/common/checkout-order.json"))
                         .build();
             }
         }
 
 
-        TestFixture testFixture = TestFixture.create(ContentState.class, new OrderFulfillment(), new EndpointMock()).withProperty("pgp", "paypal").givenCommands("/com/breece/sighting/ui/service/create-service.json");
+        TestFixture testFixture = TestFixture.create(ContentState.class, new OrderFulfillment(), new EndpointMock()).withProperty("pgp", "paypal").withProperty("paypal.url", "https://paypal-value").givenCommands("/com/breece/sighting/ui/service/create-service.json");
 
         @Test
         void paypalAuthenticate() {
@@ -126,16 +126,16 @@ class PaypalAuthenticateTest {
     @Nested
     class PaypalOrderFailTests {
         static class EndpointMock {
-            @HandlePost("https://api-m.sandbox.paypal.com/v1/oauth2/token")
+            @HandlePost("https://paypal-value.com/v1/oauth2/token")
             WebResponse authenticationToken() {
                 return WebResponse.builder()
                         .status(401)
-                        .payload(FileUtils.loadFile("/com/breece/trackrejoice/common/auth-response-error.json"))
+                        .payload(FileUtils.loadFile("/com/breece/sighting/ui/common/auth-response-error.json"))
                         .build();
             }
         }
 
-        TestFixture testFixture = TestFixture.create(new OrderFulfillment(), new EndpointMock());
+        TestFixture testFixture = TestFixture.create(new OrderFulfillment(), new EndpointMock()).withProperty("paypal.url", "https://paypal-value.com");
 
         @Test
         void paypalAuthenticate() {
