@@ -1,4 +1,4 @@
-package com.breece.sighting.ui.service;
+package com.breece.service;
 
 import io.fluxzero.sdk.test.TestFixture;
 import org.junit.jupiter.api.Test;

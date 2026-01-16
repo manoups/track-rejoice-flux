@@ -1,6 +1,5 @@
-package com.breece.sighting.ui.user;
+package com.breece.coreapi.user;
 
-import com.breece.coreapi.user.UsersEndpoint;
 import com.breece.coreapi.user.api.CreateUser;
 import com.breece.coreapi.user.api.GetUsers;
 import com.breece.coreapi.user.api.UserId;
@@ -69,14 +68,14 @@ class UserTest {
 
         @Test
         void createUser() {
-            testFixture.whenPost("/users", "/com/breece/sighting/ui/user/create-user-request.json")
+            testFixture.whenPost("/users", "/com/breece/coreapi/user/create-user-request.json")
                     .expectResult(UserId.class)
                     .expectEvents(CreateUser.class);
         }
 
         @Test
         void getUsers() {
-            testFixture.givenPost("/users", "/com/breece/sighting/ui/user/create-user-request.json")
+            testFixture.givenPost("/users", "/com/breece/coreapi/user/create-user-request.json")
                     .whenGet("/users")
                     .expectResult(hasSize(1));
         }

@@ -1,6 +1,5 @@
 package com.breece.sighting.ui;
 
-
 import com.breece.content.command.api.ClaimSighting;
 import com.breece.content.command.api.ContentHandler;
 import com.breece.content.command.api.SightingHandler;
@@ -10,8 +9,6 @@ import com.breece.coreapi.sighting.SightingErrors;
 import com.breece.coreapi.sighting.model.Sighting;
 import com.breece.coreapi.sighting.model.SightingDetails;
 import com.breece.coreapi.sighting.model.SightingId;
-import com.breece.coreapi.user.api.UserId;
-import com.breece.coreapi.user.api.model.UserProfile;
 import com.breece.sighting.command.api.LinkSightingBackToContent;
 import com.breece.sighting.query.api.GetSighting;
 import com.breece.sighting.query.api.GetSightings;
@@ -26,8 +23,7 @@ import java.util.Objects;
 import static org.hamcrest.Matchers.hasSize;
 
 public class SightingTest extends TestUtilities{
-    final TestFixture testFixture = TestFixture.create(ContentHandler.class, SightingHandler.class ).givenCommands("user/create-user.json").givenCommands("user/create-another-user.json");
-
+    final TestFixture testFixture = TestFixture.create(ContentHandler.class, SightingHandler.class );
 
     @Test
     void createSighting() {
@@ -56,7 +52,7 @@ public class SightingTest extends TestUtilities{
         testFixture
                 .givenCommandsByUser(viewer,
                         "content/create-content.json", "sighting/create-sighting.json")
-                .whenCommandByUser(new UserProfile(new UserId("user2"), null, null), "sighting/claim-sighting.json")
+                .whenCommandByUser(Alice, "sighting/claim-sighting.json")
                 .expectExceptionalResult(ContentErrors.notFound);
     }
 

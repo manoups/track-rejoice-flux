@@ -11,5 +11,21 @@
   <name>core-api</name>
   <url>http://maven.apache.org</url>
   <dependencies>
+    <dependency>
+      <groupId>io.fluxzero</groupId>
+      <artifactId>sdk</artifactId>
+      <scope>test</scope>
+      <classifier>tests</classifier>
+    </dependency>
+    <dependency>
+      <groupId>io.fluxzero</groupId>
+      <artifactId>test-server</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>io.fluxzero</groupId>
+      <artifactId>proxy</artifactId>
+      <scope>test</scope>
+    </dependency>
   </dependencies>
 </project>
