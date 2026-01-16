@@ -1,4 +1,4 @@
-package com.breece.coreapi.order.model;
+package com.breece.order.api.model;
 
 import io.fluxzero.sdk.Fluxzero;
 import io.fluxzero.sdk.modeling.Id;

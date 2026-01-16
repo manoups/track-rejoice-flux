@@ -1,4 +1,4 @@
-package com.breece.coreapi.order.model;
+package com.breece.order.api.model;
 
 import com.breece.coreapi.content.model.ContentId;
 import com.breece.coreapi.user.api.UserId;

@@ -19,12 +19,24 @@
     </dependency>
     <dependency>
       <groupId>${project.groupId}</groupId>
-      <artifactId>sighting-command</artifactId>
+      <artifactId>sighting</artifactId>
       <version>${project.version}</version>
     </dependency>
     <dependency>
-      <groupId>org.springframework.boot</groupId>
-      <artifactId>spring-boot-starter-web</artifactId>
+      <groupId>io.fluxzero</groupId>
+      <artifactId>sdk</artifactId>
+      <scope>test</scope>
+      <classifier>tests</classifier>
+    </dependency>
+    <dependency>
+      <groupId>io.fluxzero</groupId>
+      <artifactId>test-server</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>io.fluxzero</groupId>
+      <artifactId>proxy</artifactId>
+      <scope>test</scope>
     </dependency>
   </dependencies>
   <!--<build>

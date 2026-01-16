@@ -3,8 +3,8 @@ package com.breece.content.command.api;
 import com.breece.coreapi.content.model.ContentId;
 import com.breece.coreapi.proposed.sighting.model.ProposedSighting;
 import com.breece.coreapi.proposed.sighting.model.ProposedSightingId;
-import com.breece.coreapi.content.model.Content;
 import com.breece.coreapi.sighting.SightingErrors;
+import com.breece.coreapi.content.model.Content;
 import com.breece.coreapi.sighting.model.SightingDetails;
 import io.fluxzero.sdk.modeling.AssertLegal;
 import io.fluxzero.sdk.persisting.eventsourcing.Apply;
@@ -26,7 +26,7 @@ public record AcceptProposal(@NotNull ProposedSightingId proposedSightingId,
         content.proposedSightings().stream().filter(p -> p.proposedSightingId().equals(proposedSightingId)).findFirst().ifPresent(
                 proposedSighting -> {
                     if (!proposedSighting.details().equals(sightingDetails)) {
-                        throw SightingErrors.sightingMismatch;
+                        throw com.breece.coreapi.sighting.SightingErrors.sightingMismatch;
                     }
                 }
         );

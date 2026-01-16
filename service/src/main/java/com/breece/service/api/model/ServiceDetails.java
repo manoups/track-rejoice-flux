@@ -1,4 +1,4 @@
-package com.breece.coreapi.service.model;
+package com.breece.service.api.model;
 
 import java.math.BigDecimal;
 

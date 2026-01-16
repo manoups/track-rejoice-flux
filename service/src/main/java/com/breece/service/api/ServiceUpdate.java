@@ -1,7 +1,6 @@
-package com.breece.service.api.command;
+package com.breece.service.api;
 
-import com.breece.coreapi.service.model.Service;
-import com.breece.coreapi.service.ServiceErrors;
+import com.breece.service.api.model.Service;
 import io.fluxzero.sdk.modeling.AssertLegal;
 import jakarta.annotation.Nullable;
 

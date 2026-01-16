@@ -12,6 +12,6 @@ import java.util.List;
 
 @Aggregate(searchable = true)
 @Builder(toBuilder = true)
-public record Sighting(@EntityId SightingId sightingId, @NotNull UserId source, @NotNull SightingDetails details,
+public record Sighting(@EntityId com.breece.coreapi.sighting.model.SightingId sightingId, @NotNull UserId source, @NotNull com.breece.coreapi.sighting.model.SightingDetails details,
                        @Singular List<ContentId> linkedContents) {
 }

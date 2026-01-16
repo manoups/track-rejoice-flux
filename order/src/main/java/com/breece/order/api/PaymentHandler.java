@@ -1,7 +1,7 @@
 package com.breece.order.api;
 
 import com.breece.content.command.api.TakeContentOffline;
-import com.breece.coreapi.order.model.Order;
+import com.breece.order.api.model.Order;
 import com.breece.payment.api.PaymentAccepted;
 import io.fluxzero.sdk.Fluxzero;
 import io.fluxzero.sdk.tracking.Consumer;
@@ -15,9 +15,7 @@ public class PaymentHandler {
     void handle(PaymentAccepted event) {
         Fluxzero.loadAggregate(event.reference(), Order.class).ifPresent(orderEntity ->
         {
-            Fluxzero.scheduleCommand(new TakeContentOffline(orderEntity.get().contentId()),
-                    orderEntity.get().details().duration());
-            return orderEntity;
+            throw new RuntimeException("Payment accepted for order " + event.reference());
         });
     }
 }

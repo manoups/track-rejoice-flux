@@ -1,7 +1,7 @@
 package com.breece.order.api.command;
 
-import com.breece.coreapi.order.model.OrderId;
-import com.breece.coreapi.order.model.Order;
+import com.breece.order.api.model.OrderId;
+import com.breece.order.api.model.Order;
 import com.breece.coreapi.authentication.RequiresRole;
 import com.breece.coreapi.authentication.Role;
 import io.fluxzero.sdk.persisting.eventsourcing.Apply;

@@ -3,7 +3,7 @@ package com.breece.sighting.ui;
 import com.breece.content.command.api.ClaimSighting;
 import com.breece.content.command.api.ContentHandler;
 import com.breece.content.command.api.SightingHandler;
-import com.breece.coreapi.content.ContentErrors;
+import com.breece.content.ContentErrors;
 import com.breece.coreapi.content.model.ContentId;
 import com.breece.coreapi.sighting.SightingErrors;
 import com.breece.coreapi.sighting.model.Sighting;

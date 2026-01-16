@@ -2,10 +2,10 @@ package com.breece.sighting.ui;
 
 
 import com.breece.coreapi.content.model.ContentId;
-import com.breece.coreapi.order.model.OrderDetails;
-import com.breece.coreapi.order.model.OrderId;
+import com.breece.order.api.model.OrderDetails;
+import com.breece.order.api.model.OrderId;
 import com.breece.coreapi.payment.model.PaymentId;
-import com.breece.coreapi.service.model.ServiceId;
+import com.breece.service.api.model.ServiceId;
 import com.breece.order.api.command.PlaceOrder;
 import io.fluxzero.sdk.Fluxzero;
 import io.fluxzero.sdk.configuration.spring.ConditionalOnProperty;
@@ -26,7 +26,7 @@ import java.util.List;
 public class PspCallbackEndpoint {
     @HandlePost("/orders/{content-id}")
     void createOrder(@PathParam(value = "content-id") ContentId contentId, List<ServiceId> serviceIds) {
-            Fluxzero.publishEvent(new PlaceOrder(new OrderId(), contentId, new OrderDetails(serviceIds, Instant.now(), Duration.ofDays(90))));
+            Fluxzero.publishEvent(new PlaceOrder(new OrderId(), contentId, new OrderDetails(serviceIds, Instant.now())));
     }
 
     @HandlePost("/orders/{orderID}/{announcementId}/capture")

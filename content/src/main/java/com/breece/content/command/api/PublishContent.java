@@ -1,8 +1,9 @@
 package com.breece.content.command.api;
 
 import com.breece.coreapi.content.model.ContentId;
-import com.breece.coreapi.order.model.OrderId;
 import jakarta.validation.constraints.NotNull;
 
-public record PublishContent(@NotNull ContentId contentId, OrderId orderId) {
+import java.time.Duration;
+
+public record PublishContent(@NotNull ContentId contentId, Duration duration) {
 }

@@ -1,11 +1,10 @@
-package com.breece.service.api.command;
+package com.breece.service.api;
 
 import com.breece.coreapi.authentication.RequiresRole;
 import com.breece.coreapi.authentication.Role;
-import com.breece.coreapi.service.model.Service;
-import com.breece.coreapi.service.model.ServiceDetails;
-import com.breece.coreapi.service.model.ServiceId;
-import com.breece.coreapi.service.ServiceErrors;
+import com.breece.service.api.model.Service;
+import com.breece.service.api.model.ServiceDetails;
+import com.breece.service.api.model.ServiceId;
 import io.fluxzero.sdk.modeling.AssertLegal;
 import io.fluxzero.sdk.persisting.eventsourcing.Apply;
 import jakarta.validation.constraints.NotBlank;

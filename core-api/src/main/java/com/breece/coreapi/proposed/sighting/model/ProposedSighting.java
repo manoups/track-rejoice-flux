@@ -1,5 +1,6 @@
 package com.breece.coreapi.proposed.sighting.model;
 
+
 import com.breece.coreapi.sighting.model.SightingDetails;
 import com.breece.coreapi.sighting.model.SightingId;
 import io.fluxzero.sdk.modeling.EntityId;

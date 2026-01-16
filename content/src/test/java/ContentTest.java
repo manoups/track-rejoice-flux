@@ -1,19 +1,17 @@
-package com.breece.sighting.ui.content;
-
-import com.breece.content.command.api.*;
+import com.breece.content.command.api.ContentScheduler;
+import com.breece.content.command.api.ContentState;
+import com.breece.content.command.api.CreateContent;
+import com.breece.content.command.api.TakeContentOffline;
 import com.breece.content.query.api.GetContentStats;
 import com.breece.content.query.api.GetContents;
-import com.breece.coreapi.content.ContentErrors;
+import com.breece.content.ContentErrors;
 import com.breece.coreapi.content.model.ContentId;
 import com.breece.coreapi.content.model.GenderEnum;
 import com.breece.coreapi.content.model.Keys;
 import com.breece.coreapi.content.model.Pet;
-import com.breece.coreapi.sighting.model.SightingDetails;
+import com.breece.sighting.model.SightingDetails;
 import com.breece.coreapi.user.api.UserId;
 import com.breece.coreapi.user.api.model.UserProfile;
-import com.breece.order.api.PaymentHandler;
-import com.breece.payment.api.ExecutePayment;
-import com.breece.sighting.ui.ContentEndpoint;
 import io.fluxzero.sdk.test.TestFixture;
 import org.junit.jupiter.api.*;
 
@@ -54,8 +52,7 @@ class ContentTest {
 
     @Test
     void deleteContentNonOwner() {
-        testFixture.givenCommands("/com/breece/sighting/ui/user/create-user.json", "/com/breece/sighting/ui/user/create-another-user.json")
-                .givenCommandsByUser(new UserProfile(new UserId("viewer"), null, null),"create-content.json")
+        testFixture.givenCommandsByUser(new UserProfile(new UserId("viewer"), null, null),"create-content.json")
                 .whenCommandByUser(new UserProfile(new UserId("user2"), null, null),"delete-content.json")
                 .expectExceptionalResult(ContentErrors.unauthorized);
     }
@@ -119,31 +116,10 @@ class ContentTest {
     }
 
     @Nested
-    class ContentEndpointTests {
-        @BeforeEach
-        void setUp() {
-            testFixture.registerHandlers(new ContentEndpoint());
-        }
-
-        @Test
-        void createContent() {
-            testFixture.whenPost("content", "/com/breece/sighting/ui/content/content-details.json")
-                    .expectResult(ContentId.class).expectEvents(CreateContent.class);
-        }
-
-        @Test
-        void getContents() {
-            testFixture.givenPost("content", "/com/breece/sighting/ui/content/content-details.json")
-                    .whenGet("content")
-                    .expectResult(hasSize(1));
-        }
-    }
-
-    @Nested
     class ContentSchedulerTests {
         @BeforeEach
         void setUp() {
-            testFixture.registerHandlers(new ContentScheduler(), new PaymentHandler()).givenCommands("/com/breece/sighting/ui/service/create-service.json","create-content.json");
+            testFixture.registerHandlers(new ContentScheduler()).givenCommands("/com/breece/sighting/ui/service/create-service.json","create-content.json");
         }
 
         @Test
@@ -153,22 +129,6 @@ class ContentTest {
                     .andThen()
                     .whenTimeElapses(Duration.ofDays(90))
                     .expectEvents(TakeContentOffline.class);
-        }
-    }
-
-    @Nested
-    class ContentStateTests {
-        @BeforeEach
-        void setUp() {
-            testFixture.registerHandlers().givenCommands("create-content.json");
-        }
-
-        @Disabled
-        @Timeout(15)
-        @Test
-        void createContentDetails() {
-            testFixture.whenEvent("payment-initiated.json")
-                    .expectEvents(ExecutePayment.class);
         }
     }
 }

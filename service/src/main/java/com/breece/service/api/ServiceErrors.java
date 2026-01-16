@@ -1,4 +1,4 @@
-package com.breece.coreapi.service;
+package com.breece.service.api;
 
 import io.fluxzero.sdk.common.exception.FunctionalException;
 import io.fluxzero.sdk.tracking.handling.IllegalCommandException;

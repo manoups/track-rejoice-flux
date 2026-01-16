@@ -1,7 +1,7 @@
 package com.breece.content.query.api;
 
 import com.breece.coreapi.authentication.Sender;
-import com.breece.coreapi.content.ContentErrors;
+import com.breece.content.ContentErrors;
 import com.breece.coreapi.content.model.Content;
 import com.breece.coreapi.content.model.ContentId;
 import io.fluxzero.sdk.Fluxzero;

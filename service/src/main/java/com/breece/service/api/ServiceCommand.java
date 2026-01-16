@@ -1,6 +1,6 @@
-package com.breece.service.api.command;
+package com.breece.service.api;
 
-import com.breece.coreapi.service.model.ServiceId;
+import com.breece.service.api.model.ServiceId;
 import io.fluxzero.sdk.Fluxzero;
 import io.fluxzero.sdk.tracking.TrackSelf;
 import io.fluxzero.sdk.tracking.handling.HandleCommand;

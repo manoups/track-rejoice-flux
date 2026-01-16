@@ -1,16 +1,16 @@
-package com.breece.sighting.ui.orders;
+package com.breece.order;
 
 import com.breece.content.command.api.ContentState;
 import com.breece.coreapi.content.model.ContentId;
 import com.breece.coreapi.order.OrderErrors;
-import com.breece.coreapi.order.model.OrderDetails;
-import com.breece.coreapi.order.model.OrderId;
-import com.breece.coreapi.service.model.ServiceId;
+import com.breece.order.api.model.OrderDetails;
+import com.breece.order.api.model.OrderId;
+import com.breece.service.api.model.ServiceId;
 import com.breece.coreapi.user.api.UserId;
 import com.breece.coreapi.user.api.model.UserDetails;
 import com.breece.coreapi.user.api.model.UserProfile;
 import com.breece.order.api.command.PlaceOrder;
-import com.breece.service.api.command.UpdateService;
+import com.breece.service.api.UpdateService;
 import io.fluxzero.sdk.test.TestFixture;
 import org.junit.jupiter.api.Test;
 
@@ -21,7 +21,7 @@ import java.time.Instant;
 import static org.hibernate.internal.util.collections.CollectionHelper.listOf;
 
 class PlaceOrderTest {
-    TestFixture testFixture = TestFixture.create(ContentState.class).givenCommands("/com/breece/sighting/ui/service/create-service.json", "/com/breece/sighting/ui/content/create-content.json");
+    TestFixture testFixture = TestFixture.create(ContentState.class).givenCommands("service/create-service.json", "content/create-content.json");
 
     PlaceOrder order1 = new PlaceOrder(new OrderId("1"), new ContentId("1"), new OrderDetails(
             listOf(new ServiceId("1")), Instant.now(), Duration.ofDays(90)));

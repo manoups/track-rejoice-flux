@@ -1,5 +1,6 @@
 package com.breece.content.command.api;
 
+import com.breece.coreapi.sighting.SightingContentBridge;
 import com.breece.sighting.command.api.DeleteSighting;
 import com.breece.sighting.command.api.LinkSightingBackToContent;
 import io.fluxzero.sdk.Fluxzero;
@@ -15,7 +16,7 @@ import java.util.Objects;
 public class SightingHandler {
 
     @HandleEvent
-    void on(com.breece.coreapi.sighting.SightingContentBridge event) {
+    void on(SightingContentBridge event) {
         Fluxzero.sendAndForgetCommand(new LinkSightingBackToContent(event.contentId(), event.sightingId()));
     }
 

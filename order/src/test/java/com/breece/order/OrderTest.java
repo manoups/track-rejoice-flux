@@ -1,4 +1,4 @@
-package com.breece.sighting.ui;
+package com.breece.order;
 
 import com.breece.content.command.api.ContentState;
 import com.breece.coreapi.order.OrderErrors;
@@ -49,14 +49,14 @@ class OrderTest {
         @HandlePost("https://paypal-value/v1/oauth2/token")
         WebResponse authenticationToken() {
             return WebResponse.builder()
-                    .payload(FileUtils.loadFile("/com/breece/sighting/ui/common/auth-response.json"))
+                    .payload(FileUtils.loadFile("/com/breece/order/common/auth-response.json"))
                     .build();
         }
 
         @HandlePost("https://paypal-value/v2/checkout/orders")
         WebResponse placeOrder() {
             return WebResponse.builder()
-                    .payload(FileUtils.loadFile("/com/breece/sighting/ui/common/checkout-order.json"))
+                    .payload(FileUtils.loadFile("/com/breece/order/common/checkout-order.json"))
                     .build();
         }
     }

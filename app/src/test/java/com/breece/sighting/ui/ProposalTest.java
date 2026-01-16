@@ -3,7 +3,7 @@ package com.breece.sighting.ui;
 import com.breece.content.command.api.*;
 import com.breece.content.query.api.GetContent;
 import com.breece.content.query.api.GetSightingHistoryForContent;
-import com.breece.coreapi.content.ContentErrors;
+import com.breece.content.ContentErrors;
 import com.breece.coreapi.content.model.Content;
 import com.breece.coreapi.content.model.ContentId;
 import com.breece.coreapi.proposed.sighting.model.ProposedSightingId;

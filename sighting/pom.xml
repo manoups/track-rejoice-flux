@@ -9,7 +9,7 @@
     <relativePath>../pom.xml</relativePath>
   </parent>
   <artifactId>sighting</artifactId>
-  <name>sighting-command</name>
+  <name>sighting</name>
   <url>http://maven.apache.org</url>
   <dependencies>
     <dependency>

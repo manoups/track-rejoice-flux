@@ -1,0 +1,26 @@
+{
+  "id": "9X423344HC269822Y",
+  "status": "CREATED",
+  "links": [
+    {
+      "href": "https://api.sandbox.paypal.com/v2/checkout/orders/9X423344HC269822Y",
+      "rel": "self",
+      "method": "GET"
+    },
+    {
+      "href": "https://www.sandbox.paypal.com/checkoutnow?token=9X423344HC269822Y",
+      "rel": "approve",
+      "method": "GET"
+    },
+    {
+      "href": "https://api.sandbox.paypal.com/v2/checkout/orders/9X423344HC269822Y",
+      "rel": "update",
+      "method": "PATCH"
+    },
+    {
+      "href": "https://api.sandbox.paypal.com/v2/checkout/orders/9X423344HC269822Y/capture",
+      "rel": "capture",
+      "method": "POST"
+    }
+  ]
+}
