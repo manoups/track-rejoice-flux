@@ -1,14 +1,14 @@
 package com.breece.sighting.ui;
 
+import com.breece.common.model.ContentId;
+import com.breece.common.sighting.SightingErrors;
+import com.breece.common.sighting.model.Sighting;
+import com.breece.common.sighting.model.SightingDetails;
+import com.breece.common.sighting.model.SightingId;
 import com.breece.content.command.api.ClaimSighting;
 import com.breece.content.command.api.ContentHandler;
 import com.breece.content.command.api.SightingHandler;
 import com.breece.content.ContentErrors;
-import com.breece.coreapi.content.model.ContentId;
-import com.breece.coreapi.sighting.SightingErrors;
-import com.breece.coreapi.sighting.model.Sighting;
-import com.breece.coreapi.sighting.model.SightingDetails;
-import com.breece.coreapi.sighting.model.SightingId;
 import com.breece.sighting.command.api.LinkSightingBackToContent;
 import com.breece.sighting.query.api.GetSighting;
 import com.breece.sighting.query.api.GetSightings;

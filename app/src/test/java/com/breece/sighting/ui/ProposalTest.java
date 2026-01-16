@@ -1,13 +1,13 @@
 package com.breece.sighting.ui;
 
+import com.breece.common.model.Content;
+import com.breece.common.model.ContentId;
+import com.breece.common.model.ProposedSightingId;
+import com.breece.common.sighting.SightingErrors;
 import com.breece.content.command.api.*;
 import com.breece.content.query.api.GetContent;
 import com.breece.content.query.api.GetSightingHistoryForContent;
 import com.breece.content.ContentErrors;
-import com.breece.coreapi.content.model.Content;
-import com.breece.coreapi.content.model.ContentId;
-import com.breece.coreapi.proposed.sighting.model.ProposedSightingId;
-import com.breece.coreapi.sighting.SightingErrors;
 import com.breece.order.geo.GeometryUtil;
 import io.fluxzero.sdk.test.TestFixture;
 import io.fluxzero.sdk.tracking.handling.IllegalCommandException;

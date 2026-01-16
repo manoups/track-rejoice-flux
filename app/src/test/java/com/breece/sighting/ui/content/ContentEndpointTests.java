@@ -1,8 +1,8 @@
 package com.breece.sighting.ui.content;
 
+import com.breece.common.model.ContentId;
 import com.breece.content.command.api.ContentState;
 import com.breece.content.command.api.CreateContent;
-import com.breece.coreapi.content.model.ContentId;
 import com.breece.sighting.ui.ContentEndpoint;
 import io.fluxzero.sdk.test.TestFixture;
 import org.junit.jupiter.api.Test;

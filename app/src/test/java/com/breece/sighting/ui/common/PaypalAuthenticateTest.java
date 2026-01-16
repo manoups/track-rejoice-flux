@@ -1,8 +1,8 @@
 package com.breece.sighting.ui.common;
 
+import com.breece.common.model.ContentId;
 import com.breece.content.command.api.ContentState;
 import com.breece.coreapi.common.PaypalAuthenticate;
-import com.breece.coreapi.content.model.ContentId;
 import com.breece.order.api.model.OrderDetails;
 import com.breece.order.api.model.OrderId;
 import com.breece.service.api.model.ServiceId;
@@ -96,7 +96,7 @@ class PaypalAuthenticateTest {
 
         @Test
         void sendOrder() {
-            PlaceOrder order1 = new PlaceOrder(new OrderId("1"), new ContentId("1"), new OrderDetails(listOf(new ServiceId("1")), Instant.now(), Duration.ofDays(90)));
+            PlaceOrder order1 = new PlaceOrder(new OrderId("1"), new ContentId("1"), new OrderDetails(listOf(new ServiceId("1")), Instant.now()));
             testFixture.givenCommands("/com/breece/sighting/ui/content/create-content.json").whenCommand(order1)
                     .expectEvents(PlaceOrder.class)
                     .expectCommands(ValidateOrder.class, UpdateOrder.class);
