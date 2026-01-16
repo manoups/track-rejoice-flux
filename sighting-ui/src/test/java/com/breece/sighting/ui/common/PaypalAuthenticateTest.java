@@ -126,7 +126,7 @@ class PaypalAuthenticateTest {
     @Nested
     class PaypalOrderFailTests {
         static class EndpointMock {
-            @HandlePost("https://paypal-value.com/v1/oauth2/token")
+            @HandlePost("https://paypal-value/v1/oauth2/token")
             WebResponse authenticationToken() {
                 return WebResponse.builder()
                         .status(401)
@@ -135,7 +135,7 @@ class PaypalAuthenticateTest {
             }
         }
 
-        TestFixture testFixture = TestFixture.create(new OrderFulfillment(), new EndpointMock()).withProperty("paypal.url", "https://paypal-value.com");
+        TestFixture testFixture = TestFixture.create(new OrderFulfillment(), new EndpointMock()).withProperty("paypal.url", "https://paypal-value");
 
         @Test
         void paypalAuthenticate() {
