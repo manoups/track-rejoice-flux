@@ -14,7 +14,7 @@ import jakarta.validation.constraints.NotNull;
 
 public record AcceptProposal(@NotNull ProposedSightingId proposedSightingId,
                              @NotNull @Valid SightingDetails sightingDetails,
-                             @NotNull ContentId contentId) implements ContentUpdate, ConfirmedSightingUpdate {
+                             @NotNull ContentId contentId) implements ActiveContentUpdate, ConfirmedSightingUpdate {
     @AssertLegal(priority = -10)
     void assertProposedSightingExists(Content content) {
         if (content.proposedSightings().stream().map(ProposedSighting::proposedSightingId).noneMatch(p -> p.equals(proposedSightingId))) {

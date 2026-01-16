@@ -14,4 +14,11 @@ public interface ContentInteract extends ContentCommand {
             throw ContentErrors.notFound;
         }
     }
+
+    @AssertLegal
+    default void assertOnline(Content content) {
+        if (!content.online()) {
+            throw ContentErrors.offlineContent;
+        }
+    }
 }

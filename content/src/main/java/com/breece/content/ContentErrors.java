@@ -11,5 +11,6 @@ public interface ContentErrors {
             unauthorized = new UnauthorizedException("Unauthorized for action"),
             taskNotFound = new IllegalCommandException("Task not found"),
             taskCompleted = new IllegalCommandException("Task has already completed"),
-            sightingNotFound = new IllegalCommandException("Sighting not found");
+            sightingNotFound = new IllegalCommandException("Sighting not found"),
+            offlineContent = new IllegalCommandException("Content is offline and cannot be accessed");
 }

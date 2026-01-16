@@ -15,7 +15,7 @@ import io.fluxzero.sdk.tracking.handling.authentication.RequiresUser;
 import jakarta.validation.constraints.NotNull;
 
 @RequiresUser
-public record ClaimSighting(@NotNull ContentId contentId, @NotNull SightingId sightingId, @NotNull SightingDetails sightingDetails) implements ContentUpdate, ConfirmedSightingUpdate, SightingContentBridge {
+public record ClaimSighting(@NotNull ContentId contentId, @NotNull SightingId sightingId, @NotNull SightingDetails sightingDetails) implements ActiveContentUpdate, ConfirmedSightingUpdate, SightingContentBridge {
 
     @AssertLegal
     void assertSightingExists() {
