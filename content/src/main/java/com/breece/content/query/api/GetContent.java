@@ -1,9 +1,9 @@
 package com.breece.content.query.api;
 
+import com.breece.common.model.Content;
+import com.breece.common.model.ContentId;
 import com.breece.coreapi.authentication.Sender;
 import com.breece.content.ContentErrors;
-import com.breece.coreapi.content.model.Content;
-import com.breece.coreapi.content.model.ContentId;
 import io.fluxzero.sdk.Fluxzero;
 import io.fluxzero.sdk.tracking.handling.HandleQuery;
 import io.fluxzero.sdk.tracking.handling.Request;

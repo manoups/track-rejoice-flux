@@ -1,6 +1,6 @@
 package com.breece.sighting.ui;
 
-import com.breece.coreapi.content.model.ContentId;
+import com.breece.common.model.ContentId;
 import com.breece.order.api.model.OrderDetails;
 import com.breece.order.api.model.OrderId;
 import com.breece.order.api.command.PlaceOrder;
@@ -9,8 +9,6 @@ import io.fluxzero.sdk.web.HandlePost;
 import io.fluxzero.sdk.web.Path;
 import io.fluxzero.sdk.web.PathParam;
 import org.springframework.stereotype.Component;
-
-import java.time.Duration;
 
 @Component
 @Path("/orders")

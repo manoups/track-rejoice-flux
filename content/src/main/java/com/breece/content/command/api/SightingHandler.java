@@ -1,6 +1,6 @@
 package com.breece.content.command.api;
 
-import com.breece.coreapi.sighting.SightingContentBridge;
+import com.breece.common.sighting.SightingContentBridge;
 import com.breece.sighting.command.api.DeleteSighting;
 import com.breece.sighting.command.api.LinkSightingBackToContent;
 import io.fluxzero.sdk.Fluxzero;

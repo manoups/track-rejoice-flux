@@ -1,8 +1,8 @@
 package com.breece.content.command.api;
 
+import com.breece.common.model.Content;
+import com.breece.common.model.ProposedSighting;
 import com.breece.coreapi.authentication.Sender;
-import com.breece.coreapi.content.model.Content;
-import com.breece.coreapi.proposed.sighting.model.ProposedSighting;
 import io.fluxzero.sdk.Fluxzero;
 import io.fluxzero.sdk.modeling.AssertLegal;
 import jakarta.annotation.Nullable;

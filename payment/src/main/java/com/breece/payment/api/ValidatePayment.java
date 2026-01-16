@@ -2,7 +2,7 @@ package com.breece.payment.api;
 
 import com.breece.coreapi.authentication.Sender;
 import com.breece.coreapi.common.SendWebRequestWithoutMetadata;
-import com.breece.coreapi.payment.model.PaymentId;
+import com.breece.payment.api.model.PaymentId;
 import com.fasterxml.jackson.databind.JsonNode;
 import io.fluxzero.common.serialization.JsonUtils;
 import io.fluxzero.sdk.Fluxzero;

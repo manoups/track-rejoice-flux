@@ -1,6 +1,6 @@
 package com.breece.content.query.api;
 
-import com.breece.coreapi.content.model.Content;
+import com.breece.common.model.Content;
 import io.fluxzero.common.api.search.FacetStats;
 import io.fluxzero.sdk.Fluxzero;
 import io.fluxzero.sdk.tracking.handling.HandleQuery;

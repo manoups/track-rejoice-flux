@@ -1,10 +1,10 @@
 package com.breece.sighting.ui;
 
+import com.breece.common.model.Content;
+import com.breece.common.model.ContentId;
 import com.breece.content.command.api.CreateContent;
 import com.breece.content.query.api.GetContent;
 import com.breece.content.query.api.GetContents;
-import com.breece.coreapi.content.model.Content;
-import com.breece.coreapi.content.model.ContentId;
 import io.fluxzero.sdk.Fluxzero;
 import io.fluxzero.sdk.web.HandleGet;
 import io.fluxzero.sdk.web.HandlePost;

@@ -1,7 +1,7 @@
 package com.breece.payment.api;
 
-import com.breece.coreapi.payment.model.Payment;
-import com.breece.coreapi.payment.model.PaymentId;
+import com.breece.payment.api.model.Payment;
+import com.breece.payment.api.model.PaymentId;
 import io.fluxzero.sdk.persisting.eventsourcing.Apply;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;

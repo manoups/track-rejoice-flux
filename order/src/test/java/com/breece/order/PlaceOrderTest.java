@@ -2,7 +2,7 @@ package com.breece.order;
 
 import com.breece.content.command.api.ContentState;
 import com.breece.coreapi.content.model.ContentId;
-import com.breece.coreapi.order.OrderErrors;
+import com.breece.order.api.OrderErrors;
 import com.breece.order.api.model.OrderDetails;
 import com.breece.order.api.model.OrderId;
 import com.breece.service.api.model.ServiceId;

@@ -1,7 +1,7 @@
 package com.breece.order;
 
 import com.breece.content.command.api.ContentState;
-import com.breece.coreapi.order.OrderErrors;
+import com.breece.order.api.OrderErrors;
 import com.breece.order.api.OrderFulfillment;
 import com.breece.order.api.command.UpdateOrder;
 import com.breece.order.api.command.ValidateOrder;

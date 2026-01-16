@@ -1,6 +1,6 @@
 package com.breece.content.command.api;
 
-import com.breece.coreapi.content.model.ContentId;
+import com.breece.common.model.ContentId;
 import io.fluxzero.sdk.Fluxzero;
 import io.fluxzero.sdk.publishing.routing.RoutingKey;
 import io.fluxzero.sdk.tracking.TrackSelf;

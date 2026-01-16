@@ -1,6 +1,6 @@
 package com.breece.content.command.api;
 
-import com.breece.coreapi.content.model.ContentId;
+import com.breece.common.model.ContentId;
 import jakarta.validation.constraints.NotNull;
 
 import java.time.Duration;

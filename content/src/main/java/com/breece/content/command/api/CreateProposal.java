@@ -1,16 +1,16 @@
 package com.breece.content.command.api;
 
 
+import com.breece.common.model.Content;
+import com.breece.common.model.ContentId;
+import com.breece.common.model.ProposedSighting;
+import com.breece.common.model.ProposedSightingId;
+import com.breece.common.sighting.SightingContentBridge;
+import com.breece.common.sighting.SightingErrors;
+import com.breece.common.sighting.model.Sighting;
+import com.breece.common.sighting.model.SightingDetails;
+import com.breece.common.sighting.model.SightingId;
 import com.breece.coreapi.authentication.Sender;
-import com.breece.coreapi.content.model.Content;
-import com.breece.coreapi.content.model.ContentId;
-import com.breece.coreapi.proposed.sighting.model.ProposedSighting;
-import com.breece.coreapi.proposed.sighting.model.ProposedSightingId;
-import com.breece.coreapi.sighting.SightingErrors;
-import com.breece.coreapi.sighting.SightingContentBridge;
-import com.breece.coreapi.sighting.model.Sighting;
-import com.breece.coreapi.sighting.model.SightingDetails;
-import com.breece.coreapi.sighting.model.SightingId;
 import io.fluxzero.sdk.Fluxzero;
 import io.fluxzero.sdk.modeling.AssertLegal;
 import io.fluxzero.sdk.persisting.eventsourcing.Apply;

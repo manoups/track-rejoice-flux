@@ -1,7 +1,7 @@
 package com.breece.content.query.api;
 
-import com.breece.coreapi.content.model.ContentId;
-import com.breece.coreapi.sighting.ConfirmedSightingUpdate;
+import com.breece.common.model.ContentId;
+import com.breece.common.sighting.ConfirmedSightingUpdate;
 import io.fluxzero.sdk.Fluxzero;
 import io.fluxzero.sdk.tracking.handling.HandleQuery;
 import io.fluxzero.sdk.tracking.handling.Request;

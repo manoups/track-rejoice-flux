@@ -1,6 +1,6 @@
 package com.breece.payment.api;
 
-import com.breece.coreapi.payment.model.PaymentId;
+import com.breece.payment.api.model.PaymentId;
 import io.fluxzero.sdk.Fluxzero;
 import io.fluxzero.sdk.web.HandlePost;
 import io.fluxzero.sdk.web.Path;

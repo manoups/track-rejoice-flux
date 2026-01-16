@@ -1,7 +1,7 @@
 package com.breece.content.command.api;
 
-import com.breece.coreapi.proposed.sighting.model.ProposedSighting;
-import com.breece.coreapi.proposed.sighting.model.ProposedSightingId;
+import com.breece.common.model.ProposedSighting;
+import com.breece.common.model.ProposedSightingId;
 import io.fluxzero.sdk.persisting.eventsourcing.Apply;
 import jakarta.validation.constraints.NotNull;
 

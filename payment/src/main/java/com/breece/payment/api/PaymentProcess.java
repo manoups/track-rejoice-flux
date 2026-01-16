@@ -1,7 +1,7 @@
 package com.breece.payment.api;
 
-import com.breece.coreapi.payment.model.PaymentId;
-import com.breece.coreapi.payment.model.PaymentStatus;
+import com.breece.payment.api.model.PaymentId;
+import com.breece.payment.api.model.PaymentStatus;
 import io.fluxzero.sdk.Fluxzero;
 import io.fluxzero.sdk.modeling.EntityId;
 import io.fluxzero.sdk.tracking.handling.Association;

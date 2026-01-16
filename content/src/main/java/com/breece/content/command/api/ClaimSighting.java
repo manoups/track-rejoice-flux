@@ -1,12 +1,13 @@
 package com.breece.content.command.api;
 
 
-import com.breece.coreapi.content.model.Content;
-import com.breece.coreapi.content.model.ContentId;
-import com.breece.coreapi.sighting.SightingContentBridge;
-import com.breece.coreapi.sighting.SightingErrors;
-import com.breece.coreapi.sighting.model.SightingDetails;
-import com.breece.coreapi.sighting.model.SightingId;
+import com.breece.common.model.Content;
+import com.breece.common.model.ContentId;
+import com.breece.common.sighting.ConfirmedSightingUpdate;
+import com.breece.common.sighting.SightingContentBridge;
+import com.breece.common.sighting.SightingErrors;
+import com.breece.common.sighting.model.SightingDetails;
+import com.breece.common.sighting.model.SightingId;
 import io.fluxzero.sdk.Fluxzero;
 import io.fluxzero.sdk.modeling.AssertLegal;
 import io.fluxzero.sdk.persisting.eventsourcing.Apply;
@@ -14,7 +15,7 @@ import io.fluxzero.sdk.tracking.handling.authentication.RequiresUser;
 import jakarta.validation.constraints.NotNull;
 
 @RequiresUser
-public record ClaimSighting(@NotNull ContentId contentId, @NotNull SightingId sightingId, @NotNull SightingDetails sightingDetails) implements ContentUpdate, com.breece.coreapi.sighting.ConfirmedSightingUpdate, SightingContentBridge {
+public record ClaimSighting(@NotNull ContentId contentId, @NotNull SightingId sightingId, @NotNull SightingDetails sightingDetails) implements ContentUpdate, ConfirmedSightingUpdate, SightingContentBridge {
 
     @AssertLegal
     void assertSightingExists() {

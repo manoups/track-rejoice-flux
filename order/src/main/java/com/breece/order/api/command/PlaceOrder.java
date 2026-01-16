@@ -1,12 +1,12 @@
 package com.breece.order.api.command;
 
+import com.breece.common.model.Content;
+import com.breece.common.model.ContentId;
+import com.breece.common.model.ContentStatus;
 import com.breece.content.command.api.ContentState;
 import com.breece.coreapi.authentication.Sender;
 import com.breece.content.ContentErrors;
-import com.breece.coreapi.content.model.Content;
-import com.breece.coreapi.content.model.ContentId;
-import com.breece.coreapi.content.model.ContentStatus;
-import com.breece.coreapi.order.OrderErrors;
+import com.breece.order.api.OrderErrors;
 import com.breece.order.api.model.Order;
 import com.breece.order.api.model.OrderDetails;
 import com.breece.order.api.model.OrderId;

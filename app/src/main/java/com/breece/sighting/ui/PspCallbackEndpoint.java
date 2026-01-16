@@ -1,10 +1,10 @@
 package com.breece.sighting.ui;
 
 
-import com.breece.coreapi.content.model.ContentId;
+import com.breece.common.model.ContentId;
 import com.breece.order.api.model.OrderDetails;
 import com.breece.order.api.model.OrderId;
-import com.breece.coreapi.payment.model.PaymentId;
+import com.breece.payment.api.model.PaymentId;
 import com.breece.service.api.model.ServiceId;
 import com.breece.order.api.command.PlaceOrder;
 import io.fluxzero.sdk.Fluxzero;
@@ -15,7 +15,6 @@ import io.fluxzero.sdk.web.PathParam;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
-import java.time.Duration;
 import java.time.Instant;
 import java.util.List;
 

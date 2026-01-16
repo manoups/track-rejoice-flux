@@ -2,7 +2,7 @@ package com.breece.order.api.command;
 
 import com.breece.coreapi.authentication.RequiresRole;
 import com.breece.coreapi.authentication.Role;
-import com.breece.coreapi.order.OrderErrors;
+import com.breece.order.api.OrderErrors;
 import com.breece.order.api.model.Order;
 import com.breece.order.api.model.OrderId;
 import io.fluxzero.sdk.Fluxzero;

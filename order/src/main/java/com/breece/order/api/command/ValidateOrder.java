@@ -1,8 +1,8 @@
 package com.breece.order.api.command;
 
+import com.breece.common.model.ContentId;
 import com.breece.coreapi.authentication.Sender;
 import com.breece.coreapi.common.SendWebRequestWithMetadata;
-import com.breece.coreapi.content.model.ContentId;
 import com.breece.order.api.model.OrderId;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.paypal.sdk.models.*;

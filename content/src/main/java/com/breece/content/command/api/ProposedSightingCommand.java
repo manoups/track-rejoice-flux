@@ -1,6 +1,6 @@
 package com.breece.content.command.api;
 
-import com.breece.coreapi.proposed.sighting.model.ProposedSightingId;
+import com.breece.common.model.ProposedSightingId;
 import io.fluxzero.sdk.Fluxzero;
 import io.fluxzero.sdk.tracking.handling.HandleCommand;
 import jakarta.validation.constraints.NotNull;
