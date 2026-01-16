@@ -183,11 +183,10 @@
   <modules>
     <module>core-api</module>
     <module>app</module>
-    <module>sighting-command</module>
+    <module>sighting</module>
     <module>content</module>
     <module>order</module>
     <module>service</module>
     <module>payment</module>
-    <module>sighting-query</module>
   </modules>
 </project>

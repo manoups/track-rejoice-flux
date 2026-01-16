@@ -8,7 +8,7 @@
     <version>0.0.1-SNAPSHOT</version>
     <relativePath>../pom.xml</relativePath>
   </parent>
-  <artifactId>sighting-command</artifactId>
+  <artifactId>sighting</artifactId>
   <name>sighting-command</name>
   <url>http://maven.apache.org</url>
   <dependencies>
