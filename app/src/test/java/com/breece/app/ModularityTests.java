@@ -1,4 +1,4 @@
-package com.breece.sighting.ui;
+package com.breece.app;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.modulith.core.ApplicationModules;

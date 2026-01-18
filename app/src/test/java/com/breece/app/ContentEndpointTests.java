@@ -1,9 +1,8 @@
-package com.breece.sighting.ui.content;
+package com.breece.app;
 
 import com.breece.common.model.ContentId;
 import com.breece.content.command.api.ContentState;
 import com.breece.content.command.api.CreateContent;
-import com.breece.sighting.ui.ContentEndpoint;
 import io.fluxzero.sdk.test.TestFixture;
 import org.junit.jupiter.api.Test;
 
@@ -14,13 +13,13 @@ public class ContentEndpointTests {
 
     @Test
     void createContent() {
-        testFixture.whenPost("content", "/com/breece/sighting/ui/content/content-details.json")
+        testFixture.whenPost("content", "/com/breece/app/content/content-details.json")
                 .expectResult(ContentId.class).expectEvents(CreateContent.class);
     }
 
     @Test
     void getContents() {
-        testFixture.givenPost("content", "/com/breece/sighting/ui/content/content-details.json")
+        testFixture.givenPost("content", "/com/breece/app/content/content-details.json")
                 .whenGet("content")
                 .expectResult(hasSize(1));
     }

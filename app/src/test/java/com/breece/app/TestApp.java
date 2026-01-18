@@ -1,4 +1,4 @@
-package com.breece.sighting.ui;
+package com.breece.app;
 
 import io.fluxzero.proxy.ProxyServer;
 import io.fluxzero.sdk.configuration.ApplicationProperties;

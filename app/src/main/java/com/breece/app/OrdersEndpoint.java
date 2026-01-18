@@ -1,4 +1,4 @@
-package com.breece.sighting.ui;
+package com.breece.app;
 
 import com.breece.common.model.ContentId;
 import com.breece.order.api.order.model.OrderDetails;
