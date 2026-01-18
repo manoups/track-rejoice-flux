@@ -8,7 +8,8 @@ import com.breece.common.sighting.model.SightingId;
 import com.breece.content.ContentErrors;
 import com.breece.content.command.api.ClaimSighting;
 import com.breece.content.command.api.ContentHandler;
-import com.breece.content.command.api.SightingHandler;
+import com.breece.content.command.api.handler.CleanupHandler;
+import com.breece.content.command.api.handler.SightingHandler;
 import com.breece.sighting.command.api.DeleteSighting;
 import com.breece.sighting.command.api.LinkSightingBackToContent;
 import com.breece.sighting.query.api.GetSighting;
@@ -92,12 +93,12 @@ public class SightingTest extends TestUtilities {
 
     @Test
     void givenSightingClaimedWithRemovalEnabled_whenGetSightings_thenNoResults() {
-        testFixture
+        testFixture.registerHandlers(CleanupHandler.class)
                 .givenCommandsByUser(viewer, "../content/create-content.json", "create-sighting-removal.json")
                 .givenCommands("../content/publish-content.json").
-                whenCommandByUser(viewer, "claim-sighting.json")
+                whenCommandByUser(viewer, "claim-sighting-removal.json")
                 .expectNoErrors()
-                .expectEvents("claim-sighting.json", LinkSightingBackToContent.class, DeleteSighting.class)
+                .expectEvents("claim-sighting-removal.json", LinkSightingBackToContent.class, DeleteSighting.class)
                 .andThen()
                 .whenQuery(new GetSightings())
                 .expectResult(List::isEmpty);

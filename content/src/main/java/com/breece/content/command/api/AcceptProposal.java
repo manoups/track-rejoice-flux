@@ -8,6 +8,7 @@ import com.breece.common.sighting.ConfirmedSightingUpdate;
 import com.breece.common.sighting.SightingAftermath;
 import com.breece.common.sighting.SightingErrors;
 import com.breece.common.sighting.model.SightingDetails;
+import com.breece.common.sighting.model.SightingId;
 import io.fluxzero.sdk.modeling.AssertLegal;
 import io.fluxzero.sdk.persisting.eventsourcing.Apply;
 import jakarta.validation.Valid;
@@ -16,6 +17,7 @@ import jakarta.validation.constraints.NotNull;
 public record AcceptProposal(@NotNull ProposedSightingId proposedSightingId,
                              @NotNull @Valid SightingDetails sightingDetails,
                              @NotNull ContentId contentId,
+                             SightingId sightingId,
                              boolean removeAfterMatching) implements ActiveContentUpdate, ConfirmedSightingUpdate, SightingAftermath {
     @AssertLegal(priority = -10)
     void assertProposedSightingExists(Content content) {
@@ -40,6 +42,17 @@ public record AcceptProposal(@NotNull ProposedSightingId proposedSightingId,
         content.proposedSightings().stream().filter(p -> p.proposedSightingId().equals(proposedSightingId)).findFirst().ifPresent(
                 proposedSighting -> {
                     if (proposedSighting.removeAfterMatching() != removeAfterMatching) {
+                        throw SightingErrors.sightingMismatch;
+                    }
+                }
+        );
+    }
+
+    @AssertLegal
+    void assertSightingMatch(Content content) {
+        content.proposedSightings().stream().filter(p -> p.proposedSightingId().equals(proposedSightingId)).findFirst().ifPresent(
+                proposedSighting -> {
+                    if (!proposedSighting.sightingId().equals(sightingId)) {
                         throw SightingErrors.sightingMismatch;
                     }
                 }

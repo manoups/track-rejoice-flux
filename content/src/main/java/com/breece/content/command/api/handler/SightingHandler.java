@@ -1,18 +1,17 @@
-package com.breece.content.command.api;
+package com.breece.content.command.api.handler;
 
 import com.breece.common.sighting.SightingContentBridge;
+import com.breece.content.command.api.RemoveMemberProposal;
 import com.breece.sighting.command.api.DeleteSighting;
 import com.breece.sighting.command.api.LinkSightingBackToContent;
 import io.fluxzero.sdk.Fluxzero;
 import io.fluxzero.sdk.modeling.Entity;
-import io.fluxzero.sdk.tracking.Consumer;
 import io.fluxzero.sdk.tracking.handling.HandleEvent;
 import org.springframework.stereotype.Component;
 
 import java.util.Objects;
 
 @Component
-@Consumer(name = "sighting-handler")
 public class SightingHandler {
 
     @HandleEvent
