@@ -1,8 +1,8 @@
-package com.breece.order.api;
+package com.breece.geo;
 
 import com.breece.coreapi.util.GeometryUtil;
-import com.breece.order.geo.model.GeoJsonPost;
-import com.breece.order.geo.repositories.GeoJsonPostRepository;
+import com.breece.geo.model.GeoJsonPost;
+import com.breece.geo.repositories.GeoJsonPostRepository;
 import com.breece.sighting.command.api.LinkSightingToContent;
 import com.breece.sighting.command.api.PostSighting;
 import io.fluxzero.sdk.tracking.Consumer;

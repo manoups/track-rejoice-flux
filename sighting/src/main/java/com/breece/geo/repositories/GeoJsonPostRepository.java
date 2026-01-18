@@ -1,6 +1,6 @@
-package com.breece.order.geo.repositories;
+package com.breece.geo.repositories;
 
-import com.breece.order.geo.model.GeoJsonPost;
+import com.breece.geo.model.GeoJsonPost;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

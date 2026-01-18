@@ -1,6 +1,7 @@
+- [ ] Basic service vs extra services checkout
 - [ ] Make shopping basket
 - [x] Immutable objects should support multipoints
 - [x] When a Sighting is deleted, it should remove from all proposed sighings
 - [ ] Validate payment success upon event reception
 - [ ] Add a PaymentGateway role
-- [ ] Memoize reference-data
+- [x] Memoize reference-data
