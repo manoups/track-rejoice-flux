@@ -8,8 +8,4 @@ import io.fluxzero.sdk.tracking.handling.Request;
 import java.util.List;
 
 public record GetServices() implements Request<List<Service>> {
-    @HandleQuery
-    List<Service> getServices() {
-        return Fluxzero.search(Service.class).fetchAll();
-    }
 }

@@ -6,13 +6,14 @@ import com.breece.content.command.api.ContentState;
 import com.breece.content.command.api.GetContentState;
 import com.breece.order.api.order.model.OrderId;
 import com.breece.order.api.command.CreateOrderRemote;
+import com.breece.util.MockQueryHandler;
 import io.fluxzero.sdk.test.TestFixture;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
 class ContentStateTest {
-    TestFixture testFixture = TestFixture.create(ContentState.class).givenCommands("../service/create-service.json", "../content/create-content.json");
+    TestFixture testFixture = TestFixture.create(ContentState.class, new MockQueryHandler()).givenCommands("../content/create-content.json");
 
     @Test
     void createContent() {

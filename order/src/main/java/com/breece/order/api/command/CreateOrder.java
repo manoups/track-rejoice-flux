@@ -10,6 +10,7 @@ import com.breece.order.api.order.OrderErrors;
 import com.breece.order.api.order.model.Order;
 import com.breece.order.api.order.model.OrderDetails;
 import com.breece.order.api.order.model.OrderId;
+import com.breece.service.api.GetService;
 import com.breece.service.api.ServiceErrors;
 import io.fluxzero.sdk.Fluxzero;
 import io.fluxzero.sdk.modeling.AssertLegal;
@@ -19,6 +20,7 @@ import io.fluxzero.sdk.tracking.handling.authentication.RequiresUser;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 
+import java.util.Objects;
 import java.util.Optional;
 
 @RequiresUser
@@ -46,7 +48,7 @@ public record CreateOrder(@NotNull OrderId orderId, @NotNull ContentId contentId
 
     @AssertLegal
     void assertExistingService() {
-        if (details.serviceIds().stream().map(Fluxzero::loadAggregate).anyMatch(it -> !it.isPresent() || !it.get().online())) {
+        if (details.serviceIds().stream().map(serviceId -> Fluxzero.queryAndWait(new GetService(serviceId))).anyMatch(it -> Objects.isNull(it) || !it.online())) {
             throw OrderErrors.serviceNotFound;
         }
     }
@@ -58,7 +60,7 @@ public record CreateOrder(@NotNull OrderId orderId, @NotNull ContentId contentId
             throw ContentErrors.notFound;
         }
         if (stateOptional.get().status() == ContentStatus.OFFLINE) {
-            if (details.serviceIds().stream().map(Fluxzero::loadAggregate).noneMatch(it -> it.isPresent() && it.get().basic())) {
+            if (details.serviceIds().stream().map(it -> Fluxzero.queryAndWait(new GetService(it))).noneMatch(it -> Objects.nonNull(it) && it.basic())) {
                 throw ServiceErrors.basicServiceRequired;
             }
         }

@@ -5,6 +5,7 @@ import com.breece.order.api.order.OrderErrors;
 import com.breece.order.api.order.OrderFulfillment;
 import com.breece.order.api.command.UpdateOrder;
 import com.breece.order.api.command.CreateOrderRemote;
+import com.breece.util.MockQueryHandler;
 import io.fluxzero.common.FileUtils;
 import io.fluxzero.sdk.test.TestFixture;
 import io.fluxzero.sdk.web.HandlePost;
@@ -18,8 +19,8 @@ import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
 
 class OrderTest {
-    final TestFixture testFixture = TestFixture.create(new OrderFulfillment(), ContentState.class, new EndpointMock()).withClock(Clock.fixed(Instant.parse("2025-01-01T00:00:00Z"), ZoneId.systemDefault()))
-            .givenCommands("../service/create-service.json", "../content/create-content.json").withProperty("paypal.url", "https://paypal-value");
+    final TestFixture testFixture = TestFixture.create(new OrderFulfillment(), new MockQueryHandler(),ContentState.class, new EndpointMock()).withClock(Clock.fixed(Instant.parse("2025-01-01T00:00:00Z"), ZoneId.systemDefault()))
+            .givenCommands("../content/create-content.json").withProperty("paypal.url", "https://paypal-value");
 
 
     @Test

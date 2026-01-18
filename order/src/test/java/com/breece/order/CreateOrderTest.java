@@ -11,6 +11,7 @@ import com.breece.order.api.order.model.OrderDetails;
 import com.breece.order.api.order.model.OrderId;
 import com.breece.service.api.UpdateService;
 import com.breece.service.api.model.ServiceId;
+import com.breece.util.MockQueryHandler;
 import io.fluxzero.sdk.test.TestFixture;
 import org.junit.jupiter.api.Test;
 
@@ -20,7 +21,7 @@ import java.time.Instant;
 import static org.hibernate.internal.util.collections.CollectionHelper.listOf;
 
 class CreateOrderTest {
-    TestFixture testFixture = TestFixture.create(ContentState.class).givenCommands("../service/create-service.json", "../content/create-content.json");
+    TestFixture testFixture = TestFixture.create(ContentState.class, new MockQueryHandler()).givenCommands("../content/create-content.json");
 
     CreateOrder order1 = new CreateOrder(new OrderId("1"), new ContentId("1"), new OrderDetails(
             listOf(new ServiceId("1")), Instant.now()), "1");
@@ -49,8 +50,9 @@ class CreateOrderTest {
 
     @Test
     void placeOrderForOfflineService() {
-        testFixture.givenCommands(new UpdateService(new ServiceId("1"), "name", "description", BigDecimal.ZERO, false))
-                .whenCommand(order1)
+        testFixture
+                .whenCommand(new CreateOrder(new OrderId("1"), new ContentId("1"), new OrderDetails(
+                        listOf(new ServiceId("2")), Instant.now()), "1"))
                 .expectError(OrderErrors.serviceNotFound);
     }
 }
