@@ -1,6 +1,6 @@
 package com.breece.order.api;
 
-import com.breece.order.geo.GeometryUtil;
+import com.breece.coreapi.util.GeometryUtil;
 import com.breece.order.geo.model.GeoJsonPost;
 import com.breece.order.geo.repositories.GeoJsonPostRepository;
 import com.breece.sighting.command.api.LinkSightingToContent;

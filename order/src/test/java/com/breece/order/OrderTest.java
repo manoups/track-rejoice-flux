@@ -1,10 +1,10 @@
 package com.breece.order;
 
 import com.breece.content.command.api.ContentState;
-import com.breece.order.api.OrderErrors;
-import com.breece.order.api.OrderFulfillment;
+import com.breece.order.api.order.OrderErrors;
+import com.breece.order.api.order.OrderFulfillment;
 import com.breece.order.api.command.UpdateOrder;
-import com.breece.order.api.command.ValidateOrder;
+import com.breece.order.api.command.CreateOrderRemote;
 import io.fluxzero.common.FileUtils;
 import io.fluxzero.sdk.test.TestFixture;
 import io.fluxzero.sdk.web.HandlePost;
@@ -19,29 +19,29 @@ import java.time.temporal.ChronoUnit;
 
 class OrderTest {
     final TestFixture testFixture = TestFixture.create(new OrderFulfillment(), ContentState.class, new EndpointMock()).withClock(Clock.fixed(Instant.parse("2025-01-01T00:00:00Z"), ZoneId.systemDefault()))
-            .givenCommands("service/create-service.json", "content/create-content.json").withProperty("paypal.url", "https://paypal-value");
+            .givenCommands("../service/create-service.json", "../content/create-content.json").withProperty("paypal.url", "https://paypal-value");
 
 
     @Test
     void placeOrder() {
-        testFixture.whenCommand("orders/place-order.json")
-                .expectCommands(ValidateOrder.class, UpdateOrder.class)
-                .expectEvents("orders/place-order.json", UpdateOrder.class);
+        testFixture.whenCommand("place-order.json")
+                .expectCommands(CreateOrderRemote.class, UpdateOrder.class)
+                .expectEvents("place-order.json", UpdateOrder.class);
     }
 
     @Test
     void abortOrder() {
-        testFixture.givenCommands("orders/place-order.json")
-                .whenCommand("orders/abort-order.json")
-                .expectEvents("orders/abort-order.json");
+        testFixture.givenCommands("place-order.json")
+                .whenCommand("abort-order.json")
+                .expectEvents("abort-order.json");
     }
 
     @Test
     void abortOrderAfter24Hours() {
-        testFixture.givenCommands("orders/place-order.json")
+        testFixture.givenCommands("place-order.json")
                 .whenTimeElapses(Duration.ofHours(24).plus(1, ChronoUnit.SECONDS))
                 .andThen()
-                .whenCommand("orders/abort-order.json")
+                .whenCommand("abort-order.json")
                 .expectError(OrderErrors.tooOld);
     }
 
@@ -49,14 +49,14 @@ class OrderTest {
         @HandlePost("https://paypal-value/v1/oauth2/token")
         WebResponse authenticationToken() {
             return WebResponse.builder()
-                    .payload(FileUtils.loadFile("/com/breece/order/common/auth-response.json"))
+                    .payload(FileUtils.loadFile("../common/auth-response.json"))
                     .build();
         }
 
         @HandlePost("https://paypal-value/v2/checkout/orders")
         WebResponse placeOrder() {
             return WebResponse.builder()
-                    .payload(FileUtils.loadFile("/com/breece/order/common/checkout-order.json"))
+                    .payload(FileUtils.loadFile("../common/checkout-order.json"))
                     .build();
         }
     }

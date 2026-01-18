@@ -1,7 +1,7 @@
 package com.breece.order.api.command;
 
-import com.breece.order.api.model.Order;
-import com.breece.order.api.OrderErrors;
+import com.breece.order.api.order.model.Order;
+import com.breece.order.api.order.OrderErrors;
 import io.fluxzero.sdk.modeling.AssertLegal;
 import io.fluxzero.sdk.tracking.TrackSelf;
 import jakarta.annotation.Nullable;

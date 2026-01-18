@@ -195,7 +195,6 @@
     <module>content</module>
     <module>order</module>
     <module>service</module>
-    <module>payment</module>
     <module>common</module>
   </modules>
 </project>

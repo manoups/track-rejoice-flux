@@ -1,12 +1,7 @@
 package com.breece.sighting.ui;
 
 
-import com.breece.common.model.ContentId;
-import com.breece.order.api.model.OrderDetails;
-import com.breece.order.api.model.OrderId;
-import com.breece.payment.api.model.PaymentId;
-import com.breece.service.api.model.ServiceId;
-import com.breece.order.api.command.PlaceOrder;
+import com.breece.order.api.payment.PaymentAccepted;
 import io.fluxzero.sdk.Fluxzero;
 import io.fluxzero.sdk.configuration.spring.ConditionalOnProperty;
 import io.fluxzero.sdk.web.HandlePost;
@@ -15,21 +10,18 @@ import io.fluxzero.sdk.web.PathParam;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
-import java.time.Instant;
-import java.util.List;
-
 @Component
 @Path("/payments/paypal")
 @RequiredArgsConstructor
 @ConditionalOnProperty(value = "pgp", pattern = "paypal")
 public class PspCallbackEndpoint {
-    @HandlePost("/orders/{content-id}")
+    /*@HandlePost("/orders/{content-id}")
     void createOrder(@PathParam(value = "content-id") ContentId contentId, List<ServiceId> serviceIds) {
-            Fluxzero.publishEvent(new PlaceOrder(new OrderId(), contentId, new OrderDetails(serviceIds, Instant.now())));
-    }
+            Fluxzero.publishEvent(new CreateOrder(new OrderId(), contentId, new OrderDetails(serviceIds, Instant.now()), UUID.randomUUID().toString()));
+    }*/
 
-    @HandlePost("/orders/{orderID}/{announcementId}/capture")
-    void captureOrder(@PathParam OrderId orderID, @PathParam String announcementId) {
-        Fluxzero.publishEvent(new PaymentId(orderID.getFunctionalId()));
+    @HandlePost("/accepted/{pspReference}")
+    void captureOrder(@PathParam String pspReference) {
+        Fluxzero.publishEvent(new PaymentAccepted(pspReference));
     }
 }

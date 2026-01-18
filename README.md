@@ -96,3 +96,11 @@ This example follows FluxZero's event-driven architecture:
 
 ### Depedencies loops
 - Content -> ProposedSightingId -> ProposedSighting -> SightingId -> Sighting -> ContentId -> Content
+- If we remove the sighting holding ContentId's the cycle is broken
+- Payment does not need to be an aggregate -- it can be a simple payment reference string
+- ~~An order can be an aggregate member of content. We can use projections for "My orders" screen.~~
+- We should keep order as in independent aggregate with many-to-one relationship with content
+- A product can have multiple orders
+  - an order of a basic product will change its status to online upon completed order
+- There is a 1-1 relationship between an order and a payment. Thus, a payment will become a value object and the status will be inherited by the order.
+- Since this is digital goods, cancelling an order is not possible. We may later create a workflow to support it

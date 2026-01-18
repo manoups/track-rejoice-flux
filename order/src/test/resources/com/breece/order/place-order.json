@@ -1,0 +1,12 @@
+{
+  "@class": "com.breece.order.api.command.CreateOrder",
+  "orderId": "1",
+  "contentId": "1",
+  "pspReference": "test-psp-reference",
+  "details": {
+    "serviceIds": ["1"],
+    "paymentId": "payment1",
+    "updatedAt": "2025-01-01T00:00:00Z",
+    "duration": "P90D"
+  }
+}

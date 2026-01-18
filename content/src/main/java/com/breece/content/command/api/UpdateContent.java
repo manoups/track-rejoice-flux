@@ -7,7 +7,7 @@ import io.fluxzero.sdk.persisting.eventsourcing.Apply;
 import jakarta.validation.Valid;
 import org.wildfly.common.annotation.NotNull;
 
-public record UpdateContent(@NotNull ContentId contentId, @Valid @NotNull ExtraDetails details) implements ContentUpdate {
+public record UpdateContent(@NotNull ContentId contentId, @Valid @NotNull ExtraDetails details) implements ContentUpdateForOwner {
     @Apply
     Content apply(Content content) {
         return content.withDetails(details);

@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 @Consumer(name = "content-scheduler")
 public class ContentScheduler {
     @HandleEvent(allowedClasses = {CompleteContent.class, CancelContent.class})
-    void handle(ContentUpdate event) {
+    void handle(ContentUpdateForOwner event) {
         Fluxzero.cancelSchedule(new TakeContentOffline(event.contentId()));
     }
 

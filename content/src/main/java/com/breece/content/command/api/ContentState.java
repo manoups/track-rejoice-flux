@@ -18,6 +18,11 @@ public record ContentState(@Association @EntityId ContentId contentId, @With Con
         return new ContentState(event.contentId(), ContentStatus.OFFLINE);
     }
 
+    @HandleEvent
+    ContentState on(TakeContentOffline event) { return withStatus(ContentStatus.OFFLINE);}
+
+    @HandleEvent
+    ContentState on(PublishContent event) { return withStatus(ContentStatus.ONLINE);}
     /*Used only for the basic (publishing) service
     * Cannot buy extra service without the basic service*/
 //    TODO: check how to break circular dependency
