@@ -1,4 +1,23 @@
 services:
+  postgres:
+    # see https://hub.docker.com/_/postgres for list of postgres image versions on docker hub
+    #image: postgres:latest # To download the latest image
+    #image: postgres:17.4-alpine # To download a specific version, here the version 17.4 of Postgresql under an alpine linux distribution
+    image: postgis/postgis:16-3.4 # To download a specific version, here the version 17.4 of Postgresql
+    container_name: postgres-track-rejoice
+    volumes:
+      - postgresql_data:/var/lib/postgresql/data
+      - ./initdb.d:/docker-entrypoint-initdb.d
+    env_file:
+      - .env
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    ports:
+      - "5432:5432" # HOST_PORT:CONTAINER_PORT
+
+
   fluxzero-runtime:
     image: ghcr.io/fluxzero-io/fluxzero-sdk-java/fluxzero-test:1.20.0
     environment:
@@ -9,43 +28,13 @@ services:
     ports:
       - "8888:8888"
 
-  meepleverse:
+  track-rejoice:
     image: ghcr.io/fluxzero-io/fluxzero-sdk-java/fluxzero-proxy:1.20.0
     environment:
       - FLUXZERO_BASE_URL=http://fluxzero-runtime:8888
       - FLUXZERO_APPLICATION_NAME=meepleverse-proxy
     ports:
       - "8080:8080"
-
-  supplier-service:
-    build:
-      context: supplier
-    environment:
-      - FLUXZERO_BASE_URL=http://fluxzero-runtime:8888
-      - FLUXZERO_APPLICATION_NAME=supplier-service
-    depends_on:
-      fluxzero-runtime:
-        condition: service_healthy
-
-  psp-service:
-    build:
-      context: psp
-    environment:
-      - FLUXZERO_BASE_URL=http://fluxzero-runtime:8888
-      - FLUXZERO_APPLICATION_NAME=psp-service
-    depends_on:
-      fluxzero-runtime:
-        condition: service_healthy
-
-  shipper-service:
-    build:
-      context: shipper
-    environment:
-      - FLUXZERO_BASE_URL=http://fluxzero-runtime:8888
-      - FLUXZERO_APPLICATION_NAME=shipper-service
-    depends_on:
-      fluxzero-runtime:
-        condition: service_healthy
 
   opensearch:
     image: opensearchproject/opensearch:3
@@ -85,3 +74,11 @@ services:
         condition: service_healthy
       fluxzero-runtime:
         condition: service_healthy
+
+volumes:
+  postgresql_data:
+    driver: local
+
+networks:
+  postgres_network:
+    driver: bridge
