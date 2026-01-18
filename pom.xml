@@ -10,8 +10,8 @@
   <groupId>com.breece</groupId>
   <artifactId>track-rejoice-flux</artifactId>
   <version>0.0.1-SNAPSHOT</version>
-  <name>Fluxzero Basic Java</name>
-  <description>A Flux application</description>
+  <name>Track Rejoice</name>
+  <description>Lost and Found app</description>
   <properties>
     <java.version>25</java.version>
   </properties>
