@@ -1,8 +1,0 @@
-{
-  "@class": "com.breece.service.api.UpdateService",
-  "serviceId": "1",
-  "name": "updated service1",
-  "description": "updated service1 description",
-  "price": 200,
-  "online": false
-}

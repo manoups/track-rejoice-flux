@@ -9,13 +9,11 @@ import com.breece.order.api.order.OrderErrors;
 import com.breece.order.api.command.CreateOrder;
 import com.breece.order.api.order.model.OrderDetails;
 import com.breece.order.api.order.model.OrderId;
-import com.breece.service.api.UpdateService;
 import com.breece.service.api.model.ServiceId;
 import com.breece.util.MockQueryHandler;
 import io.fluxzero.sdk.test.TestFixture;
 import org.junit.jupiter.api.Test;
 
-import java.math.BigDecimal;
 import java.time.Instant;
 
 import static org.hibernate.internal.util.collections.CollectionHelper.listOf;

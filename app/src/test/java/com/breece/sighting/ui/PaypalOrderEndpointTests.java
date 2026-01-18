@@ -36,7 +36,7 @@ public class PaypalOrderEndpointTests {
         }
     }
 
-    TestFixture testFixture = TestFixture.create(ContentState.class, new PspCallbackEndpoint(), new OrderFulfillment(), new PaypalOrderTests.EndpointMock()).withProperty("pgp", "paypal").withProperty("paypal.url", "https://paypal-value").givenCommands("/com/breece/sighting/ui/service/create-service.json");
+    TestFixture testFixture = TestFixture.create(ContentState.class, new PspCallbackEndpoint(), new OrderFulfillment(), new PaypalOrderTests.EndpointMock()).withProperty("pgp", "paypal").withProperty("paypal.url", "https://paypal-value");
 
     @Disabled
     @Test
