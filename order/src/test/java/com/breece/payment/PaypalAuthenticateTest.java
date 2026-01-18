@@ -3,15 +3,14 @@ package com.breece.payment;
 import com.breece.common.model.ContentId;
 import com.breece.content.command.api.ContentState;
 import com.breece.coreapi.common.PaypalAuthenticate;
-import com.breece.util.MockQueryHandler;
 import com.breece.order.api.command.CreateOrder;
 import com.breece.order.api.command.UpdateOrder;
 import com.breece.order.api.order.OrderFulfillment;
 import com.breece.order.api.order.model.OrderDetails;
 import com.breece.order.api.order.model.OrderId;
 import com.breece.service.api.model.ServiceId;
-import com.google.common.base.Supplier;
-import com.google.common.base.Suppliers;
+import com.breece.util.MockQueryHandler;
+import io.fluxzero.common.DefaultMemoizingSupplier;
 import io.fluxzero.common.FileUtils;
 import io.fluxzero.sdk.Fluxzero;
 import io.fluxzero.sdk.test.TestFixture;
@@ -25,8 +24,9 @@ import org.junit.jupiter.api.Test;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.UUID;
-import java.util.concurrent.TimeUnit;
+import java.util.function.Supplier;
 
+import static io.fluxzero.common.ObjectUtils.memoize;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 import static org.hibernate.internal.util.collections.CollectionHelper.listOf;
@@ -68,7 +68,7 @@ class PaypalAuthenticateTest {
         @Disabled
         @Test
         public void givenMemoizedSupplier_whenGet_thenSubsequentGetsAreFast() {
-            Supplier<String> memoizedSupplier = Suppliers.memoizeWithExpiration(this::authenticate, 30, TimeUnit.SECONDS);
+            Supplier<String> memoizedSupplier = memoize(new DefaultMemoizingSupplier<>(this::authenticate, Duration.ofSeconds(30), testFixture.getClock()));
             String expectedValue = "A21AALDt0z1oWeRUxAALcnBjR6qjIq6Vs1mWnMKzrdvs59Sj6jMu8f_H09IxiV9XQSZZ9RP_cOQdBVHWcWQjo0ZYKwqqBLBAw";
             assertSupplierGetExecutionResultAndDuration(
                     memoizedSupplier, expectedValue, 2000D);
