@@ -8,7 +8,7 @@
     <version>0.0.1-SNAPSHOT</version>
   </parent>
   <artifactId>app</artifactId>
-  <name>sighting-ui</name>
+  <name>app</name>
   <url>http://maven.apache.org</url>
   <dependencies>
     <dependency>
@@ -47,6 +47,19 @@
       <groupId>io.fluxzero</groupId>
       <artifactId>proxy</artifactId>
       <scope>test</scope>
+    </dependency>
+    <!-- https://mvnrepository.com/artifact/org.flywaydb/flyway-core -->
+    <dependency>
+      <groupId>org.flywaydb</groupId>
+      <artifactId>flyway-core</artifactId>
+      <version>11.18.0</version>
+    </dependency>
+    <!-- https://mvnrepository.com/artifact/org.flywaydb/flyway-database-postgresql -->
+    <dependency>
+      <groupId>org.flywaydb</groupId>
+      <artifactId>flyway-database-postgresql</artifactId>
+      <version>11.18.0</version>
+      <scope>runtime</scope>
     </dependency>
     <dependency>
       <groupId>org.springframework.modulith</groupId>
