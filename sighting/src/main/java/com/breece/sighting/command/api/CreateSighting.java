@@ -14,7 +14,7 @@ import jakarta.validation.constraints.NotNull;
 import java.util.List;
 
 @RequiresUser
-public record CreateSighting(@NotNull SightingId sightingId, @Valid @NotNull SightingDetails sightingDetails) implements SightingCommand {
+public record CreateSighting(@NotNull SightingId sightingId, @Valid @NotNull SightingDetails sightingDetails, boolean removeAfterMatching) implements SightingCommand {
     @AssertLegal
     void assertNew(Sighting sighting) {
         throw SightingErrors.alreadyExists;
@@ -22,6 +22,6 @@ public record CreateSighting(@NotNull SightingId sightingId, @Valid @NotNull Sig
 
     @Apply
     Sighting create(Sender sender) {
-        return new Sighting(sightingId, sender.userId(), sightingDetails, List.of());
+        return new Sighting(sightingId, sender.userId(), sightingDetails, List.of(), removeAfterMatching);
     }
 }

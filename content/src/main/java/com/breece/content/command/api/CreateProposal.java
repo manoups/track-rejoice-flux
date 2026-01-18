@@ -18,7 +18,7 @@ import io.fluxzero.sdk.tracking.handling.authentication.RequiresUser;
 import jakarta.validation.constraints.NotNull;
 
 @RequiresUser
-public record CreateProposal(ContentId contentId, @NotNull SightingId sightingId, @NotNull ProposedSightingId proposedSightingId, @NotNull SightingDetails sightingDetails) implements ContentInteract, SightingContentBridge {
+public record CreateProposal(ContentId contentId, @NotNull SightingId sightingId, @NotNull ProposedSightingId proposedSightingId, @NotNull SightingDetails sightingDetails, boolean removeAfterMatching) implements ContentInteract, SightingContentBridge {
     @AssertLegal
     void assertSightingExists() {
         if (!Fluxzero.loadAggregate(sightingId).isPresent()) {
@@ -31,6 +31,14 @@ public record CreateProposal(ContentId contentId, @NotNull SightingId sightingId
         Sighting sighting = Fluxzero.loadAggregate(sightingId).get();
         if (!sender.isAuthorizedFor(sighting.source())) {
             throw SightingErrors.notOwner;
+        }
+    }
+
+    @AssertLegal
+    void assertPreferenceConsistency() {
+        Sighting sighting = Fluxzero.loadAggregate(sightingId).get();
+        if (sighting.removeAfterMatching() != removeAfterMatching) {
+            throw SightingErrors.sightingMismatch;
         }
     }
 
@@ -50,6 +58,6 @@ public record CreateProposal(ContentId contentId, @NotNull SightingId sightingId
 
     @Apply
     ProposedSighting propose() {
-        return new ProposedSighting(proposedSightingId, sightingId, sightingDetails);
+        return new ProposedSighting(proposedSightingId, sightingId, sightingDetails, removeAfterMatching);
     }
 }

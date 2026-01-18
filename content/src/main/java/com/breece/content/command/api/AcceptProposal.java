@@ -5,6 +5,7 @@ import com.breece.common.model.ContentId;
 import com.breece.common.model.ProposedSighting;
 import com.breece.common.model.ProposedSightingId;
 import com.breece.common.sighting.ConfirmedSightingUpdate;
+import com.breece.common.sighting.SightingAftermath;
 import com.breece.common.sighting.SightingErrors;
 import com.breece.common.sighting.model.SightingDetails;
 import io.fluxzero.sdk.modeling.AssertLegal;
@@ -14,7 +15,8 @@ import jakarta.validation.constraints.NotNull;
 
 public record AcceptProposal(@NotNull ProposedSightingId proposedSightingId,
                              @NotNull @Valid SightingDetails sightingDetails,
-                             @NotNull ContentId contentId) implements ActiveContentUpdate, ConfirmedSightingUpdate {
+                             @NotNull ContentId contentId,
+                             boolean removeAfterMatching) implements ActiveContentUpdate, ConfirmedSightingUpdate, SightingAftermath {
     @AssertLegal(priority = -10)
     void assertProposedSightingExists(Content content) {
         if (content.proposedSightings().stream().map(ProposedSighting::proposedSightingId).noneMatch(p -> p.equals(proposedSightingId))) {
@@ -27,6 +29,17 @@ public record AcceptProposal(@NotNull ProposedSightingId proposedSightingId,
         content.proposedSightings().stream().filter(p -> p.proposedSightingId().equals(proposedSightingId)).findFirst().ifPresent(
                 proposedSighting -> {
                     if (!proposedSighting.details().equals(sightingDetails)) {
+                        throw SightingErrors.sightingMismatch;
+                    }
+                }
+        );
+    }
+
+    @AssertLegal
+    void assertPreferenceMatch(Content content) {
+        content.proposedSightings().stream().filter(p -> p.proposedSightingId().equals(proposedSightingId)).findFirst().ifPresent(
+                proposedSighting -> {
+                    if (proposedSighting.removeAfterMatching() != removeAfterMatching) {
                         throw SightingErrors.sightingMismatch;
                     }
                 }

@@ -9,6 +9,7 @@ import com.breece.content.ContentErrors;
 import com.breece.content.command.api.ClaimSighting;
 import com.breece.content.command.api.ContentHandler;
 import com.breece.content.command.api.SightingHandler;
+import com.breece.sighting.command.api.DeleteSighting;
 import com.breece.sighting.command.api.LinkSightingBackToContent;
 import com.breece.sighting.query.api.GetSighting;
 import com.breece.sighting.query.api.GetSightings;
@@ -25,7 +26,7 @@ import static org.hamcrest.Matchers.hasSize;
 
 public class SightingTest extends TestUtilities {
 
-    final TestFixture testFixture = TestFixture.create(ContentHandler.class, SightingHandler.class );
+    final TestFixture testFixture = TestFixture.create(ContentHandler.class, SightingHandler.class);
 
     @Test
     void createSighting() {
@@ -67,7 +68,7 @@ public class SightingTest extends TestUtilities {
                 .givenCommandsByUser(user2, "../content/create-content-keys.json")
                 .whenCommandByUser(user2, new ClaimSighting(new ContentId("2"), new SightingId("1"), new SightingDetails(
                         new BigDecimal("78.901"), new BigDecimal("123.456")
-        )))
+                ), false))
                 .expectExceptionalResult(SightingErrors.notLinkedToContent);
     }
 
@@ -90,22 +91,35 @@ public class SightingTest extends TestUtilities {
     }
 
     @Test
+    void givenSightingClaimedWithRemovalEnabled_whenGetSightings_thenNoResults() {
+        testFixture
+                .givenCommandsByUser(viewer, "../content/create-content.json", "create-sighting-removal.json")
+                .givenCommands("../content/publish-content.json").
+                whenCommandByUser(viewer, "claim-sighting.json")
+                .expectNoErrors()
+                .expectEvents("claim-sighting.json", LinkSightingBackToContent.class, DeleteSighting.class)
+                .andThen()
+                .whenQuery(new GetSightings())
+                .expectResult(List::isEmpty);
+    }
+
+    @Test
     void givenSighting_whenClaimSightingWithInvertedCoords_thenError() {
         testFixture
                 .givenCommands("../content/create-content.json", "create-sighting.json")
                 .whenCommand(new ClaimSighting(new ContentId("1"), new SightingId("1"), new SightingDetails(
                         new BigDecimal("123.456"), new BigDecimal("78.901")
-                )))
+                ), false))
                 .expectExceptionalResult(SightingErrors.sightingMismatch);
     }
 
     @Test
     void givenSighting_whenClaimSightingWithExtraDecimals_thenNoError() {
         testFixture
-                .givenCommands("../content/create-content.json","../content/publish-content.json", "create-sighting.json")
+                .givenCommands("../content/create-content.json", "../content/publish-content.json", "create-sighting.json")
                 .whenCommand(new ClaimSighting(new ContentId("1"), new SightingId("1"), new SightingDetails(
                         new BigDecimal("78.901000"), new BigDecimal("123.456000")
-                )))
+                ), false))
                 .expectNoErrors();
     }
 }
