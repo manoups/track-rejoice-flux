@@ -1,4 +1,4 @@
-package com.breece.common.model;
+package com.breece.content.api.model;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.*;

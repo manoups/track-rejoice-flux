@@ -1,4 +1,4 @@
-package com.breece.common.sighting;
+package com.breece.sighting.api;
 
 import io.fluxzero.sdk.common.exception.FunctionalException;
 import io.fluxzero.sdk.tracking.handling.IllegalCommandException;

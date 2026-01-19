@@ -1,9 +1,9 @@
 package com.breece.geo;
 
+import com.breece.content.command.api.LinkSightingToContent;
 import com.breece.coreapi.util.GeometryUtil;
 import com.breece.geo.model.GeoJsonPost;
 import com.breece.geo.repositories.GeoJsonPostRepository;
-import com.breece.sighting.command.api.LinkSightingToContent;
 import com.breece.sighting.command.api.PostSighting;
 import io.fluxzero.sdk.tracking.Consumer;
 import io.fluxzero.sdk.tracking.handling.HandleEvent;

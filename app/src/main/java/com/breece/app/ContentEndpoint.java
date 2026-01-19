@@ -1,7 +1,7 @@
 package com.breece.app;
 
-import com.breece.common.model.Content;
-import com.breece.common.model.ContentId;
+import com.breece.content.api.model.Content;
+import com.breece.content.api.model.ContentId;
 import com.breece.content.command.api.CreateContent;
 import com.breece.content.query.api.GetContent;
 import com.breece.content.query.api.GetContents;

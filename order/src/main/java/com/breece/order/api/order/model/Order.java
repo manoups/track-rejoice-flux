@@ -1,6 +1,6 @@
 package com.breece.order.api.order.model;
 
-import com.breece.common.model.ContentId;
+import com.breece.content.api.model.ContentId;
 import com.breece.coreapi.user.api.UserId;
 import io.fluxzero.sdk.modeling.Aggregate;
 import jakarta.validation.constraints.NotNull;

@@ -1,9 +1,9 @@
 package com.breece.sighting.command.api;
 
-import com.breece.common.sighting.SightingErrors;
-import com.breece.common.sighting.model.Sighting;
-import com.breece.common.sighting.model.SightingDetails;
-import com.breece.common.sighting.model.SightingId;
+import com.breece.sighting.api.SightingErrors;
+import com.breece.sighting.api.model.Sighting;
+import com.breece.sighting.api.model.SightingDetails;
+import com.breece.sighting.api.model.SightingId;
 import com.breece.coreapi.authentication.Sender;
 import io.fluxzero.sdk.modeling.AssertLegal;
 import io.fluxzero.sdk.persisting.eventsourcing.Apply;

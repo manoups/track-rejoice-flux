@@ -1,4 +1,4 @@
-package com.breece.common.model;
+package com.breece.content.api.model;
 
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;

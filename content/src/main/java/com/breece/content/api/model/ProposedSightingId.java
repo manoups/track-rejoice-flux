@@ -1,4 +1,4 @@
-package com.breece.common.model;
+package com.breece.content.api.model;
 
 import io.fluxzero.sdk.Fluxzero;
 import io.fluxzero.sdk.modeling.Id;

@@ -1,8 +1,8 @@
 package com.breece.content.command.api;
 
-import com.breece.common.model.Content;
-import com.breece.common.model.ContentId;
-import com.breece.common.model.ExtraDetails;
+import com.breece.content.api.model.Content;
+import com.breece.content.api.model.ContentId;
+import com.breece.content.api.model.ExtraDetails;
 import io.fluxzero.sdk.persisting.eventsourcing.Apply;
 import jakarta.validation.Valid;
 import org.wildfly.common.annotation.NotNull;

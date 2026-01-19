@@ -1,6 +1,6 @@
 package com.breece.content.command.api;
 
-import com.breece.common.model.Content;
+import com.breece.content.api.model.Content;
 import com.breece.content.ContentErrors;
 import io.fluxzero.sdk.modeling.AssertLegal;
 

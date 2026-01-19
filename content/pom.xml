@@ -19,7 +19,7 @@
     </dependency>
     <dependency>
       <groupId>${project.groupId}</groupId>
-      <artifactId>common</artifactId>
+      <artifactId>sighting</artifactId>
       <version>${project.version}</version>
     </dependency>
     <dependency>

@@ -1,7 +1,7 @@
-package com.breece.common.sighting;
+package com.breece.content.api;
 
-import com.breece.common.model.ContentId;
-import com.breece.common.sighting.model.SightingId;
+import com.breece.content.api.model.ContentId;
+import com.breece.sighting.api.model.SightingId;
 import jakarta.validation.constraints.NotNull;
 
 public interface SightingContentBridge {

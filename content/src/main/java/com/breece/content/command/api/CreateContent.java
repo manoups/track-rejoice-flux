@@ -1,10 +1,10 @@
 package com.breece.content.command.api;
 
-import com.breece.common.model.Content;
-import com.breece.common.model.ContentId;
-import com.breece.common.model.ExtraDetails;
-import com.breece.common.sighting.ConfirmedSightingUpdate;
-import com.breece.common.sighting.model.SightingDetails;
+import com.breece.content.api.model.Content;
+import com.breece.content.api.model.ContentId;
+import com.breece.content.api.model.ExtraDetails;
+import com.breece.content.api.ConfirmedSightingUpdate;
+import com.breece.sighting.api.model.SightingDetails;
 import com.breece.coreapi.authentication.Sender;
 import com.breece.content.ContentErrors;
 import io.fluxzero.sdk.modeling.AssertLegal;

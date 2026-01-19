@@ -1,10 +1,10 @@
 package sighting;
 
-import com.breece.common.model.ContentId;
-import com.breece.common.sighting.SightingErrors;
-import com.breece.common.sighting.model.Sighting;
-import com.breece.common.sighting.model.SightingDetails;
-import com.breece.common.sighting.model.SightingId;
+import com.breece.content.api.model.ContentId;
+import com.breece.sighting.api.SightingErrors;
+import com.breece.sighting.api.model.Sighting;
+import com.breece.sighting.api.model.SightingDetails;
+import com.breece.sighting.api.model.SightingId;
 import com.breece.content.ContentErrors;
 import com.breece.content.api.model.SightingState;
 import com.breece.content.command.api.ClaimSighting;

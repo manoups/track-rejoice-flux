@@ -1,9 +1,9 @@
 package proposal;
 
-import com.breece.common.model.Content;
-import com.breece.common.model.ContentId;
-import com.breece.common.model.ProposedSightingId;
-import com.breece.common.sighting.SightingErrors;
+import com.breece.content.api.model.Content;
+import com.breece.content.api.model.ContentId;
+import com.breece.content.api.model.ProposedSightingId;
+import com.breece.sighting.api.SightingErrors;
 import com.breece.content.command.api.*;
 import com.breece.content.command.api.SightingHandler;
 import com.breece.content.query.api.GetContent;

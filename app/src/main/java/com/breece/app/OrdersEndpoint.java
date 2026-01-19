@@ -1,6 +1,6 @@
 package com.breece.app;
 
-import com.breece.common.model.ContentId;
+import com.breece.content.api.model.ContentId;
 import com.breece.order.api.order.model.OrderDetails;
 import com.breece.order.api.order.model.OrderId;
 import com.breece.order.api.command.CreateOrder;

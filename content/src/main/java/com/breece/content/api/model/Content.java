@@ -1,6 +1,6 @@
-package com.breece.common.model;
+package com.breece.content.api.model;
 
-import com.breece.common.sighting.model.SightingDetails;
+import com.breece.sighting.api.model.SightingDetails;
 import com.breece.coreapi.user.api.UserId;
 import io.fluxzero.common.search.Facet;
 import io.fluxzero.sdk.modeling.Aggregate;

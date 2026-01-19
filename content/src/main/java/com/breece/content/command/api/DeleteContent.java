@@ -1,7 +1,7 @@
 package com.breece.content.command.api;
 
-import com.breece.common.model.Content;
-import com.breece.common.model.ContentId;
+import com.breece.content.api.model.Content;
+import com.breece.content.api.model.ContentId;
 import com.breece.coreapi.authentication.Sender;
 import io.fluxzero.sdk.persisting.eventsourcing.Apply;
 import org.wildfly.common.annotation.NotNull;

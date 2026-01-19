@@ -1,7 +1,7 @@
 package com.breece.content.command.api;
 
-import com.breece.common.model.ContentId;
-import com.breece.common.model.ContentStatus;
+import com.breece.content.api.model.ContentId;
+import com.breece.content.api.model.ContentStatus;
 import io.fluxzero.sdk.modeling.EntityId;
 import io.fluxzero.sdk.tracking.Consumer;
 import io.fluxzero.sdk.tracking.handling.Association;

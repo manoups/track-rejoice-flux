@@ -1,8 +1,8 @@
-package com.breece.common.model;
+package com.breece.content.api.model;
 
 
-import com.breece.common.sighting.model.SightingDetails;
-import com.breece.common.sighting.model.SightingId;
+import com.breece.sighting.api.model.SightingDetails;
+import com.breece.sighting.api.model.SightingId;
 import io.fluxzero.sdk.modeling.EntityId;
 import jakarta.validation.constraints.NotNull;
 

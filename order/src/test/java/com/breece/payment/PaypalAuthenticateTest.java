@@ -1,6 +1,6 @@
 package com.breece.payment;
 
-import com.breece.common.model.ContentId;
+import com.breece.content.api.model.ContentId;
 import com.breece.content.command.api.ContentState;
 import com.breece.coreapi.common.PaypalAuthenticate;
 import com.breece.order.api.command.CreateOrder;

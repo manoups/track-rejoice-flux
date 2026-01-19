@@ -1,7 +1,7 @@
 package com.breece.sighting.command.api;
 
-import com.breece.common.sighting.SightingErrors;
-import com.breece.common.sighting.model.Sighting;
+import com.breece.sighting.api.SightingErrors;
+import com.breece.sighting.api.model.Sighting;
 import io.fluxzero.sdk.modeling.AssertLegal;
 import jakarta.annotation.Nullable;
 

@@ -1,4 +1,4 @@
-package com.breece.common.sighting.model;
+package com.breece.sighting.api.model;
 
 import jakarta.validation.constraints.NotNull;
 

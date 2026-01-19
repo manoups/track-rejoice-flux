@@ -1,7 +1,7 @@
 package com.breece.order;
 
-import com.breece.common.model.ContentId;
-import com.breece.common.model.ContentStatus;
+import com.breece.content.api.model.ContentId;
+import com.breece.content.api.model.ContentStatus;
 import com.breece.content.command.api.ContentState;
 import com.breece.content.command.api.GetContentState;
 import com.breece.order.api.order.model.OrderId;

@@ -1,6 +1,6 @@
 package com.breece.content.query.api;
 
-import com.breece.common.model.Content;
+import com.breece.content.api.model.Content;
 import com.breece.coreapi.authentication.Sender;
 import io.fluxzero.sdk.Fluxzero;
 import io.fluxzero.sdk.tracking.handling.HandleQuery;

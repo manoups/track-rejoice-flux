@@ -1,6 +1,7 @@
 package com.breece.content.command.api;
 
-import com.breece.common.sighting.SightingContentBridge;
+import com.breece.content.api.model.Content;
+import com.breece.content.api.SightingContentBridge;
 import com.breece.sighting.command.api.DeleteSighting;
 import com.breece.sighting.command.api.LinkSightingBackToContent;
 import io.fluxzero.sdk.Fluxzero;
@@ -17,16 +18,15 @@ public class SightingHandler {
 
     @HandleEvent(allowedClasses = {ClaimSighting.class, CreateProposal.class})
     void on(SightingContentBridge event) {
-        Fluxzero.sendAndForgetCommand(new LinkSightingBackToContent(event.contentId(), event.sightingId()));
+        Fluxzero.sendAndForgetCommand(new LinkSightingBackToContent(event.contentId().toString(), event.sightingId()));
     }
 
     @HandleEvent
     void on(DeleteSighting event) {
         Fluxzero.loadAggregate(event.sightingId()).previous().get().linkedContents().stream()
-                .map(Fluxzero::loadAggregate)
+                .map(contentId -> Fluxzero.loadAggregate(contentId, Content.class))
                 .filter(Entity::isPresent)
                 .map(Entity::get)
-                .filter(content -> content.proposedSightings().stream().anyMatch(p -> Objects.equals(p.sightingId(), event.sightingId())))
                 .flatMap(content -> content.proposedSightings().stream().filter(p -> Objects.equals(p.sightingId(), event.sightingId())))
                 .forEach(proposal -> Fluxzero.sendAndForgetCommand(new RemoveMemberProposal(proposal.proposedSightingId())));
     }

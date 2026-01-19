@@ -1,7 +1,7 @@
 package com.breece.content.api.model;
 
-import com.breece.common.sighting.SightingContentBridge;
-import com.breece.common.sighting.model.SightingId;
+import com.breece.content.api.SightingContentBridge;
+import com.breece.sighting.api.model.SightingId;
 import com.breece.content.command.api.AcceptProposal;
 import com.breece.content.command.api.ClaimSighting;
 import com.breece.sighting.command.api.CreateSighting;

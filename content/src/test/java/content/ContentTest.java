@@ -1,10 +1,10 @@
 package content;
 
-import com.breece.common.model.ContentId;
-import com.breece.common.model.GenderEnum;
-import com.breece.common.model.Keys;
-import com.breece.common.model.Pet;
-import com.breece.common.sighting.model.SightingDetails;
+import com.breece.content.api.model.ContentId;
+import com.breece.content.api.model.GenderEnum;
+import com.breece.content.api.model.Keys;
+import com.breece.content.api.model.Pet;
+import com.breece.sighting.api.model.SightingDetails;
 import com.breece.content.command.api.ContentScheduler;
 import com.breece.content.command.api.ContentState;
 import com.breece.content.command.api.CreateContent;

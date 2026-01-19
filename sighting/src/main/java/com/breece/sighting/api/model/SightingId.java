@@ -1,4 +1,4 @@
-package com.breece.common.sighting.model;
+package com.breece.sighting.api.model;
 
 import io.fluxzero.sdk.Fluxzero;
 import io.fluxzero.sdk.modeling.Id;
