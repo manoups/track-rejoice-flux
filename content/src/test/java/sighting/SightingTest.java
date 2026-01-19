@@ -6,10 +6,10 @@ import com.breece.common.sighting.model.Sighting;
 import com.breece.common.sighting.model.SightingDetails;
 import com.breece.common.sighting.model.SightingId;
 import com.breece.content.ContentErrors;
+import com.breece.content.api.model.SightingState;
 import com.breece.content.command.api.ClaimSighting;
 import com.breece.content.command.api.ContentHandler;
-import com.breece.content.command.api.handler.CleanupHandler;
-import com.breece.content.command.api.handler.SightingHandler;
+import com.breece.content.command.api.SightingHandler;
 import com.breece.sighting.command.api.DeleteSighting;
 import com.breece.sighting.command.api.LinkSightingBackToContent;
 import com.breece.sighting.query.api.GetSighting;
@@ -69,7 +69,7 @@ public class SightingTest extends TestUtilities {
                 .givenCommandsByUser(user2, "../content/create-content-keys.json")
                 .whenCommandByUser(user2, new ClaimSighting(new ContentId("2"), new SightingId("1"), new SightingDetails(
                         new BigDecimal("78.901"), new BigDecimal("123.456")
-                ), false))
+                )))
                 .expectExceptionalResult(SightingErrors.notLinkedToContent);
     }
 
@@ -93,12 +93,12 @@ public class SightingTest extends TestUtilities {
 
     @Test
     void givenSightingClaimedWithRemovalEnabled_whenGetSightings_thenNoResults() {
-        testFixture.registerHandlers(CleanupHandler.class)
+        testFixture.registerHandlers(SightingState.class)
                 .givenCommandsByUser(viewer, "../content/create-content.json", "create-sighting-removal.json")
                 .givenCommands("../content/publish-content.json").
-                whenCommandByUser(viewer, "claim-sighting-removal.json")
+                whenCommandByUser(viewer, "claim-sighting.json")
                 .expectNoErrors()
-                .expectEvents("claim-sighting-removal.json", LinkSightingBackToContent.class, DeleteSighting.class)
+                .expectEvents("claim-sighting.json", LinkSightingBackToContent.class, DeleteSighting.class)
                 .andThen()
                 .whenQuery(new GetSightings())
                 .expectResult(List::isEmpty);
@@ -110,7 +110,7 @@ public class SightingTest extends TestUtilities {
                 .givenCommands("../content/create-content.json", "create-sighting.json")
                 .whenCommand(new ClaimSighting(new ContentId("1"), new SightingId("1"), new SightingDetails(
                         new BigDecimal("123.456"), new BigDecimal("78.901")
-                ), false))
+                )))
                 .expectExceptionalResult(SightingErrors.sightingMismatch);
     }
 
@@ -120,7 +120,7 @@ public class SightingTest extends TestUtilities {
                 .givenCommands("../content/create-content.json", "../content/publish-content.json", "create-sighting.json")
                 .whenCommand(new ClaimSighting(new ContentId("1"), new SightingId("1"), new SightingDetails(
                         new BigDecimal("78.901000"), new BigDecimal("123.456000")
-                ), false))
+                )))
                 .expectNoErrors();
     }
 }

@@ -22,6 +22,6 @@ public record CreateSighting(@NotNull SightingId sightingId, @Valid @NotNull Sig
 
     @Apply
     Sighting create(Sender sender) {
-        return new Sighting(sightingId, sender.userId(), sightingDetails, List.of(), removeAfterMatching);
+        return new Sighting(sightingId, sender.userId(), sightingDetails, List.of());
     }
 }

@@ -5,7 +5,7 @@ import com.breece.common.model.ContentId;
 import com.breece.common.model.ProposedSightingId;
 import com.breece.common.sighting.SightingErrors;
 import com.breece.content.command.api.*;
-import com.breece.content.command.api.handler.SightingHandler;
+import com.breece.content.command.api.SightingHandler;
 import com.breece.content.query.api.GetContent;
 import com.breece.content.query.api.GetSightingHistoryForContent;
 import com.breece.content.ContentErrors;

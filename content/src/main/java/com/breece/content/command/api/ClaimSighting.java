@@ -4,7 +4,6 @@ package com.breece.content.command.api;
 import com.breece.common.model.Content;
 import com.breece.common.model.ContentId;
 import com.breece.common.sighting.ConfirmedSightingUpdate;
-import com.breece.common.sighting.SightingAftermath;
 import com.breece.common.sighting.SightingContentBridge;
 import com.breece.common.sighting.SightingErrors;
 import com.breece.common.sighting.model.SightingDetails;
@@ -16,8 +15,8 @@ import io.fluxzero.sdk.tracking.handling.authentication.RequiresUser;
 import jakarta.validation.constraints.NotNull;
 
 @RequiresUser
-public record ClaimSighting(@NotNull ContentId contentId, @NotNull SightingId sightingId, @NotNull SightingDetails sightingDetails, boolean removeAfterMatching) implements ActiveContentUpdate,
-        ConfirmedSightingUpdate, SightingContentBridge, SightingAftermath {
+public record ClaimSighting(@NotNull ContentId contentId, @NotNull SightingId sightingId, @NotNull SightingDetails sightingDetails) implements ActiveContentUpdate,
+        ConfirmedSightingUpdate, SightingContentBridge {
 
     @AssertLegal
     void assertSightingExists() {
@@ -29,13 +28,6 @@ public record ClaimSighting(@NotNull ContentId contentId, @NotNull SightingId si
     @AssertLegal
     void assertDetailsCoherence() {
         if(!Fluxzero.loadAggregate(sightingId).get().details().equals(sightingDetails)) {
-            throw SightingErrors.sightingMismatch;
-        }
-    }
-
-    @AssertLegal
-    void assertRemovalCoherence() {
-        if(Fluxzero.loadAggregate(sightingId).get().removeAfterMatching() != removeAfterMatching) {
             throw SightingErrors.sightingMismatch;
         }
     }

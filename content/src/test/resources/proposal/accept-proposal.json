@@ -6,5 +6,6 @@
     "@class": "com.breece.coreapi.sighting.model.SightingDetails",
     "lat": 123.456,
     "lng": 78.901
-  }
+  },
+  "sightingId": "1"
 }
