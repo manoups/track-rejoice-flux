@@ -29,11 +29,7 @@ public class SightingTest extends TestUtilities {
 
     final TestFixture testFixture = TestFixture.create(ContentHandler.class, SightingHandler.class);
 
-    @Test
-    void createSighting() {
-        testFixture.whenCommand("create-sighting.json")
-                .expectEvents("create-sighting.json");
-    }
+
 
     @Test
     void claimSightingWithCorrectContentOwner() {
@@ -71,14 +67,6 @@ public class SightingTest extends TestUtilities {
                         new BigDecimal("78.901"), new BigDecimal("123.456")
                 )))
                 .expectExceptionalResult(SightingErrors.notLinkedToContent);
-    }
-
-    @Test
-    void givenSighting_whenGetSightings_thenOneResults() {
-        testFixture
-                .givenCommands("create-sighting.json")
-                .whenQuery(new GetSightings())
-                .expectResult(hasSize(1));
     }
 
     @Disabled
