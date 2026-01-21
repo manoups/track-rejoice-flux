@@ -1,5 +1,6 @@
 package com.breece.app;
 
+import com.breece.app.web.PspCallbackEndpoint;
 import com.breece.content.command.api.ContentState;
 import com.breece.order.api.order.OrderFulfillment;
 import com.breece.order.api.command.CreateOrder;

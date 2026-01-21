@@ -1,4 +1,4 @@
-package com.breece.app;
+package com.breece.app.web;
 
 import com.breece.content.api.model.Content;
 import com.breece.content.api.model.ContentId;

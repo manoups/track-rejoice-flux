@@ -1,5 +1,6 @@
 package com.breece.app;
 
+import com.breece.app.web.ContentEndpoint;
 import com.breece.content.api.model.ContentId;
 import com.breece.content.command.api.ContentState;
 import com.breece.content.command.api.CreateContent;

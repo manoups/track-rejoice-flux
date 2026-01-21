@@ -1,4 +1,4 @@
-package com.breece.app;
+package com.breece.app.web;
 
 
 import com.breece.order.api.payment.PaymentAccepted;

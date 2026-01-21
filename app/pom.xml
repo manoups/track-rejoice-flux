@@ -32,6 +32,13 @@
       <version>${project.version}</version>
     </dependency>
 
+    <!-- websocket updates to UI -->
+    <dependency>
+      <groupId>com.flipkart.zjsonpatch</groupId>
+      <artifactId>zjsonpatch</artifactId>
+      <version>0.4.16</version>
+    </dependency>
+
     <dependency>
       <groupId>io.fluxzero</groupId>
       <artifactId>sdk</artifactId>
