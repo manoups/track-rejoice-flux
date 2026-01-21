@@ -32,7 +32,7 @@ services:
     image: ghcr.io/fluxzero-io/fluxzero-sdk-java/fluxzero-proxy:1.20.0
     environment:
       - FLUXZERO_BASE_URL=http://fluxzero-runtime:8888
-      - FLUXZERO_APPLICATION_NAME=meepleverse-proxy
+      - FLUXZERO_APPLICATION_NAME=track-rejoice-proxy
     ports:
       - "8080:8080"
 
