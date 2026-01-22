@@ -1,0 +1,11 @@
+POST {{baseUrl}}/content
+Content-Type: application/json
+
+{
+  "contentId": "1",
+  "sightingDetails": {},
+  "details": {}
+}
+
+###
+GET {{baseUrl}}/content
