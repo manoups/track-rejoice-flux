@@ -9,7 +9,6 @@ import com.breece.coreapi.user.api.UserId;
 import io.fluxzero.sdk.test.TestFixture;
 import org.junit.jupiter.api.Test;
 
-import static com.breece.coreapi.authentication.AuthenticationUtils.createAuthorizationHeader;
 import static org.hamcrest.Matchers.hasSize;
 
 public class ContentEndpointTests {
