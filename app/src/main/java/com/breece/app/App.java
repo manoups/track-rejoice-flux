@@ -12,7 +12,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 @EnableJpaRepositories(basePackages = "com.breece")
 // Explicitly scan for JPA entities (@Entity) in all modules
 @EntityScan(basePackages = "com.breece")
-@ComponentScan(basePackages = {"com.breece"})
+@ComponentScan(basePackages = "com.breece")
 public class App 
 {
     public static void main( String[] args )

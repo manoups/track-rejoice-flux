@@ -5,6 +5,7 @@ import com.breece.content.api.model.Content;
 import com.breece.coreapi.authentication.Sender;
 import com.breece.coreapi.user.api.UserId;
 import com.breece.coreapi.user.api.model.UserProfile;
+import com.breece.order.api.order.model.Order;
 import com.breece.sighting.api.model.Sighting;
 import com.fasterxml.jackson.databind.JsonNode;
 import io.fluxzero.common.serialization.JsonUtils;
@@ -42,9 +43,12 @@ public class UiUpdater {
     }
 
     @HandleNotification
-    void handleOperatorUpdate(Entity<Sighting> entity) {
+    void handleSightingUpdate(Entity<Sighting> entity) {
         handleAnyUpdate(entity);
     }
+
+    @HandleNotification
+    void handleOrderUpdate(Entity<Order> entity) {handleAnyUpdate(entity);}
 
     @HandleSocketOpen("/api/updates")
     @RequiresUser
