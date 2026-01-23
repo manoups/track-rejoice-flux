@@ -3,6 +3,7 @@ package com.breece.order.api.command;
 import com.breece.coreapi.authentication.Sender;
 import com.breece.coreapi.common.SendWebRequestWithMetadata;
 import com.breece.order.api.order.model.OrderId;
+import com.breece.order.api.payment.OrderStatus;
 import com.breece.service.api.model.ServiceDetails;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.paypal.sdk.models.*;
@@ -72,7 +73,7 @@ public class CreateOrderRemote extends SendWebRequestWithMetadata {
     protected String handleResponse(WebResponse response, WebRequest request, Metadata metadata) {
         String stringResult = (String) super.handleResponse(response, request);
         JsonNode result = JsonUtils.fromJson(stringResult, JsonNode.class);
-        Fluxzero.sendAndForgetCommand(new UpdateOrder(orderId, result.get("status").asText()));
+        Fluxzero.loadAggregate(orderId).apply(new CreateOrderRemoteSuccess(orderId, pspReference, OrderStatus.valueOf(result.get("status").asText())));
         return result.get("id").asText();
     }
 }

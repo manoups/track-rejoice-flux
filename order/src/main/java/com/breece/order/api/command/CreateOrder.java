@@ -32,16 +32,9 @@ public record CreateOrder(@NotNull OrderId orderId, @NotNull ContentId contentId
     }
 
     @AssertLegal
-    void assertUnique() {
-        if (0 < Fluxzero.search(Order.class).match(contentId, "contentId").count()) {
-            throw OrderErrors.alreadyPlaced;
-        }
-    }
-
-    @AssertLegal
     void assertExistingProduct(Sender sender) {
         Entity<Content> contentEntity = Fluxzero.loadAggregate(contentId);
-        if (!contentEntity.isPresent() || (!sender.isAdmin() && !contentEntity.get().ownerId().equals(sender.userId()))) {
+        if (!contentEntity.isPresent() || !sender.isAuthorizedFor(contentEntity.get().ownerId())) {
             throw OrderErrors.productNotFound;
         }
     }
@@ -68,7 +61,7 @@ public record CreateOrder(@NotNull OrderId orderId, @NotNull ContentId contentId
 
     @Apply
     Order apply(Sender sender) {
-        return new Order(orderId, sender.userId(), contentId, details, null, false, pspReference);
+        return new Order(orderId, sender.userId(), contentId, details, pspReference);
     }
 
 }
