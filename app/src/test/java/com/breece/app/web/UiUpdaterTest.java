@@ -1,8 +1,9 @@
 package com.breece.app.web;
 
 import com.breece.app.App;
+import com.breece.app.web.api.UiUpdate;
+import com.breece.content.api.model.Content;
 import com.breece.content.api.model.ContentId;
-import com.breece.content.api.model.ExtraDetails;
 import com.breece.content.api.model.GenderEnum;
 import com.breece.content.api.model.Pet;
 import com.breece.content.command.api.CreateContent;
@@ -12,36 +13,32 @@ import com.breece.coreapi.user.api.CreateUser;
 import com.breece.coreapi.user.api.UserId;
 import com.breece.coreapi.user.api.model.UserDetails;
 import com.breece.sighting.api.model.SightingDetails;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import io.fluxzero.common.MessageType;
-import io.fluxzero.common.Registration;
 import io.fluxzero.proxy.ProxyRequestHandler;
 import io.fluxzero.proxy.ProxyServer;
 import io.fluxzero.sdk.Fluxzero;
 import io.fluxzero.sdk.common.HasMessage;
 import io.fluxzero.sdk.common.serialization.DeserializingMessage;
+import io.fluxzero.sdk.common.serialization.jackson.JacksonSerializer;
 import io.fluxzero.sdk.configuration.client.Client;
 import io.fluxzero.sdk.configuration.client.WebSocketClient;
-import io.fluxzero.sdk.test.TestFixture;
 import io.fluxzero.sdk.tracking.handling.authentication.AbstractUserProvider;
 import io.fluxzero.sdk.tracking.handling.authentication.User;
 import io.fluxzero.sdk.tracking.handling.authentication.UserProvider;
 import io.fluxzero.testserver.TestServer;
-import lombok.NonNull;
 import org.assertj.core.api.Assertions;
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.Timeout;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
-import org.springframework.test.annotation.DirtiesContext;
 
 import java.math.BigDecimal;
-import java.net.URI;
 import java.net.InetSocketAddress;
 import java.net.Socket;
+import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.WebSocket;
 import java.time.Duration;
@@ -52,33 +49,11 @@ import java.util.concurrent.TimeUnit;
 
 @SpringBootTest(classes = App.class)
 @Import(UiUpdaterTest.TestConfig.class)
-@DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_CLASS)
 class UiUpdaterTest {
     private static final int TEST_SERVER_PORT = 8090;
     private static final int PROXY_PORT = 8091;
     private static final String HOST = "127.0.0.1";
-    private static Registration proxyRegistration;
-    final TestFixture testFixture = TestFixture.create();
-
-    @BeforeAll
-    static void setUp() {
-        WebSocketClient proxyClient = WebSocketClient.newInstance(
-                WebSocketClient.ClientConfig.builder()
-                        .runtimeBaseUrl("ws://" + HOST + ":" + TEST_SERVER_PORT)
-                        .name("$proxy")
-                        .projectId("test")
-                        .build());
-        proxyRegistration = ProxyServer.start(PROXY_PORT, new ProxyRequestHandler(proxyClient));
-        waitForPort(HOST, PROXY_PORT, Duration.ofSeconds(5));
-    }
-
-
-    @AfterAll
-    static void tearDown() {
-        if (proxyRegistration != null) {
-            proxyRegistration.cancel();
-        }
-    }
+    private final ObjectMapper objectMapper = JacksonSerializer.defaultObjectMapper;
 
     @Test
     void sendsUiUpdatesOverWebsocket() throws Exception {
@@ -110,11 +85,14 @@ class UiUpdaterTest {
         Fluxzero.sendCommandAndWait(new CreateContent(new ContentId("1"), new SightingDetails(BigDecimal.ZERO, BigDecimal.ZERO), new Pet("name", "breed", GenderEnum.FEMALE)));
 
         String payload = messageFuture.orTimeout(5, TimeUnit.SECONDS).join();
+
         Assertions.assertThat(payload)
                 .contains("\"type\":\"Content\"")
                 .contains("\"id\":\"content-1\"")
                 .contains("op");
-
+        UiUpdate update = objectMapper.readValue(payload, UiUpdate.class);
+        Content content = extractContent(update);
+        Assertions.assertThat(content.contentId().getFunctionalId()).isEqualTo("1");
         webSocket.sendClose(WebSocket.NORMAL_CLOSURE, "done").join();
     }
 
@@ -166,7 +144,6 @@ class UiUpdaterTest {
     }
 
 
-
     private static void waitForPort(String host, int port, Duration timeout) {
         long deadline = System.nanoTime() + timeout.toNanos();
         while (System.nanoTime() < deadline) {
@@ -185,6 +162,12 @@ class UiUpdaterTest {
         throw new IllegalStateException("Timed out waiting for " + host + ":" + port);
     }
 
+    private Content extractContent(UiUpdate update) throws Exception {
+        JsonNode patch = update.getPatch();
+        JsonNode value = patch.get(0).get("value");
+        return objectMapper.treeToValue(value, Content.class);
+    }
+
     @TestConfiguration
     static class TestConfig {
         @Bean
@@ -201,6 +184,13 @@ class UiUpdaterTest {
                     .name("track-rejoice-test")
                     .projectId("test")
                     .build());
+        }
+
+        @Bean(destroyMethod = "cancel")
+        ProxyServer proxyServer(Client fluxzeroClient) {
+            ProxyServer proxyServer = ProxyServer.start(PROXY_PORT, new ProxyRequestHandler(fluxzeroClient));
+            waitForPort(HOST, PROXY_PORT, Duration.ofSeconds(5));
+            return proxyServer;
         }
     }
 

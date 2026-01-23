@@ -21,12 +21,6 @@ public class RefData {
     private final ObjectMapper objectMapper = JacksonSerializer.defaultObjectMapper;
     private final Supplier<List<Service>> services = memoize(this::loadServices);
 
-//    private final Function<GetServices, Service> getServices = memoize(this::getServices);
-
-//    private Object getServices() {
-//    }
-
-
     @HandleQuery
     public List<Service> handle(GetServices request) {
         return services.get();
@@ -36,7 +30,7 @@ public class RefData {
     private List<Service> loadServices() {
         return objectMapper.readValue(
                 loadFile("services.json"),
-                objectMapper.getTypeFactory().constructType(com.breece.service.api.model.Service.class));
+                objectMapper.getTypeFactory().constructType(Service.class));
     }
 
     private String loadFile(String filename) {
