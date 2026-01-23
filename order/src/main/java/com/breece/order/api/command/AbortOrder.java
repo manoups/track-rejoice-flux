@@ -24,6 +24,6 @@ public record AbortOrder(OrderId orderId, @NotBlank String reason) implements Or
 
     @Apply
     Order apply(Order order) {
-        return order.withAborted(true);
+        return order;
     }
 }

@@ -1,4 +1,4 @@
-package com.breece.coreapi.user;
+package com.breece.app;
 
 import com.breece.coreapi.user.api.CreateUser;
 import com.breece.coreapi.user.api.GetUsers;

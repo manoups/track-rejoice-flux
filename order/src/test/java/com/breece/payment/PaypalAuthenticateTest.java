@@ -4,7 +4,7 @@ import com.breece.content.api.model.ContentId;
 import com.breece.content.command.api.ContentState;
 import com.breece.coreapi.common.PaypalAuthenticate;
 import com.breece.order.api.command.CreateOrder;
-import com.breece.order.api.command.UpdateOrder;
+import com.breece.order.api.command.CreateOrderRemote;
 import com.breece.order.api.order.OrderFulfillment;
 import com.breece.order.api.order.model.OrderDetails;
 import com.breece.order.api.order.model.OrderId;
@@ -100,7 +100,7 @@ class PaypalAuthenticateTest {
             CreateOrder createOrder = new CreateOrder(new OrderId("1"), new ContentId("1"), new OrderDetails(listOf(new ServiceId("1")), Instant.now()), UUID.randomUUID().toString());
             testFixture.givenCommands("../content/create-content.json").whenCommand(createOrder)
                     .expectEvents(createOrder)
-                    .expectCommands(UpdateOrder.class);
+                    .expectOnlyCommands(CreateOrderRemote.class);
         }
     }
 

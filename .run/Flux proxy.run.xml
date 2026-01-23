@@ -1,11 +1,13 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="Flux proxy" type="Application" factoryName="Application">
+    <option name="ALTERNATIVE_JRE_PATH" value="corretto-21" />
+    <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
     <envs>
       <env name="FLUX_URL" value="ws://localhost:8888" />
       <env name="PROXY_PORT" value="8080" />
     </envs>
     <option name="MAIN_CLASS_NAME" value="io.fluxzero.proxy.ProxyServer" />
-    <module name="flux-basic-java" />
+    <module name="app" />
     <extension name="net.ashald.envfile">
       <option name="IS_ENABLED" value="false" />
       <option name="IS_SUBST" value="false" />

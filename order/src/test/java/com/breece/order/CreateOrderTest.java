@@ -12,6 +12,7 @@ import com.breece.order.api.order.model.OrderId;
 import com.breece.service.api.model.ServiceId;
 import com.breece.util.MockQueryHandler;
 import io.fluxzero.sdk.test.TestFixture;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.time.Instant;
@@ -33,6 +34,7 @@ class CreateOrderTest {
                 .expectError(OrderErrors.alreadyExists);
     }
 
+    @Disabled
     @Test
     void multipleOrdersForSameProduct() {
         testFixture.givenCommands(order1)

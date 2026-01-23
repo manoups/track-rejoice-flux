@@ -11,5 +11,6 @@ public interface OrderErrors {
             tooOld = new IllegalCommandException("Order cancellation expired"),
             productNotFound = new IllegalCommandException("Product not found"),
             serviceNotFound = new IllegalCommandException("Service not found"),
-            jsonProcessingException = new IllegalCommandException("JsonProcessingException");
+            jsonProcessingException = new IllegalCommandException("JsonProcessingException"),
+            basicServiceRequired = new IllegalCommandException("Basic service required");
 }

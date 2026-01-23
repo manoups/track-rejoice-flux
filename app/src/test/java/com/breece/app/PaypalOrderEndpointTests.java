@@ -4,7 +4,6 @@ import com.breece.app.web.PspCallbackEndpoint;
 import com.breece.content.command.api.ContentState;
 import com.breece.order.api.order.OrderFulfillment;
 import com.breece.order.api.command.CreateOrder;
-import com.breece.order.api.command.UpdateOrder;
 import com.breece.order.api.command.CreateOrderRemote;
 import io.fluxzero.common.FileUtils;
 import io.fluxzero.sdk.test.TestFixture;
@@ -47,6 +46,6 @@ public class PaypalOrderEndpointTests {
                 .whenPost("/payments/paypal/orders/content-1")
                 .expectNoErrors()
                 .expectEvents(CreateOrder.class)
-                .expectCommands(CreateOrderRemote.class, UpdateOrder.class);
+                .expectOnlyCommands(CreateOrderRemote.class);
     }
 }
