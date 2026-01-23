@@ -8,9 +8,6 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import lombok.With;
 
-import static io.fluxzero.sdk.modeling.EventPublication.IF_MODIFIED;
-
-//Todo: remove the IF_Modified because the abort order will not work
 @Aggregate(searchable = true)
 public record Order(@EntityId OrderId orderId, @NotNull UserId userId, @NotNull ContentId contentId, @Valid OrderDetails details, @With String paymentReference) {
 }

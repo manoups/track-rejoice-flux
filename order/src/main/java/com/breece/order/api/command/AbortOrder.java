@@ -7,7 +7,6 @@ import com.breece.order.api.order.model.Order;
 import com.breece.order.api.order.model.OrderId;
 import io.fluxzero.sdk.Fluxzero;
 import io.fluxzero.sdk.modeling.AssertLegal;
-import io.fluxzero.sdk.modeling.EventPublication;
 import io.fluxzero.sdk.persisting.eventsourcing.Apply;
 import jakarta.validation.constraints.NotBlank;
 
