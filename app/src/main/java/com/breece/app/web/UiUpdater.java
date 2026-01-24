@@ -14,9 +14,6 @@ import io.fluxzero.sdk.common.Message;
 import io.fluxzero.sdk.common.serialization.Serializer;
 import io.fluxzero.sdk.modeling.Entity;
 import io.fluxzero.sdk.tracking.handling.HandleNotification;
-import io.fluxzero.sdk.tracking.handling.authentication.RequiresUser;
-import io.fluxzero.sdk.web.HandleSocketClose;
-import io.fluxzero.sdk.web.HandleSocketOpen;
 import io.fluxzero.sdk.web.SocketSession;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -46,15 +43,11 @@ public class UiUpdater {
         handleAnyUpdate(entity);
     }
 
-    @HandleSocketOpen("/api/updates")
-    @RequiresUser
-    void startListening(Sender user, SocketSession session) {
-        openSessions.computeIfAbsent(user.userId(), u -> new CopyOnWriteArrayList<>())
-                .add(session);
+    void registerSession(UserId userId, SocketSession session) {
+        openSessions.computeIfAbsent(userId, _ -> new CopyOnWriteArrayList<>()).add(session);
     }
 
-    @HandleSocketClose("/api/updates")
-    void stopListening(SocketSession session) {
+    void unregisterSession(SocketSession session) {
         openSessions.forEach((key, value) -> {
             if (value.removeIf(s -> s.sessionId().equals(session.sessionId())) && value.isEmpty()) {
                 openSessions.remove(key);

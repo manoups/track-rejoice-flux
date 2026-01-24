@@ -11,6 +11,7 @@ import io.fluxzero.sdk.common.serialization.jackson.JacksonSerializer;
 import io.fluxzero.sdk.test.TestFixture;
 import io.fluxzero.sdk.web.HttpRequestMethod;
 import io.fluxzero.sdk.web.WebRequest;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
@@ -21,6 +22,7 @@ import java.util.List;
 public class UiUpdaterTests {
     private final TestFixture testFixture = TestFixture.create();
     private final ObjectMapper objectMapper = JacksonSerializer.defaultObjectMapper;
+    private final UiUpdater uiUpdater = new UiUpdater();
 
     private static <T> T extractEntity(ObjectMapper objectMapper, UiUpdate update, Class<T> type) throws Exception {
         JsonNode base = objectMapper.createObjectNode();
@@ -30,8 +32,18 @@ public class UiUpdaterTests {
 
     @BeforeEach
     void setUp() {
-        testFixture.registerHandlers(ContentEndpoint.class, new UiUpdater())
-                .givenCommands("../user/create-user.json");
+        testFixture.registerHandlers(ContentEndpoint.class, uiUpdater, new UiUpdateSocketEndpoint(uiUpdater))
+                .givenCommands("../user/create-user.json")
+                .withHeader("Authorization", createAuthorizationHeader("viewer"))
+                .whenWebRequest(openSocket());
+    }
+
+    @AfterEach
+    void tearDown() {
+        testFixture
+//                .withHeader("Authorization", createAuthorizationHeader("viewer"))
+                .whenWebRequest(WebRequest.builder().url("/api/updates").method(HttpRequestMethod.WS_CLOSE).build())
+                .expectNoErrors();
     }
 
     @Test
@@ -45,9 +57,7 @@ public class UiUpdaterTests {
 
     @Test
     void receiveContentUpdate() {
-        testFixture.withHeader("Authorization", createAuthorizationHeader("viewer"))
-                .givenWebRequest(openSocket())
-                .whenCommand("../content/create-content.json")
+        testFixture.whenCommand("../content/create-content.json")
                 .expectWebResponse(r -> r.getPayload() instanceof UiUpdate uiUpdate
                         && extractEntity(objectMapper, uiUpdate, Content.class) instanceof Content res
                         && res.contentId().toString().equals("content-1"));
