@@ -35,7 +35,7 @@ public class UiUpdaterTests {
         testFixture.registerHandlers(ContentEndpoint.class, uiUpdater, new UiUpdateSocketEndpoint(uiUpdater))
                 .givenCommands("../user/create-user.json")
                 .withHeader("Authorization", createAuthorizationHeader("viewer"))
-                .whenWebRequest(openSocket());
+                .givenWebRequest(openSocket());
     }
 
     @AfterEach
@@ -65,9 +65,11 @@ public class UiUpdaterTests {
 
     @Test
     void closeSessionAfterTimeout() {
-        testFixture.withHeader("Authorization", createAuthorizationHeader("viewer"))
-                .givenWebRequest(openSocket())
-                .givenElapsedTime(Duration.ofSeconds(120))
+        testFixture
+                .givenElapsedTime(Duration.ofSeconds(60))
+                .given(fc -> fc.taskScheduler().executeExpiredTasks()) // send ping
+                .givenElapsedTime(Duration.ofSeconds(25)) // > pingTimeout (default 20s)
+                .given(fc -> fc.taskScheduler().executeExpiredTasks()) // close session
                 .whenCommand("../content/create-content.json")
                 .expectNoWebResponses();
     }
