@@ -87,7 +87,7 @@ public class AuthenticationUtils {
             return null;
         }
         JWTCreator.Builder builder = JWT.create()
-                .withKeyId("fluxjwt")
+                .withKeyId("trackrejoicejwt")
                 .withSubject(userId.getFunctionalId())
                 .withIssuedAt(Date.from(now))
                 .withExpiresAt(Date.from(now.plus(Duration.ofHours(12))))
