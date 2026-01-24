@@ -1,3 +1,5 @@
+- [ ] Check facet updates via tracker
+- [ ] Check metrics
 - [ ] Add tags to sightings
 - [ ] Add tags to content
 - [ ] Decouple content from sightings
@@ -8,6 +10,19 @@
 - [ ] Validate payment success upon event reception
 - [ ] Add a PaymentGateway role
 - [x] Memoize reference-data
+
+### Measure metrics
+- Active sessions gauge: size of openSessions and total sessions.
+- Per‑user session count: distribution (min/avg/max) or a histogram. 
+- Outbound update count: increment when you send a UiUpdate. 
+- Outbound update bytes (approx): size of serialized patch.
+- Serialization/patch time: timer around diff+serialization.
+- Send failures: count exceptions in the inner send try/catch.
+- Dropped/closed sessions: count when !session.isOpen() pruning happens.
+
+#### Alive‑check / socket lifecycle
+- Socket opens/closes: count in UiUpdateSocketEndpoint.startListening/stopListening.
+- Close reasons: if you can access close codes, bucket them (1000, 1001, 1002, 1006). If not available, track “timeout close” via a separate counter in your ping timeout path (if you expose it).
 
 ## Screens
 ### Home
