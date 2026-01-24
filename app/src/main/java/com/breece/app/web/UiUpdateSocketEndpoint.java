@@ -6,23 +6,18 @@ import io.fluxzero.sdk.web.HandleSocketClose;
 import io.fluxzero.sdk.web.HandleSocketOpen;
 import io.fluxzero.sdk.web.SocketEndpoint;
 import io.fluxzero.sdk.web.SocketSession;
+import org.springframework.beans.factory.annotation.Autowired;
 
 @SocketEndpoint
 public class UiUpdateSocketEndpoint {
-    private final UiUpdater uiUpdater;
-
-    public UiUpdateSocketEndpoint(UiUpdater uiUpdater) {
-        this.uiUpdater = uiUpdater;
-    }
-
     @HandleSocketOpen("/api/updates")
     @RequiresUser
-    void startListening(Sender user, SocketSession session) {
+    void startListening(Sender user, SocketSession session, @Autowired UiUpdater uiUpdater) {
         uiUpdater.registerSession(user.userId(), session);
     }
 
     @HandleSocketClose("/api/updates")
-    void stopListening(SocketSession session) {
+    void stopListening(SocketSession session, @Autowired UiUpdater uiUpdater) {
         uiUpdater.unregisterSession(session);
     }
 }

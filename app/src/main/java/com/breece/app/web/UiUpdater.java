@@ -63,6 +63,11 @@ public class UiUpdater {
     <T> void handleAnyUpdate(String entityId, T before, T after, Long index, UiUpdate.Type type) {
         Serializer serializer = Fluxzero.get().serializer();
         openSessions.forEach((userId, sessions) -> {
+            sessions.removeIf(session -> !session.isOpen());
+            if (sessions.isEmpty()) {
+                openSessions.remove(userId);
+                return;
+            }
             try {
                 var sender = Sender.createSender(userId);
                 if (sender == null) {
