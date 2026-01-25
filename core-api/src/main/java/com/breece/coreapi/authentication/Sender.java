@@ -33,7 +33,6 @@ public record Sender(@NonNull UserId userId, Role userRole) implements User {
 
     public static Sender createSender(UserProfile userProfile) {
         return Sender.builder().userId(userProfile.userId()).userRole(userProfile.role())
-//                .operator(userProfile.getOperator())
                 .build();
     }
 

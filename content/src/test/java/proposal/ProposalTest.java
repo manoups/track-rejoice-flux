@@ -1,15 +1,14 @@
 package proposal;
 
+import com.breece.content.ContentErrors;
 import com.breece.content.api.model.Content;
 import com.breece.content.api.model.ContentId;
 import com.breece.content.api.model.ProposedSightingId;
-import com.breece.sighting.api.SightingErrors;
 import com.breece.content.command.api.*;
-import com.breece.content.command.api.SightingHandler;
 import com.breece.content.query.api.GetContent;
 import com.breece.content.query.api.GetSightingHistoryForContent;
-import com.breece.content.ContentErrors;
 import com.breece.coreapi.util.GeometryUtil;
+import com.breece.sighting.api.SightingErrors;
 import io.fluxzero.sdk.test.TestFixture;
 import io.fluxzero.sdk.tracking.handling.IllegalCommandException;
 import lombok.extern.slf4j.Slf4j;
@@ -25,7 +24,7 @@ import static org.hamcrest.Matchers.hasSize;
 
 @Slf4j
 public class ProposalTest extends TestUtilities {
-    final TestFixture testFixture = TestFixture.create(ProposedSightingHandler.class, SightingHandler.class, ContentHandler.class);
+    final TestFixture testFixture = TestFixture.create(ProposedSightingHandler.class, SightingHandler.class, ContentHandler.class).givenCommands(createUserFromProfile(viewer), createUserFromProfile(user2), createUserFromProfile(Alice));
 
     @Test
     void givenNoContent_whenProposalCreated_thenError() {
@@ -74,37 +73,37 @@ public class ProposalTest extends TestUtilities {
 
     @Test
     void givenContentOfUserA_whenUserBCreatesProposal_thenNoError() {
-        testFixture.givenCommandsByUser(viewer, "../content/create-content.json")
-                .givenCommandsByUser(user2, "../sighting/create-sighting.json")
+        testFixture.givenCommandsByUser("viewer", "../content/create-content.json")
+                .givenCommandsByUser("user2", "../sighting/create-sighting.json")
                 .givenCommands("../content/publish-content.json")
-                .whenCommandByUser(user2, "create-proposal.json")
+                .whenCommandByUser("user2", "create-proposal.json")
                 .expectNoErrors()
                 .expectEvents("create-proposal.json");
     }
 
     @Test
     void givenContentOfUserASightingOfUserB_whenUserAliceCreatesProposal_thenError() {
-        testFixture.givenCommandsByUser(viewer, "../content/create-content.json")
-                .givenCommandsByUser(user2, "../sighting/create-sighting.json")
-                .whenCommandByUser(Alice, "create-proposal.json")
+        testFixture.givenCommandsByUser("viewer", "../content/create-content.json")
+                .givenCommandsByUser("user2", "../sighting/create-sighting.json")
+                .whenCommandByUser("Alice", "create-proposal.json")
                 .expectError(SightingErrors.notOwner);
     }
 
     @Test
     void givenContentOfUserA_whenUserBRemovesProposal_thenError() {
-        testFixture.givenCommandsByUser(viewer, "../sighting/create-sighting.json", "../content/create-content.json")
+        testFixture.givenCommandsByUser("viewer", "../sighting/create-sighting.json", "../content/create-content.json")
                 .givenCommands("../content/publish-content.json")
-                .givenCommandsByUser(viewer, "create-proposal.json")
-                .whenCommandByUser(user2, "reject-proposal.json")
+                .givenCommandsByUser("viewer", "create-proposal.json")
+                .whenCommandByUser("user2", "reject-proposal.json")
                 .expectError(IllegalCommandException.class);
     }
 
     @Test
     void givenContentOfUserA_whenUserBAcceptsProposal_thenError() {
-        testFixture.givenCommandsByUser(viewer, "../sighting/create-sighting.json", "../content/create-content.json")
+        testFixture.givenCommandsByUser("viewer", "../sighting/create-sighting.json", "../content/create-content.json")
                 .givenCommands("../content/publish-content.json")
-                .givenCommandsByUser(viewer, "create-proposal.json")
-                .whenCommandByUser(user2, "accept-proposal.json")
+                .givenCommandsByUser("viewer", "create-proposal.json")
+                .whenCommandByUser("user2", "accept-proposal.json")
                 .expectError(ContentErrors.unauthorized);
     }
 

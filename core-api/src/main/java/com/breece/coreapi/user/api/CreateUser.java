@@ -9,8 +9,10 @@ import io.fluxzero.sdk.persisting.eventsourcing.Apply;
 import io.fluxzero.sdk.tracking.handling.IllegalCommandException;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
+import lombok.Builder;
 
 @RequiresRole(Role.ADMIN)
+@Builder
 public record CreateUser(@NotNull UserId userId,
                          @NotNull @Valid UserDetails details,
                          Role role) implements UserCommand {

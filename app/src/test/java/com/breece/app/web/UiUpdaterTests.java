@@ -57,7 +57,7 @@ public class UiUpdaterTests {
 
     @Test
     void receiveContentUpdate() {
-        testFixture.whenCommand("../content/create-content.json")
+        testFixture.whenCommandByUser("viewer","../content/create-content.json")
                 .expectWebResponse(r -> r.getPayload() instanceof UiUpdate uiUpdate
                         && extractEntity(objectMapper, uiUpdate, Content.class) instanceof Content res
                         && res.contentId().toString().equals("content-1"));

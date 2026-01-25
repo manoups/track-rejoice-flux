@@ -1,21 +1,22 @@
 package content;
 
+import com.breece.content.ContentErrors;
 import com.breece.content.api.model.ContentId;
 import com.breece.content.api.model.GenderEnum;
 import com.breece.content.api.model.Keys;
 import com.breece.content.api.model.Pet;
-import com.breece.sighting.api.model.SightingDetails;
 import com.breece.content.command.api.ContentScheduler;
 import com.breece.content.command.api.ContentState;
 import com.breece.content.command.api.CreateContent;
 import com.breece.content.command.api.TakeContentOffline;
 import com.breece.content.query.api.GetContentStats;
 import com.breece.content.query.api.GetContents;
-import com.breece.content.ContentErrors;
-import com.breece.coreapi.user.api.UserId;
-import com.breece.coreapi.user.api.model.UserProfile;
+import com.breece.sighting.api.model.SightingDetails;
 import io.fluxzero.sdk.test.TestFixture;
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Nested;
+import org.junit.jupiter.api.Test;
+import util.TestUtilities;
 
 import java.math.BigDecimal;
 import java.time.Duration;
@@ -23,8 +24,8 @@ import java.util.List;
 
 import static org.hamcrest.Matchers.hasSize;
 
-class ContentTest {
-    final TestFixture testFixture = TestFixture.create(ContentState.class);
+class ContentTest extends TestUtilities {
+    final TestFixture testFixture = TestFixture.create(ContentState.class).givenCommands(createUserFromProfile(viewer), createUserFromProfile(user2), createUserFromProfile(Alice));
 
     @Test
     void createContent() {
@@ -54,8 +55,8 @@ class ContentTest {
 
     @Test
     void deleteContentNonOwner() {
-        testFixture.givenCommandsByUser(new UserProfile(new UserId("viewer"), null, null),"create-content.json")
-                .whenCommandByUser(new UserProfile(new UserId("user2"), null, null),"delete-content.json")
+        testFixture.givenCommandsByUser("viewer","create-content.json")
+                .whenCommandByUser("user2","delete-content.json")
                 .expectExceptionalResult(ContentErrors.unauthorized);
     }
 

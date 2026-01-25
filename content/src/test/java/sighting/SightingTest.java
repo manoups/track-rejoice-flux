@@ -27,16 +27,16 @@ import static org.hamcrest.Matchers.hasSize;
 
 public class SightingTest extends TestUtilities {
 
-    final TestFixture testFixture = TestFixture.create(ContentHandler.class, SightingHandler.class);
+    final TestFixture testFixture = TestFixture.create(ContentHandler.class, SightingHandler.class).givenCommands(createUserFromProfile(viewer), createUserFromProfile(user2), createUserFromProfile(Alice));
 
 
 
     @Test
     void claimSightingWithCorrectContentOwner() {
         testFixture
-                .givenCommandsByUser(viewer, "../content/create-content.json", "create-sighting.json")
+                .givenCommandsByUser("viewer", "../content/create-content.json", "create-sighting.json")
                 .givenCommands("../content/publish-content.json")
-                .whenCommandByUser(viewer, "claim-sighting.json")
+                .whenCommandByUser("viewer", "claim-sighting.json")
                 .expectNoErrors()
                 .expectEvents("claim-sighting.json")
                 .expectCommands(LinkSightingBackToContent.class)
@@ -50,9 +50,9 @@ public class SightingTest extends TestUtilities {
     @Test
     void claimSightingForContentOfOtherUser() {
         testFixture
-                .givenCommandsByUser(viewer,
+                .givenCommandsByUser("viewer",
                         "../content/create-content.json", "create-sighting.json")
-                .whenCommandByUser(Alice, "claim-sighting.json")
+                .whenCommandByUser("Alice", "claim-sighting.json")
                 .expectExceptionalResult(ContentErrors.notFound);
     }
 
@@ -60,10 +60,10 @@ public class SightingTest extends TestUtilities {
     @Test
     void claimAlreadyClaimedSighting() {
         testFixture
-                .givenCommandsByUser(viewer,
+                .givenCommandsByUser("viewer",
                         "../content/create-content.json", "create-sighting.json", "claim-sighting.json")
-                .givenCommandsByUser(user2, "../content/create-content-keys.json")
-                .whenCommandByUser(user2, new ClaimSighting(new ContentId("2"), new SightingId("1"), new SightingDetails(
+                .givenCommandsByUser("user2", "../content/create-content-keys.json")
+                .whenCommandByUser("user2", new ClaimSighting(new ContentId("2"), new SightingId("1"), new SightingDetails(
                         new BigDecimal("78.901"), new BigDecimal("123.456")
                 )))
                 .expectExceptionalResult(SightingErrors.notLinkedToContent);
@@ -73,7 +73,7 @@ public class SightingTest extends TestUtilities {
     @Test
     void givenSightingClaimed_whenGetSightings_thenNoResults() {
         testFixture
-                .givenCommandsByUser(viewer,
+                .givenCommandsByUser("viewer",
                         "../content/create-content.json", "create-sighting.json", "claim-sighting.json")
                 .whenQuery(new GetSightings())
                 .expectResult(List::isEmpty);
@@ -82,9 +82,9 @@ public class SightingTest extends TestUtilities {
     @Test
     void givenSightingClaimedWithRemovalEnabled_whenGetSightings_thenNoResults() {
         testFixture.registerHandlers(SightingState.class)
-                .givenCommandsByUser(viewer, "../content/create-content.json", "create-sighting-removal.json")
+                .givenCommandsByUser("viewer", "../content/create-content.json", "create-sighting-removal.json")
                 .givenCommands("../content/publish-content.json").
-                whenCommandByUser(viewer, "claim-sighting.json")
+                whenCommandByUser("viewer", "claim-sighting.json")
                 .expectNoErrors()
                 .expectEvents("claim-sighting.json", LinkSightingBackToContent.class, DeleteSighting.class)
                 .andThen()
