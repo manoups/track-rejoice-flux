@@ -1,5 +1,6 @@
 package com.breece.app;
 
+import com.breece.app.web.UsersEndpoint;
 import com.breece.coreapi.user.api.CreateUser;
 import com.breece.coreapi.user.api.UserId;
 import io.fluxzero.sdk.test.TestFixture;

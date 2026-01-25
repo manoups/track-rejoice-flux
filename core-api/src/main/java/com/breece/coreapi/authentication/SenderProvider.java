@@ -18,7 +18,6 @@ public class SenderProvider extends AbstractUserProvider {
     @Override
     public User fromMessage(HasMessage message) {
         if (message instanceof DeserializingMessage dm && dm.getMessageType() == MessageType.WEBREQUEST) {
-            //for demo purposes, let's assume that everyone sending web requests is admin. Don't use this in the real world! :P
             return AuthenticationUtils.getSender(dm);
         }
         return super.fromMessage(message);
