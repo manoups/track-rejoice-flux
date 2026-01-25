@@ -86,6 +86,17 @@
 
   <build>
     <finalName>Flux Rejoice</finalName>
+    <resources>
+      <resource>
+        <directory>src/main/resources</directory>
+        <filtering>true</filtering>
+      </resource>
+      <resource>
+        <directory>src/main/typescript-generator</directory>
+        <targetPath>${project.build.directory}/typescript-generator</targetPath>
+      </resource>
+
+    </resources>
     <plugins>
       <plugin>
         <groupId>org.springframework.boot</groupId>
@@ -161,6 +172,83 @@
           <classpathScope>test</classpathScope>
         </configuration>
       </plugin>
+      <plugin>
+        <groupId>cz.habarta.typescript-generator</groupId>
+        <artifactId>typescript-generator-maven-plugin</artifactId>
+        <version>3.2.1263</version>
+        <executions>
+          <execution>
+            <id>generate</id>
+            <goals>
+              <goal>generate</goal>
+            </goals>
+            <phase>prepare-package</phase>
+          </execution>
+        </executions>
+        <configuration>
+          <jsonLibrary>jackson2</jsonLibrary>
+          <customTypeMappings>
+            <customTypeMapping>java.time.LocalDate:string</customTypeMapping>
+            <customTypeMapping>java.time.LocalDateTime:string</customTypeMapping>
+            <customTypeMapping>java.time.Duration:string</customTypeMapping>
+            <customTypeMapping>java.time.Instant:string</customTypeMapping>
+            <customTypeMapping>java.time.ZonedDateTime:string</customTypeMapping>
+            <customTypeMapping>org.locationtech.jts.geom.Geometry:string</customTypeMapping>
+            <customTypeMapping>org.locationtech.jts.geom.PrecisionModel$Type:string</customTypeMapping>
+          </customTypeMappings>
+          <classPatterns>
+            <classPattern>com.breece.**</classPattern>
+          </classPatterns>
+          <excludeClassPatterns>
+            <excludeClassPattern>**Builder**</excludeClassPattern>
+            <excludeClassPattern>**Deserializer</excludeClassPattern>
+            <excludeClassPattern>java.lang.Class</excludeClassPattern>
+            <excludeClassPattern>com.fasterxml.**</excludeClassPattern>
+            <excludeClassPattern>io.fluxzero.**</excludeClassPattern>
+          </excludeClassPatterns>
+          <outputKind>module</outputKind>
+          <!-- See: src/main/typescript-generator/package.json -->
+          <generateNpmPackageJson>false</generateNpmPackageJson>
+          <optionalProperties>all</optionalProperties>
+          <sortDeclarations>true</sortDeclarations>
+          <noFileComment>true</noFileComment>
+          <noTslintDisable>true</noTslintDisable>
+          <noEslintDisable>true</noEslintDisable>
+          <mapEnum>asEnum</mapEnum>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>com.github.eirslett</groupId>
+        <artifactId>frontend-maven-plugin</artifactId>
+        <version>1.15.1</version>
+        <configuration>
+          <workingDirectory>target/typescript-generator</workingDirectory>
+        </configuration>
+        <executions>
+          <execution>
+            <id>install Node and NPM</id>
+            <phase>package</phase>
+            <goals>
+              <goal>install-node-and-npm</goal>
+            </goals>
+            <configuration>
+              <nodeVersion>v22.12.0</nodeVersion>
+            </configuration>
+          </execution>
+          <execution>
+            <id>package typescript models</id>
+            <phase>package</phase>
+            <goals>
+              <goal>npm</goal>
+            </goals>
+            <configuration>
+              <arguments>pack</arguments>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+
+
     </plugins>
   </build>
 </project>
