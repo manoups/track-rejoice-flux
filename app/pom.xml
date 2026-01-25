@@ -186,6 +186,7 @@
           </execution>
         </executions>
         <configuration>
+          <outputFile>${project.build.directory}/typescript-generator/track-rejoice.d.ts</outputFile>
           <jsonLibrary>jackson2</jsonLibrary>
           <customTypeMappings>
             <customTypeMapping>java.time.LocalDate:string</customTypeMapping>
