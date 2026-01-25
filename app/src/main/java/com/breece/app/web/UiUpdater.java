@@ -3,6 +3,7 @@ package com.breece.app.web;
 import com.breece.app.web.api.UiUpdate;
 import com.breece.content.api.model.Content;
 import com.breece.coreapi.authentication.Sender;
+import com.breece.coreapi.user.WithOwner;
 import com.breece.coreapi.user.api.UserId;
 import com.breece.coreapi.user.api.model.UserProfile;
 import com.breece.sighting.api.model.Sighting;
@@ -20,6 +21,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 
@@ -55,24 +57,24 @@ public class UiUpdater {
         });
     }
 
-    <T> void handleAnyUpdate(Entity<T> entity) {
+    <T extends WithOwner> void handleAnyUpdate(Entity<T> entity) {
         handleAnyUpdate(entity.id().toString(), entity.previous().get(), entity.get(), entity.lastEventIndex(),
                 UiUpdate.Type.valueOf(entity.type().getSimpleName()));
     }
 
-    <T> void handleAnyUpdate(String entityId, T before, T after, Long index, UiUpdate.Type type) {
+    <T extends WithOwner> void handleAnyUpdate(String entityId, T before, T after, Long index, UiUpdate.Type type) {
+        cleanUpClosedSessions();
         Serializer serializer = Fluxzero.get().serializer();
         openSessions.forEach((userId, sessions) -> {
-            sessions.removeIf(session -> !session.isOpen());
-            if (sessions.isEmpty()) {
-                openSessions.remove(userId);
-                return;
-            }
             try {
                 var sender = Sender.createSender(userId);
                 if (sender == null) {
                     log.info("User {} not found. Closing socket sessions.", userId);
                     sessions.forEach(SocketSession::close);
+                    return;
+                }
+                UserId ownerId = Objects.isNull(before) ? after.ownerId() : before.ownerId();
+                if (!sender.isAuthorizedFor(ownerId)) {
                     return;
                 }
                 var b = serializer.filterContent(before, sender);
@@ -95,6 +97,15 @@ public class UiUpdater {
                 }
             } catch (Throwable e) {
                 log.error("Failed to send update to ui (userId: {})", userId, e);
+            }
+        });
+    }
+
+    void cleanUpClosedSessions() {
+        openSessions.forEach((userId, sessions) -> {
+            sessions.removeIf(session -> !session.isOpen());
+            if (sessions.isEmpty()) {
+                openSessions.remove(userId);
             }
         });
     }

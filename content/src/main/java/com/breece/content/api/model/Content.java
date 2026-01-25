@@ -1,5 +1,6 @@
 package com.breece.content.api.model;
 
+import com.breece.coreapi.user.WithOwner;
 import com.breece.sighting.api.model.SightingDetails;
 import com.breece.coreapi.user.api.UserId;
 import io.fluxzero.common.search.Facet;
@@ -21,5 +22,5 @@ public record Content(@EntityId ContentId contentId,
                       @With
                       List<ProposedSighting> proposedSightings,
                       @With @Facet ExtraDetails details, UserId ownerId,
-                      @With boolean online, @NotNull @With Duration duration) {
+                      @With boolean online, @NotNull @With Duration duration) implements WithOwner {
 }

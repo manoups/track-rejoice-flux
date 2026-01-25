@@ -3,7 +3,10 @@ package com.breece.app.web;
 import com.breece.app.web.api.UiUpdate;
 import com.breece.content.api.model.Content;
 import com.breece.coreapi.authentication.AuthenticationUtils;
+import com.breece.coreapi.authentication.Role;
+import com.breece.coreapi.user.api.CreateUser;
 import com.breece.coreapi.user.api.UserId;
+import com.breece.coreapi.user.api.model.UserDetails;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.flipkart.zjsonpatch.JsonPatch;
@@ -38,6 +41,20 @@ public class UiUpdaterTests {
                 .givenWebRequest(openSocket());
     }
 
+    @Test
+    void userFromDifferentSessionDoesNotReceiveUpdates() {
+        testFixture.givenCommands(CreateUser.builder().userId(new UserId("Alice")).details(UserDetails.builder().name("Alice").email("a@b").build()).build())
+                .whenCommandByUser("Alice","../content/create-content.json")
+                .expectNoWebResponses();
+    }
+
+    @Test
+    void adminReceivesUpdates() {
+        testFixture.givenCommands(CreateUser.builder().userId(new UserId("Alice")).details(UserDetails.builder().name("Alice").email("a@b").build()).role(Role.ADMIN).build())
+                .whenCommandByUser("Alice","../content/create-content.json")
+                .expectNoWebResponses();
+    }
+
    /* @AfterEach
     void tearDown() {
         testFixture
@@ -70,19 +87,6 @@ public class UiUpdaterTests {
                 .given(fc -> fc.taskScheduler().executeExpiredTasks()) // send ping
                 .givenElapsedTime(Duration.ofSeconds(25)) // > pingTimeout (default 20s)
                 .given(fc -> fc.taskScheduler().executeExpiredTasks()) // close session
-                .whenCommand("../content/create-content.json")
-                .expectNoWebResponses();
-    }
-
-    @Test
-    @Disabled
-    void userFromDifferentSessionDoesNotReceiveUpdates() {
-        testFixture.withHeader("Authorization", createAuthorizationHeader("other-user"))
-                .givenWebRequest(openSocket())
-                .given(fc -> {
-//                    fc.setSessionId("different-session-id");
-                    return;
-                })
                 .whenCommand("../content/create-content.json")
                 .expectNoWebResponses();
     }
