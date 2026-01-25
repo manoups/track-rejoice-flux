@@ -186,7 +186,8 @@
           </execution>
         </executions>
         <configuration>
-          <outputFile>${project.build.directory}/typescript-generator/track-rejoice.d.ts</outputFile>
+          <outputFile>${project.build.directory}/typescript-generator/track-rejoice.ts</outputFile>
+          <outputFileType>implementationFile</outputFileType>
           <jsonLibrary>jackson2</jsonLibrary>
           <customTypeMappings>
             <customTypeMapping>java.time.LocalDate:string</customTypeMapping>
@@ -200,6 +201,7 @@
           <classPatterns>
             <classPattern>com.breece.**</classPattern>
           </classPatterns>
+          <nonConstEnums>true</nonConstEnums>
           <excludeClassPatterns>
             <excludeClassPattern>**Builder**</excludeClassPattern>
             <excludeClassPattern>**Deserializer</excludeClassPattern>
