@@ -1,6 +1,5 @@
 package com.breece.coreapi.authentication;
 
-import com.breece.coreapi.user.api.UserId;
 import com.breece.coreapi.user.api.model.UserProfile;
 import io.fluxzero.common.MessageType;
 import io.fluxzero.sdk.Fluxzero;
