@@ -1,0 +1,9 @@
+{
+  "name": "@trackrejoice/typescriptmodels",
+  "version": "1.0.0",
+  "types": "track-rejoice.ts",
+  "files": [
+    "track-rejoice.ts",
+    "package.json"
+  ]
+}
