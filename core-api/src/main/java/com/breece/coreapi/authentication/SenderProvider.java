@@ -5,10 +5,9 @@ import io.fluxzero.common.MessageType;
 import io.fluxzero.sdk.Fluxzero;
 import io.fluxzero.sdk.common.HasMessage;
 import io.fluxzero.sdk.common.serialization.DeserializingMessage;
+import io.fluxzero.sdk.modeling.Entity;
 import io.fluxzero.sdk.tracking.handling.authentication.AbstractUserProvider;
 import io.fluxzero.sdk.tracking.handling.authentication.User;
-
-import java.util.Objects;
 
 public class SenderProvider extends AbstractUserProvider {
 
@@ -27,8 +26,10 @@ public class SenderProvider extends AbstractUserProvider {
 
     @Override
     public User getUserById(Object userId) {
-        UserProfile userProfile = Fluxzero.loadAggregate(userId, UserProfile.class).get();
-        return Objects.isNull(userProfile) ? null : Sender.builder().userId(userProfile.userId()).userRole(userProfile.role()).build();
+        return Fluxzero.loadAggregate(userId, UserProfile.class)
+                .mapIfPresent(Entity::get)
+                .map( userProfile -> Sender.builder().userId(userProfile.userId()).userRole(userProfile.role()).build())
+                .orElse(null);
     }
 
     @Override
