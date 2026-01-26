@@ -24,7 +24,6 @@ import java.util.List;
 public class UiUpdaterTests {
     private final TestFixture testFixture = TestFixture.create();
     private final ObjectMapper objectMapper = JacksonSerializer.defaultObjectMapper;
-    private final UiUpdater uiUpdater = new UiUpdater();
 
     private static <T> T extractEntity(ObjectMapper objectMapper, UiUpdate update, Class<T> type) throws Exception {
         JsonNode base = objectMapper.createObjectNode();
@@ -34,8 +33,9 @@ public class UiUpdaterTests {
 
     @BeforeEach
     void setUp() {
-        testFixture.withBean(uiUpdater)
-                .registerHandlers(ContentEndpoint.class, uiUpdater, UiUpdateSocketEndpoint.class)
+        testFixture
+//                .withBean(uiUpdater)
+                .registerHandlers(ContentEndpoint.class, UiUpdateSocketEndpoint.class)
                 .givenCommands("../user/create-user.json")
                 .withHeader("Authorization", createAuthorizationHeader("viewer"))
                 .givenWebRequest(openSocket());
