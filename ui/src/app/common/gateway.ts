@@ -1,4 +1,7 @@
-import {Injectable} from '@angular/core';
+import {ElementRef, Injectable} from '@angular/core';
+import {Handler, HandlerInvoker, HandlerOptions} from './handler';
+import {HandlerRegistration, HandlerRegistry} from './handler-registry';
+import {Observable, of} from 'rxjs';
 
 @Injectable()
 export abstract class Gateway {
