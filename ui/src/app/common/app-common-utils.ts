@@ -1,5 +1,15 @@
-import {ElementRef, Injector} from '@angular/core';
-import {Observable, Subscriber} from 'rxjs';
+import {ElementRef, Injector, ViewContainerRef} from '@angular/core';
+import {Observable, Subscriber, take} from 'rxjs';
+import {RequestOptions} from './request-gateway';
+import {QueryGateway} from './query-gateway';
+import {CommandGateway, CommandOptions} from './command-gateway';
+import {lodash, uuid} from './utils';
+import {defaultModalOptions, ModalOptions, OpenModal} from './modal/modal';
+import {EventGateway} from './event-gateway';
+import {Router} from '@angular/router';
+import {HttpClient, HttpErrorResponse} from '@angular/common/http';
+import {tap} from 'rxjs/operators';
+import {Alert, AlertLevel} from './alerting/status-alert/alert';
 
 export class InjectorProvider {
   static injector: Injector;
@@ -130,6 +140,7 @@ export class AppCommonUtils {
         const splitErrors = (<string>error).split('\n');
         if (splitErrors.length > 1) {
           splitErrors.forEach(e => this.registerError(e));
+          // @ts-ignore
           return;
         }
       } else {

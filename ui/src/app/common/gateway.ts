@@ -15,6 +15,7 @@ export abstract class Gateway {
     });
   }
 
+  // @ts-ignore
   protected tryHandleOnDom(type: string, payload: any, elementRef?: ElementRef<Element>): Observable<any> {
     if (elementRef) {
       const domEvent = new CustomEvent<any>(type, {

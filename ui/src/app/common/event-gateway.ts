@@ -8,7 +8,7 @@ import {HandlerRegistry} from './handler-registry';
 export class EventGateway extends Gateway {
   protected static invokers: Map<string, HandlerInvoker[]> = new Map();
 
-  constructor(protected registry: HandlerRegistry) {
+  constructor(protected override registry: HandlerRegistry) {
     super(EventGateway.invokers, registry);
   }
 

@@ -1,0 +1,14 @@
+<h1>Sightings</h1>
+<div>
+  <label for="term" class="form-label">Search:</label>
+  <select name="term"
+          class="form-select"
+          [(ngModel)]="term" id="term"></select>
+</div>
+<div>
+  @for (sighting of sightings$|async; track sighting.sightingId) {
+
+  } @empty {
+    <div>No sightings yet.</div>
+  }
+</div>

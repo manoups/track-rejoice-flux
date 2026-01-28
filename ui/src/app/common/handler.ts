@@ -1,7 +1,7 @@
 import {ElementRef, OnDestroy, OnInit} from '@angular/core';
-import {HandlerRegistry} from "./handler-registry.service";
 import {InjectorProvider} from './app-common-utils';
 import {View} from './view';
+import {HandlerRegistry} from './handler-registry';
 
 export function Handler() {
   return function <T extends { new(...args: any[]): {} }>(constructor: T) {

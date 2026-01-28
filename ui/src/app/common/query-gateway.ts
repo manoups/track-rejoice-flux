@@ -2,15 +2,15 @@ import {RequestGateway, RequestOptions} from './request-gateway';
 import {HttpClient} from '@angular/common/http';
 import {ElementRef, Injectable} from '@angular/core';
 import {Observable, ReplaySubject, Subject, take} from 'rxjs';
-import {HandlerRegistry} from "./handler-registry.service";
 import {HandlerInvoker, HandlerOptions} from './handler';
 import {AppCommonUtils} from "./app-common-utils";
+import {HandlerRegistry} from './handler-registry';
 
 @Injectable()
 export class QueryGateway extends RequestGateway {
   protected static invokers: Map<string, HandlerInvoker[]> = new Map();
 
-  constructor(protected registry: HandlerRegistry, http: HttpClient) {
+  constructor(protected override registry: HandlerRegistry, http: HttpClient) {
     super(QueryGateway.invokers, registry, http, "get");
   }
 

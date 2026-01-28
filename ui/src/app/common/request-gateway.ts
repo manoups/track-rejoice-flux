@@ -1,19 +1,18 @@
 import {HttpClient} from '@angular/common/http';
 import {Observable, of, ReplaySubject, shareReplay, take} from 'rxjs';
-import moment from "moment/moment";
-import {environment} from '../../environments/environment';
 import {Gateway} from "./gateway";
-import {HandlerRegistry} from "./handler-registry.service";
 import {HandlerInvoker} from './handler';
 import {ElementRef} from '@angular/core';
 import {tap} from 'rxjs/operators';
 import {AppCommonUtils} from './app-common-utils';
+import {environment} from '../../environments/environments';
+import {HandlerRegistry} from './handler-registry';
 
 export abstract class RequestGateway extends Gateway {
   private cache: Map<string, ReplaySubject<any>> = new Map();
 
 
-  protected constructor(invokers: Map<string, HandlerInvoker[]>, protected registry: HandlerRegistry,
+  protected constructor(invokers: Map<string, HandlerInvoker[]>, protected override registry: HandlerRegistry,
                         private http: HttpClient, private method: 'get' | 'post' | 'put' | 'patch' | 'delete' | 'head') {
     super(invokers, registry);
   }
@@ -52,6 +51,7 @@ export abstract class RequestGateway extends Gateway {
     return o;
   }
 
+  // @ts-ignore
   protected tryHandleRequestLocally(type: string, payload: any, options: RequestOptions = {}, elementRef?: ElementRef<Element>): Observable<any> {
     const domResult = this.tryHandleOnDom(type, payload, elementRef);
     if (domResult) {
@@ -95,6 +95,7 @@ export abstract class RequestGateway extends Gateway {
     switch (this.method) {
       case "get":
       case "delete":
+        // @ts-ignore
         return this.http[this.method](url, options);
       default:
         return (<any>this.http[this.method])(url, payload, options);
