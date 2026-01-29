@@ -3,7 +3,7 @@ package proposal;
 import com.breece.content.ContentErrors;
 import com.breece.content.api.model.Content;
 import com.breece.content.api.model.ContentId;
-import com.breece.content.api.model.ProposedSightingId;
+import com.breece.content.api.model.LinkedSightingId;
 import com.breece.content.command.api.*;
 import com.breece.content.query.api.GetContent;
 import com.breece.content.query.api.GetSightingHistoryForContent;
@@ -67,7 +67,7 @@ public class ProposalTest extends TestUtilities {
                 .whenQuery(new GetContent(new ContentId("1")))
                 .expectNoErrors()
                 .expectResult(Objects::nonNull)
-                .mapResult(Content::proposedSightings)
+                .mapResult(Content::linkedSightings)
                 .expectResult(List::isEmpty);
     }
 
@@ -126,20 +126,20 @@ public class ProposalTest extends TestUtilities {
             testFixture.whenQuery(new GetContent(new ContentId("1")))
                     .expectNoErrors()
                     .expectResult(Objects::nonNull)
-                    .mapResult(Content::proposedSightings)
+                    .mapResult(Content::linkedSightings)
                     .expectResult(hasSize(1))
                     .andThen()
                     .givenCommands("accept-proposal.json")
                     .whenQuery(new GetContent(new ContentId("1")))
                     .expectNoErrors()
                     .expectResult(Objects::nonNull)
-                    .mapResult(Content::proposedSightings)
+                    .mapResult(Content::linkedSightings)
                     .expectResult(List::isEmpty);
         }
 
         @Test
         void givenProposal_whenNonExistentProposalRejected_thenError() {
-            testFixture.whenCommand(new RemoveMemberProposal(new ProposedSightingId("2")))
+            testFixture.whenCommand(new RemoveMemberProposal(new LinkedSightingId("2")))
                     .expectError(ProposedSightingErrors.notFound);
         }
 
@@ -184,7 +184,7 @@ public class ProposalTest extends TestUtilities {
             testFixture.whenQuery(new GetContent(new ContentId("1")))
                     .expectNoErrors()
                     .expectResult(Objects::nonNull)
-                    .mapResult(Content::proposedSightings)
+                    .mapResult(Content::linkedSightings)
                     .expectResult(hasSize(1));
         }
 
@@ -203,7 +203,7 @@ public class ProposalTest extends TestUtilities {
                     .whenQuery(new GetContent(new ContentId("1")))
                     .expectNoErrors()
                     .expectResult(Objects::nonNull)
-                    .mapResult(Content::proposedSightings)
+                    .mapResult(Content::linkedSightings)
                     .expectResult(List::isEmpty);
         }
 
@@ -232,7 +232,7 @@ public class ProposalTest extends TestUtilities {
                     .whenQuery(new GetContent(new ContentId("1")))
                     .expectNoErrors()
                     .expectResult(Objects::nonNull)
-                    .mapResult(Content::proposedSightings)
+                    .mapResult(Content::linkedSightings)
                     .expectResult(List::isEmpty);
         }
 

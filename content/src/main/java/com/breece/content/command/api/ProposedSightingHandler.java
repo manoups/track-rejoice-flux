@@ -10,6 +10,6 @@ import org.springframework.stereotype.Component;
 public class ProposedSightingHandler {
     @HandleEvent
     void on(AcceptProposal event) {
-        Fluxzero.sendAndForgetCommand(new RemoveMemberProposal(event.proposedSightingId()));
+        Fluxzero.sendAndForgetCommand(new RemoveMemberProposal(event.linkedSightingId()));
     }
 }

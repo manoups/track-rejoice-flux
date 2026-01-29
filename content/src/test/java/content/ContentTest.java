@@ -57,7 +57,8 @@ class ContentTest extends TestUtilities {
     void deleteContentNonOwner() {
         testFixture.givenCommandsByUser("viewer","create-content.json")
                 .whenCommandByUser("user2","delete-content.json")
-                .expectExceptionalResult(ContentErrors.unauthorized);
+                .expectExceptionalResult(ContentErrors.unauthorized)
+                .expectError((e) -> e.getMessage().equals(ContentErrors.unauthorized.getMessage()));
     }
 
     @Nested

@@ -3,8 +3,8 @@ package com.breece.content.command.api;
 
 import com.breece.content.api.model.Content;
 import com.breece.content.api.model.ContentId;
-import com.breece.content.api.model.ProposedSighting;
-import com.breece.content.api.model.ProposedSightingId;
+import com.breece.content.api.model.LinkedSighting;
+import com.breece.content.api.model.LinkedSightingId;
 import com.breece.content.api.SightingContentBridge;
 import com.breece.sighting.api.SightingErrors;
 import com.breece.sighting.api.model.Sighting;
@@ -18,7 +18,7 @@ import io.fluxzero.sdk.tracking.handling.authentication.RequiresUser;
 import jakarta.validation.constraints.NotNull;
 
 @RequiresUser
-public record CreateProposal(ContentId contentId, @NotNull SightingId sightingId, @NotNull ProposedSightingId proposedSightingId, @NotNull SightingDetails sightingDetails) implements ContentInteract, SightingContentBridge {
+public record CreateProposal(ContentId contentId, @NotNull SightingId sightingId, @NotNull LinkedSightingId linkedSightingId, @NotNull SightingDetails sightingDetails) implements ContentInteract, SightingContentBridge {
     @AssertLegal
     void assertSightingExists() {
         if (!Fluxzero.loadAggregate(sightingId).isPresent()) {
@@ -36,7 +36,7 @@ public record CreateProposal(ContentId contentId, @NotNull SightingId sightingId
 
     @AssertLegal
     void assertUnique(Content content) {
-        if (content.proposedSightings().stream().anyMatch(p -> p.sightingId().equals(sightingId))) {
+        if (content.linkedSightings().stream().anyMatch(p -> p.sightingId().equals(sightingId))) {
             throw SightingErrors.alreadyProposed;
         }
     }
@@ -49,7 +49,7 @@ public record CreateProposal(ContentId contentId, @NotNull SightingId sightingId
     }
 
     @Apply
-    ProposedSighting propose() {
-        return new ProposedSighting(proposedSightingId, sightingId, sightingDetails);
+    LinkedSighting propose() {
+        return new LinkedSighting(linkedSightingId, sightingId, sightingDetails);
     }
 }

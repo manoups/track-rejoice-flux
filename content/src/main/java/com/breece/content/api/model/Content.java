@@ -20,7 +20,7 @@ public record Content(@EntityId ContentId contentId,
                       SightingDetails lastConfirmedSighting,
                       @Member
                       @With
-                      List<ProposedSighting> proposedSightings,
+                      List<LinkedSighting> linkedSightings,
                       @With @Facet ExtraDetails details, UserId ownerId,
                       @With boolean online, @NotNull @With Duration duration) implements WithOwner {
 }

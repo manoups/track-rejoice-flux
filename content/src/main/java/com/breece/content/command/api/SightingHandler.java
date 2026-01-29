@@ -27,7 +27,7 @@ public class SightingHandler {
                 .map(contentId -> Fluxzero.loadAggregate(contentId, Content.class))
                 .filter(Entity::isPresent)
                 .map(Entity::get)
-                .flatMap(content -> content.proposedSightings().stream().filter(p -> Objects.equals(p.sightingId(), event.sightingId())))
-                .forEach(proposal -> Fluxzero.sendAndForgetCommand(new RemoveMemberProposal(proposal.proposedSightingId())));
+                .flatMap(content -> content.linkedSightings().stream().filter(p -> Objects.equals(p.sightingId(), event.sightingId())))
+                .forEach(proposal -> Fluxzero.sendAndForgetCommand(new RemoveMemberProposal(proposal.linkedSightingId())));
     }
 }

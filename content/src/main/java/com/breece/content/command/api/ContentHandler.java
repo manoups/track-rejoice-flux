@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 public class ContentHandler {
     @HandleEvent
     void searchAndRemoveProposals(ClaimSighting event) {
-        Fluxzero.loadAggregate(event.contentId()).get().proposedSightings().stream().filter(ps -> ps.sightingId().equals(event.sightingId()))
-                .findFirst().ifPresent(ps -> Fluxzero.sendAndForgetCommand(new RemoveMemberProposal(ps.proposedSightingId())));
+        Fluxzero.loadAggregate(event.contentId()).get().linkedSightings().stream().filter(ps -> ps.sightingId().equals(event.sightingId()))
+                .findFirst().ifPresent(ps -> Fluxzero.sendAndForgetCommand(new RemoveMemberProposal(ps.linkedSightingId())));
     }
 }
