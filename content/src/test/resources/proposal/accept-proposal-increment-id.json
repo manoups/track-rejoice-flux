@@ -1,0 +1,11 @@
+{
+  "@class": "com.breece.content.command.api.AcceptProposal",
+  "linkedSightingId": "2",
+  "contentId": "1",
+  "sightingDetails": {
+    "@class": "com.breece.coreapi.sighting.model.SightingDetails",
+    "lat": 123.456,
+    "lng": 78.901
+  },
+  "sightingId": "1"
+}

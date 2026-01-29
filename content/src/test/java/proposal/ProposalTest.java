@@ -108,6 +108,16 @@ public class ProposalTest extends TestUtilities {
     }
 
     @Test
+    void givenContent_whenAcceptsDifferentProposal_thenError() {
+        testFixture.givenCommandsByUser("viewer", "../sighting/create-sighting.json", "../content/create-content.json")
+                .givenCommands("../content/publish-content.json")
+                .givenCommandsByUser("viewer", "create-proposal.json")
+                .whenCommandByUser("viewer", "accept-proposal-increment-id.json")
+                .expectExceptionalResult(SightingErrors.notLinkedToContent)
+                .expectError((e) -> e.getMessage().equals(SightingErrors.notLinkedToContent.getMessage()));
+    }
+
+    @Test
     void givenClaim_whenSameProposal_thenError() {
         testFixture.givenCommands("../sighting/create-sighting.json", "../content/create-content.json", "../content/publish-content.json", "../sighting/claim-sighting.json")
                 .whenCommand("create-proposal.json")
