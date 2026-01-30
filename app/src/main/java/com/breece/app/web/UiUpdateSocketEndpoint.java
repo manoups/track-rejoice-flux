@@ -59,7 +59,7 @@ public class UiUpdateSocketEndpoint {
                 return;
             }
             UserId ownerId = Objects.isNull(before) ? after.ownerId() : before.ownerId();
-            if (!sender.isAuthorizedFor(ownerId)) {
+            if (sender.nonAuthorizedFor(ownerId)) {
                 return;
             }
             var b = serializer.filterContent(before, sender);

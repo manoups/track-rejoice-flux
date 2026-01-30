@@ -1,21 +1,23 @@
-package proposal;
+package com.breece.proposal;
 
 import com.breece.content.ContentErrors;
 import com.breece.content.api.model.Content;
 import com.breece.content.api.model.ContentId;
-import com.breece.content.api.model.LinkedSightingId;
-import com.breece.content.command.api.*;
 import com.breece.content.query.api.GetContent;
 import com.breece.content.query.api.GetSightingHistoryForContent;
 import com.breece.coreapi.util.GeometryUtil;
+import com.breece.proposal.api.*;
+import com.breece.proposal.api.model.LinkedSightingId;
+import com.breece.proposal.api.model.LinkedSightingStatus;
+import com.breece.util.TestUtilities;
 import com.breece.sighting.api.SightingErrors;
+import com.breece.sighting.api.model.SightingId;
 import io.fluxzero.sdk.test.TestFixture;
 import io.fluxzero.sdk.tracking.handling.IllegalCommandException;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
-import util.TestUtilities;
 
 import java.util.List;
 import java.util.Objects;
@@ -24,7 +26,7 @@ import static org.hamcrest.Matchers.hasSize;
 
 @Slf4j
 public class ProposalTest extends TestUtilities {
-    final TestFixture testFixture = TestFixture.create(ProposedSightingHandler.class, SightingHandler.class, ContentHandler.class).givenCommands(createUserFromProfile(viewer), createUserFromProfile(user2), createUserFromProfile(Alice));
+    final TestFixture testFixture = TestFixture.create(LinkedSightingHandler.class, SightingHandler.class).givenCommands(createUserFromProfile(viewer), createUserFromProfile(user2), createUserFromProfile(Alice));
 
     @Test
     void givenNoContent_whenProposalCreated_thenError() {
@@ -64,10 +66,9 @@ public class ProposalTest extends TestUtilities {
     void givenRejectProposal_whenQueryProposedSightings_thenEmptyList() {
         testFixture.givenCommands("../sighting/create-sighting.json", "../content/create-content.json",
                         "../content/publish-content.json", "create-proposal.json", "reject-proposal.json")
-                .whenQuery(new GetContent(new ContentId("1")))
+                .whenQuery(new GetLinkedSightingsByContentIdAndStatuses(new ContentId("1"), List.of(LinkedSightingStatus.CREATED)))
                 .expectNoErrors()
                 .expectResult(Objects::nonNull)
-                .mapResult(Content::linkedSightings)
                 .expectResult(List::isEmpty);
     }
 
@@ -136,21 +137,19 @@ public class ProposalTest extends TestUtilities {
             testFixture.whenQuery(new GetContent(new ContentId("1")))
                     .expectNoErrors()
                     .expectResult(Objects::nonNull)
-                    .mapResult(Content::linkedSightings)
+                    .andThen()
+                    .whenQuery(new GetLinkedSightingsByContentIdAndStatuses(new ContentId("1"), List.of(LinkedSightingStatus.CREATED)))
                     .expectResult(hasSize(1))
                     .andThen()
                     .givenCommands("accept-proposal.json")
-                    .whenQuery(new GetContent(new ContentId("1")))
-                    .expectNoErrors()
-                    .expectResult(Objects::nonNull)
-                    .mapResult(Content::linkedSightings)
+                    .whenQuery(new GetLinkedSightingsByContentIdAndStatuses(new ContentId("1"), List.of(LinkedSightingStatus.CREATED)))
                     .expectResult(List::isEmpty);
         }
 
         @Test
         void givenProposal_whenNonExistentProposalRejected_thenError() {
-            testFixture.whenCommand(new RemoveMemberProposal(new LinkedSightingId("2")))
-                    .expectError(ProposedSightingErrors.notFound);
+            testFixture.whenCommand(new DeleteLinkedProposal(new LinkedSightingId(new ContentId("1"), new SightingId("2"))))
+                    .expectError(LinkedSightingErrors.notFound);
         }
 
         @Test
@@ -191,10 +190,9 @@ public class ProposalTest extends TestUtilities {
 
         @Test
         void givenSighting_whenCreateProposal_thenContentShouldContainTheProposal() {
-            testFixture.whenQuery(new GetContent(new ContentId("1")))
+            testFixture.whenQuery(new GetLinkedSightingsByContentIdAndStatuses(new ContentId("1"), List.of(LinkedSightingStatus.CREATED)))
                     .expectNoErrors()
                     .expectResult(Objects::nonNull)
-                    .mapResult(Content::linkedSightings)
                     .expectResult(hasSize(1));
         }
 
@@ -208,12 +206,11 @@ public class ProposalTest extends TestUtilities {
             testFixture.whenCommand("../sighting/delete-sighting.json")
                     .expectNoErrors()
                     .expectEvents("../sighting/delete-sighting.json")
-                    .expectCommands(RemoveMemberProposal.class)
+                    .expectCommands(DeleteLinkedProposal.class)
                     .andThen()
-                    .whenQuery(new GetContent(new ContentId("1")))
+                    .whenQuery(new GetLinkedSightingsByContentIdAndStatuses(new ContentId("1"), List.of(LinkedSightingStatus.CREATED)))
                     .expectNoErrors()
                     .expectResult(Objects::nonNull)
-                    .mapResult(Content::linkedSightings)
                     .expectResult(List::isEmpty);
         }
 
@@ -237,13 +234,12 @@ public class ProposalTest extends TestUtilities {
             testFixture
                     .whenCommand("../sighting/claim-sighting.json")
                     .expectNoErrors()
-                    .expectCommands(RemoveMemberProposal.class)
+                    .expectCommands(CreateProposal.class, AcceptProposal.class)
                     .andThen()
-                    .whenQuery(new GetContent(new ContentId("1")))
+                    .whenQuery(new GetLinkedSightingsByContentIdAndStatuses(new ContentId("1"), List.of(LinkedSightingStatus.ACCEPTED)))
                     .expectNoErrors()
                     .expectResult(Objects::nonNull)
-                    .mapResult(Content::linkedSightings)
-                    .expectResult(List::isEmpty);
+                    .expectResult(hasSize(1));
         }
 
         @Test

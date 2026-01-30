@@ -1,11 +1,12 @@
-package com.breece.content.command.api;
+package com.breece.proposal.api.model;
 
-import com.breece.content.api.model.LinkedSightingId;
 import io.fluxzero.sdk.Fluxzero;
+import io.fluxzero.sdk.publishing.routing.RoutingKey;
 import io.fluxzero.sdk.tracking.handling.HandleCommand;
 import jakarta.validation.constraints.NotNull;
 
 public interface LinkedSightingCommand {
+    @RoutingKey
     @NotNull
     LinkedSightingId linkedSightingId();
 

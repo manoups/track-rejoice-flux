@@ -1,6 +1,6 @@
 package com.breece.sighting.command.api;
 
-import com.breece.sighting.api.model.SightingDetails;
+import com.breece.coreapi.common.SightingDetails;
 import com.breece.sighting.api.model.SightingId;
 import io.fluxzero.sdk.tracking.handling.authentication.RequiresUser;
 

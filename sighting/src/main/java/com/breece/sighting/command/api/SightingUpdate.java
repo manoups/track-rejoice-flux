@@ -8,7 +8,7 @@ import io.fluxzero.sdk.modeling.AssertLegal;
 public interface SightingUpdate extends SightingInteract {
     @AssertLegal
     default void assertAuthorized(Sighting sighting, Sender sender) {
-        if (!sender.isAuthorizedFor(sighting.source())) {
+        if (sender.nonAuthorizedFor(sighting.source())) {
             throw SightingErrors.unauthorized;
         }
     }

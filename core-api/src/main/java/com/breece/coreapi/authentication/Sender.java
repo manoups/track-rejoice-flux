@@ -59,4 +59,8 @@ public record Sender(@NonNull UserId userId, Role userRole) implements User {
     public boolean isAuthorizedFor(UserId userId) {
         return isAdmin() || Objects.equals(this.userId, userId);
     }
+
+    public boolean nonAuthorizedFor(UserId userId) {
+        return !isAuthorizedFor(userId);
+    }
 }

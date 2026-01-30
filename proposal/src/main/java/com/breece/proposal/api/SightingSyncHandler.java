@@ -1,6 +1,5 @@
-package com.breece.geo;
+package com.breece.proposal.api;
 
-import com.breece.content.command.api.LinkSightingToContent;
 import com.breece.coreapi.util.GeometryUtil;
 import com.breece.geo.model.GeoJsonPost;
 import com.breece.geo.repositories.GeoJsonPostRepository;

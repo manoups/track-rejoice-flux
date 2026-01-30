@@ -11,7 +11,7 @@ import com.breece.content.command.api.CreateContent;
 import com.breece.content.command.api.TakeContentOffline;
 import com.breece.content.query.api.GetContentStats;
 import com.breece.content.query.api.GetContents;
-import com.breece.sighting.api.model.SightingDetails;
+import com.breece.coreapi.common.SightingDetails;
 import io.fluxzero.sdk.test.TestFixture;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;

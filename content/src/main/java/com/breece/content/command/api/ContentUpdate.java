@@ -18,7 +18,7 @@ public interface ContentUpdate extends ContentCommand {
 
     @AssertLegal
     default void assertAuthorized(Content content, Sender sender) {
-        if (!sender.isAuthorizedFor(content.ownerId())) {
+        if (sender.nonAuthorizedFor(content.ownerId())) {
             throw ContentErrors.unauthorized;
         }
     }
