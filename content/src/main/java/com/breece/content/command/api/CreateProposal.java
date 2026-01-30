@@ -18,19 +18,12 @@ import io.fluxzero.sdk.tracking.handling.authentication.RequiresUser;
 import jakarta.validation.constraints.NotNull;
 
 @RequiresUser
-public record CreateProposal(ContentId contentId, @NotNull SightingId sightingId, @NotNull LinkedSightingId linkedSightingId, @NotNull SightingDetails sightingDetails) implements ContentInteract, SightingContentBridge {
+public record CreateProposal(ContentId contentId, @NotNull SightingId sightingId, @NotNull LinkedSightingId linkedSightingId, @NotNull SightingDetails sightingDetails) implements
+        ContentInteract, SightingContentBridge {
     @AssertLegal
     void assertSightingExists() {
         if (!Fluxzero.loadAggregate(sightingId).isPresent()) {
             throw SightingErrors.notFound;
-        }
-    }
-
-    @AssertLegal
-    void assertOwner(Sender sender) {
-        Sighting sighting = Fluxzero.loadAggregate(sightingId).get();
-        if (!sender.isAuthorizedFor(sighting.source())) {
-            throw SightingErrors.notOwner;
         }
     }
 

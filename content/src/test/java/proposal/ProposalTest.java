@@ -76,7 +76,7 @@ public class ProposalTest extends TestUtilities {
         testFixture.givenCommandsByUser("viewer", "../content/create-content.json")
                 .givenCommandsByUser("user2", "../sighting/create-sighting.json")
                 .givenCommands("../content/publish-content.json")
-                .whenCommandByUser("user2", "create-proposal.json")
+                .whenCommandByUser("user2", "create-proposal-facade.json")
                 .expectNoErrors()
                 .expectEvents("create-proposal.json");
     }

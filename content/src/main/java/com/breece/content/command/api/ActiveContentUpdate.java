@@ -4,7 +4,7 @@ import com.breece.content.api.model.Content;
 import com.breece.content.ContentErrors;
 import io.fluxzero.sdk.modeling.AssertLegal;
 
-public interface ActiveContentUpdate extends ContentUpdateForOwner {
+public interface ActiveContentUpdate extends ContentUpdate {
     @AssertLegal
     default void assertActive(Content content) {
         if (!content.online()) {

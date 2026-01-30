@@ -10,7 +10,7 @@ import jakarta.validation.constraints.NotNull;
 import java.time.Duration;
 
 @RequiresRole(Role.ADMIN)
-public record PublishContent(@NotNull ContentId contentId, Duration duration) implements ContentUpdateForOwner {
+public record PublishContent(@NotNull ContentId contentId, Duration duration) implements ContentUpdate {
 
     @Apply
     Content publish(Content content) {
