@@ -1,4 +1,4 @@
-package com.breece.util;
+package util;
 
 import com.breece.coreapi.user.api.CreateUser;
 import com.breece.coreapi.user.api.UserId;

@@ -1,4 +1,4 @@
-package com.breece.sighting;
+package sighting;
 
 import com.breece.content.ContentErrors;
 import com.breece.content.api.model.ContentId;
@@ -11,7 +11,7 @@ import com.breece.sighting.api.model.SightingId;
 import com.breece.sighting.command.api.DeleteSighting;
 import com.breece.sighting.command.api.LinkSightingBackToContent;
 import com.breece.sighting.query.api.GetSightings;
-import com.breece.util.TestUtilities;
+import util.TestUtilities;
 import io.fluxzero.sdk.test.TestFixture;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;

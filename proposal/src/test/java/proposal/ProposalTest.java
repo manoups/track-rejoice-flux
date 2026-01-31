@@ -1,4 +1,4 @@
-package com.breece.proposal;
+package proposal;
 
 import com.breece.content.ContentErrors;
 import com.breece.content.api.model.Content;
@@ -9,7 +9,7 @@ import com.breece.coreapi.util.GeometryUtil;
 import com.breece.proposal.api.*;
 import com.breece.proposal.api.model.LinkedSightingId;
 import com.breece.proposal.api.model.LinkedSightingStatus;
-import com.breece.util.TestUtilities;
+import util.TestUtilities;
 import com.breece.sighting.api.SightingErrors;
 import com.breece.sighting.api.model.SightingId;
 import io.fluxzero.sdk.test.TestFixture;

@@ -1,5 +1,5 @@
 {
-  "@class": "com.breece.content.command.api.CreateProposal",
+  "@class": "com.breece.proposal.api.CreateProposal",
   "sightingId": "1",
   "linkedSightingId": "1",
   "sightingDetails": {

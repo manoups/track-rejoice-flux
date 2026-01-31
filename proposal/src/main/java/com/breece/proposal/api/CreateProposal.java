@@ -1,6 +1,8 @@
 package com.breece.proposal.api;
 
 
+import com.breece.content.ContentErrors;
+import com.breece.content.api.model.Content;
 import com.breece.content.api.model.ContentId;
 import com.breece.coreapi.authentication.Sender;
 import com.breece.coreapi.common.SightingDetails;
@@ -13,10 +15,14 @@ import com.breece.sighting.api.SightingErrors;
 import com.breece.sighting.api.model.SightingId;
 import io.fluxzero.sdk.Fluxzero;
 import io.fluxzero.sdk.modeling.AssertLegal;
+import io.fluxzero.sdk.modeling.Entity;
 import io.fluxzero.sdk.persisting.eventsourcing.Apply;
+import io.fluxzero.sdk.tracking.handling.authentication.UnauthorizedException;
 import jakarta.validation.constraints.NotNull;
 
-public record CreateProposal(@NotNull ContentId contentId, @NotNull UserId targetUser, @NotNull SightingId sightingId, @NotNull UserId sourceUser, @NotNull LinkedSightingId linkedSightingId, @NotNull SightingDetails sightingDetails, boolean removeAfterMatching) implements
+import java.util.Objects;
+
+public record CreateProposal(@NotNull ContentId contentId, @NotNull UserId seeker, @NotNull SightingId sightingId, @NotNull LinkedSightingId linkedSightingId, @NotNull SightingDetails sightingDetails, boolean removeAfterMatching) implements
         LinkedSightingCommand, SightingContentBridge {
     @AssertLegal
     void assertSightingExists() {
@@ -30,8 +36,30 @@ public record CreateProposal(@NotNull ContentId contentId, @NotNull UserId targe
         throw LinkedSightingErrors.alreadyExists;
     }
 
+    @AssertLegal
+    void assertCorrectSeeker() {
+        Entity<Content> contentEntity = Fluxzero.loadAggregate(contentId);
+        if (!contentEntity.isPresent()) {
+            throw ContentErrors.notFound;
+        }
+        Sender sender = Sender.createSender(seeker);
+        if(Objects.isNull(sender)) {
+            throw new UnauthorizedException("User not found");
+        }
+        if (sender.nonAuthorizedFor(contentEntity.get().ownerId())) {
+            throw LinkedSightingErrors.unauthorized;
+        }
+    }
+
+    @AssertLegal
+    void assertCorrectId(LinkedSighting linkedSighting) {
+        if (!linkedSightingId.getId().equals(contentId+"-"+sightingId)) {
+            throw LinkedSightingErrors.malformedKey;
+        }
+    }
+
     @Apply
     LinkedSighting propose(Sender sender) {
-        return new LinkedSighting(new LinkedSightingId(contentId, sightingId), sender.userId(), targetUser, sightingId, contentId, sightingDetails, LinkedSightingStatus.CREATED);
+        return new LinkedSighting(linkedSightingId, sender.userId(), seeker, sightingId, contentId, sightingDetails, LinkedSightingStatus.CREATED);
     }
 }

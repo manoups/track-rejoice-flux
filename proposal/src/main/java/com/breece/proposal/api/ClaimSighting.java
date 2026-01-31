@@ -16,6 +16,6 @@ public record ClaimSighting(@NotNull ContentId contentId, @NotNull SightingId si
 
     @InterceptApply
     CreateProposal interceptApply(Sender sender) {
-        return new CreateProposal(contentId, sender.userId(), sightingId, sender.userId(), linkedSightingId, sightingDetails, removeAfterMatching);
+        return new CreateProposal(contentId, sender.userId(), sightingId, new LinkedSightingId(contentId, sightingId), sightingDetails, removeAfterMatching);
     }
 }
