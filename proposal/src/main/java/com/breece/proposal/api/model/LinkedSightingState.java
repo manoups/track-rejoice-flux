@@ -22,7 +22,7 @@ import lombok.extern.slf4j.Slf4j;
 @Stateful
 @Consumer(name = "linked-sighting-state-consumer", ignoreSegment = true)
 @Slf4j
-public record LinkedSightingState(@EntityId @Association LinkedSightingId linkedSightingId, @Association SightingId sightingId,
+public record LinkedSightingState(@EntityId @Association LinkedSightingId linkedSightingId, SightingId sightingId,
                                   @With LinkedSightingStatus status) {
     @HandleEvent
     static LinkedSightingState on(CreateProposal event, Sender sender) {
