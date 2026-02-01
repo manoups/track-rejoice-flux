@@ -7,10 +7,7 @@ import io.fluxzero.sdk.modeling.Aggregate;
 import io.fluxzero.sdk.modeling.EntityId;
 import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
-import lombok.Singular;
 import lombok.With;
-
-import java.util.List;
 
 @Aggregate(searchable = true)
 @Builder(toBuilder = true)
