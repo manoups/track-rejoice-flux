@@ -28,9 +28,11 @@ public class LinkedSightingHandler {
     }
 
     @HandleEvent
-    void on(AcceptProposal event) {
-        LinkedSighting linkedSighting = Fluxzero.loadAggregate(event.linkedSightingId()).get();
+    void on(AcceptProposal event, LinkedSighting linkedSighting) {
         Fluxzero.sendAndForgetCommand(new UpdateLastSeenPosition(linkedSighting.contentId(), linkedSighting.sightingDetails()));
+        if(Fluxzero.loadAggregate(linkedSighting.sightingId()).get().removeAfterMatching()) {
+            Fluxzero.sendAndForgetCommand(new DeleteSighting(linkedSighting.sightingId()));
+        }
     }
 
     @HandleEvent

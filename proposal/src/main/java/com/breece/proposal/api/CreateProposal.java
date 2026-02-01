@@ -23,7 +23,7 @@ import jakarta.validation.constraints.NotNull;
 
 import java.util.Objects;
 
-public record CreateProposal(@NotNull ContentId contentId, @NotNull UserId seeker, @NotNull SightingId sightingId, @NotNull LinkedSightingId linkedSightingId, @NotNull SightingDetails sightingDetails, boolean removeAfterMatching) implements
+public record CreateProposal(@NotNull ContentId contentId, @NotNull UserId seeker, @NotNull SightingId sightingId, @NotNull LinkedSightingId linkedSightingId, @NotNull SightingDetails sightingDetails) implements
         LinkedSightingCommand, SightingContentBridge {
     @AssertLegal
     void assertNew(LinkedSighting linkedSighting) {
@@ -59,9 +59,6 @@ public record CreateProposal(@NotNull ContentId contentId, @NotNull UserId seeke
             throw SightingErrors.notFound;
         }
         if (!sighting.details().equals(sightingDetails)) {
-            throw SightingErrors.sightingMismatch;
-        }
-        if (removeAfterMatching != sighting.removeAfterMatching()) {
             throw SightingErrors.sightingMismatch;
         }
     }

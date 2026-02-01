@@ -68,7 +68,7 @@ public class SightingTest extends TestUtilities {
                     .givenCommands(new PublishContent(contentId, Duration.ofDays(90)))
                     .whenCommandByUser("user2", new ClaimSighting(contentId, sightingId, new SightingDetails(
                             new BigDecimal("78.901"), new BigDecimal("123.456")
-                    ), false, new LinkedSightingId(contentId, sightingId)))
+                    ), new LinkedSightingId(contentId, sightingId)))
                     .expectNoErrors();
         }
 
@@ -79,7 +79,7 @@ public class SightingTest extends TestUtilities {
             testFixture
                     .whenCommand(new ClaimSighting(contentId, sightingId, new SightingDetails(
                             new BigDecimal("123.456"), new BigDecimal("78.901")
-                    ),false, new LinkedSightingId(contentId, sightingId)))
+                    ), new LinkedSightingId(contentId, sightingId)))
                     .expectExceptionalResult(SightingErrors.sightingMismatch)
                     .expectError((e) -> e.getMessage().equals(SightingErrors.sightingMismatch.getMessage()));
         }
@@ -91,7 +91,7 @@ public class SightingTest extends TestUtilities {
             testFixture
                     .whenCommand(new ClaimSighting(contentId, sightingId, new SightingDetails(
                             new BigDecimal("78.901000"), new BigDecimal("123.456000")),
-                            false, new LinkedSightingId(contentId, sightingId)))
+                            new LinkedSightingId(contentId, sightingId)))
                     .expectNoErrors();
         }
     }
@@ -115,7 +115,7 @@ public class SightingTest extends TestUtilities {
                     .givenCommands(new PublishContent(contentId, Duration.ofDays(90)))
                     .whenCommandByUser("user2", new ClaimSighting(contentId, sightingId, new SightingDetails(
                             new BigDecimal("78.901"), new BigDecimal("123.456")
-                    ), true, new LinkedSightingId(contentId, sightingId)))
+                    ), new LinkedSightingId(contentId, sightingId)))
                     .expectExceptionalResult(SightingErrors.notFound)
                     .expectError((e) -> e.getMessage().equals(SightingErrors.notFound.getMessage()));
         }

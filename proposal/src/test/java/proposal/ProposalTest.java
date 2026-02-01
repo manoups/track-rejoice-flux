@@ -56,7 +56,7 @@ public class ProposalTest extends TestUtilities {
         testFixture.givenCommandsByUser("viewer", "../content/create-content.json", "../sighting/create-sighting.json")
                 .givenCommands("../content/publish-content.json")
                 .whenCommand(new CreateProposal(new ContentId("1"), new UserId("viewer"), new SightingId("1"), new LinkedSightingId(new ContentId("3"), new SightingId("2")),
-                        new SightingDetails(BigDecimal.ZERO, BigDecimal.ZERO), false))
+                        new SightingDetails(BigDecimal.ZERO, BigDecimal.ZERO)))
                 .expectError(LinkedSightingErrors.malformedKey)
                 .expectExceptionalResult((e) -> e.getMessage().equals(LinkedSightingErrors.malformedKey.getMessage()));
     }
