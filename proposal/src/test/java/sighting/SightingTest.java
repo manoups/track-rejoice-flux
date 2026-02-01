@@ -27,7 +27,7 @@ import static org.hamcrest.Matchers.hasSize;
 
 public class SightingTest extends TestUtilities {
 
-    final TestFixture testFixture = TestFixture.create(LinkedSightingState.class)
+    final TestFixture testFixture = TestFixture.createAsync(LinkedSightingState.class)
             .givenCommands(createUserFromProfile(viewer), createUserFromProfile(user2), createUserFromProfile(Alice));
 
 
@@ -44,7 +44,7 @@ public class SightingTest extends TestUtilities {
             testFixture
                     .whenCommandByUser("viewer", "claim-sighting.json")
                     .expectNoErrors()
-                    .expectOnlyEvents(CreateProposal.class, AcceptProposal.class, UpdateLastSeenPosition.class)
+                    .expectOnlyEvents(CreateProposal.class, AcceptProposal.class, UpdateLastSeenPosition.class, UpdateStatusProjection.class)
                     .expectCommands(AcceptProposal.class, UpdateLastSeenPosition.class)
                     .andThen()
                     .whenQuery(new GetLinkedSightingsBySightingIdAndStatuses(new SightingId("1"), List.of(LinkedSightingStatus.ACCEPTED)))
@@ -149,7 +149,7 @@ public class SightingTest extends TestUtilities {
         void givenSightingClaimedWithRemovalEnabled_whenGetSightings_thenNoResults() {
             testFixture.whenCommandByUser("viewer", "claim-sighting-removal.json")
                     .expectNoErrors()
-                    .expectOnlyEvents(DeleteSighting.class, CreateProposal.class, AcceptProposal.class, UpdateLastSeenPosition.class)
+                    .expectOnlyEvents(DeleteSighting.class, CreateProposal.class, AcceptProposal.class, UpdateLastSeenPosition.class, UpdateStatusProjection.class)
                     .andThen()
                     .whenQuery(new GetSightings())
                     .expectResult(List::isEmpty);

@@ -11,6 +11,7 @@ import com.breece.coreapi.common.SightingDetails;
 import com.breece.coreapi.user.api.UserId;
 import com.breece.coreapi.util.GeometryUtil;
 import com.breece.proposal.api.*;
+import com.breece.proposal.api.model.LinkedSighting;
 import com.breece.proposal.api.model.LinkedSightingId;
 import com.breece.proposal.api.model.LinkedSightingState;
 import com.breece.proposal.api.model.LinkedSightingStatus;
@@ -37,7 +38,7 @@ import static org.hamcrest.Matchers.hasSize;
 
 @Slf4j
 public class ProposalTest extends TestUtilities {
-    final TestFixture testFixture = TestFixture.create(LinkedSightingState.class).givenCommands(createUserFromProfile(viewer), createUserFromProfile(user2), createUserFromProfile(Alice));
+    final TestFixture testFixture = TestFixture.createAsync(LinkedSightingState.class).givenCommands(createUserFromProfile(viewer), createUserFromProfile(user2), createUserFromProfile(Alice));
 
     @Test
     void givenNoContent_whenProposalCreated_thenError() {
@@ -100,8 +101,8 @@ public class ProposalTest extends TestUtilities {
                 .givenCommands("../content/publish-content.json")
                 .whenCommandByUser("viewer", "create-proposal.json")
                 .expectNoErrors()
-                .expectOnlyCommands(AcceptProposal.class, UpdateLastSeenPosition.class)
-                .expectEvents("create-proposal.json", AcceptProposal.class, UpdateLastSeenPosition.class);
+                .expectOnlyCommands(AcceptProposal.class, UpdateLastSeenPosition.class, UpdateStatusProjection.class)
+                .expectEvents("create-proposal.json", AcceptProposal.class, UpdateLastSeenPosition.class, UpdateStatusProjection.class);
     }
 
     @Test
@@ -186,10 +187,18 @@ public class ProposalTest extends TestUtilities {
                         new BigDecimal("123.456")),
                         new LinkedSightingId(contentId, sightingId)
                 ))
-                .expectOnlyCommands(AcceptProposal.class, UpdateLastSeenPosition.class, DeleteSighting.class)
+//                .expectOnlyCommands(AcceptProposal.class, UpdateLastSeenPosition.class, UpdateStatusProjection.class, DeleteSighting.class)
                 .expectThat(fz -> {
-                    List<LinkedSightingState> objectList = fz.documentStore().search(LinkedSightingState.class).fetchAll();
-                    assertThat(objectList).hasSize(1);
+                    List<LinkedSightingState> linkedSightingStates = fz.documentStore().search(LinkedSightingState.class).fetchAll();
+                    assertThat(linkedSightingStates).hasSize(1);
+                    List<LinkedSighting> linkedSightings = fz.documentStore().search(LinkedSighting.class).fetchAll();
+                    assertThat(linkedSightings).hasSize(1);
+                    linkedSightings.forEach(sighting -> {
+                        LinkedSightingState linkedSightingState = linkedSightingStates.stream()
+                                .filter(state -> sighting.linkedSightingId().equals(state.linkedSightingId()))
+                                .findFirst().get();
+                        assertThat(sighting.status()).isEqualTo(linkedSightingState.status());
+                    });
                 })
                 .andThen()
                 .whenQuery(new GetLinkedSightingsByContentIdAndStatuses(new ContentId("1"), List.of(LinkedSightingStatus.CREATED)))
@@ -219,10 +228,18 @@ public class ProposalTest extends TestUtilities {
                             new BigDecimal("123.456")),
                             new LinkedSightingId(contentId, sightingId)
                     ))
-                    .expectOnlyCommands(AcceptProposal.class, UpdateLastSeenPosition.class)
+                    .expectOnlyCommands(AcceptProposal.class, UpdateLastSeenPosition.class, UpdateStatusProjection.class)
                     .expectThat(fz -> {
-                        List<LinkedSightingState> objectList = fz.documentStore().search(LinkedSightingState.class).fetchAll();
-                        assertThat(objectList).hasSize(2);
+                        List<LinkedSightingState> linkedSightingStates = fz.documentStore().search(LinkedSightingState.class).fetchAll();
+                        assertThat(linkedSightingStates).hasSize(2);
+                        List<LinkedSighting> linkedSightings = fz.documentStore().search(LinkedSighting.class).fetchAll();
+                        assertThat(linkedSightings).hasSize(2);
+                        linkedSightings.forEach(sighting -> {
+                            LinkedSightingState linkedSightingState = linkedSightingStates.stream()
+                                    .filter(state -> sighting.linkedSightingId().equals(state.linkedSightingId()))
+                                    .findFirst().get();
+                            assertThat(sighting.status()).isEqualTo(linkedSightingState.status());
+                        });
                     })
                     .andThen()
                     .whenQuery(new GetLinkedSightingsByContentIdAndStatuses(new ContentId("1"), List.of(LinkedSightingStatus.CREATED)))
