@@ -129,6 +129,24 @@ public class SightingTest extends TestUtilities {
         }
 
         @Test
+        void checkDiffInStates() {
+            testFixture.givenCommandsByUser("Alice", "../proposal/create-proposal-removal.json")
+                    .whenQuery(new GetLinkedSightingsBySightingIdAndStatuses(new SightingId("1"), List.of(LinkedSightingStatus.CREATED, LinkedSightingStatus.REJECTED)))
+                    .expectNoErrors()
+                    .expectResult(Objects::nonNull)
+                    .expectResult(hasSize(1))
+                    .andThen()
+                    .whenCommandByUser("viewer", "claim-sighting-removal.json")
+                    .expectNoErrors()
+                    .expectCommands(DeleteSighting.class, UpdateLastSeenPosition.class)
+                    .andThen()
+                    .whenQuery(new GetLinkedSightingsBySightingIdAndStatuses(new SightingId("1"), List.of(LinkedSightingStatus.CREATED, LinkedSightingStatus.REJECTED)))
+                    .expectNoErrors()
+                    .expectResult(Objects::nonNull)
+                    .expectResult(List::isEmpty);
+        }
+
+        @Test
         void givenSightingClaimedWithRemovalEnabled_whenGetSightings_thenNoResults() {
             testFixture.whenCommandByUser("viewer", "claim-sighting-removal.json")
                     .expectNoErrors()

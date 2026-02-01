@@ -16,7 +16,7 @@ import lombok.With;
 @Stateful
 @Consumer(name = "linked-sighting-state-consumer", ignoreSegment = true)
 public record LinkedSightingState(@Association @EntityId LinkedSightingId linkedSightingId, SightingId sightingId,
-                                  @With boolean removeAfterMatching, @With LinkedSightingStatus state) {
+                                  @With boolean removeAfterMatching, @With LinkedSightingStatus status) {
     @HandleEvent
     static LinkedSightingState on(CreateProposal event) {
         return new LinkedSightingState(event.linkedSightingId(), event.sightingId(),event.removeAfterMatching(), LinkedSightingStatus.CREATED);
@@ -27,7 +27,7 @@ public record LinkedSightingState(@Association @EntityId LinkedSightingId linked
         if (removeAfterMatching) {
             Fluxzero.sendAndForgetCommand(new DeleteSighting(sightingId));
         }
-        return withState(LinkedSightingStatus.ACCEPTED);
+        return withStatus(LinkedSightingStatus.ACCEPTED);
     }
 
     @HandleEvent
