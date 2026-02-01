@@ -3,20 +3,25 @@ package com.breece.proposal.api.model;
 import com.breece.proposal.api.AcceptProposal;
 import com.breece.proposal.api.CreateProposal;
 import com.breece.proposal.api.DeleteLinkedProposal;
+import com.breece.sighting.api.model.Sighting;
 import com.breece.sighting.api.model.SightingId;
+import com.breece.sighting.command.api.DeleteSighting;
 import com.breece.sighting.command.api.SightingUpdate;
+import io.fluxzero.sdk.Fluxzero;
+import io.fluxzero.sdk.modeling.Entity;
 import io.fluxzero.sdk.modeling.EntityId;
 import io.fluxzero.sdk.tracking.Consumer;
 import io.fluxzero.sdk.tracking.handling.Association;
 import io.fluxzero.sdk.tracking.handling.HandleEvent;
 import io.fluxzero.sdk.tracking.handling.Stateful;
+import jakarta.annotation.Nullable;
 import lombok.With;
 import lombok.extern.slf4j.Slf4j;
 
 @Stateful
 @Consumer(name = "linked-sighting-state-consumer", ignoreSegment = true)
 @Slf4j
-public record LinkedSightingState(@EntityId @Association LinkedSightingId linkedSightingId, SightingId sightingId,
+public record LinkedSightingState(@EntityId @Association LinkedSightingId linkedSightingId, @Association SightingId sightingId,
                                   @With LinkedSightingStatus status) {
     @HandleEvent
     static LinkedSightingState on(CreateProposal event) {
@@ -29,8 +34,10 @@ public record LinkedSightingState(@EntityId @Association LinkedSightingId linked
     }
 
     @HandleEvent
-    LinkedSightingState on(SightingUpdate event) {
-        log.info("Handling SightingUpdate for LinkedSightingId: {}", linkedSightingId);
+    LinkedSightingState on(DeleteSighting event, Entity<Sighting> sightingEntity) {
+        if(LinkedSightingStatus.ACCEPTED != status()) {
+            Fluxzero.sendAndForgetCommand(new DeleteLinkedProposal(linkedSightingId()));
+        }
         return this;
     }
 

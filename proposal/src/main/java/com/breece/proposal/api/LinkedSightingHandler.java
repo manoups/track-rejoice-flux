@@ -34,12 +34,4 @@ public class LinkedSightingHandler {
             Fluxzero.sendAndForgetCommand(new DeleteSighting(linkedSighting.sightingId()));
         }
     }
-
-    @HandleEvent
-    void on(DeleteSighting event) {
-        List<LinkedSightingState> linkedSightings = Fluxzero.search(LinkedSightingState.class).match(event.sightingId(), "sightingId")
-                .any(Stream.of(LinkedSightingStatus.CREATED, LinkedSightingStatus.REJECTED).map(v -> match(v, "status")).toArray(Constraint[]::new))
-                .fetchAll();
-        linkedSightings.forEach(linkedSighting -> Fluxzero.sendAndForgetCommand(new DeleteLinkedProposal(linkedSighting.linkedSightingId())));
-    }
 }
