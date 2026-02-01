@@ -22,7 +22,7 @@ public record GetLinkedSightingsByContentIdAndStatuses(@NotNull ContentId conten
         return Fluxzero.search(LinkedSighting.class)
                 .match(contentId, "contentId")
                 .match(sender.isAdmin() ? null : sender.userId(), "seeker")
-                .any(statuses.stream().map(v -> match(v, "orderId")).toArray(Constraint[]::new))
+                .any(statuses.stream().map(v -> match(v, "status")).toArray(Constraint[]::new))
                 .fetchAll();
     }
 

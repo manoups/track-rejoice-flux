@@ -3,13 +3,15 @@ package sighting;
 import com.breece.content.ContentErrors;
 import com.breece.content.api.model.ContentId;
 import com.breece.content.command.api.PublishContent;
+import com.breece.content.command.api.UpdateLastSeenPosition;
 import com.breece.coreapi.common.SightingDetails;
 import com.breece.proposal.api.*;
+import com.breece.proposal.api.model.LinkedSightingId;
+import com.breece.proposal.api.model.LinkedSightingState;
 import com.breece.proposal.api.model.LinkedSightingStatus;
 import com.breece.sighting.api.SightingErrors;
 import com.breece.sighting.api.model.SightingId;
 import com.breece.sighting.command.api.DeleteSighting;
-import com.breece.sighting.command.api.LinkSightingBackToContent;
 import com.breece.sighting.query.api.GetSightings;
 import util.TestUtilities;
 import io.fluxzero.sdk.test.TestFixture;
@@ -26,7 +28,7 @@ import static org.hamcrest.Matchers.hasSize;
 
 public class SightingTest extends TestUtilities {
 
-    final TestFixture testFixture = TestFixture.create(SightingHandler.class)
+    final TestFixture testFixture = TestFixture.create(LinkedSightingState.class, new LinkedSightingHandler())
             .givenCommands(createUserFromProfile(viewer), createUserFromProfile(user2), createUserFromProfile(Alice));
 
 
@@ -43,10 +45,10 @@ public class SightingTest extends TestUtilities {
             testFixture
                     .whenCommandByUser("viewer", "claim-sighting.json")
                     .expectNoErrors()
-                    .expectEvents("claim-sighting.json")
-                    .expectCommands(LinkSightingBackToContent.class)
+                    .expectOnlyEvents(CreateProposal.class, AcceptProposal.class, UpdateLastSeenPosition.class)
+                    .expectCommands(AcceptProposal.class, UpdateLastSeenPosition.class)
                     .andThen()
-                    .whenQuery(new GetLinkedSightingsBySightingIdAndStatuses(new SightingId("1"), List.of(LinkedSightingStatus.CREATED)))
+                    .whenQuery(new GetLinkedSightingsBySightingIdAndStatuses(new SightingId("1"), List.of(LinkedSightingStatus.ACCEPTED)))
                     .expectResult(Objects::nonNull)
                     .expectResult(hasSize(1));
         }
@@ -54,37 +56,43 @@ public class SightingTest extends TestUtilities {
         @Test
         void claimSightingForContentOfOtherUser() {
             testFixture.whenCommandByUser("Alice", "claim-sighting.json")
-                    .expectExceptionalResult(ContentErrors.unauthorized)
-                    .expectError((e) -> e.getMessage().equals(ContentErrors.unauthorized.getMessage()));
+                    .expectExceptionalResult(ContentErrors.notFound)
+                    .expectError((e) -> e.getMessage().equals(ContentErrors.notFound.getMessage()));
         }
 
         @Test
         void claimAlreadyClaimedSighting() {
+            ContentId contentId = new ContentId("2");
+            SightingId sightingId = new SightingId("1");
             testFixture.givenCommandsByUser("viewer", "claim-sighting.json")
                     .givenCommandsByUser("user2", "../content/create-content-keys.json")
-                    .givenCommands(new PublishContent(new ContentId("2"), Duration.ofDays(90)))
-                    .whenCommandByUser("user2", new ClaimSighting(new ContentId("2"), new SightingId("1"), new SightingDetails(
+                    .givenCommands(new PublishContent(contentId, Duration.ofDays(90)))
+                    .whenCommandByUser("user2", new ClaimSighting(contentId, sightingId, new SightingDetails(
                             new BigDecimal("78.901"), new BigDecimal("123.456")
-                    ), false, null))
+                    ), false, new LinkedSightingId(contentId, sightingId)))
                     .expectNoErrors();
         }
 
         @Test
         void givenSighting_whenClaimSightingWithInvertedCoords_thenError() {
+            ContentId contentId = new ContentId("1");
+            SightingId sightingId = new SightingId("1");
             testFixture
-                    .whenCommand(new ClaimSighting(new ContentId("1"), new SightingId("1"), new SightingDetails(
+                    .whenCommand(new ClaimSighting(contentId, sightingId, new SightingDetails(
                             new BigDecimal("123.456"), new BigDecimal("78.901")
-                    ),false, null))
+                    ),false, new LinkedSightingId(contentId, sightingId)))
                     .expectExceptionalResult(SightingErrors.sightingMismatch)
                     .expectError((e) -> e.getMessage().equals(SightingErrors.sightingMismatch.getMessage()));
         }
 
         @Test
         void givenSighting_whenClaimSightingWithExtraDecimals_thenNoError() {
+            ContentId contentId = new ContentId("1");
+            SightingId sightingId = new SightingId("1");
             testFixture
-                    .whenCommand(new ClaimSighting(new ContentId("1"), new SightingId("1"), new SightingDetails(
+                    .whenCommand(new ClaimSighting(contentId, sightingId, new SightingDetails(
                             new BigDecimal("78.901000"), new BigDecimal("123.456000")),
-                            false, null))
+                            false, new LinkedSightingId(contentId, sightingId)))
                     .expectNoErrors();
         }
     }
@@ -100,29 +108,31 @@ public class SightingTest extends TestUtilities {
 
         @Test
         void claimAlreadyClaimedSightingWithRemovalEnabled() {
+            ContentId contentId = new ContentId("2");
+            SightingId sightingId = new SightingId("1");
             testFixture
-                    .givenCommandsByUser("viewer", "claim-sighting.json")
+                    .givenCommandsByUser("viewer", "claim-sighting-removal.json")
                     .givenCommandsByUser("user2", "../content/create-content-keys.json")
-                    .givenCommands(new PublishContent(new ContentId("2"), Duration.ofDays(90)))
-                    .whenCommandByUser("user2", new ClaimSighting(new ContentId("2"), new SightingId("1"), new SightingDetails(
+                    .givenCommands(new PublishContent(contentId, Duration.ofDays(90)))
+                    .whenCommandByUser("user2", new ClaimSighting(contentId, sightingId, new SightingDetails(
                             new BigDecimal("78.901"), new BigDecimal("123.456")
-                    ), false, null))
+                    ), true, new LinkedSightingId(contentId, sightingId)))
                     .expectExceptionalResult(SightingErrors.notFound)
                     .expectError((e) -> e.getMessage().equals(SightingErrors.notFound.getMessage()));
         }
 
         @Test
         void givenSightingClaimed_whenGetSightingsWithRemovalEnabled_thenNoResults() {
-            testFixture.givenCommandsByUser("viewer", "claim-sighting.json")
+            testFixture.givenCommandsByUser("viewer", "claim-sighting-removal.json")
                     .whenQuery(new GetLinkedSightingsByContentIdAndStatuses(new ContentId("1"), List.of(LinkedSightingStatus.CREATED, LinkedSightingStatus.REJECTED)))
                     .expectResult(List::isEmpty);
         }
 
         @Test
         void givenSightingClaimedWithRemovalEnabled_whenGetSightings_thenNoResults() {
-            testFixture.whenCommandByUser("viewer", "claim-sighting.json")
+            testFixture.whenCommandByUser("viewer", "claim-sighting-removal.json")
                     .expectNoErrors()
-                    .expectEvents("claim-sighting.json", LinkSightingBackToContent.class, DeleteSighting.class, CreateProposal.class, AcceptProposal.class)
+                    .expectOnlyEvents(DeleteSighting.class, CreateProposal.class, AcceptProposal.class, UpdateLastSeenPosition.class)
                     .andThen()
                     .whenQuery(new GetSightings())
                     .expectResult(List::isEmpty);

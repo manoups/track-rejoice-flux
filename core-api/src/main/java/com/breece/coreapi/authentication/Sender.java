@@ -23,6 +23,9 @@ public record Sender(@NonNull UserId userId, Role userRole) implements User {
     }
 
     public static Sender createSender(UserId userId) {
+        if (userId.equals(system.userId())) {
+            return system;
+        }
         UserProfile userProfile = Fluxzero.loadAggregate(userId).get();
         if (userProfile == null) {
             log.info("User {} does not exist", userId);

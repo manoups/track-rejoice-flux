@@ -7,10 +7,10 @@ import com.breece.proposal.api.model.LinkedSightingStatus;
 import io.fluxzero.sdk.persisting.eventsourcing.Apply;
 import jakarta.validation.constraints.NotNull;
 
-public record AcceptProposal(@NotNull LinkedSightingId linkedSightingId) implements LinkedSightingSeekerUpdate {
+public record RejectProposal(@NotNull LinkedSightingId linkedSightingId) implements LinkedSightingSeekerUpdate {
 
     @Apply
     LinkedSighting apply(LinkedSighting linkedSighting) {
-        return linkedSighting.withStatus(LinkedSightingStatus.ACCEPTED);
+        return linkedSighting.withStatus(LinkedSightingStatus.REJECTED);
     }
 }

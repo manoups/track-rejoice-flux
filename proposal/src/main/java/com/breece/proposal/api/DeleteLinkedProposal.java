@@ -7,14 +7,16 @@ import com.breece.proposal.api.model.LinkedSightingStatus;
 import com.breece.proposal.api.model.LinkedSightingUpdate;
 import io.fluxzero.sdk.modeling.AssertLegal;
 import io.fluxzero.sdk.persisting.eventsourcing.Apply;
+import io.fluxzero.sdk.persisting.eventsourcing.InterceptApply;
 import jakarta.validation.constraints.NotNull;
 
 public record DeleteLinkedProposal(@NotNull LinkedSightingId linkedSightingId) implements LinkedSightingUpdate {
-    @AssertLegal
-    void assertNotLinked(LinkedSighting linkedSighting) {
+    @InterceptApply
+    DeleteLinkedProposal assertNotLinked(LinkedSighting linkedSighting) {
         if (linkedSighting.status() == LinkedSightingStatus.ACCEPTED) {
-            throw LinkedSightingErrors.linkedProposalCannotBeDeleted;
+            return null;
         }
+        return this;
     }
 
     @AssertLegal

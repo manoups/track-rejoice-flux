@@ -15,6 +15,6 @@ public record GetContent(@NotNull ContentId contentId) implements Request<Conten
         return Fluxzero.search(Content.class)
                 .match(sender.isAdmin() ? null : sender.userId(), "ownerId")
                 .match(contentId, "contentId")
-                .<Content>fetchFirst().orElseThrow(() -> ContentErrors.notFound);
+                .fetchFirstOrNull();
     }
 }
