@@ -6,7 +6,6 @@ import com.breece.proposal.api.DeleteLinkedProposal;
 import com.breece.sighting.api.model.Sighting;
 import com.breece.sighting.api.model.SightingId;
 import com.breece.sighting.command.api.DeleteSighting;
-import com.breece.sighting.command.api.SightingUpdate;
 import io.fluxzero.sdk.Fluxzero;
 import io.fluxzero.sdk.modeling.Entity;
 import io.fluxzero.sdk.modeling.EntityId;
@@ -14,7 +13,6 @@ import io.fluxzero.sdk.tracking.Consumer;
 import io.fluxzero.sdk.tracking.handling.Association;
 import io.fluxzero.sdk.tracking.handling.HandleEvent;
 import io.fluxzero.sdk.tracking.handling.Stateful;
-import jakarta.annotation.Nullable;
 import lombok.With;
 import lombok.extern.slf4j.Slf4j;
 
