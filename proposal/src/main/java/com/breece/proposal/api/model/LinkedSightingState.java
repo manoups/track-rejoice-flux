@@ -1,8 +1,11 @@
 package com.breece.proposal.api.model;
 
+import com.breece.content.command.api.UpdateLastSeenPosition;
+import com.breece.coreapi.authentication.Sender;
 import com.breece.proposal.api.AcceptProposal;
 import com.breece.proposal.api.CreateProposal;
 import com.breece.proposal.api.DeleteLinkedProposal;
+import com.breece.proposal.api.RejectProposal;
 import com.breece.sighting.api.model.Sighting;
 import com.breece.sighting.api.model.SightingId;
 import com.breece.sighting.command.api.DeleteSighting;
@@ -22,13 +25,25 @@ import lombok.extern.slf4j.Slf4j;
 public record LinkedSightingState(@EntityId @Association LinkedSightingId linkedSightingId, @Association SightingId sightingId,
                                   @With LinkedSightingStatus status) {
     @HandleEvent
-    static LinkedSightingState on(CreateProposal event) {
+    static LinkedSightingState on(CreateProposal event, Sender sender) {
+        if (sender.isAuthorizedFor(event.seeker())) {
+            Fluxzero.sendAndForgetCommand(new AcceptProposal(event.linkedSightingId()));
+        }
         return new LinkedSightingState(event.linkedSightingId(), event.sightingId(), LinkedSightingStatus.CREATED);
     }
 
     @HandleEvent
-    LinkedSightingState on(AcceptProposal event) {
+    LinkedSightingState on(AcceptProposal event, LinkedSighting linkedSighting) {
+        Fluxzero.sendAndForgetCommand(new UpdateLastSeenPosition(linkedSighting.contentId(), linkedSighting.sightingDetails()));
+        if(Fluxzero.loadAggregate(linkedSighting.sightingId()).get().removeAfterMatching()) {
+            Fluxzero.sendAndForgetCommand(new DeleteSighting(linkedSighting.sightingId()));
+        }
         return withStatus(LinkedSightingStatus.ACCEPTED);
+    }
+
+    @HandleEvent
+    LinkedSightingState on(RejectProposal event) {
+        return withStatus(LinkedSightingStatus.REJECTED);
     }
 
     @HandleEvent
