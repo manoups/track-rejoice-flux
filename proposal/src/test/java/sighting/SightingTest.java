@@ -1,6 +1,5 @@
 package sighting;
 
-import com.breece.content.ContentErrors;
 import com.breece.content.api.model.ContentId;
 import com.breece.content.command.api.PublishContent;
 import com.breece.content.command.api.UpdateLastSeenPosition;
@@ -13,11 +12,11 @@ import com.breece.sighting.api.SightingErrors;
 import com.breece.sighting.api.model.SightingId;
 import com.breece.sighting.command.api.DeleteSighting;
 import com.breece.sighting.query.api.GetSightings;
-import util.TestUtilities;
 import io.fluxzero.sdk.test.TestFixture;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import util.TestUtilities;
 
 import java.math.BigDecimal;
 import java.time.Duration;
@@ -56,8 +55,8 @@ public class SightingTest extends TestUtilities {
         @Test
         void claimSightingForContentOfOtherUser() {
             testFixture.whenCommandByUser("Alice", "claim-sighting.json")
-                    .expectExceptionalResult(ContentErrors.notFound)
-                    .expectError((e) -> e.getMessage().equals(ContentErrors.notFound.getMessage()));
+                    .expectExceptionalResult(LinkedSightingErrors.unauthorized)
+                    .expectError((e) -> e.getMessage().equals(LinkedSightingErrors.unauthorized.getMessage()));
         }
 
         @Test
