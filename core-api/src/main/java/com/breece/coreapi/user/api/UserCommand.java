@@ -4,12 +4,10 @@ import com.breece.coreapi.authentication.Sender;
 import com.breece.coreapi.user.api.model.UserProfile;
 import io.fluxzero.sdk.Fluxzero;
 import io.fluxzero.sdk.modeling.AssertLegal;
-import io.fluxzero.sdk.tracking.TrackSelf;
 import io.fluxzero.sdk.tracking.handling.HandleCommand;
 import io.fluxzero.sdk.tracking.handling.authentication.UnauthorizedException;
 import jakarta.validation.constraints.NotNull;
 
-@TrackSelf
 public interface UserCommand {
     @NotNull
     UserId userId();
