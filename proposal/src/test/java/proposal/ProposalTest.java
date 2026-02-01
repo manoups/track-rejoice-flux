@@ -11,6 +11,7 @@ import com.breece.coreapi.user.api.UserId;
 import com.breece.coreapi.util.GeometryUtil;
 import com.breece.proposal.api.*;
 import com.breece.proposal.api.model.LinkedSightingId;
+import com.breece.proposal.api.model.LinkedSightingState;
 import com.breece.proposal.api.model.LinkedSightingStatus;
 import com.breece.sighting.command.api.CreateSighting;
 import org.junit.jupiter.api.Disabled;
@@ -172,7 +173,7 @@ public class ProposalTest extends TestUtilities {
     class CreatePublishPropose {
         @BeforeEach
         void setUp() {
-            testFixture.givenCommandsByUser("viewer","../content/create-content.json").givenCommands("../content/publish-content.json")
+            testFixture.registerHandlers(LinkedSightingState.class).givenCommandsByUser("viewer","../content/create-content.json").givenCommands("../content/publish-content.json")
                     .givenCommandsByUser("Alice","../sighting/create-sighting.json", "create-proposal.json");
         }
 

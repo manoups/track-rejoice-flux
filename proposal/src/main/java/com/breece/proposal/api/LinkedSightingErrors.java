@@ -10,5 +10,5 @@ public interface LinkedSightingErrors {
             unauthorized = new IllegalCommandException("Not owner of linked sighting"),
             linkedProposalCannotBeDeleted = new IllegalCommandException("Linked proposal cannot be deleted"),
             malformedKey = new IllegalCommandException("Linked sighting id malformed"),
-            incorrectState = new IllegalCommandException("Linked sighting is in incorrect state");
+            incorrectState = new IllegalCommandException("Linked sighting is in incorrect status");
 }
