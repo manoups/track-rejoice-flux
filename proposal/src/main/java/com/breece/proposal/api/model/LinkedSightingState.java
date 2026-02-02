@@ -13,7 +13,6 @@ import io.fluxzero.sdk.tracking.Consumer;
 import io.fluxzero.sdk.tracking.handling.Association;
 import io.fluxzero.sdk.tracking.handling.HandleEvent;
 import io.fluxzero.sdk.tracking.handling.Stateful;
-import jakarta.annotation.Nullable;
 import lombok.With;
 import lombok.extern.slf4j.Slf4j;
 
@@ -31,11 +30,10 @@ public record LinkedSightingState(@EntityId @Association LinkedSightingId linked
     }
 
     @HandleEvent
-    LinkedSightingState on(AcceptProposal event) {
+    LinkedSightingState on(AcceptProposal event, LinkedSighting linkedSighting) {
         if (status() != LinkedSightingStatus.CREATED) {
             throw LinkedSightingErrors.incorrectState;
         }
-        LinkedSighting linkedSighting = Fluxzero.loadAggregate(linkedSightingId()).get();
         Fluxzero.sendAndForgetCommand(new UpdateLastSeenPosition(linkedSighting.contentId(), linkedSighting.sightingDetails()));
         Fluxzero.sendAndForgetCommand(new UpdateStatusProjection(linkedSightingId(), LinkedSightingStatus.ACCEPTED));
         if(Fluxzero.loadAggregate(linkedSighting.sightingId()).get().removeAfterMatching()) {
