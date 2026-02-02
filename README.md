@@ -104,3 +104,11 @@ This example follows FluxZero's event-driven architecture:
   - an order of a basic product will change its status to online upon completed order
 - There is a 1-1 relationship between an order and a payment. Thus, a payment will become a value object and the status will be inherited by the order.
 - Since this is digital goods, cancelling an order is not possible. We may later create a workflow to support it
+
+
+## Questions
+- If an aggregate is stored only in the document store, does it implicitly impact the event publication strategy?
+- If there are multiple associations on a statefult, does it trigger on events with all associations or just one (union vs intersection).
+- Does performance decrease if many objects match on the association member variable but there is no handler for the action?
+- Can I load the state in the context?
+- Decider pattern
