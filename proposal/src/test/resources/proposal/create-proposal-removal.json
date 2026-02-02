@@ -1,6 +1,6 @@
 {
   "@class": "com.breece.proposal.api.CreateProposal",
-  "sightingId": "1",
+  "sourceSightingId": "1",
   "linkedSightingId": "content-1-sighting-1",
   "sightingDetails": {
     "lat": 123.456,

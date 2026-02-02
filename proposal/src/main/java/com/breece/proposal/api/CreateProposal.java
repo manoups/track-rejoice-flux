@@ -10,7 +10,6 @@ import com.breece.coreapi.user.api.UserId;
 import com.breece.proposal.api.model.LinkedSighting;
 import com.breece.proposal.api.model.LinkedSightingCommand;
 import com.breece.proposal.api.model.LinkedSightingId;
-import com.breece.proposal.api.model.LinkedSightingStatus;
 import com.breece.sighting.api.SightingErrors;
 import com.breece.sighting.api.model.Sighting;
 import com.breece.sighting.api.model.SightingId;
@@ -23,8 +22,8 @@ import jakarta.validation.constraints.NotNull;
 
 import java.util.Objects;
 
-public record CreateProposal(@NotNull ContentId contentId, @NotNull UserId seeker, @NotNull SightingId sightingId, @NotNull LinkedSightingId linkedSightingId, @NotNull SightingDetails sightingDetails) implements
-        LinkedSightingCommand, SightingContentBridge {
+public record CreateProposal(@NotNull ContentId contentId, @NotNull UserId seeker, @NotNull SightingId sourceSightingId, @NotNull LinkedSightingId linkedSightingId, @NotNull SightingDetails sightingDetails) implements
+        LinkedSightingCommand {
     @AssertLegal
     void assertNew(LinkedSighting linkedSighting) {
         throw LinkedSightingErrors.alreadyExists;
@@ -47,14 +46,14 @@ public record CreateProposal(@NotNull ContentId contentId, @NotNull UserId seeke
 
     @AssertLegal
     void assertCorrectId() {
-        if (!linkedSightingId.getId().equals(contentId+"-"+sightingId)) {
+        if (!linkedSightingId.getId().equals(contentId+"-"+sourceSightingId)) {
             throw LinkedSightingErrors.malformedKey;
         }
     }
 
     @AssertLegal
     void assertSightingExistsAndValid(Sender sender) {
-        Sighting sighting = Fluxzero.loadAggregate(sightingId).get();
+        Sighting sighting = Fluxzero.loadAggregate(sourceSightingId).get();
         if (Objects.isNull(sighting)) {
             throw SightingErrors.notFound;
         }
@@ -65,6 +64,6 @@ public record CreateProposal(@NotNull ContentId contentId, @NotNull UserId seeke
 
     @Apply
     LinkedSighting propose(Sender sender) {
-        return new LinkedSighting(linkedSightingId, sender.userId(), seeker, sightingId, contentId, sightingDetails);
+        return new LinkedSighting(linkedSightingId, sender.userId(), seeker, sourceSightingId, contentId, sightingDetails);
     }
 }

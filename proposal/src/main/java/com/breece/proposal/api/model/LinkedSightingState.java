@@ -22,7 +22,7 @@ public record LinkedSightingState(@EntityId @Association LinkedSightingId linked
                                   @With LinkedSightingStatus status) {
     @HandleEvent
     static LinkedSightingState on(CreateProposal event, Sender sender) {
-        return new LinkedSightingState(event.linkedSightingId(), event.sightingId(), LinkedSightingStatus.CREATED);
+        return new LinkedSightingState(event.linkedSightingId(), event.sourceSightingId(), LinkedSightingStatus.CREATED);
     }
 
     @HandleEvent
