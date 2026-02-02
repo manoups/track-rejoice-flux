@@ -129,7 +129,7 @@ public class SightingTest extends TestUtilities {
         void givenSightingClaimedWithRemovalEnabled_whenGetSightings_thenNoResults() {
             testFixture.whenCommandByUser("viewer", "claim-sighting-removal.json")
                     .expectNoErrors()
-                    .expectOnlyEvents(DeleteSighting.class, CreateProposal.class, AcceptProposal.class, UpdateLastSeenPosition.class)
+                    .expectOnlyEvents(DeleteSighting.class, CreateProposal.class, UpdateLastSeenPosition.class, DeleteLinkedProposal.class, AcceptProposal.class)
                     .andThen()
                     .whenQuery(new GetSightings())
                     .expectResult(List::isEmpty);

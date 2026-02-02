@@ -13,5 +13,5 @@ import lombok.With;
 @Aggregate(searchable = true)
 public record LinkedSighting(@EntityId LinkedSightingId linkedSightingId, @NotNull UserId finder,
                              @NotNull UserId seeker, @NotNull SightingId sightingId, @NotNull ContentId contentId,
-                             @NotNull SightingDetails sightingDetails, @With LinkedSightingStatus status) {
+                             @NotNull SightingDetails sightingDetails) {
 }

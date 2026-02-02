@@ -65,6 +65,6 @@ public record CreateProposal(@NotNull ContentId contentId, @NotNull UserId seeke
 
     @Apply
     LinkedSighting propose(Sender sender) {
-        return new LinkedSighting(linkedSightingId, sender.userId(), seeker, sightingId, contentId, sightingDetails, LinkedSightingStatus.CREATED);
+        return new LinkedSighting(linkedSightingId, sender.userId(), seeker, sightingId, contentId, sightingDetails);
     }
 }

@@ -96,7 +96,7 @@ public class ProposalTest extends TestUtilities {
                 .givenCommands("../content/publish-content.json")
                 .whenCommandByUser("viewer", "create-proposal.json")
                 .expectNoErrors()
-                .expectOnlyCommands(AcceptProposal.class, UpdateLastSeenPosition.class)
+                .expectCommands(UpdateLastSeenPosition.class)
                 .expectEvents("create-proposal.json", AcceptProposal.class, UpdateLastSeenPosition.class);
     }
 

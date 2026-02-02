@@ -37,7 +37,7 @@ public class SightingAsyncTest extends TestUtilities {
                 .whenCommandByUser("viewer", "claim-sighting.json")
                 .expectNoErrors()
                 .expectOnlyEvents(CreateProposal.class, AcceptProposal.class, UpdateLastSeenPosition.class)
-                .expectCommands(AcceptProposal.class, UpdateLastSeenPosition.class)
+                .expectCommands(UpdateLastSeenPosition.class)
                 .andThen()
                 .whenQuery(new GetLinkedSightingsBySightingIdAndStatuses(new SightingId("1"), List.of(LinkedSightingStatus.ACCEPTED)))
                 .expectResult(Objects::nonNull)
