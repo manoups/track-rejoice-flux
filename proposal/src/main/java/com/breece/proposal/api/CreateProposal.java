@@ -22,8 +22,7 @@ import jakarta.validation.constraints.NotNull;
 
 import java.util.Objects;
 
-public record CreateProposal(@NotNull ContentId contentId, @NotNull UserId seeker, @NotNull SightingId sourceSightingId, @NotNull LinkedSightingId linkedSightingId, @NotNull SightingDetails sightingDetails) implements
-        LinkedSightingCommand {
+public record CreateProposal(@NotNull ContentId contentId, @NotNull UserId seeker, @NotNull SightingId sourceSightingId, @NotNull LinkedSightingId linkedSightingId, @NotNull SightingDetails sightingDetails) implements LinkedSightingCommand {
     @AssertLegal
     void assertNew(LinkedSighting linkedSighting) {
         throw LinkedSightingErrors.alreadyExists;

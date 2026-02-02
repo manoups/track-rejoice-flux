@@ -13,13 +13,13 @@ import jakarta.validation.constraints.NotNull;
 
 import java.util.Objects;
 
-public record ClaimSighting(@NotNull ContentId contentId, @NotNull SightingId sightingId, @NotNull SightingDetails sightingDetails, @NotNull LinkedSightingId linkedSightingId) implements LinkedSightingCommand, SightingContentBridge {
+public record ClaimSighting(@NotNull ContentId contentId, @NotNull SightingId sourceSightingId, @NotNull SightingDetails sightingDetails, @NotNull LinkedSightingId linkedSightingId) implements LinkedSightingCommand {
 
     @InterceptApply
     LinkedSightingCommand interceptApply(@Nullable LinkedSighting linkedSighting, Sender sender) {
         if (Objects.nonNull(linkedSighting)) {
             return new AcceptProposal(linkedSighting.linkedSightingId());
         }
-        return new CreateProposal(contentId, sender.userId(), sightingId, linkedSightingId, sightingDetails);
+        return new CreateProposal(contentId, sender.userId(), sourceSightingId, linkedSightingId, sightingDetails);
     }
 }
