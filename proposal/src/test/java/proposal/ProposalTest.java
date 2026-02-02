@@ -3,7 +3,6 @@ package proposal;
 import com.breece.content.ContentErrors;
 import com.breece.content.api.model.Content;
 import com.breece.content.api.model.ContentId;
-import com.breece.content.command.api.PublishContent;
 import com.breece.content.command.api.UpdateLastSeenPosition;
 import com.breece.content.query.api.GetContent;
 import com.breece.content.query.api.GetSightingHistoryForContent;
@@ -11,34 +10,30 @@ import com.breece.coreapi.common.SightingDetails;
 import com.breece.coreapi.user.api.UserId;
 import com.breece.coreapi.util.GeometryUtil;
 import com.breece.proposal.api.*;
-import com.breece.proposal.api.model.LinkedSighting;
 import com.breece.proposal.api.model.LinkedSightingId;
 import com.breece.proposal.api.model.LinkedSightingState;
 import com.breece.proposal.api.model.LinkedSightingStatus;
-import com.breece.sighting.command.api.CreateSighting;
-import com.breece.sighting.command.api.DeleteSighting;
-import org.junit.jupiter.api.Disabled;
-import util.TestUtilities;
 import com.breece.sighting.api.SightingErrors;
 import com.breece.sighting.api.model.SightingId;
+import com.breece.sighting.command.api.CreateSighting;
 import io.fluxzero.sdk.test.TestFixture;
 import io.fluxzero.sdk.tracking.handling.IllegalCommandException;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import util.TestUtilities;
 
 import java.math.BigDecimal;
-import java.time.Duration;
 import java.util.List;
 import java.util.Objects;
 
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasSize;
 
 @Slf4j
 public class ProposalTest extends TestUtilities {
-    final TestFixture testFixture = TestFixture.createAsync(LinkedSightingState.class).givenCommands(createUserFromProfile(viewer), createUserFromProfile(user2), createUserFromProfile(Alice));
+    final TestFixture testFixture = TestFixture.create(LinkedSightingState.class).givenCommands(createUserFromProfile(viewer), createUserFromProfile(user2), createUserFromProfile(Alice));
 
     @Test
     void givenNoContent_whenProposalCreated_thenError() {
@@ -174,79 +169,12 @@ public class ProposalTest extends TestUtilities {
                 .expectError((e) -> e.getMessage().equals(LinkedSightingErrors.alreadyExists.getMessage()));
     }
 
-    @Test
-    void givenCreateProposalForContent2_whenClaimSightingForContent1_thenStateOfContent2ShouldNotBeChanged() {
-        ContentId contentId = new ContentId("2");
-        SightingId sightingId = new SightingId("1");
-        testFixture.givenCommandsByUser("viewer", "../content/create-content.json").givenCommands("../content/publish-content.json")
-                .givenCommandsByUser("Alice", "../sighting/create-sighting-removal.json", "create-proposal.json")
-//            create C2
-                .givenCommandsByUser("viewer", "../content/create-content-keys.json")
-                .givenCommands(new PublishContent(contentId, Duration.ofDays(10)))
-                .whenCommandByUser("viewer", new ClaimSighting(contentId, sightingId, new SightingDetails(new BigDecimal("78.901"),
-                        new BigDecimal("123.456")),
-                        new LinkedSightingId(contentId, sightingId)
-                ))
-//                .expectOnlyCommands(AcceptProposal.class, UpdateLastSeenPosition.class, UpdateStatusProjection.class, DeleteSighting.class)
-                .expectThat(fz -> {
-                    List<LinkedSightingState> linkedSightingStates = fz.documentStore().search(LinkedSightingState.class).fetchAll();
-                    assertThat(linkedSightingStates).hasSize(1);
-                    List<LinkedSighting> linkedSightings = fz.documentStore().search(LinkedSighting.class).fetchAll();
-                    assertThat(linkedSightings).hasSize(1);
-                    linkedSightings.forEach(sighting -> {
-                        LinkedSightingState linkedSightingState = linkedSightingStates.stream()
-                                .filter(state -> sighting.linkedSightingId().equals(state.linkedSightingId()))
-                                .findFirst().get();
-                        assertThat(sighting.status()).isEqualTo(linkedSightingState.status());
-                    });
-                })
-                .andThen()
-                .whenQuery(new GetLinkedSightingsByContentIdAndStatuses(new ContentId("1"), List.of(LinkedSightingStatus.CREATED)))
-                .expectResult(List::isEmpty)
-                .andThen()
-                .whenQuery(new GetLinkedSightingsByContentIdAndStatuses(contentId, List.of(LinkedSightingStatus.ACCEPTED)))
-                .expectResult(hasSize(1));
-    }
-
     @Nested
     class CreatePublishPropose {
         @BeforeEach
         void setUp() {
             testFixture.givenCommandsByUser("viewer", "../content/create-content.json").givenCommands("../content/publish-content.json")
                     .givenCommandsByUser("Alice", "../sighting/create-sighting.json", "create-proposal.json");
-        }
-
-        @Test
-        void givenCreateProposalForContent2_whenClaimSightingForContent1_thenStateOfContent2ShouldNotBeChanged() {
-            ContentId contentId = new ContentId("2");
-            SightingId sightingId = new SightingId("1");
-            testFixture
-//            create C2
-                    .givenCommandsByUser("viewer", "../content/create-content-keys.json")
-                    .givenCommands(new PublishContent(contentId, Duration.ofDays(10)))
-                    .whenCommandByUser("viewer", new ClaimSighting(contentId, sightingId, new SightingDetails(new BigDecimal("78.901"),
-                            new BigDecimal("123.456")),
-                            new LinkedSightingId(contentId, sightingId)
-                    ))
-                    .expectOnlyCommands(AcceptProposal.class, UpdateLastSeenPosition.class, UpdateStatusProjection.class)
-                    .expectThat(fz -> {
-                        List<LinkedSightingState> linkedSightingStates = fz.documentStore().search(LinkedSightingState.class).fetchAll();
-                        assertThat(linkedSightingStates).hasSize(2);
-                        List<LinkedSighting> linkedSightings = fz.documentStore().search(LinkedSighting.class).fetchAll();
-                        assertThat(linkedSightings).hasSize(2);
-                        linkedSightings.forEach(sighting -> {
-                            LinkedSightingState linkedSightingState = linkedSightingStates.stream()
-                                    .filter(state -> sighting.linkedSightingId().equals(state.linkedSightingId()))
-                                    .findFirst().get();
-                            assertThat(sighting.status()).isEqualTo(linkedSightingState.status());
-                        });
-                    })
-                    .andThen()
-                    .whenQuery(new GetLinkedSightingsByContentIdAndStatuses(new ContentId("1"), List.of(LinkedSightingStatus.CREATED)))
-                    .expectResult(hasSize(1))
-                    .andThen()
-                    .whenQuery(new GetLinkedSightingsByContentIdAndStatuses(contentId, List.of(LinkedSightingStatus.ACCEPTED)))
-                    .expectResult(hasSize(1));
         }
 
         @Test

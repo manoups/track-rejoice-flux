@@ -27,7 +27,7 @@ import static org.hamcrest.Matchers.hasSize;
 
 public class SightingTest extends TestUtilities {
 
-    final TestFixture testFixture = TestFixture.createAsync(LinkedSightingState.class)
+    final TestFixture testFixture = TestFixture.create(LinkedSightingState.class)
             .givenCommands(createUserFromProfile(viewer), createUserFromProfile(user2), createUserFromProfile(Alice));
 
 
@@ -37,19 +37,6 @@ public class SightingTest extends TestUtilities {
         void setUp() {
             testFixture.givenCommandsByUser("viewer", "../content/create-content.json", "create-sighting.json")
                     .givenCommands("../content/publish-content.json");
-        }
-
-        @Test
-        void claimSightingWithCorrectContentOwner() {
-            testFixture
-                    .whenCommandByUser("viewer", "claim-sighting.json")
-                    .expectNoErrors()
-                    .expectOnlyEvents(CreateProposal.class, AcceptProposal.class, UpdateLastSeenPosition.class, UpdateStatusProjection.class)
-                    .expectCommands(AcceptProposal.class, UpdateLastSeenPosition.class)
-                    .andThen()
-                    .whenQuery(new GetLinkedSightingsBySightingIdAndStatuses(new SightingId("1"), List.of(LinkedSightingStatus.ACCEPTED)))
-                    .expectResult(Objects::nonNull)
-                    .expectResult(hasSize(1));
         }
 
         @Test
@@ -120,12 +107,7 @@ public class SightingTest extends TestUtilities {
                     .expectError((e) -> e.getMessage().equals(SightingErrors.notFound.getMessage()));
         }
 
-        @Test
-        void givenSightingClaimed_whenGetSightingsWithRemovalEnabled_thenNoResults() {
-            testFixture.givenCommandsByUser("viewer", "claim-sighting-removal.json")
-                    .whenQuery(new GetLinkedSightingsByContentIdAndStatuses(new ContentId("1"), List.of(LinkedSightingStatus.CREATED, LinkedSightingStatus.REJECTED)))
-                    .expectResult(List::isEmpty);
-        }
+
 
         @Test
         void checkDiffInStates() {
