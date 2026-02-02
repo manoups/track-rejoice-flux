@@ -12,6 +12,6 @@ public interface LinkedSightingCommand {
 
     @HandleCommand
     default void handle(LinkedSightingCommand command) {
-        Fluxzero.loadEntity(linkedSightingId()).assertAndApply(command);
+        Fluxzero.loadAggregate(linkedSightingId()).assertAndApply(command);
     }
 }

@@ -4,10 +4,7 @@ import com.breece.content.api.model.ContentId;
 import com.breece.content.command.api.PublishContent;
 import com.breece.content.command.api.UpdateLastSeenPosition;
 import com.breece.coreapi.common.SightingDetails;
-import com.breece.proposal.api.AcceptProposal;
-import com.breece.proposal.api.ClaimSighting;
-import com.breece.proposal.api.GetLinkedSightingsByContentIdAndStatuses;
-import com.breece.proposal.api.UpdateStatusProjection;
+import com.breece.proposal.api.*;
 import com.breece.proposal.api.model.LinkedSighting;
 import com.breece.proposal.api.model.LinkedSightingId;
 import com.breece.proposal.api.model.LinkedSightingState;
@@ -16,6 +13,7 @@ import com.breece.sighting.api.model.SightingId;
 import com.breece.sighting.command.api.DeleteSighting;
 import io.fluxzero.sdk.test.TestFixture;
 import org.junit.jupiter.api.Test;
+import util.TestUtilities;
 
 import java.math.BigDecimal;
 import java.time.Duration;
@@ -24,8 +22,8 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasSize;
 
-public class ProposalAsyncTest extends ProposalTest {
-    final TestFixture testFixture = TestFixture.createAsync(LinkedSightingState.class).givenCommands(createUserFromProfile(viewer), createUserFromProfile(user2), createUserFromProfile(Alice));
+public class ProposalAsyncTest extends TestUtilities {
+    final TestFixture testFixture = TestFixture.create(LinkedSightingState.class, LinkedSightingHandler.class).givenCommands(createUserFromProfile(viewer), createUserFromProfile(user2), createUserFromProfile(Alice));
 
     @Test
     void givenCreateProposalForRemovableSightingContent2_whenClaimSightingForContent1_thenStateOfContent2ShouldBeDeleted() {
@@ -40,7 +38,7 @@ public class ProposalAsyncTest extends ProposalTest {
                         new BigDecimal("123.456")),
                         new LinkedSightingId(contentId, sightingId)
                 ))
-                .expectOnlyCommands(AcceptProposal.class, UpdateLastSeenPosition.class, UpdateStatusProjection.class, DeleteSighting.class)
+                .expectOnlyCommands(AcceptProposal.class, UpdateLastSeenPosition.class, DeleteSighting.class, DeleteLinkedProposal.class)
                 .expectThat(fz -> {
                     List<LinkedSightingState> linkedSightingStates = fz.documentStore().search(LinkedSightingState.class).fetchAll();
                     assertThat(linkedSightingStates).hasSize(1);
@@ -74,7 +72,7 @@ public class ProposalAsyncTest extends ProposalTest {
                         new BigDecimal("123.456")),
                         new LinkedSightingId(contentId, sightingId)
                 ))
-                .expectOnlyCommands(AcceptProposal.class, UpdateLastSeenPosition.class, UpdateStatusProjection.class)
+                .expectOnlyCommands(AcceptProposal.class, UpdateLastSeenPosition.class)
                 .expectThat(fz -> {
                     List<LinkedSightingState> linkedSightingStates = fz.documentStore().search(LinkedSightingState.class).fetchAll();
                     assertThat(linkedSightingStates).hasSize(2);

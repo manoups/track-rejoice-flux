@@ -16,7 +16,7 @@ import java.util.Objects;
 import static org.hamcrest.Matchers.hasSize;
 
 public class SightingAsyncTest extends TestUtilities {
-    final TestFixture testFixture = TestFixture.createAsync(LinkedSightingState.class)
+    final TestFixture testFixture = TestFixture.createAsync(LinkedSightingHandler.class, LinkedSightingState.class)
             .givenCommands(createUserFromProfile(viewer), createUserFromProfile(user2), createUserFromProfile(Alice));
 
 
@@ -36,7 +36,7 @@ public class SightingAsyncTest extends TestUtilities {
                 .givenCommands("../content/publish-content.json")
                 .whenCommandByUser("viewer", "claim-sighting.json")
                 .expectNoErrors()
-                .expectOnlyEvents(CreateProposal.class, AcceptProposal.class, UpdateLastSeenPosition.class, UpdateStatusProjection.class)
+                .expectOnlyEvents(CreateProposal.class, AcceptProposal.class, UpdateLastSeenPosition.class)
                 .expectCommands(AcceptProposal.class, UpdateLastSeenPosition.class)
                 .andThen()
                 .whenQuery(new GetLinkedSightingsBySightingIdAndStatuses(new SightingId("1"), List.of(LinkedSightingStatus.ACCEPTED)))

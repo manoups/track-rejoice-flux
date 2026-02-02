@@ -1,6 +1,5 @@
 package com.breece.proposal.api.model;
 
-import com.breece.content.command.api.UpdateLastSeenPosition;
 import com.breece.coreapi.authentication.Sender;
 import com.breece.proposal.api.*;
 import com.breece.sighting.api.model.Sighting;
@@ -23,31 +22,16 @@ public record LinkedSightingState(@EntityId @Association LinkedSightingId linked
                                   @With LinkedSightingStatus status) {
     @HandleEvent
     static LinkedSightingState on(CreateProposal event, Sender sender) {
-        if (sender.isAuthorizedFor(event.seeker())) {
-            Fluxzero.sendAndForgetCommand(new AcceptProposal(event.linkedSightingId()));
-        }
         return new LinkedSightingState(event.linkedSightingId(), event.sightingId(), LinkedSightingStatus.CREATED);
     }
 
     @HandleEvent
-    LinkedSightingState on(AcceptProposal event, LinkedSighting linkedSighting) {
-        if (status() != LinkedSightingStatus.CREATED) {
-            throw LinkedSightingErrors.incorrectState;
-        }
-        Fluxzero.sendAndForgetCommand(new UpdateLastSeenPosition(linkedSighting.contentId(), linkedSighting.sightingDetails()));
-        Fluxzero.sendAndForgetCommand(new UpdateStatusProjection(linkedSightingId(), LinkedSightingStatus.ACCEPTED));
-        if(Fluxzero.loadAggregate(linkedSighting.sightingId()).get().removeAfterMatching()) {
-            Fluxzero.sendAndForgetCommand(new DeleteSighting(linkedSighting.sightingId()));
-        }
+    LinkedSightingState on(AcceptProposal event) {
         return withStatus(LinkedSightingStatus.ACCEPTED);
     }
 
     @HandleEvent
     LinkedSightingState on(RejectProposal event) {
-        if (status() != LinkedSightingStatus.CREATED) {
-            throw LinkedSightingErrors.incorrectState;
-        }
-        Fluxzero.sendAndForgetCommand(new UpdateStatusProjection(linkedSightingId(), LinkedSightingStatus.REJECTED));
         return withStatus(LinkedSightingStatus.REJECTED);
     }
 
