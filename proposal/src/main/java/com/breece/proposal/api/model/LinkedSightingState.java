@@ -14,7 +14,7 @@ import lombok.With;
 import lombok.extern.slf4j.Slf4j;
 
 @Stateful
-@Consumer(name = "linked-sighting-state-consumer", typeFilter = "com\\.breece\\.proposal\\.api\\..*|com\\.breece\\.sighting\\.command\\.api\\.DeleteSighting", ignoreSegment = true)
+@Consumer(name = "linked-sighting-state-consumer", ignoreSegment = true)
 @Slf4j
 public record LinkedSightingState(@EntityId LinkedSightingId linkedSightingId, SightingId sightingId,
                                   @With LinkedSightingStatus status) {
