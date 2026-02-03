@@ -108,8 +108,7 @@ This example follows FluxZero's event-driven architecture:
 
 ## Questions
 - If an aggregate is stored only in the document store, does it implicitly impact the event publication strategy to publish-only? What is the purpose of storing the events?
-- If there are multiple associations on a statefult, does it trigger on events with all associations or just one (union vs intersection).
 - Does performance decrease if many objects match on the association member variable but there is no handler for the action?
 - Can I load the state in the context?
-- At which point does the stateful handler load its state?
+- Can typeFilter be tested?
 - Decider pattern
