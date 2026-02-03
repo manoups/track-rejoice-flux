@@ -25,10 +25,11 @@ public class LinkedSightingHandler {
     void on(AcceptProposal event) {
         LinkedSighting linkedSighting = Fluxzero.loadAggregate(event.linkedSightingId()).get();
         Fluxzero.sendAndForgetCommand(new UpdateLastSeenPosition(linkedSighting.contentId(), linkedSighting.sightingDetails()));
-//        Fluxzero.sendAndForgetCommand(new UpdateStatusProjection(event.linkedSightingId(), LinkedSightingStatus.ACCEPTED));
         Fluxzero.loadAggregate(linkedSighting.sightingId())
                 .mapIfPresent(Entity::get)
                 .filter(Sighting::removeAfterMatching)
-                .ifPresent(_ -> Fluxzero.sendAndForgetCommand(new DeleteSighting(linkedSighting.sightingId())));
+                .map(Sighting::sightingId)
+                .map(DeleteSighting::new)
+                .ifPresent(Fluxzero::sendAndForgetCommand);
     }
 }
