@@ -111,4 +111,5 @@ This example follows FluxZero's event-driven architecture:
 - Does performance decrease if many objects match on the association member variable but there is no handler for the action?
 - Can I load the state in the context?
 - Can typeFilter be tested?
+- What does `disableScheduledCommandHandler` do?
 - Decider pattern
