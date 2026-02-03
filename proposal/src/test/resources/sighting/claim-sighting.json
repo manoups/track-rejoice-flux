@@ -1,6 +1,6 @@
 {
   "@class": "com.breece.proposal.api.ClaimSighting",
-  "sourceSightingId": "1",
+  "sightingId": "1",
   "contentId": "1",
   "linkedSightingId": "content-1-sighting-1",
   "sightingDetails": {
