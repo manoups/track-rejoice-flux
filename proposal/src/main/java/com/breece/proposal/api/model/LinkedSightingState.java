@@ -13,7 +13,7 @@ import io.fluxzero.sdk.tracking.handling.Stateful;
 import lombok.With;
 import lombok.extern.slf4j.Slf4j;
 
-@Stateful
+@Stateful(commitInBatch = true)
 @Consumer(name = "linked-sighting-state-consumer", ignoreSegment = true)
 @Slf4j
 public record LinkedSightingState(@EntityId LinkedSightingId linkedSightingId, SightingId sightingId,
