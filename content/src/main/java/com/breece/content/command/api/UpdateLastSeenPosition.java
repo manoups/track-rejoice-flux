@@ -8,7 +8,7 @@ import com.breece.coreapi.authentication.Role;
 import com.breece.coreapi.common.SightingDetails;
 import io.fluxzero.sdk.persisting.eventsourcing.Apply;
 
-@RequiresRole(Role.ADMIN)
+//@RequiresRole(Role.ADMIN)
 public record UpdateLastSeenPosition(ContentId contentId, SightingDetails sightingDetails) implements ContentUpdate, ConfirmedSightingUpdate {
     @Apply
     Content apply(Content content) {

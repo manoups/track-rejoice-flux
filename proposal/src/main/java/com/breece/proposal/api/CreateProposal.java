@@ -17,12 +17,22 @@ import io.fluxzero.sdk.Fluxzero;
 import io.fluxzero.sdk.modeling.AssertLegal;
 import io.fluxzero.sdk.modeling.Entity;
 import io.fluxzero.sdk.persisting.eventsourcing.Apply;
+import io.fluxzero.sdk.persisting.eventsourcing.InterceptApply;
 import io.fluxzero.sdk.tracking.handling.authentication.UnauthorizedException;
 import jakarta.validation.constraints.NotNull;
 
+import java.util.List;
 import java.util.Objects;
 
 public record CreateProposal(@NotNull ContentId contentId, @NotNull UserId seeker, @NotNull SightingId sightingId, @NotNull LinkedSightingId linkedSightingId, @NotNull SightingDetails sightingDetails) implements LinkedSightingCommand {
+    @InterceptApply
+    List<LinkedSightingCommand> interceptApply(Sender sender) {
+        if (sender.isAuthorizedFor(seeker())) {
+            return List.of(this, new AcceptProposal(linkedSightingId()));
+        }
+        return List.of(this);
+    }
+
     @AssertLegal
     void assertNew(LinkedSighting linkedSighting) {
         throw LinkedSightingErrors.alreadyExists;
