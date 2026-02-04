@@ -14,12 +14,6 @@ import org.springframework.stereotype.Component;
 @Component
 @Consumer(name = "linked-sighting-handler")
 public class LinkedSightingHandler {
-    @HandleEvent
-    void on(CreateProposal event, Sender sender) {
-        if (sender.isAuthorizedFor(event.seeker())) {
-            Fluxzero.publishEvent(new AcceptProposal(event.linkedSightingId()));
-        }
-    }
 
     @HandleEvent
     void on(AcceptProposal event) {
