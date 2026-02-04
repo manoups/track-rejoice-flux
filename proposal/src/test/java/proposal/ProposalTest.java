@@ -33,7 +33,7 @@ import static org.hamcrest.Matchers.hasSize;
 
 @Slf4j
 public class ProposalTest extends TestUtilities {
-    final TestFixture testFixture = TestFixture.create(LinkedSightingHandler.class, LinkedSightingState.class).givenCommands(createUserFromProfile(viewer), createUserFromProfile(user2), createUserFromProfile(Alice));
+    final TestFixture testFixture = TestFixture.create(LinkedSightingState.class).givenCommands(createUserFromProfile(viewer), createUserFromProfile(user2), createUserFromProfile(Alice));
 
     @Test
     void givenNoContent_whenProposalCreated_thenError() {

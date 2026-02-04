@@ -27,7 +27,7 @@ import static org.hamcrest.Matchers.hasSize;
 
 public class SightingTest extends TestUtilities {
 
-    final TestFixture testFixture = TestFixture.create(LinkedSightingHandler.class, LinkedSightingState.class)
+    final TestFixture testFixture = TestFixture.create(LinkedSightingState.class)
             .givenCommands(createUserFromProfile(viewer), createUserFromProfile(user2), createUserFromProfile(Alice));
 
 

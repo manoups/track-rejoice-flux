@@ -16,7 +16,7 @@ import java.util.Objects;
 import static org.hamcrest.Matchers.hasSize;
 
 public class SightingAsyncTest extends TestUtilities {
-    final TestFixture testFixture = TestFixture.createAsync(LinkedSightingHandler.class, LinkedSightingState.class)
+    final TestFixture testFixture = TestFixture.createAsync(LinkedSightingState.class)
             .givenCommands(createUserFromProfile(viewer), createUserFromProfile(user2), createUserFromProfile(Alice));
 
 
