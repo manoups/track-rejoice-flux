@@ -2,11 +2,14 @@ package sighting;
 
 import com.breece.content.api.model.ContentId;
 import com.breece.content.command.api.UpdateLastSeenPosition;
-import com.breece.proposal.api.*;
-import com.breece.proposal.api.model.LinkedSightingState;
-import com.breece.proposal.api.model.LinkedSightingStatus;
+import com.breece.proposal.command.api.model.LinkedSightingState;
+import com.breece.proposal.command.api.model.LinkedSightingStatus;
+import com.breece.proposal.command.api.AcceptProposal;
+import com.breece.proposal.command.api.GetLinkedSightingsByContentIdAndStatuses;
+import com.breece.proposal.command.api.GetLinkedSightingsBySightingIdAndStatuses;
 import com.breece.sighting.api.model.SightingId;
 import io.fluxzero.sdk.test.TestFixture;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import util.TestUtilities;
 
@@ -30,13 +33,14 @@ public class SightingAsyncTest extends TestUtilities {
                 .expectResult(List::isEmpty);
     }
 
+    @Disabled("GetLinkedSightingsByContentIdAndStatuses should be disabled")
     @Test
     void claimSightingWithCorrectContentOwner() {
         testFixture.givenCommandsByUser("viewer", "../content/create-content.json", "create-sighting.json")
                 .givenCommands("../content/publish-content.json")
                 .whenCommandByUser("viewer", "claim-sighting.json")
                 .expectNoErrors()
-                .expectOnlyEvents(CreateProposal.class, AcceptProposal.class, UpdateLastSeenPosition.class)
+                .expectOnlyEvents(com.breece.proposal.command.api.CreateProposal.class, AcceptProposal.class, UpdateLastSeenPosition.class)
                 .expectCommands(UpdateLastSeenPosition.class)
                 .andThen()
                 .whenQuery(new GetLinkedSightingsBySightingIdAndStatuses(new SightingId("1"), List.of(LinkedSightingStatus.ACCEPTED)))

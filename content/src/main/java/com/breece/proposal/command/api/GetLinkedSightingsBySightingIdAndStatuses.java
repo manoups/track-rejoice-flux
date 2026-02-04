@@ -1,10 +1,10 @@
-package com.breece.proposal.api;
+package com.breece.proposal.command.api;
 
 import com.breece.coreapi.authentication.Sender;
-import com.breece.proposal.api.model.LinkedSighting;
-import com.breece.proposal.api.model.LinkedSightingId;
-import com.breece.proposal.api.model.LinkedSightingState;
-import com.breece.proposal.api.model.LinkedSightingStatus;
+import com.breece.proposal.command.api.model.LinkedSighting;
+import com.breece.proposal.command.api.model.LinkedSightingId;
+import com.breece.proposal.command.api.model.LinkedSightingState;
+import com.breece.proposal.command.api.model.LinkedSightingStatus;
 import com.breece.sighting.api.model.SightingId;
 import io.fluxzero.common.api.search.Constraint;
 import io.fluxzero.sdk.Fluxzero;

@@ -1,4 +1,4 @@
-package com.breece.proposal.api.model;
+package com.breece.proposal.command.api.model;
 
 import com.breece.content.api.model.ContentId;
 import com.breece.sighting.api.model.SightingId;

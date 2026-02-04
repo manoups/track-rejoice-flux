@@ -1,7 +1,7 @@
-package com.breece.proposal.api;
+package com.breece.proposal.command.api;
 
-import com.breece.proposal.api.model.LinkedSightingState;
-import com.breece.proposal.api.model.LinkedSightingStatus;
+import com.breece.proposal.command.api.model.LinkedSightingState;
+import com.breece.proposal.command.api.model.LinkedSightingStatus;
 import io.fluxzero.common.api.search.Constraint;
 import io.fluxzero.sdk.Fluxzero;
 import io.fluxzero.sdk.tracking.handling.HandleQuery;

@@ -6,7 +6,7 @@ import com.breece.coreapi.authentication.Sender;
 import io.fluxzero.sdk.persisting.eventsourcing.Apply;
 import org.wildfly.common.annotation.NotNull;
 
-public record DeleteContent(@NotNull ContentId contentId) implements ContentUpdate {
+public record DeleteContent(@NotNull ContentId contentId) implements ContentUpdateOwner {
 
     @Apply
     Content create(Sender sender) {

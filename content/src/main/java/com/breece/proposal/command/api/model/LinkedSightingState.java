@@ -1,10 +1,13 @@
-package com.breece.proposal.api.model;
+package com.breece.proposal.command.api.model;
 
+import com.breece.content.api.model.Content;
+import com.breece.content.api.model.ContentId;
 import com.breece.content.command.api.UpdateLastSeenPosition;
-import com.breece.proposal.api.AcceptProposal;
-import com.breece.proposal.api.CreateProposal;
-import com.breece.proposal.api.DeleteLinkedProposal;
-import com.breece.proposal.api.RejectProposal;
+import com.breece.coreapi.common.SightingDetails;
+import com.breece.proposal.command.api.AcceptProposal;
+import com.breece.proposal.command.api.CreateProposal;
+import com.breece.proposal.command.api.DeleteLinkedProposal;
+import com.breece.proposal.command.api.RejectProposal;
 import com.breece.sighting.api.model.Sighting;
 import com.breece.sighting.api.model.SightingId;
 import com.breece.sighting.command.api.DeleteSighting;
@@ -21,26 +24,25 @@ import lombok.With;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.Objects;
-import java.util.Optional;
 
 @Stateful(commitInBatch = true)
 @Consumer(name = "linked-sighting-state-consumer", ignoreSegment = true)
 @Slf4j
-public record LinkedSightingState(@EntityId LinkedSightingId linkedSightingId, SightingId sightingId,
-                                  @With LinkedSightingStatus status) {
+public record LinkedSightingState(@EntityId LinkedSightingId linkedSightingId, ContentId contentId, SightingId sightingId,
+                                  SightingDetails sightingDetails, @With LinkedSightingStatus status) {
     @Association("linkedSightingId")
     @HandleEvent
     static LinkedSightingState on(CreateProposal event) {
-        return new LinkedSightingState(event.linkedSightingId(), event.sightingId(), LinkedSightingStatus.CREATED);
+        return new LinkedSightingState(event.linkedSightingId(), event.contentId(), event.sightingId(), event.sightingDetails(), LinkedSightingStatus.CREATED);
     }
 
     @Association("linkedSightingId")
     @HandleEvent
-    LinkedSightingState on(AcceptProposal event, LinkedSighting linkedSighting) {
+    LinkedSightingState on(AcceptProposal event, Content content) {
         if (LinkedSightingStatus.CREATED != status()) {
             return this;
         }
-        DeleteSighting deleteSighting = Fluxzero.loadAggregate(linkedSighting.sightingId())
+        DeleteSighting deleteSighting = Fluxzero.loadAggregate(sightingId())
                 .mapIfPresent(Entity::get)
                 .filter(Sighting::removeAfterMatching)
                 .map(Sighting::sightingId)
@@ -52,7 +54,7 @@ public record LinkedSightingState(@EntityId LinkedSightingId linkedSightingId, S
                 return this;
             }
         }
-        Fluxzero.sendAndForgetCommand(new UpdateLastSeenPosition(linkedSighting.contentId(), linkedSighting.sightingDetails()));
+        Fluxzero.sendAndForgetCommand(new UpdateLastSeenPosition(content.contentId(), sightingDetails()));
 
         return withStatus(LinkedSightingStatus.ACCEPTED);
     }
@@ -69,7 +71,7 @@ public record LinkedSightingState(@EntityId LinkedSightingId linkedSightingId, S
     @Association("sightingId")
     @HandleEvent
     LinkedSightingState on(DeleteSighting event) {
-        Fluxzero.sendAndForgetCommand(new DeleteLinkedProposal(linkedSightingId()));
+        Fluxzero.sendAndForgetCommand(new DeleteLinkedProposal(contentId, linkedSightingId()));
         return this;
     }
 

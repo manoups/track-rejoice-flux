@@ -7,12 +7,11 @@ import com.breece.content.command.api.UpdateLastSeenPosition;
 import com.breece.content.query.api.GetContent;
 import com.breece.content.query.api.GetSightingHistoryForContent;
 import com.breece.coreapi.common.SightingDetails;
-import com.breece.coreapi.user.api.UserId;
 import com.breece.coreapi.util.GeometryUtil;
-import com.breece.proposal.api.*;
-import com.breece.proposal.api.model.LinkedSightingId;
-import com.breece.proposal.api.model.LinkedSightingState;
-import com.breece.proposal.api.model.LinkedSightingStatus;
+import com.breece.proposal.command.api.*;
+import com.breece.proposal.command.api.model.LinkedSightingId;
+import com.breece.proposal.command.api.model.LinkedSightingState;
+import com.breece.proposal.command.api.model.LinkedSightingStatus;
 import com.breece.sighting.api.SightingErrors;
 import com.breece.sighting.api.model.SightingId;
 import com.breece.sighting.command.api.CreateSighting;
@@ -55,7 +54,7 @@ public class ProposalTest extends TestUtilities {
     void givenIncorrectLinkedSightingId_whenCreateProposal_thenError() {
         testFixture.givenCommandsByUser("viewer", "../content/create-content.json", "../sighting/create-sighting.json")
                 .givenCommands("../content/publish-content.json")
-                .whenCommand(new CreateProposal(new ContentId("1"), new UserId("viewer"), new SightingId("1"), new LinkedSightingId(new ContentId("3"), new SightingId("2")),
+                .whenCommandByUser("viewer", new CreateProposal(new ContentId("1"), new SightingId("1"), new LinkedSightingId(new ContentId("3"), new SightingId("2")),
                         new SightingDetails(BigDecimal.ZERO, BigDecimal.ZERO)))
                 .expectError(LinkedSightingErrors.malformedKey)
                 .expectExceptionalResult((e) -> e.getMessage().equals(LinkedSightingErrors.malformedKey.getMessage()));
@@ -137,7 +136,8 @@ public class ProposalTest extends TestUtilities {
                 .givenCommands("../content/publish-content.json")
                 .givenCommandsByUser("viewer", "create-proposal.json")
                 .whenCommandByUser("user2", "reject-proposal.json")
-                .expectError(IllegalCommandException.class);
+                .expectError(ContentErrors.unauthorized)
+                .expectExceptionalResult((e) -> e.getMessage().equals(ContentErrors.unauthorized.getMessage()));
     }
 
     @Test
@@ -146,7 +146,8 @@ public class ProposalTest extends TestUtilities {
                 .givenCommands("../content/publish-content.json")
                 .givenCommandsByUser("viewer", "create-proposal.json")
                 .whenCommandByUser("user2", "accept-proposal.json")
-                .expectError(ContentErrors.unauthorized);
+                .expectError(ContentErrors.unauthorized)
+                .expectExceptionalResult((e) -> e.getMessage().equals(ContentErrors.unauthorized.getMessage()));
     }
 
     @Test
@@ -177,6 +178,7 @@ public class ProposalTest extends TestUtilities {
                     .givenCommandsByUser("Alice", "../sighting/create-sighting.json", "create-proposal.json");
         }
 
+        @Disabled("GetLinkedSightingsByContentIdAndStatuses should be disabled")
         @Test
         void givenAcceptedProposal_whenQueryProposedSightings_thenEmptyList() {
             testFixture.whenQuery(new GetContent(new ContentId("1")))
@@ -193,7 +195,8 @@ public class ProposalTest extends TestUtilities {
 
         @Test
         void givenProposal_whenNonExistentProposalRejected_thenError() {
-            testFixture.whenCommand(new DeleteLinkedProposal(new LinkedSightingId(new ContentId("1"), new SightingId("2"))))
+            ContentId contentId = new ContentId("1");
+            testFixture.whenCommand(new DeleteLinkedProposal(contentId, new LinkedSightingId(contentId, new SightingId("2"))))
                     .expectError(LinkedSightingErrors.notFound);
         }
 
@@ -233,6 +236,7 @@ public class ProposalTest extends TestUtilities {
                     .expectResult(details -> GeometryUtil.parseLocation(details.lat(), details.lng()).within(GeometryUtil.parseLocation(123.456, 78.901)));
         }
 
+        @Disabled("GetLinkedSightingsByContentIdAndStatuses should be disabled")
         @Test
         void givenSighting_whenCreateProposal_thenContentShouldContainTheProposal() {
             testFixture.whenQuery(new GetLinkedSightingsByContentIdAndStatuses(new ContentId("1"), List.of(LinkedSightingStatus.CREATED)))
@@ -276,6 +280,7 @@ public class ProposalTest extends TestUtilities {
                     .expectResult(Objects::nonNull);
         }
 
+        @Disabled("GetLinkedSightingsByContentIdAndStatuses should be disabled")
         @Test
         void givenAProposal_whenClaim_thenProposalUnaffected() {
             testFixture

@@ -1,4 +1,5 @@
 {
-  "@class": "com.breece.proposal.api.RejectProposal",
-  "linkedSightingId": "content-1-sighting-1"
+  "@class": "com.breece.proposal.command.api.RejectProposal",
+  "linkedSightingId": "content-1-sighting-1",
+  "contentId": "1"
 }

@@ -1,4 +1,4 @@
-package com.breece.proposal.api;
+package com.breece.proposal.command.api;
 
 import com.breece.coreapi.util.GeometryUtil;
 import com.breece.geo.model.GeoJsonPost;

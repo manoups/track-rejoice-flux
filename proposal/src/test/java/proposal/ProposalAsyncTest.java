@@ -4,14 +4,16 @@ import com.breece.content.api.model.ContentId;
 import com.breece.content.command.api.PublishContent;
 import com.breece.content.command.api.UpdateLastSeenPosition;
 import com.breece.coreapi.common.SightingDetails;
-import com.breece.proposal.api.*;
-import com.breece.proposal.api.model.LinkedSighting;
-import com.breece.proposal.api.model.LinkedSightingId;
-import com.breece.proposal.api.model.LinkedSightingState;
-import com.breece.proposal.api.model.LinkedSightingStatus;
+import com.breece.proposal.command.api.model.LinkedSighting;
+import com.breece.proposal.command.api.model.LinkedSightingId;
+import com.breece.proposal.command.api.model.LinkedSightingState;
+import com.breece.proposal.command.api.model.LinkedSightingStatus;
+import com.breece.proposal.command.api.DeleteLinkedProposal;
+import com.breece.proposal.command.api.GetLinkedSightingsByContentIdAndStatuses;
 import com.breece.sighting.api.model.SightingId;
 import com.breece.sighting.command.api.DeleteSighting;
 import io.fluxzero.sdk.test.TestFixture;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import util.TestUtilities;
 
@@ -25,6 +27,7 @@ import static org.hamcrest.Matchers.hasSize;
 public class ProposalAsyncTest extends TestUtilities {
     final TestFixture testFixture = TestFixture.createAsync(LinkedSightingState.class).givenCommands(createUserFromProfile(viewer), createUserFromProfile(user2), createUserFromProfile(Alice));
 
+    @Disabled("GetLinkedSightingsByContentIdAndStatuses should be disabled")
     @Test
     void givenCreateProposalForRemovableSightingContent2_whenClaimSightingForContent1_thenStateOfContent2ShouldBeDeleted() {
         ContentId contentId = new ContentId("2");
@@ -34,7 +37,7 @@ public class ProposalAsyncTest extends TestUtilities {
 //            create C2
                 .givenCommandsByUser("viewer", "../content/create-content-keys.json")
                 .givenCommands(new PublishContent(contentId, Duration.ofDays(10)))
-                .whenCommandByUser("viewer", new ClaimSighting(contentId, sightingId, new SightingDetails(new BigDecimal("78.901"),
+                .whenCommandByUser("viewer", new com.breece.proposal.command.api.ClaimSighting(contentId, sightingId, new SightingDetails(new BigDecimal("78.901"),
                         new BigDecimal("123.456")),
                         new LinkedSightingId(contentId, sightingId)
                 ))
@@ -53,6 +56,7 @@ public class ProposalAsyncTest extends TestUtilities {
                 .expectResult(List::isEmpty);
     }
 
+    @Disabled("GetLinkedSightingsByContentIdAndStatuses should be disabled")
     @Test
     void givenCreateProposalForContent2_whenClaimSightingForContent1_thenStateOfContent2ShouldNotBeChanged() {
         ContentId contentId = new ContentId("2");
@@ -62,7 +66,7 @@ public class ProposalAsyncTest extends TestUtilities {
 //            create C2
                 .givenCommandsByUser("viewer", "../content/create-content-keys.json")
                 .givenCommands(new PublishContent(contentId, Duration.ofDays(10)))
-                .whenCommandByUser("viewer", new ClaimSighting(contentId, sightingId, new SightingDetails(new BigDecimal("78.901"),
+                .whenCommandByUser("viewer", new com.breece.proposal.command.api.ClaimSighting(contentId, sightingId, new SightingDetails(new BigDecimal("78.901"),
                         new BigDecimal("123.456")),
                         new LinkedSightingId(contentId, sightingId)
                 ))

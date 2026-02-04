@@ -1,14 +1,14 @@
-package com.breece.proposal.api;
+package com.breece.proposal.command.api;
 
+import com.breece.content.api.model.ContentId;
 import com.breece.coreapi.authentication.Sender;
-import com.breece.proposal.api.model.*;
-import io.fluxzero.sdk.Fluxzero;
+import com.breece.proposal.command.api.model.LinkedSighting;
+import com.breece.proposal.command.api.model.LinkedSightingId;
+import com.breece.proposal.command.api.model.LinkedSightingUpdate;
 import io.fluxzero.sdk.modeling.AssertLegal;
 import io.fluxzero.sdk.persisting.eventsourcing.Apply;
-import io.fluxzero.sdk.persisting.eventsourcing.InterceptApply;
-import jakarta.validation.constraints.NotNull;
 
-public record DeleteLinkedProposal(@NotNull LinkedSightingId linkedSightingId) implements LinkedSightingUpdate {
+public record DeleteLinkedProposal(ContentId contentId, LinkedSightingId linkedSightingId) implements LinkedSightingUpdate {
 
     @AssertLegal
     void assertPermitted(LinkedSighting linkedSighting, Sender sender) {

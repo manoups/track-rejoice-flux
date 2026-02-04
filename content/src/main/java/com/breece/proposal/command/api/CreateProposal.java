@@ -1,34 +1,33 @@
-package com.breece.proposal.api;
+package com.breece.proposal.command.api;
 
 
-import com.breece.content.ContentErrors;
 import com.breece.content.api.model.Content;
 import com.breece.content.api.model.ContentId;
+import com.breece.content.command.api.ContentCommand;
+import com.breece.content.command.api.ContentInteract;
 import com.breece.coreapi.authentication.Sender;
 import com.breece.coreapi.common.SightingDetails;
-import com.breece.coreapi.user.api.UserId;
-import com.breece.proposal.api.model.LinkedSighting;
-import com.breece.proposal.api.model.LinkedSightingCommand;
-import com.breece.proposal.api.model.LinkedSightingId;
+import com.breece.proposal.command.api.model.LinkedSighting;
+import com.breece.proposal.command.api.model.LinkedSightingCommand;
+import com.breece.proposal.command.api.model.LinkedSightingId;
 import com.breece.sighting.api.SightingErrors;
 import com.breece.sighting.api.model.Sighting;
 import com.breece.sighting.api.model.SightingId;
 import io.fluxzero.sdk.Fluxzero;
 import io.fluxzero.sdk.modeling.AssertLegal;
-import io.fluxzero.sdk.modeling.Entity;
 import io.fluxzero.sdk.persisting.eventsourcing.Apply;
 import io.fluxzero.sdk.persisting.eventsourcing.InterceptApply;
-import io.fluxzero.sdk.tracking.handling.authentication.UnauthorizedException;
 import jakarta.validation.constraints.NotNull;
 
 import java.util.List;
 import java.util.Objects;
 
-public record CreateProposal(@NotNull ContentId contentId, @NotNull UserId seeker, @NotNull SightingId sightingId, @NotNull LinkedSightingId linkedSightingId, @NotNull SightingDetails sightingDetails) implements LinkedSightingCommand {
+public record CreateProposal(ContentId contentId, @NotNull SightingId sightingId, LinkedSightingId linkedSightingId, @NotNull SightingDetails sightingDetails) implements ContentInteract, LinkedSightingCommand {
     @InterceptApply
-    List<LinkedSightingCommand> interceptApply(Sender sender) {
-        if (sender.isAuthorizedFor(seeker())) {
-            return List.of(this, new AcceptProposal(linkedSightingId()));
+    List<ContentCommand> interceptApply(Content content, Sender sender) {
+//        UserId userId = Fluxzero.<Content>loadAggregateFor(linkedSightingId, Content.class).mapIfPresent(Entity::get).map(Content::ownerId).get();
+        if (sender.isAuthorizedFor(content.ownerId())) {
+            return List.of(this, new AcceptProposal(contentId, linkedSightingId()));
         }
         return List.of(this);
     }
@@ -38,8 +37,9 @@ public record CreateProposal(@NotNull ContentId contentId, @NotNull UserId seeke
         throw LinkedSightingErrors.alreadyExists;
     }
 
-    @AssertLegal
+    /*@AssertLegal
     void assertCorrectSeeker() {
+
         Sender sender = Sender.createSender(seeker);
         if(Objects.isNull(sender)) {
             throw new UnauthorizedException("User not found");
@@ -51,7 +51,7 @@ public record CreateProposal(@NotNull ContentId contentId, @NotNull UserId seeke
         if (sender.nonAuthorizedFor(contentEntity.get().ownerId())) {
             throw LinkedSightingErrors.unauthorized;
         }
-    }
+    }*/
 
     @AssertLegal
     void assertCorrectId() {
@@ -73,6 +73,6 @@ public record CreateProposal(@NotNull ContentId contentId, @NotNull UserId seeke
 
     @Apply
     LinkedSighting propose(Sender sender) {
-        return new LinkedSighting(linkedSightingId, sender.userId(), seeker, sightingId, contentId, sightingDetails);
+        return new LinkedSighting(linkedSightingId, sender.userId(), sightingId, sightingDetails);
     }
 }

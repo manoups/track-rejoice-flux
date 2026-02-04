@@ -1,4 +1,4 @@
-package com.breece.proposal.api;
+package com.breece.proposal.command.api;
 
 import com.breece.content.api.model.Content;
 import com.breece.content.api.model.ContentId;
@@ -6,7 +6,6 @@ import com.breece.content.command.api.ContentCommand;
 import com.breece.coreapi.common.SightingDetails;
 import com.breece.sighting.api.model.Sighting;
 import com.breece.sighting.api.model.SightingId;
-import com.breece.sighting.command.api.SightingCommand;
 import io.fluxzero.sdk.Fluxzero;
 import io.fluxzero.sdk.persisting.eventsourcing.Apply;
 import io.fluxzero.sdk.persisting.eventsourcing.InterceptApply;
