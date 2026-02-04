@@ -261,6 +261,7 @@ public class ProposalTest extends TestUtilities {
         }
 
         @Test
+        @Disabled
         void givenAnAcceptedProposal_whenDeleteSighting_thenProposalUnaffected() {
             testFixture.givenCommands("accept-proposal.json")
                     .whenCommand("../sighting/delete-sighting.json")

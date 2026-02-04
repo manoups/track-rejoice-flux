@@ -38,7 +38,7 @@ public class ProposalAsyncTest extends TestUtilities {
                         new BigDecimal("123.456")),
                         new LinkedSightingId(contentId, sightingId)
                 ))
-                .expectOnlyCommands(UpdateLastSeenPosition.class, DeleteSighting.class, DeleteLinkedProposal.class)
+                .expectOnlyCommands(UpdateLastSeenPosition.class, DeleteSighting.class, DeleteLinkedProposal.class, DeleteLinkedProposal.class)
                 .expectThat(fz -> {
                     List<LinkedSightingState> linkedSightingStates = fz.documentStore().search(LinkedSightingState.class).fetchAll();
                     assertThat(linkedSightingStates).hasSize(1);

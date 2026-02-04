@@ -1,7 +1,9 @@
 package com.breece.proposal.api.model;
 
-import com.breece.coreapi.authentication.Sender;
-import com.breece.proposal.api.*;
+import com.breece.proposal.api.AcceptProposal;
+import com.breece.proposal.api.CreateProposal;
+import com.breece.proposal.api.DeleteLinkedProposal;
+import com.breece.proposal.api.RejectProposal;
 import com.breece.sighting.api.model.SightingId;
 import com.breece.sighting.command.api.DeleteSighting;
 import io.fluxzero.sdk.Fluxzero;
@@ -27,7 +29,7 @@ public record LinkedSightingState(@EntityId LinkedSightingId linkedSightingId, S
     @Association("linkedSightingId")
     @HandleEvent
     LinkedSightingState on(AcceptProposal event) {
-        if(LinkedSightingStatus.CREATED != status()) {
+        if (LinkedSightingStatus.CREATED != status()) {
             return this;
         }
         return withStatus(LinkedSightingStatus.ACCEPTED);
@@ -36,7 +38,7 @@ public record LinkedSightingState(@EntityId LinkedSightingId linkedSightingId, S
     @Association("linkedSightingId")
     @HandleEvent
     LinkedSightingState on(RejectProposal event) {
-        if(LinkedSightingStatus.CREATED != status()) {
+        if (LinkedSightingStatus.CREATED != status()) {
             return this;
         }
         return withStatus(LinkedSightingStatus.REJECTED);
@@ -45,9 +47,7 @@ public record LinkedSightingState(@EntityId LinkedSightingId linkedSightingId, S
     @Association("sightingId")
     @HandleEvent
     LinkedSightingState on(DeleteSighting event) {
-        if(LinkedSightingStatus.ACCEPTED != status()) {
-            Fluxzero.sendAndForgetCommand(new DeleteLinkedProposal(linkedSightingId()));
-        }
+        Fluxzero.sendAndForgetCommand(new DeleteLinkedProposal(linkedSightingId()));
         return this;
     }
 
