@@ -9,13 +9,6 @@ import io.fluxzero.sdk.persisting.eventsourcing.InterceptApply;
 import jakarta.validation.constraints.NotNull;
 
 public record DeleteLinkedProposal(@NotNull LinkedSightingId linkedSightingId) implements LinkedSightingUpdate {
-    @InterceptApply
-    DeleteLinkedProposal assertNotLinked(LinkedSighting linkedSighting) {
-        if (Fluxzero.getDocument(linkedSighting.linkedSightingId(), LinkedSightingState.class).get().status()== LinkedSightingStatus.ACCEPTED) {
-            return null;
-        }
-        return this;
-    }
 
     @AssertLegal
     void assertPermitted(LinkedSighting linkedSighting, Sender sender) {

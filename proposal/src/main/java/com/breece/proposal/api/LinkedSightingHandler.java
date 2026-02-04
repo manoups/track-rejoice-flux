@@ -15,15 +15,4 @@ import org.springframework.stereotype.Component;
 @Consumer(name = "linked-sighting-handler")
 public class LinkedSightingHandler {
 
-    @HandleEvent
-    void on(AcceptProposal event) {
-        LinkedSighting linkedSighting = Fluxzero.loadAggregate(event.linkedSightingId()).get();
-        Fluxzero.sendAndForgetCommand(new UpdateLastSeenPosition(linkedSighting.contentId(), linkedSighting.sightingDetails()));
-        Fluxzero.loadAggregate(linkedSighting.sightingId())
-                .mapIfPresent(Entity::get)
-                .filter(Sighting::removeAfterMatching)
-                .map(Sighting::sightingId)
-                .map(DeleteSighting::new)
-                .ifPresent(Fluxzero::sendAndForgetCommand);
-    }
 }

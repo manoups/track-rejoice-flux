@@ -41,16 +41,16 @@ public class ProposalAsyncTest extends TestUtilities {
                 .expectOnlyCommands(UpdateLastSeenPosition.class, DeleteSighting.class, DeleteLinkedProposal.class, DeleteLinkedProposal.class)
                 .expectThat(fz -> {
                     List<LinkedSightingState> linkedSightingStates = fz.documentStore().search(LinkedSightingState.class).fetchAll();
-                    assertThat(linkedSightingStates).hasSize(1);
+                    assertThat(linkedSightingStates).isEmpty();
                     List<LinkedSighting> linkedSightings = fz.documentStore().search(LinkedSighting.class).fetchAll();
-                    assertThat(linkedSightings).hasSize(1);
+                    assertThat(linkedSightings).isEmpty();
                 })
                 .andThen()
                 .whenQuery(new GetLinkedSightingsByContentIdAndStatuses(new ContentId("1"), List.of(LinkedSightingStatus.CREATED)))
                 .expectResult(List::isEmpty)
                 .andThen()
                 .whenQuery(new GetLinkedSightingsByContentIdAndStatuses(contentId, List.of(LinkedSightingStatus.ACCEPTED)))
-                .expectResult(hasSize(1));
+                .expectResult(List::isEmpty);
     }
 
     @Test
