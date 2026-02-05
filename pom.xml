@@ -183,6 +183,5 @@
     <module>content</module>
     <module>order</module>
     <module>service</module>
-    <module>proposal</module>
   </modules>
 </project>
