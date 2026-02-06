@@ -3,20 +3,28 @@ package proposal;
 import com.breece.content.ContentErrors;
 import com.breece.content.api.model.Content;
 import com.breece.content.api.model.ContentId;
-import com.breece.content.api.model.ProposedSightingId;
-import com.breece.content.command.api.*;
+import com.breece.content.command.api.UpdateLastSeenPosition;
 import com.breece.content.query.api.GetContent;
 import com.breece.content.query.api.GetSightingHistoryForContent;
+import com.breece.coreapi.common.SightingDetails;
 import com.breece.coreapi.util.GeometryUtil;
+import com.breece.proposal.command.api.*;
+import com.breece.proposal.command.api.model.LinkedSightingId;
+import com.breece.proposal.command.api.model.LinkedSightingState;
+import com.breece.proposal.command.api.model.LinkedSightingStatus;
 import com.breece.sighting.api.SightingErrors;
+import com.breece.sighting.api.model.SightingId;
+import com.breece.sighting.command.api.CreateSighting;
 import io.fluxzero.sdk.test.TestFixture;
 import io.fluxzero.sdk.tracking.handling.IllegalCommandException;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import util.TestUtilities;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Objects;
 
@@ -24,7 +32,7 @@ import static org.hamcrest.Matchers.hasSize;
 
 @Slf4j
 public class ProposalTest extends TestUtilities {
-    final TestFixture testFixture = TestFixture.create(ProposedSightingHandler.class, SightingHandler.class, ContentHandler.class).givenCommands(createUserFromProfile(viewer), createUserFromProfile(user2), createUserFromProfile(Alice));
+    final TestFixture testFixture = TestFixture.create(LinkedSightingState.class).givenCommands(createUserFromProfile(viewer), createUserFromProfile(user2), createUserFromProfile(Alice));
 
     @Test
     void givenNoContent_whenProposalCreated_thenError() {
@@ -35,10 +43,21 @@ public class ProposalTest extends TestUtilities {
 
     @Test
     void createProposal() {
-        testFixture.givenCommands("../content/create-content.json", "../sighting/create-sighting.json", "../content/publish-content.json")
+        testFixture.givenCommandsByUser("viewer", "../content/create-content.json", "../sighting/create-sighting.json")
+                .givenCommands("../content/publish-content.json")
                 .whenCommand("create-proposal.json")
                 .expectNoErrors()
                 .expectEvents("create-proposal.json");
+    }
+
+    @Test
+    void givenIncorrectLinkedSightingId_whenCreateProposal_thenError() {
+        testFixture.givenCommandsByUser("viewer", "../content/create-content.json", "../sighting/create-sighting.json")
+                .givenCommands("../content/publish-content.json")
+                .whenCommandByUser("viewer", new CreateProposal(new ContentId("1"), new SightingId("1"), new LinkedSightingId(new ContentId("3"), new SightingId("2")),
+                        new SightingDetails(BigDecimal.ZERO, BigDecimal.ZERO)))
+                .expectError(LinkedSightingErrors.malformedKey)
+                .expectExceptionalResult((e) -> e.getMessage().equals(LinkedSightingErrors.malformedKey.getMessage()));
     }
 
     @Test
@@ -61,13 +80,34 @@ public class ProposalTest extends TestUtilities {
     }
 
     @Test
+    void givenProposal_whenLinkedProposalByDifferentUser_thenEmptyList() {
+        testFixture.givenCommandsByUser("viewer", "../sighting/create-sighting.json", "../content/create-content.json")
+                .givenCommands("../content/publish-content.json")
+                .whenCommandByUser("Alice", "create-proposal.json")
+                .expectNoErrors()
+                .expectCommands()
+                .expectEvents("create-proposal.json");
+    }
+
+    @Test
+    void ProposalShouldBeLinkedToContentIfUserMatch() {
+        testFixture.givenCommandsByUser("viewer", "../sighting/create-sighting.json", "../content/create-content.json")
+                .givenCommands("../content/publish-content.json")
+                .whenCommandByUser("viewer", "create-proposal.json")
+                .expectNoErrors()
+                .expectCommands(UpdateLastSeenPosition.class)
+                .expectEvents("create-proposal.json", AcceptProposal.class, UpdateLastSeenPosition.class);
+    }
+
+    @Test
     void givenRejectProposal_whenQueryProposedSightings_thenEmptyList() {
-        testFixture.givenCommands("../sighting/create-sighting.json", "../content/create-content.json",
-                        "../content/publish-content.json", "create-proposal.json", "reject-proposal.json")
-                .whenQuery(new GetContent(new ContentId("1")))
+        testFixture.givenCommandsByUser("viewer", "../sighting/create-sighting.json", "../content/create-content.json")
+                .givenCommands("../content/publish-content.json")
+                .givenCommandsByUser("Alice", "create-proposal.json")
+                .givenCommandsByUser("viewer", "reject-proposal.json")
+                .whenQuery(new GetLinkedSightingsByContentIdAndStatuses(new ContentId("1"), List.of(LinkedSightingStatus.CREATED)))
                 .expectNoErrors()
                 .expectResult(Objects::nonNull)
-                .mapResult(Content::proposedSightings)
                 .expectResult(List::isEmpty);
     }
 
@@ -78,9 +118,10 @@ public class ProposalTest extends TestUtilities {
                 .givenCommands("../content/publish-content.json")
                 .whenCommandByUser("user2", "create-proposal.json")
                 .expectNoErrors()
-                .expectEvents("create-proposal.json");
+                .expectOnlyEvents("create-proposal.json");
     }
 
+    @Disabled("Anyone should be able to create proposal")
     @Test
     void givenContentOfUserASightingOfUserB_whenUserAliceCreatesProposal_thenError() {
         testFixture.givenCommandsByUser("viewer", "../content/create-content.json")
@@ -95,7 +136,8 @@ public class ProposalTest extends TestUtilities {
                 .givenCommands("../content/publish-content.json")
                 .givenCommandsByUser("viewer", "create-proposal.json")
                 .whenCommandByUser("user2", "reject-proposal.json")
-                .expectError(IllegalCommandException.class);
+                .expectError(ContentErrors.unauthorized)
+                .expectExceptionalResult((e) -> e.getMessage().equals(ContentErrors.unauthorized.getMessage()));
     }
 
     @Test
@@ -104,21 +146,36 @@ public class ProposalTest extends TestUtilities {
                 .givenCommands("../content/publish-content.json")
                 .givenCommandsByUser("viewer", "create-proposal.json")
                 .whenCommandByUser("user2", "accept-proposal.json")
-                .expectError(ContentErrors.unauthorized);
+                .expectError(ContentErrors.unauthorized)
+                .expectExceptionalResult((e) -> e.getMessage().equals(ContentErrors.unauthorized.getMessage()));
+    }
+
+    @Test
+    void givenContent_whenAcceptsDifferentProposal_thenError() {
+        testFixture.givenCommandsByUser("viewer", "../sighting/create-sighting.json", "../content/create-content.json")
+                .givenCommands("../content/publish-content.json")
+                .givenCommandsByUser("Alice", new CreateSighting(new SightingId("2"), new SightingDetails(BigDecimal.ZERO, BigDecimal.ZERO), true), "create-proposal.json")
+                .whenCommandByUser("viewer", "accept-proposal-increment-id.json")
+                .expectExceptionalResult(LinkedSightingErrors.notFound)
+                .expectError((e) -> e.getMessage().equals(LinkedSightingErrors.notFound.getMessage()));
     }
 
     @Test
     void givenClaim_whenSameProposal_thenError() {
-        testFixture.givenCommands("../sighting/create-sighting.json", "../content/create-content.json", "../content/publish-content.json", "../sighting/claim-sighting.json")
+        testFixture.givenCommandsByUser("viewer", "../sighting/create-sighting.json", "../content/create-content.json")
+                .givenCommands("../content/publish-content.json")
+                .givenCommandsByUser("viewer", "../sighting/claim-sighting.json")
                 .whenCommand("create-proposal.json")
-                .expectError(SightingErrors.alreadyProposed);
+                .expectExceptionalResult(LinkedSightingErrors.alreadyExists)
+                .expectError((e) -> e.getMessage().equals(LinkedSightingErrors.alreadyExists.getMessage()));
     }
 
     @Nested
     class CreatePublishPropose {
         @BeforeEach
         void setUp() {
-            testFixture.givenCommands("../content/create-content.json", "../sighting/create-sighting.json", "../content/publish-content.json", "create-proposal.json");
+            testFixture.givenCommandsByUser("viewer", "../content/create-content.json").givenCommands("../content/publish-content.json")
+                    .givenCommandsByUser("Alice", "../sighting/create-sighting.json", "create-proposal.json");
         }
 
         @Test
@@ -126,21 +183,20 @@ public class ProposalTest extends TestUtilities {
             testFixture.whenQuery(new GetContent(new ContentId("1")))
                     .expectNoErrors()
                     .expectResult(Objects::nonNull)
-                    .mapResult(Content::proposedSightings)
+                    .andThen()
+                    .whenQuery(new GetLinkedSightingsByContentIdAndStatuses(new ContentId("1"), List.of(LinkedSightingStatus.CREATED)))
                     .expectResult(hasSize(1))
                     .andThen()
                     .givenCommands("accept-proposal.json")
-                    .whenQuery(new GetContent(new ContentId("1")))
-                    .expectNoErrors()
-                    .expectResult(Objects::nonNull)
-                    .mapResult(Content::proposedSightings)
+                    .whenQuery(new GetLinkedSightingsByContentIdAndStatuses(new ContentId("1"), List.of(LinkedSightingStatus.CREATED)))
                     .expectResult(List::isEmpty);
         }
 
         @Test
         void givenProposal_whenNonExistentProposalRejected_thenError() {
-            testFixture.whenCommand(new RemoveMemberProposal(new ProposedSightingId("2")))
-                    .expectError(ProposedSightingErrors.notFound);
+            ContentId contentId = new ContentId("1");
+            testFixture.whenCommand(new DeleteLinkedProposal(contentId, new LinkedSightingId(contentId, new SightingId("2"))))
+                    .expectError(LinkedSightingErrors.notFound);
         }
 
         @Test
@@ -181,43 +237,44 @@ public class ProposalTest extends TestUtilities {
 
         @Test
         void givenSighting_whenCreateProposal_thenContentShouldContainTheProposal() {
-            testFixture.whenQuery(new GetContent(new ContentId("1")))
+            testFixture.whenQuery(new GetLinkedSightingsByContentIdAndStatuses(new ContentId("1"), List.of(LinkedSightingStatus.CREATED)))
                     .expectNoErrors()
                     .expectResult(Objects::nonNull)
-                    .mapResult(Content::proposedSightings)
                     .expectResult(hasSize(1));
         }
 
         @Test
         void givenProposal_whenSameProposal_thenError() {
             testFixture.whenCommand("create-proposal.json")
-                    .expectError(SightingErrors.alreadyProposed);
+                    .expectError((e) -> e.getMessage().equals(LinkedSightingErrors.alreadyExists.getMessage()));
         }
+
         @Test
         void givenAProposal_whenDeleteSighting_thenProposalRemoved() {
             testFixture.whenCommand("../sighting/delete-sighting.json")
                     .expectNoErrors()
                     .expectEvents("../sighting/delete-sighting.json")
-                    .expectCommands(RemoveMemberProposal.class)
+                    .expectCommands(DeleteLinkedProposal.class)
                     .andThen()
-                    .whenQuery(new GetContent(new ContentId("1")))
+                    .whenQuery(new GetLinkedSightingsByContentIdAndStatuses(new ContentId("1"), List.of(LinkedSightingStatus.CREATED)))
                     .expectNoErrors()
                     .expectResult(Objects::nonNull)
-                    .mapResult(Content::proposedSightings)
                     .expectResult(List::isEmpty);
         }
 
         @Test
-        void givenAnAcceptedProposal_whenDeleteSighting_thenProposalUnaffected() {
+//        @Disabled
+        void givenAnAcceptedProposal_whenDeleteSighting_thenProposalAlsoDeleted() {
             testFixture.givenCommands("accept-proposal.json")
                     .whenCommand("../sighting/delete-sighting.json")
                     .expectNoErrors()
                     .expectEvents("../sighting/delete-sighting.json")
-                    .expectNoCommands()
+                    .expectOnlyCommands(DeleteLinkedProposal.class)
                     .andThen()
                     .whenQuery(new GetContent(new ContentId("1")))
                     .expectNoErrors()
                     .expectResult(Objects::nonNull)
+                    .expectResult(content -> content.linkedSightings().isEmpty())
                     .mapResult(Content::lastConfirmedSighting)
                     .expectResult(Objects::nonNull);
         }
@@ -227,13 +284,12 @@ public class ProposalTest extends TestUtilities {
             testFixture
                     .whenCommand("../sighting/claim-sighting.json")
                     .expectNoErrors()
-                    .expectCommands(RemoveMemberProposal.class)
+                    .expectCommands(UpdateLastSeenPosition.class)
                     .andThen()
-                    .whenQuery(new GetContent(new ContentId("1")))
+                    .whenQuery(new GetLinkedSightingsByContentIdAndStatuses(new ContentId("1"), List.of(LinkedSightingStatus.ACCEPTED)))
                     .expectNoErrors()
                     .expectResult(Objects::nonNull)
-                    .mapResult(Content::proposedSightings)
-                    .expectResult(List::isEmpty);
+                    .expectResult(hasSize(1));
         }
 
         @Test

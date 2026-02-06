@@ -1,11 +1,11 @@
 {
-  "@class": "com.breece.proposal.command.api.CreateProposal",
+  "@class": "com.breece.proposal.command.api.ClaimSighting",
   "sightingId": "1",
+  "contentId": "1",
   "linkedSightingId": "content-1-sighting-1",
   "sightingDetails": {
     "lat": 123.456,
     "lng": 78.901
   },
-  "seeker": "viewer",
-  "contentId": "1"
+  "removeAfterMatching": true
 }

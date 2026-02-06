@@ -3,7 +3,6 @@ package com.breece.content.query.api;
 import com.breece.content.api.model.Content;
 import com.breece.content.api.model.ContentId;
 import com.breece.coreapi.authentication.Sender;
-import com.breece.content.ContentErrors;
 import io.fluxzero.sdk.Fluxzero;
 import io.fluxzero.sdk.tracking.handling.HandleQuery;
 import io.fluxzero.sdk.tracking.handling.Request;
@@ -15,6 +14,6 @@ public record GetContent(@NotNull ContentId contentId) implements Request<Conten
         return Fluxzero.search(Content.class)
                 .match(sender.isAdmin() ? null : sender.userId(), "ownerId")
                 .match(contentId, "contentId")
-                .<Content>fetchFirst().orElseThrow(() -> ContentErrors.notFound);
+                .fetchFirstOrNull();
     }
 }

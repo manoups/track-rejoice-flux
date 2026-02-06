@@ -95,7 +95,7 @@ This example follows FluxZero's event-driven architecture:
 - An order binds together a content with entities
 
 ### Depedencies loops
-- Content -> ProposedSightingId -> ProposedSighting -> SightingId -> Sighting -> ContentId -> Content
+- Content -> linkedSightingId -> ProposedSighting -> SightingId -> Sighting -> ContentId -> Content
 - If we remove the sighting holding ContentId's the cycle is broken
 - Payment does not need to be an aggregate -- it can be a simple payment reference string
 - ~~An order can be an aggregate member of content. We can use projections for "My orders" screen.~~
@@ -104,3 +104,12 @@ This example follows FluxZero's event-driven architecture:
   - an order of a basic product will change its status to online upon completed order
 - There is a 1-1 relationship between an order and a payment. Thus, a payment will become a value object and the status will be inherited by the order.
 - Since this is digital goods, cancelling an order is not possible. We may later create a workflow to support it
+
+
+## Questions
+- If an aggregate is stored only in the document store, does it implicitly impact the event publication strategy to publish-only? What is the purpose of storing the events?
+- Does performance decrease if many objects match on the association member variable but there is no handler for the action?
+- Can I load the state in the context?
+- Can typeFilter be tested?
+- What does `disableScheduledCommandHandler` do?
+- Decider pattern

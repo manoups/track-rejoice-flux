@@ -34,7 +34,7 @@ public record CreateOrder(@NotNull OrderId orderId, @NotNull ContentId contentId
     @AssertLegal
     void assertExistingProduct(Sender sender) {
         Entity<Content> contentEntity = Fluxzero.loadAggregate(contentId);
-        if (!contentEntity.isPresent() || !sender.isAuthorizedFor(contentEntity.get().ownerId())) {
+        if (!contentEntity.isPresent() || sender.nonAuthorizedFor(contentEntity.get().ownerId())) {
             throw OrderErrors.productNotFound;
         }
     }

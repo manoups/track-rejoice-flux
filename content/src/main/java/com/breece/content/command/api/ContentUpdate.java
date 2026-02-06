@@ -1,7 +1,7 @@
 package com.breece.content.command.api;
 
-import com.breece.content.api.model.Content;
 import com.breece.content.ContentErrors;
+import com.breece.content.api.model.Content;
 import io.fluxzero.sdk.modeling.AssertLegal;
 import jakarta.annotation.Nullable;
 

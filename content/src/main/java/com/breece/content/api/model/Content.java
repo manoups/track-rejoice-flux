@@ -1,8 +1,9 @@
 package com.breece.content.api.model;
 
+import com.breece.coreapi.common.SightingDetails;
 import com.breece.coreapi.user.WithOwner;
-import com.breece.sighting.api.model.SightingDetails;
 import com.breece.coreapi.user.api.UserId;
+import com.breece.proposal.command.api.model.LinkedSighting;
 import io.fluxzero.common.search.Facet;
 import io.fluxzero.sdk.modeling.Aggregate;
 import io.fluxzero.sdk.modeling.EntityId;
@@ -18,9 +19,6 @@ public record Content(@EntityId ContentId contentId,
                       @NotNull
                       @With
                       SightingDetails lastConfirmedSighting,
-                      @Member
-                      @With
-                      List<ProposedSighting> proposedSightings,
                       @With @Facet ExtraDetails details, UserId ownerId,
-                      @With boolean online, @NotNull @With Duration duration) implements WithOwner {
+                      @With boolean online, @NotNull @With Duration duration, @With @Member List<LinkedSighting> linkedSightings) implements WithOwner {
 }

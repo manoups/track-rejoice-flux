@@ -1,7 +1,7 @@
 package com.breece.content.api;
 
 
-import com.breece.sighting.api.model.SightingDetails;
+import com.breece.coreapi.common.SightingDetails;
 
 public interface ConfirmedSightingUpdate {
     SightingDetails sightingDetails();
