@@ -178,7 +178,6 @@ public class ProposalTest extends TestUtilities {
                     .givenCommandsByUser("Alice", "../sighting/create-sighting.json", "create-proposal.json");
         }
 
-        @Disabled("GetLinkedSightingsByContentIdAndStatuses should be disabled")
         @Test
         void givenAcceptedProposal_whenQueryProposedSightings_thenEmptyList() {
             testFixture.whenQuery(new GetContent(new ContentId("1")))
@@ -236,7 +235,6 @@ public class ProposalTest extends TestUtilities {
                     .expectResult(details -> GeometryUtil.parseLocation(details.lat(), details.lng()).within(GeometryUtil.parseLocation(123.456, 78.901)));
         }
 
-        @Disabled("GetLinkedSightingsByContentIdAndStatuses should be disabled")
         @Test
         void givenSighting_whenCreateProposal_thenContentShouldContainTheProposal() {
             testFixture.whenQuery(new GetLinkedSightingsByContentIdAndStatuses(new ContentId("1"), List.of(LinkedSightingStatus.CREATED)))
@@ -265,22 +263,22 @@ public class ProposalTest extends TestUtilities {
         }
 
         @Test
-        @Disabled
-        void givenAnAcceptedProposal_whenDeleteSighting_thenProposalUnaffected() {
+//        @Disabled
+        void givenAnAcceptedProposal_whenDeleteSighting_thenProposalAlsoDeleted() {
             testFixture.givenCommands("accept-proposal.json")
                     .whenCommand("../sighting/delete-sighting.json")
                     .expectNoErrors()
                     .expectEvents("../sighting/delete-sighting.json")
-                    .expectNoCommands()
+                    .expectOnlyCommands(DeleteLinkedProposal.class)
                     .andThen()
                     .whenQuery(new GetContent(new ContentId("1")))
                     .expectNoErrors()
                     .expectResult(Objects::nonNull)
+                    .expectResult(content -> content.linkedSightings().isEmpty())
                     .mapResult(Content::lastConfirmedSighting)
                     .expectResult(Objects::nonNull);
         }
 
-        @Disabled("GetLinkedSightingsByContentIdAndStatuses should be disabled")
         @Test
         void givenAProposal_whenClaim_thenProposalUnaffected() {
             testFixture
