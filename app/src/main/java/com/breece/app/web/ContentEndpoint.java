@@ -13,7 +13,7 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 
 @Component
-@Path("/content")
+@Path("/api/content")
 public class ContentEndpoint {
     @HandlePost(value = {"","/"})
     ContentId createContent(CreateContent content) {

@@ -3,6 +3,7 @@ package com.breece.app.web;
 import com.breece.sighting.api.model.Sighting;
 import com.breece.sighting.api.model.SightingId;
 import com.breece.sighting.command.api.CreateSighting;
+import com.breece.sighting.command.api.CreateSightingPayload;
 import com.breece.sighting.command.api.DeleteSighting;
 import com.breece.sighting.query.api.GetSighting;
 import com.breece.sighting.query.api.GetSightings;
@@ -13,10 +14,10 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 
 @Component
-@Path("/sighting")
+@Path("/api/sighting")
 public class SightingEndpoint {
     @HandlePost(value = {"","/"})
-    SightingId createSighting(CreateSighting sighting) {
+    SightingId createSighting(CreateSightingPayload sighting) {
         var sightingId = new SightingId();
         Fluxzero.sendCommandAndWait(new CreateSighting(sightingId, sighting.sightingDetails(), sighting.removeAfterMatching()));
         return sightingId;
