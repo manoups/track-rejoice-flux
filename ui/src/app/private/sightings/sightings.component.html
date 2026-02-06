@@ -1,13 +1,40 @@
 <h1>Sightings</h1>
-<div>
-  <label for="term" class="form-label">Search:</label>
-  <select name="term"
-          class="form-select"
-          [(ngModel)]="term" id="term"></select>
-</div>
-<div>
-  @for (sighting of sightings$|async; track sighting.sightingId) {
 
+<div style="margin-bottom: 1rem;">
+  <a routerLink="/sightings/new" class="btn btn-primary">Create Sighting</a>
+</div>
+
+<div style="margin-bottom: 1rem;">
+  <label for="term" class="form-label">Search:</label>
+  <input
+    id="term"
+    name="term"
+    class="form-control"
+    [(ngModel)]="term"
+    placeholder="Type to search..." />
+</div>
+
+<div>
+  @for (sighting of (sightings$ | async); track sighting.sightingId) {
+    <div class="card" style="margin-bottom: 0.75rem;">
+      <div class="card-body">
+        <div style="display:flex; justify-content: space-between; gap: 1rem;">
+          <div>
+            <div><strong>ID:</strong> {{sighting.sightingId}}</div>
+            <div><strong>Owner:</strong> {{sighting.ownerId}}</div>
+            <div><strong>Remove after matching:</strong> {{sighting.removeAfterMatching}}</div>
+          </div>
+
+          <div style="display:flex; align-items:flex-start;">
+            <button class="btn btn-outline-danger btn-sm" (click)="deleteSighting(sighting)">
+              Delete
+            </button>
+          </div>
+        </div>
+
+        <pre style="margin-top: 0.5rem; white-space: pre-wrap;">{{ sighting | json }}</pre>
+      </div>
+    </div>
   } @empty {
     <div>No sightings yet.</div>
   }

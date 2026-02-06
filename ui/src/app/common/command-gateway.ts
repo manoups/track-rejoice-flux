@@ -4,7 +4,6 @@ import {ElementRef, Injectable} from '@angular/core';
 import {HandlerInvoker, HandlerOptions} from './handler';
 import {Observable, take} from "rxjs";
 import {tap} from 'rxjs/operators';
-import {publishEvent} from './app-common-utils';
 import {HandlerRegistry} from './handler-registry';
 
 @Injectable()
@@ -19,7 +18,16 @@ export class CommandGateway extends RequestGateway {
     let observable = super.send(type, payload, options, elementRef).pipe(take(1));
     if (options.eventOnSuccess) {
       observable = observable.pipe((tap(value => {
-        publishEvent("commandSuccess", value, elementRef);
+        const event = new CustomEvent<any>("commandSuccess", {
+          detail: value,
+          bubbles: true,
+          cancelable: true
+        });
+        if (elementRef?.nativeElement) {
+          elementRef.nativeElement.dispatchEvent(event);
+        } else {
+          document.dispatchEvent(event);
+        }
       })));
     }
     return observable;

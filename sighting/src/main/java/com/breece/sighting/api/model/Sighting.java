@@ -11,9 +11,5 @@ import lombok.With;
 
 @Aggregate(searchable = true)
 @Builder(toBuilder = true)
-public record Sighting(@EntityId SightingId sightingId, @NotNull UserId source, @NotNull SightingDetails details, @With boolean removeAfterMatching) implements WithOwner {
-    @Override
-    public UserId ownerId() {
-        return source;
-    }
+public record Sighting(@EntityId SightingId sightingId, @NotNull UserId ownerId, @NotNull SightingDetails details, @With boolean removeAfterMatching) implements WithOwner {
 }

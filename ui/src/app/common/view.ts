@@ -1,10 +1,9 @@
 import {ElementRef, inject, ViewContainerRef} from '@angular/core';
 import {RequestOptions} from './request-gateway';
-import {Observable, Subject} from 'rxjs';
+import {Observable, Subject, take} from 'rxjs';
 import {QueryGateway} from './query-gateway';
 import {CommandGateway, CommandOptions} from "./command-gateway";
 import {defaultModalOptions, ModalOptions, OpenModal} from './modal/modal';
-import {sendCommand} from './app-common-utils';
 import {lodash} from './utils';
 
 
@@ -27,7 +26,11 @@ export class View {
 
   sendCommand(type: string, payload, successHandler?: (value: any) => void,
               errorHandler?: (error: any) => void, options: CommandOptions = {eventOnSuccess: true}): void {
-    sendCommand(type, payload, successHandler, errorHandler, options, this.elementRef);
+    this.commandGateway.send(type, payload, options, this.elementRef).pipe(take(1))
+      .subscribe({
+        next: (value) => (successHandler ? successHandler(value) : undefined),
+        error: (error) => (errorHandler ? errorHandler(error) : console.error(error))
+      })
   }
 
   sendCommandAndForget(type: string, payload = {}, options?: RequestOptions): void {

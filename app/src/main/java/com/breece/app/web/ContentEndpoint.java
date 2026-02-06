@@ -3,13 +3,11 @@ package com.breece.app.web;
 import com.breece.content.api.model.Content;
 import com.breece.content.api.model.ContentId;
 import com.breece.content.command.api.CreateContent;
+import com.breece.content.command.api.DeleteContent;
 import com.breece.content.query.api.GetContent;
 import com.breece.content.query.api.GetContents;
 import io.fluxzero.sdk.Fluxzero;
-import io.fluxzero.sdk.web.HandleGet;
-import io.fluxzero.sdk.web.HandlePost;
-import io.fluxzero.sdk.web.Path;
-import io.fluxzero.sdk.web.PathParam;
+import io.fluxzero.sdk.web.*;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -34,4 +32,8 @@ public class ContentEndpoint {
         return Fluxzero.queryAndWait(new GetContent(id));
     }
 
+    @HandleDelete(value = {"{id}","{id}/"})
+    void deleteContent(@PathParam ContentId id) {
+        Fluxzero.sendCommandAndWait(new DeleteContent(id));
+    }
 }

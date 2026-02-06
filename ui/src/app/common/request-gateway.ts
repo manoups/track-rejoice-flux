@@ -4,7 +4,6 @@ import {Gateway} from "./gateway";
 import {HandlerInvoker} from './handler';
 import {ElementRef} from '@angular/core';
 import {tap} from 'rxjs/operators';
-import {AppCommonUtils} from './app-common-utils';
 import {environment} from '../../environments/environments';
 import {HandlerRegistry} from './handler-registry';
 
@@ -43,10 +42,7 @@ export abstract class RequestGateway extends Gateway {
       o = this.doSend(type, payload, options);
     }
     if (!options.hideError) {
-      o = o.pipe(tap({error: e => AppCommonUtils.registerError(e)}));
-    }
-    if (options.showSpinner) {
-      o = AppCommonUtils.waitForProcess(o);
+      o = o.pipe(tap({error: e => console.error('Request failed', {type, payload, error: e})}));
     }
     return o;
   }

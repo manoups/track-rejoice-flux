@@ -1,9 +1,11 @@
 import {Component} from '@angular/core';
-import {SightingsComponent} from './private/sightings/sightings.component';
+import {RouterOutlet} from '@angular/router';
 
 @Component({
   selector: 'track-rejoice-root',
-  imports: [SightingsComponent],
+  imports: [
+    RouterOutlet
+  ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })
