@@ -10,6 +10,20 @@
   <artifactId>app</artifactId>
   <name>app</name>
   <url>http://maven.apache.org</url>
+
+  <profiles>
+    <profile>
+      <id>local</id>
+      <dependencies>
+        <dependency>
+          <groupId>com.breece</groupId>
+          <artifactId>local-auth</artifactId>
+          <version>${project.version}</version>
+        </dependency>
+      </dependencies>
+    </profile>
+  </profiles>
+
   <dependencies>
     <dependency>
       <groupId>${project.groupId}</groupId>
