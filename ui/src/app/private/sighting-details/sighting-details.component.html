@@ -1,0 +1,7 @@
+@if (data$ | async; as sighting) {
+  <div>
+    {{sighting | json }}
+  </div>
+} @else {
+  <div>Loading...</div>
+}

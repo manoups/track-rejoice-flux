@@ -9,6 +9,7 @@ import {RouterLink} from '@angular/router';
 import {CdkFixedSizeVirtualScroll, CdkVirtualForOf, CdkVirtualScrollViewport} from '@angular/cdk/scrolling';
 import {FilterSidebarComponent} from '../filter-sidebar/filter-sidebar.component';
 import {DatePipe} from '@angular/common';
+import {SightingDetailsComponent} from '../sighting-details/sighting-details.component';
 
 @Component({
   selector: 'track-rejoice-sightings',
