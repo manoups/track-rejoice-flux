@@ -3,6 +3,8 @@ import {WebsocketService} from '../../common/websocket.service';
 import {publishEvent, subscribeTo} from '../../common/app-common-utils';
 import {take} from 'rxjs';
 import {AppContext} from '../../app-context';
+import {Handler} from '../../common/handler';
+import {AuthenticationService} from '../../authentication/authentication';
 
 @Component({
   selector: 'track-rejoice-home',
@@ -10,6 +12,7 @@ import {AppContext} from '../../app-context';
   templateUrl: './home.component.html',
   styleUrl: './home.component.css'
 })
+@Handler()
 export class HomeComponent implements OnInit{
   context = AppContext;
   socketService: WebsocketService<any> = inject(WebsocketService<any>);

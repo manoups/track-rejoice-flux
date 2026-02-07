@@ -16,6 +16,7 @@ public class CoreConfiguration implements FluxzeroCustomizer {
         return builder.withAggregateCache(Content.class, new DefaultCache(500))
                 .withAggregateCache(Sighting.class, new DefaultCache(500))
                 .withAggregateCache(LinkedSighting.class, new DefaultCache(250_000))
-                .disableScheduledCommandHandler();
+                .disableScheduledCommandHandler()
+                .makeApplicationInstance(true);
     }
 }

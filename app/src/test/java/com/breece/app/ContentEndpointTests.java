@@ -19,7 +19,7 @@ public class ContentEndpointTests {
     void createContent() {
         testFixture
                 .withHeader("Authorization", createAuthorizationHeader("viewer"))
-                .whenPost("content", "/com/breece/app/content/content-details.json")
+                .whenPost("api/content", "/com/breece/app/content/content-details.json")
                 .expectResult(ContentId.class).expectEvents(CreateContent.class);
     }
 
@@ -27,8 +27,8 @@ public class ContentEndpointTests {
     void getContents() {
         testFixture
                 .withHeader("Authorization", createAuthorizationHeader("viewer"))
-                .givenPost("content", "/com/breece/app/content/content-details.json")
-                .whenGet("content")
+                .givenPost("api/content", "/com/breece/app/content/content-details.json")
+                .whenGet("api/content")
                 .expectResult(hasSize(1));
     }
 

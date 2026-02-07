@@ -35,9 +35,9 @@ export class WebsocketService<T> implements OnDestroy {
 
   private openWebsocket = () => {
     try {
-      if (!localStorage.getItem("Authorization")) {
-        return; //signed out
-      }
+      // if (!localStorage.getItem("Authorization")) {
+      //   return; //signed out
+      // }
       const url = this.getUrl();
       this.socket = new WebSocket(url, getProtocolFromHeaders("Authorization", "X-Impersonation"));
       this.subscribeToSocket();

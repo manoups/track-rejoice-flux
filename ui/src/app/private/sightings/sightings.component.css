@@ -1,0 +1,60 @@
+:host {
+  display: block;
+}
+
+.listing-layout {
+  display: grid;
+  grid-template-columns: 320px 1fr;
+  gap: 16px;
+  align-items: start;
+}
+
+.sidebar {
+  position: sticky;
+  top: 0;
+  max-height: 100vh;
+  overflow: auto;
+  padding: 12px;
+  border-right: 1px solid rgba(0,0,0,0.1);
+  background: #fff;
+}
+
+.sidebar-title {
+  margin: 0 0 12px 0;
+  font-size: 1.1rem;
+}
+
+.content {
+  min-width: 0;
+}
+
+.page-title {
+  margin: 0 0 12px 0;
+}
+
+.table-frame {
+  border: 1px solid rgba(0,0,0,0.1);
+  border-radius: 6px;
+  overflow: hidden;
+  background: #fff;
+}
+
+/* Keep table column widths consistent */
+.table-fixed {
+  table-layout: fixed;
+  width: 100%;
+  margin-bottom: 0;
+}
+
+/* Make header sticky within the scroll container feel */
+.table-fixed thead th {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  background: #fff;
+}
+
+.viewport {
+  height: calc(100vh - 180px); /* adjust if your header area differs */
+  overflow: auto;
+}
