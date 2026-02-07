@@ -1,0 +1,41 @@
+<h1>Contents</h1>
+
+<div style="margin-bottom: 1rem;">
+  <a routerLink="/contents/new" class="btn btn-primary">Create Content</a>
+</div>
+
+<div style="margin-bottom: 1rem;">
+  <label for="term" class="form-label">Search:</label>
+  <input
+    id="term"
+    name="term"
+    class="form-control"
+    [(ngModel)]="term"
+    placeholder="Type to search..." />
+</div>
+
+<div>
+  @for (content of (contents$ | async); track content.contentId) {
+    <div class="card" style="margin-bottom: 0.75rem;">
+      <div class="card-body">
+        <div style="display:flex; justify-content: space-between; gap: 1rem;">
+          <div>
+            <div><strong>ID:</strong> {{content.contentId}}</div>
+            <div><strong>Owner:</strong> {{content.ownerId}}</div>
+            <div><strong>Online:</strong> {{content.online}}</div>
+          </div>
+
+          <div style="display:flex; align-items:flex-start;">
+            <button class="btn btn-outline-danger btn-sm" (click)="deleteContent(content)">
+              Delete
+            </button>
+          </div>
+        </div>
+
+        <pre style="margin-top: 0.5rem; white-space: pre-wrap;">{{ content | json }}</pre>
+      </div>
+    </div>
+  } @empty {
+    <div>No content yet.</div>
+  }
+</div>

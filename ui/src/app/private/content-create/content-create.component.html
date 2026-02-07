@@ -1,0 +1,31 @@
+<h1>Create Content</h1>
+
+<div style="margin-bottom: 1rem;">
+  <a routerLink="/contents" class="btn btn-link">Back to list</a>
+</div>
+
+<form (ngSubmit)="create()">
+  <div class="mb-3">
+    <label for="sightingDetailsJson" class="form-label">sightingDetails (JSON)</label>
+    <textarea
+      id="sightingDetailsJson"
+      class="form-control"
+      rows="6"
+      [(ngModel)]="sightingDetailsJson"
+      name="sightingDetailsJson"></textarea>
+  </div>
+
+  <div class="mb-3">
+    <label for="detailsJson" class="form-label">details (JSON)</label>
+    <textarea
+      id="detailsJson"
+      class="form-control"
+      rows="6"
+      [(ngModel)]="detailsJson"
+      name="detailsJson"></textarea>
+  </div>
+
+  <button class="btn btn-primary" type="submit" [disabled]="submitting()">
+    Create
+  </button>
+</form>
