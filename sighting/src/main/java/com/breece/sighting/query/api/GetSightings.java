@@ -12,18 +12,19 @@ import org.apache.commons.lang3.StringUtils;
 import java.util.List;
 
 public record GetSightings(@PositiveOrZero Integer page, @Positive Integer pageSize,
-                           String filter) implements Request<List<Sighting>> {
+                           String filter) implements Request<List<SightingDocument>> {
 
     public GetSightings() {
         this(0, 10, null);
     }
 
     @HandleQuery
-    List<Sighting> getSightings() {
+    List<SightingDocument> getSightings() {
         return Fluxzero.search(Sighting.class)
                 .lookAhead(StringUtils.trimToNull(filter), "sightingId")
-                .sortBy("sightingId")
+                .sortByTimestamp(true)
                 .skip(page * pageSize)
-                .fetch(pageSize);
+                .streamHits(Sighting.class, pageSize)
+                .map(hit -> new SightingDocument(hit.getValue(), hit.getTimestamp())).toList();
     }
 }

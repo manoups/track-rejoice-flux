@@ -99,7 +99,7 @@
   </dependencies>
 
   <build>
-    <finalName>Flux Rejoice</finalName>
+    <finalName>Track Rejoice</finalName>
     <resources>
       <resource>
         <directory>src/main/resources</directory>

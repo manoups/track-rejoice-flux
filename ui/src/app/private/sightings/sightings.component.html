@@ -28,14 +28,16 @@
       <table class="table table-striped table-hover table-fixed">
         <colgroup>
           <col style="width: 25%;">
-          <col style="width: 35%;">
+          <col style="width: 20%;">
           <col style="width: 25%;">
+          <col style="width: 15%;">
           <col style="width: 15%;">
         </colgroup>
         <thead>
         <tr>
           <th scope="col">ID</th>
           <th scope="col">Owner</th>
+          <th scope="col">Created At</th>
           <th scope="col">Remove after matching</th>
           <th scope="col">Action</th>
         </tr>
@@ -51,8 +53,9 @@
         <table class="table table-striped table-hover table-fixed">
           <colgroup>
             <col style="width: 25%;">
-            <col style="width: 35%;">
+            <col style="width: 20%;">
             <col style="width: 25%;">
+            <col style="width: 15%;">
             <col style="width: 15%;">
           </colgroup>
 
@@ -60,6 +63,7 @@
           <tr *cdkVirtualFor="let sighting of sightings(); trackBy: trackBySightingId">
             <td>{{ sighting.sightingId }}</td>
             <td>{{ sighting.ownerId }}</td>
+            <td>{{ sighting.timestamp | date:'yyyy-MM-dd HH:mm:ss' }}</td>
             <td>{{ sighting.removeAfterMatching }}</td>
             <td>
               <button class="btn btn-outline-danger btn-sm" (click)="deleteSighting(sighting)">

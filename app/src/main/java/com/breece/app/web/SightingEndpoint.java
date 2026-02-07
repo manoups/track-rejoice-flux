@@ -7,6 +7,7 @@ import com.breece.sighting.command.api.CreateSightingPayload;
 import com.breece.sighting.command.api.DeleteSighting;
 import com.breece.sighting.query.api.GetSighting;
 import com.breece.sighting.query.api.GetSightings;
+import com.breece.sighting.query.api.SightingDocument;
 import io.fluxzero.sdk.Fluxzero;
 import io.fluxzero.sdk.web.*;
 import org.springframework.stereotype.Component;
@@ -24,7 +25,7 @@ public class SightingEndpoint {
     }
 
     @HandleGet(value = {"", "/"})
-    List<Sighting> getSightings(@QueryParam("page") Integer page, @QueryParam("page-size") Integer pageSize, @QueryParam("filter") String filter) {
+    List<SightingDocument> getSightings(@QueryParam("page") Integer page, @QueryParam("page-size") Integer pageSize, @QueryParam("filter") String filter) {
         return Fluxzero.queryAndWait(new GetSightings(page, pageSize, filter));
     }
 

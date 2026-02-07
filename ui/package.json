@@ -7,7 +7,7 @@
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
-    "clean:modules": "npm cache clean --force && rm -rf node_modules"
+    "clean:modules": "npm cache clean --force && rm -rf node_modules && rm package-lock.json"
   },
   "private": true,
   "dependencies": {

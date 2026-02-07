@@ -1,13 +1,14 @@
 import {Component, inject, signal} from '@angular/core';
 import {debounceTime, distinctUntilChanged, map} from 'rxjs';
 import {View} from '../../common/view';
-import {Sighting} from '@trackrejoice/typescriptmodels';
+import {Sighting, SightingDocument} from '@trackrejoice/typescriptmodels';
 import {toObservable} from '@angular/core/rxjs-interop';
 import {FormsModule} from '@angular/forms';
 import {HttpClient} from '@angular/common/http';
 import {RouterLink} from '@angular/router';
 import {CdkFixedSizeVirtualScroll, CdkVirtualForOf, CdkVirtualScrollViewport} from '@angular/cdk/scrolling';
 import {FilterSidebarComponent} from '../filter-sidebar/filter-sidebar.component';
+import {DatePipe} from '@angular/common';
 
 @Component({
   selector: 'track-rejoice-sightings',
@@ -17,7 +18,8 @@ import {FilterSidebarComponent} from '../filter-sidebar/filter-sidebar.component
     CdkVirtualScrollViewport,
     CdkFixedSizeVirtualScroll,
     CdkVirtualForOf,
-    FilterSidebarComponent
+    FilterSidebarComponent,
+    DatePipe
   ],
   templateUrl: './sightings.component.html',
   styleUrl: './sightings.component.css',
@@ -34,7 +36,7 @@ export class SightingsComponent extends View {
   private loading = signal(false);
   private done = signal(false);
 
-  sightings = signal<Sighting[]>([]);
+  sightings = signal<SightingDocument[]>([]);
 
   constructor() {
     super();
