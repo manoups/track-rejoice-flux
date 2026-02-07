@@ -88,7 +88,7 @@ export class SightingsComponent extends View {
     // Backend-side paging/filter is assumed (fits your query model pattern)
     const term = (this.term() ?? '').trim();
     const url =
-      `/api/sighting?page=${this.page}&pageSize=${this.pageSize}` +
+      `/api/sighting?page=${this.page}&page-size=${this.pageSize}` +
       (term ? `&filter=${encodeURIComponent(term)}` : '');
 
     this.http.get<Sighting[]>(url, {withCredentials: true})

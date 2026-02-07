@@ -24,8 +24,8 @@ public class SightingEndpoint {
     }
 
     @HandleGet(value = {"","/"})
-    List<Sighting> getSightings() {
-        return Fluxzero.queryAndWait(new GetSightings());
+    List<Sighting> getSightings(@QueryParam("page") Integer page, @QueryParam("page-size") Integer pageSize, @QueryParam("filter") String filter) {
+        return Fluxzero.queryAndWait(new GetSightings(page, pageSize, filter));
     }
 
     @HandleGet(value = {"{id}","{id}/"})
