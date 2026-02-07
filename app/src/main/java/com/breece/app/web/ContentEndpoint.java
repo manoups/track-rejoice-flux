@@ -33,7 +33,8 @@ public class ContentEndpoint {
     }
 
     @HandleDelete(value = {"{id}","{id}/"})
-    void deleteContent(@PathParam ContentId id) {
+    ContentId deleteContent(@PathParam ContentId id) {
         Fluxzero.sendCommandAndWait(new DeleteContent(id));
+        return id;
     }
 }

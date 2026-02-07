@@ -138,38 +138,6 @@ export function dispatchChangeEvent(element: HTMLElement) {
     element.dispatchEvent(event);
 }
 
-export function filterValuesByTerm(values, term, excludedFilterFields: string[] = []) {
-    const filtered = values.filter(v => filterByTerm(term, excludedFilterFields)(v));
-    return filtered.slice(0, Math.min(filtered.length, 20));
-}
-
-export function filterByTerm(filterTerm: string, excludedFilterFields: string[] = []): (item) => boolean {
-    return filterTerm
-        ? filterByTermArray(filterTerm.split(' '), excludedFilterFields)
-        : () => true;
-}
-
-export function filterByTermArray(filterTerms: string[], excludedFilterFields: string[] = []): (item) => boolean {
-    return item => {
-        let jsonValues = '';
-        let cache = [];
-        JSON.stringify(item, (key, value) => {
-            if (cache.includes(value)) {
-                return;
-            }
-            cache.push(value);
-            if (excludedFilterFields.indexOf(key) == -1) {
-                jsonValues += value + ' ';
-                return value;
-            }
-            return undefined;
-        });
-        cache = null;
-        jsonValues = jsonValues.toLowerCase();
-        return filterTerms.filter(t => !!t).some(term => jsonValues.indexOf(term.toLowerCase()) >= 0);
-    };
-}
-
 export function checkValidity(e: ElementRef | HTMLElement): boolean {
     const element: HTMLElement = e['nativeElement'] || e;
     if (element.querySelector('.ng-invalid')) {

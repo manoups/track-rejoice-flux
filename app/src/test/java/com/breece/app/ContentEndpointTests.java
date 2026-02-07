@@ -4,6 +4,7 @@ import com.breece.app.web.ContentEndpoint;
 import com.breece.content.api.model.ContentId;
 import com.breece.content.command.api.ContentState;
 import com.breece.content.command.api.CreateContent;
+import com.breece.content.command.api.DeleteContent;
 import com.breece.coreapi.authentication.AuthenticationUtils;
 import com.breece.coreapi.user.api.UserId;
 import io.fluxzero.sdk.test.TestFixture;
@@ -32,6 +33,14 @@ public class ContentEndpointTests {
                 .expectResult(hasSize(1));
     }
 
+    @Test
+    void deleteContent() {
+        testFixture
+                .withHeader("Authorization", createAuthorizationHeader("viewer"))
+                .givenCommandsByUser("viewer", "/com/breece/app/content/content-details.json")
+                .whenDelete("api/content/1")
+                .expectResult(ContentId.class).expectOnlyEvents(DeleteContent.class);
+    }
     String createAuthorizationHeader(String user) {
         return testFixture.getFluxzero().apply(
                 fc -> AuthenticationUtils.createAuthorizationHeader(new UserId(user)));

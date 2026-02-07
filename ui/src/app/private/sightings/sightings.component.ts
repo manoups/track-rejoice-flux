@@ -7,6 +7,7 @@ import {FormsModule} from '@angular/forms';
 import {HttpClient} from '@angular/common/http';
 import {RouterLink} from '@angular/router';
 import {CdkFixedSizeVirtualScroll, CdkVirtualForOf, CdkVirtualScrollViewport} from '@angular/cdk/scrolling';
+import {FilterSidebarComponent} from '../filter-sidebar/filter-sidebar.component';
 
 @Component({
   selector: 'track-rejoice-sightings',
@@ -15,7 +16,8 @@ import {CdkFixedSizeVirtualScroll, CdkVirtualForOf, CdkVirtualScrollViewport} fr
     RouterLink,
     CdkVirtualScrollViewport,
     CdkFixedSizeVirtualScroll,
-    CdkVirtualForOf
+    CdkVirtualForOf,
+    FilterSidebarComponent
   ],
   templateUrl: './sightings.component.html',
   styleUrl: './sightings.component.css',
