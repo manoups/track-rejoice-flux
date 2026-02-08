@@ -26,6 +26,7 @@ public record GetSightings(@PositiveOrZero Integer page, @Positive Integer pageS
                 .skip(page * pageSize)
                 .streamHits(Sighting.class, pageSize)
                 .limit(pageSize)
-                .map(hit -> new SightingDocument(hit.getValue(), hit.getTimestamp())).toList();
+                .map(SightingDocument::new)
+                .toList();
     }
 }

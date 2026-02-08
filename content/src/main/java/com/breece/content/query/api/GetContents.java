@@ -25,7 +25,7 @@ public record GetContents(@NotNull @PositiveOrZero Integer page,
                 .sortByTimestamp(true)
                 .skip(page * pageSize)
                 .streamHits(Content.class, pageSize)
-                .map(hit -> new ContentDocument(hit.getValue(), hit.getTimestamp()))
+                .map(ContentDocument::new)
                 .limit(pageSize)
                 .toList();
     }
