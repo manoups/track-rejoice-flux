@@ -9,6 +9,7 @@ import com.breece.content.command.api.ContentScheduler;
 import com.breece.content.command.api.ContentState;
 import com.breece.content.command.api.CreateContent;
 import com.breece.content.command.api.TakeContentOffline;
+import com.breece.content.query.api.ContentDocument;
 import com.breece.content.query.api.GetContentStats;
 import com.breece.content.query.api.GetContents;
 import com.breece.coreapi.common.SightingDetails;
@@ -19,7 +20,10 @@ import org.junit.jupiter.api.Test;
 import util.TestUtilities;
 
 import java.math.BigDecimal;
+import java.time.Clock;
 import java.time.Duration;
+import java.time.Instant;
+import java.time.ZoneId;
 import java.util.List;
 
 import static org.hamcrest.Matchers.hasSize;
@@ -55,8 +59,8 @@ class ContentTest extends TestUtilities {
 
     @Test
     void deleteContentNonOwner() {
-        testFixture.givenCommandsByUser("viewer","create-content.json")
-                .whenCommandByUser("user2","delete-content.json")
+        testFixture.givenCommandsByUser("viewer", "create-content.json")
+                .whenCommandByUser("user2", "delete-content.json")
                 .expectExceptionalResult(ContentErrors.unauthorized)
                 .expectError((e) -> e.getMessage().equals(ContentErrors.unauthorized.getMessage()));
     }
@@ -74,11 +78,11 @@ class ContentTest extends TestUtilities {
         void searchPaginatedContent() {
             final int SIZE = 25;
             CreateContent[] contents = new CreateContent[SIZE];
-            for(int i=0; i< 15; ++i) {
+            for (int i = 0; i < 15; ++i) {
                 ContentId contentId = new ContentId();
                 contents[i] = new CreateContent(contentId, new SightingDetails(BigDecimal.ZERO, BigDecimal.ZERO), new Pet("Maya", "Cocker Spaniel", GenderEnum.FEMALE));
             }
-            for(int i=15; i< SIZE; ++i) {
+            for (int i = 15; i < SIZE; ++i) {
                 ContentId contentId = new ContentId();
                 contents[i] = new CreateContent(contentId, new SightingDetails(BigDecimal.ZERO, BigDecimal.ZERO), new Keys("Square Key"));
             }
@@ -108,14 +112,14 @@ class ContentTest extends TestUtilities {
         @Test
         void deleteContent() {
             testFixture.givenCommands("create-content.json")
-                .whenQuery(new GetContents())
-                .expectResult(hasSize(1))
-                .andThen()
+                    .whenQuery(new GetContents())
+                    .expectResult(hasSize(1))
+                    .andThen()
                     .whenCommand("delete-content.json")
                     .expectEvents("delete-content.json")
-                .andThen()
-                .whenQuery(new GetContents())
-                .expectResult(List::isEmpty);
+                    .andThen()
+                    .whenQuery(new GetContents())
+                    .expectResult(List::isEmpty);
         }
     }
 
@@ -123,7 +127,8 @@ class ContentTest extends TestUtilities {
     class ContentSchedulerTests {
         @BeforeEach
         void setUp() {
-            testFixture.registerHandlers(new ContentScheduler()).givenCommands("create-content.json");
+            testFixture.registerHandlers(new ContentScheduler())
+                    .withClock(Clock.fixed(Instant.parse("2025-01-01T00:00:00Z"), ZoneId.systemDefault())).givenCommands("create-content.json");
         }
 
         @Test
@@ -136,5 +141,28 @@ class ContentTest extends TestUtilities {
                     .whenTimeElapses(Duration.ofDays(90))
                     .expectEvents(TakeContentOffline.class);
         }
+
+        @Test
+        void documentTimestampIsUpdated() {
+            testFixture
+                    .whenQuery(new GetContents())
+                    .mapResult(List::getFirst)
+                    .mapResult(ContentDocument::timestamp)
+                    .expectResult(timestamp -> withSlack("2025-01-01T00:00:00Z", timestamp))
+                    .andThen()
+                    .whenTimeElapses(Duration.ofDays(1))
+                    .andThen()
+                    .givenCommands("publish-content.json")
+                    .whenQuery(new GetContents())
+                    .mapResult(List::getFirst)
+                    .mapResult(ContentDocument::timestamp)
+                    .expectResult(timestamp -> withSlack("2025-01-02T00:00:00Z", timestamp));
+        }
+    }
+
+    boolean withSlack(String expectedString, Instant actual) {
+        Duration margin = Duration.ofSeconds(2);
+        Instant expected = Instant.parse(expectedString);
+        return Duration.between(expected, actual).abs().compareTo(margin) <= 0;
     }
 }
