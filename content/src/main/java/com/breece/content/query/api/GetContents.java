@@ -12,18 +12,21 @@ import jakarta.validation.constraints.PositiveOrZero;
 import java.util.List;
 
 public record GetContents(@NotNull @PositiveOrZero Integer page,
-                          @NotNull @Positive Integer pageSize) implements Request<List<Content>> {
+                          @NotNull @Positive Integer pageSize) implements Request<List<ContentDocument>> {
 
     public GetContents() {
         this(0, 10);
     }
 
     @HandleQuery
-    List<Content> find(Sender sender) {
+    List<ContentDocument> find(Sender sender) {
         return Fluxzero.search(Content.class)
                 .match(sender.isAdmin() ? null : sender.userId(), "ownerId")
-                .sortBy("contentId")
+                .sortByTimestamp(true)
                 .skip(page * pageSize)
-                .fetch(pageSize);
+                .streamHits(Content.class, pageSize)
+                .map(hit -> new ContentDocument(hit.getValue(), hit.getTimestamp()))
+                .limit(pageSize)
+                .toList();
     }
 }

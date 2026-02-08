@@ -4,6 +4,7 @@ import com.breece.content.api.model.Content;
 import com.breece.content.api.model.ContentId;
 import com.breece.content.command.api.CreateContent;
 import com.breece.content.command.api.DeleteContent;
+import com.breece.content.query.api.ContentDocument;
 import com.breece.content.query.api.GetContent;
 import com.breece.content.query.api.GetContents;
 import com.breece.content.command.api.CreateContentDTO;
@@ -24,7 +25,7 @@ public class ContentEndpoint {
     }
 
     @HandleGet(value = {"","/"})
-    List<Content> getContents() {
+    List<ContentDocument> getContents() {
         return Fluxzero.queryAndWait(new GetContents());
     }
 
