@@ -3,7 +3,7 @@ package com.breece.app.web;
 import com.breece.sighting.api.model.Sighting;
 import com.breece.sighting.api.model.SightingId;
 import com.breece.sighting.command.api.CreateSighting;
-import com.breece.sighting.command.api.CreateSightingPayload;
+import com.breece.sighting.command.api.CreateSightingDTO;
 import com.breece.sighting.command.api.DeleteSighting;
 import com.breece.sighting.query.api.GetSighting;
 import com.breece.sighting.query.api.GetSightings;
@@ -18,7 +18,7 @@ import java.util.List;
 @Path("/api/sighting")
 public class SightingEndpoint {
     @HandlePost(value = {"", "/"})
-    SightingId createSighting(CreateSightingPayload sighting) {
+    SightingId createSighting(CreateSightingDTO sighting) {
         CreateSighting command = new CreateSighting(sighting);
         Fluxzero.sendCommandAndWait(command);
         return command.sightingId();

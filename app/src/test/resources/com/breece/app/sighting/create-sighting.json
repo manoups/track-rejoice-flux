@@ -1,5 +1,5 @@
 {
-  "@class": "com.breece.sighting.command.api.CreateSightingPayload",
+  "@class": "com.breece.sighting.command.api.CreateSightingDTO",
   "sightingDetails": {
     "lng": "1.2345678",
     "lat": "52.370216"
