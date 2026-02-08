@@ -1,8 +1,7 @@
 package com.breece.app;
 
+import com.breece.app.util.TestUtil;
 import com.breece.app.web.SightingEndpoint;
-import com.breece.coreapi.authentication.AuthenticationUtils;
-import com.breece.coreapi.user.api.UserId;
 import com.breece.sighting.api.model.SightingId;
 import com.breece.sighting.command.api.CreateSighting;
 import com.breece.sighting.command.api.DeleteSighting;
@@ -11,7 +10,7 @@ import org.junit.jupiter.api.Test;
 
 import static org.hamcrest.Matchers.hasSize;
 
-public class SightingEndpointTests {
+public class SightingEndpointTests extends TestUtil {
     final TestFixture testFixture = TestFixture.create(new SightingEndpoint())
             .givenCommands("user/create-user.json");
 
@@ -41,8 +40,8 @@ public class SightingEndpointTests {
                 .expectResult(SightingId.class).expectOnlyEvents(DeleteSighting.class);
     }
 
-    String createAuthorizationHeader(String user) {
-        return testFixture.getFluxzero().apply(
-                fc -> AuthenticationUtils.createAuthorizationHeader(new UserId(user)));
+    @Override
+    protected TestFixture testFixture() {
+        return testFixture;
     }
 }

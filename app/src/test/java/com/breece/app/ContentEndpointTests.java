@@ -1,19 +1,17 @@
 package com.breece.app;
 
+import com.breece.app.util.TestUtil;
 import com.breece.app.web.ContentEndpoint;
 import com.breece.content.api.model.ContentId;
 import com.breece.content.command.api.ContentState;
 import com.breece.content.command.api.CreateContent;
 import com.breece.content.command.api.DeleteContent;
-import com.breece.coreapi.authentication.AuthenticationUtils;
-import com.breece.coreapi.user.api.UserId;
 import io.fluxzero.sdk.test.TestFixture;
 import org.junit.jupiter.api.Test;
 
 import static org.hamcrest.Matchers.hasSize;
-
-public class ContentEndpointTests {
-    final TestFixture testFixture = TestFixture.create(new ContentEndpoint(), ContentState.class)
+public class ContentEndpointTests extends TestUtil {
+    protected final TestFixture testFixture = TestFixture.create(new ContentEndpoint(), ContentState.class)
             .givenCommands("user/create-user.json");
 
     @Test
@@ -41,8 +39,10 @@ public class ContentEndpointTests {
                 .whenDelete("api/content/1")
                 .expectResult(ContentId.class).expectOnlyEvents(DeleteContent.class);
     }
-    String createAuthorizationHeader(String user) {
-        return testFixture.getFluxzero().apply(
-                fc -> AuthenticationUtils.createAuthorizationHeader(new UserId(user)));
+
+
+    @Override
+    protected TestFixture testFixture() {
+        return testFixture;
     }
 }
