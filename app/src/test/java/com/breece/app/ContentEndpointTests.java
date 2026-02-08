@@ -37,7 +37,7 @@ public class ContentEndpointTests {
     void deleteContent() {
         testFixture
                 .withHeader("Authorization", createAuthorizationHeader("viewer"))
-                .givenCommandsByUser("viewer", "/com/breece/app/content/content-details.json")
+                .givenCommandsByUser("viewer", "/com/breece/app/content/content-details-command.json")
                 .whenDelete("api/content/1")
                 .expectResult(ContentId.class).expectOnlyEvents(DeleteContent.class);
     }

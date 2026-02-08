@@ -18,6 +18,10 @@ import java.util.List;
 
 public record CreateContent(@NotNull ContentId contentId, @NotNull SightingDetails sightingDetails,
                             @Valid @NotNull ExtraDetails details) implements ContentCommand, ConfirmedSightingUpdate {
+    public CreateContent(CreateContentDTO payload) {
+        this(new ContentId(), payload.sightingDetails(), payload.details());
+    }
+
     @AssertLegal
     void assertNew(Content content) {
         throw ContentErrors.alreadyExists;

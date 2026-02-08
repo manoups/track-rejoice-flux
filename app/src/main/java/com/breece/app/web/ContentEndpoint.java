@@ -6,6 +6,7 @@ import com.breece.content.command.api.CreateContent;
 import com.breece.content.command.api.DeleteContent;
 import com.breece.content.query.api.GetContent;
 import com.breece.content.query.api.GetContents;
+import com.breece.content.command.api.CreateContentDTO;
 import io.fluxzero.sdk.Fluxzero;
 import io.fluxzero.sdk.web.*;
 import org.springframework.stereotype.Component;
@@ -16,10 +17,10 @@ import java.util.List;
 @Path("/api/content")
 public class ContentEndpoint {
     @HandlePost(value = {"","/"})
-    ContentId createContent(CreateContent content) {
-        var contentId = new ContentId();
-        Fluxzero.sendCommandAndWait(new CreateContent(contentId, content.sightingDetails(), content.details()));
-        return contentId;
+    ContentId createContent(CreateContentDTO content) {
+        CreateContent command = new CreateContent(content);
+        Fluxzero.sendCommandAndWait(command);
+        return command.contentId();
     }
 
     @HandleGet(value = {"","/"})
