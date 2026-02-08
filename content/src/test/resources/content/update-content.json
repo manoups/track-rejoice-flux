@@ -4,6 +4,7 @@
   "details": {
     "@class": "Pet",
     "name": "Fritz",
+    "subtype": "CAT",
     "gender": "MALE",
     "breed": "Golden Retriever",
     "lastConfirmedSighting": {

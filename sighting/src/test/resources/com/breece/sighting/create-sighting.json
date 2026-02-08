@@ -4,5 +4,6 @@
   "sightingDetails": {
     "lat": 123.456,
     "lng": 78.901
-  }
+  },
+  "subtype": "CARD"
 }

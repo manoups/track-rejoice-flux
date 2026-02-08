@@ -13,6 +13,7 @@ import com.breece.content.query.api.ContentDocument;
 import com.breece.content.query.api.GetContentStats;
 import com.breece.content.query.api.GetContents;
 import com.breece.coreapi.common.SightingDetails;
+import com.breece.coreapi.common.SightingEnum;
 import io.fluxzero.sdk.test.TestFixture;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
@@ -80,11 +81,11 @@ class ContentTest extends TestUtilities {
             CreateContent[] contents = new CreateContent[SIZE];
             for (int i = 0; i < 15; ++i) {
                 ContentId contentId = new ContentId();
-                contents[i] = new CreateContent(contentId, new SightingDetails(BigDecimal.ZERO, BigDecimal.ZERO), new Pet("Maya", "Cocker Spaniel", GenderEnum.FEMALE));
+                contents[i] = new CreateContent(contentId, new SightingDetails(BigDecimal.ZERO, BigDecimal.ZERO), new Pet("Maya", "Cocker Spaniel", GenderEnum.FEMALE, SightingEnum.DOG));
             }
             for (int i = 15; i < SIZE; ++i) {
                 ContentId contentId = new ContentId();
-                contents[i] = new CreateContent(contentId, new SightingDetails(BigDecimal.ZERO, BigDecimal.ZERO), new Keys("Square Key"));
+                contents[i] = new CreateContent(contentId, new SightingDetails(BigDecimal.ZERO, BigDecimal.ZERO), new Keys("Square Key", SightingEnum.KEYS));
             }
 
             testFixture.givenCommands(contents)

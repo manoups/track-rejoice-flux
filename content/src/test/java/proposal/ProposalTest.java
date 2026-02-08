@@ -7,6 +7,7 @@ import com.breece.content.command.api.UpdateLastSeenPosition;
 import com.breece.content.query.api.GetContent;
 import com.breece.content.query.api.GetSightingHistoryForContent;
 import com.breece.coreapi.common.SightingDetails;
+import com.breece.coreapi.common.SightingEnum;
 import com.breece.coreapi.util.GeometryUtil;
 import com.breece.proposal.command.api.*;
 import com.breece.proposal.command.api.model.LinkedSightingId;
@@ -154,7 +155,7 @@ public class ProposalTest extends TestUtilities {
     void givenContent_whenAcceptsDifferentProposal_thenError() {
         testFixture.givenCommandsByUser("viewer", "../sighting/create-sighting.json", "../content/create-content.json")
                 .givenCommands("../content/publish-content.json")
-                .givenCommandsByUser("Alice", new CreateSighting(new SightingId("2"), new SightingDetails(BigDecimal.ZERO, BigDecimal.ZERO), true), "create-proposal.json")
+                .givenCommandsByUser("Alice", new CreateSighting(new SightingId("2"), new SightingDetails(BigDecimal.ZERO, BigDecimal.ZERO), true, SightingEnum.CAT), "create-proposal.json")
                 .whenCommandByUser("viewer", "accept-proposal-increment-id.json")
                 .expectExceptionalResult(LinkedSightingErrors.notFound)
                 .expectError((e) -> e.getMessage().equals(LinkedSightingErrors.notFound.getMessage()));

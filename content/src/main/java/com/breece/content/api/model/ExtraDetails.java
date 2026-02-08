@@ -13,6 +13,6 @@ import lombok.Getter;
 @Getter
 public abstract class ExtraDetails {
     @Facet
-    String subtype;
+    String type;
 
 }

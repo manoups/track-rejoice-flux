@@ -6,6 +6,7 @@
   },
   "details": {
     "@class": "Pet",
+    "subtype": "CAT",
     "name": "Fritz",
     "gender": "MALE",
     "breed": "Labrador Retriever"
