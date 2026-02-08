@@ -13,6 +13,10 @@ import jakarta.validation.constraints.NotNull;
 
 @RequiresUser
 public record CreateSighting(@NotNull SightingId sightingId, @Valid @NotNull SightingDetails sightingDetails, boolean removeAfterMatching) implements SightingCommand {
+    public CreateSighting(CreateSightingPayload payload) {
+        this(new SightingId(), payload.sightingDetails(), payload.removeAfterMatching());
+    }
+
     @AssertLegal
     void assertNew(Sighting sighting) {
         throw SightingErrors.alreadyExists;

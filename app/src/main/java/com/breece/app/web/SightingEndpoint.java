@@ -19,9 +19,9 @@ import java.util.List;
 public class SightingEndpoint {
     @HandlePost(value = {"", "/"})
     SightingId createSighting(CreateSightingPayload sighting) {
-        var sightingId = new SightingId();
-        Fluxzero.sendCommandAndWait(new CreateSighting(sightingId, sighting.sightingDetails(), sighting.removeAfterMatching()));
-        return sightingId;
+        CreateSighting command = new CreateSighting(sighting);
+        Fluxzero.sendCommandAndWait(command);
+        return command.sightingId();
     }
 
     @HandleGet(value = {"", "/"})
