@@ -18,6 +18,10 @@ public record GetSightings(@PositiveOrZero Integer page, @Positive Integer pageS
         this(0, 10, null);
     }
 
+    public GetSightings(Integer page, Integer pageSize) {
+        this(page, pageSize, null);
+    }
+
     @HandleQuery
     List<SightingDocument> getSightings() {
         return Fluxzero.search(Sighting.class)

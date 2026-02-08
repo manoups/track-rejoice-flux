@@ -3,11 +3,13 @@ package com.breece.app.web;
 import com.breece.content.api.model.Content;
 import com.breece.content.api.model.ContentId;
 import com.breece.content.command.api.CreateContent;
+import com.breece.content.command.api.CreateContentDTO;
 import com.breece.content.command.api.DeleteContent;
 import com.breece.content.query.api.ContentDocument;
 import com.breece.content.query.api.GetContent;
+import com.breece.content.query.api.GetContentStats;
 import com.breece.content.query.api.GetContents;
-import com.breece.content.command.api.CreateContentDTO;
+import io.fluxzero.common.api.search.FacetStats;
 import io.fluxzero.sdk.Fluxzero;
 import io.fluxzero.sdk.web.*;
 import org.springframework.stereotype.Component;
@@ -27,6 +29,11 @@ public class ContentEndpoint {
     @HandleGet(value = {"","/"})
     List<ContentDocument> getContents() {
         return Fluxzero.queryAndWait(new GetContents());
+    }
+
+    @HandleGet(value = {"stats", "stats/"})
+    List<FacetStats> getSightingStats() {
+        return Fluxzero.queryAndWait(new GetContentStats());
     }
 
     @HandleGet(value = {"{id}","{id}/"})
