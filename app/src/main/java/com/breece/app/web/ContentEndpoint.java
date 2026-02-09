@@ -7,9 +7,10 @@ import com.breece.content.command.api.CreateContentDTO;
 import com.breece.content.command.api.DeleteContent;
 import com.breece.content.query.api.ContentDocument;
 import com.breece.content.query.api.GetContent;
-import com.breece.content.query.api.GetContentStats;
 import com.breece.content.query.api.GetContents;
-import io.fluxzero.common.api.search.FacetStats;
+import com.breece.coreapi.facets.FacetPaginationRequestBody;
+import com.breece.coreapi.facets.GetFacets;
+import io.fluxzero.common.api.search.GetFacetStatsResult;
 import io.fluxzero.sdk.Fluxzero;
 import io.fluxzero.sdk.web.*;
 import org.springframework.stereotype.Component;
@@ -26,14 +27,14 @@ public class ContentEndpoint {
         return command.contentId();
     }
 
-    @HandleGet(value = {"","/"})
-    List<ContentDocument> getContents() {
-        return Fluxzero.queryAndWait(new GetContents());
+    @HandlePost(value = {"list", "list/"})
+    List<ContentDocument> getSightings(FacetPaginationRequestBody requestBody) {
+        return Fluxzero.queryAndWait(new GetContents(requestBody.facetFilters(), requestBody.filter(), requestBody.pagination()));
     }
 
-    @HandleGet(value = {"stats", "stats/"})
-    List<FacetStats> getSightingStats() {
-        return Fluxzero.queryAndWait(new GetContentStats());
+    @HandlePost(value = {"list/stats", "list/stats/"})
+    GetFacetStatsResult getSightingStats(FacetPaginationRequestBody requestBody) {
+        return Fluxzero.queryAndWait(new GetFacets(new GetContents(requestBody.facetFilters(), requestBody.filter(), requestBody.pagination())));
     }
 
     @HandleGet(value = {"{id}","{id}/"})

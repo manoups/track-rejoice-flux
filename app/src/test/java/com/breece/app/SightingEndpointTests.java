@@ -31,7 +31,7 @@ public class SightingEndpointTests extends TestUtil {
         testFixture
                 .withHeader("Authorization", createAuthorizationHeader("viewer"))
                 .givenPost("api/sighting", "/com/breece/app/sighting/create-sighting.json")
-                .whenPost("api/sighting/list", new FacetPaginationRequestBody(null, Collections.emptyList(), new Pagination(0,10)))
+                .whenPost("api/sighting/list", new FacetPaginationRequestBody(Collections.emptyList(), null, new Pagination(0, 10)))
                 .expectResult(hasSize(1));
     }
 

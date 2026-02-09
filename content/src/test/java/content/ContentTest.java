@@ -10,10 +10,12 @@ import com.breece.content.command.api.ContentState;
 import com.breece.content.command.api.CreateContent;
 import com.breece.content.command.api.TakeContentOffline;
 import com.breece.content.query.api.ContentDocument;
-import com.breece.content.query.api.GetContentStats;
 import com.breece.content.query.api.GetContents;
 import com.breece.coreapi.common.SightingDetails;
 import com.breece.coreapi.common.SightingEnum;
+import com.breece.coreapi.facets.GetFacets;
+import com.breece.coreapi.facets.Pagination;
+import io.fluxzero.common.api.search.GetFacetStatsResult;
 import io.fluxzero.sdk.test.TestFixture;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
@@ -25,7 +27,9 @@ import java.time.Clock;
 import java.time.Duration;
 import java.time.Instant;
 import java.time.ZoneId;
+import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 import static org.hamcrest.Matchers.hasSize;
 
@@ -71,7 +75,7 @@ class ContentTest extends TestUtilities {
         @Test
         void searchForContent() {
             testFixture.givenCommands("create-content.json")
-                    .whenQuery(new GetContents())
+                    .whenQuery(new GetContents(Collections.emptyList(), null, new Pagination(0, 10)))
                     .expectResult(hasSize(1));
         }
 
@@ -89,19 +93,21 @@ class ContentTest extends TestUtilities {
             }
 
             testFixture.givenCommands(contents)
-                    .whenQuery(new GetContents())
+                    .whenQuery(new GetContents(Collections.emptyList(), null, new Pagination(0, 10)))
                     .expectResult(hasSize(10))
                     .andThen()
-                    .whenQuery(new GetContents(1, 10))
+                    .whenQuery(new GetContents(Collections.emptyList(), null, new Pagination(1, 10)))
                     .expectResult(hasSize(10))
                     .andThen()
-                    .whenQuery(new GetContents(2, 10))
+                    .whenQuery(new GetContents(Collections.emptyList(), null, new Pagination(2, 10)))
                     .expectResult(hasSize(5))
                     .andThen()
-                    .whenQuery(new GetContents(0, 30))
+                    .whenQuery(new GetContents(Collections.emptyList(), null, new Pagination(0, 30)))
                     .expectResult(hasSize(25))
                     .andThen()
-                    .whenQuery(new GetContentStats())
+                    .whenQuery(new GetFacets(new GetContents(Collections.emptyList(), null, new Pagination(0, 10))))
+                    .expectResult(Objects::nonNull)
+                    .mapResult(GetFacetStatsResult::getStats)
                     .expectResult(facetStats -> facetStats.size() == 2 &&
                             facetStats.stream().filter(it -> it.getValue().equals("pet")).findFirst().orElseThrow(() -> new AssertionError("No pet facet found")).getCount() == 15 &&
                             facetStats.stream().filter(it -> it.getValue().equals("keys")).findFirst().orElseThrow(() -> new AssertionError("No keys facet found")).getCount() == 10);
@@ -113,13 +119,13 @@ class ContentTest extends TestUtilities {
         @Test
         void deleteContent() {
             testFixture.givenCommands("create-content.json")
-                    .whenQuery(new GetContents())
+                    .whenQuery(new GetContents(Collections.emptyList(), null, new Pagination(0, 10)))
                     .expectResult(hasSize(1))
                     .andThen()
                     .whenCommand("delete-content.json")
                     .expectEvents("delete-content.json")
                     .andThen()
-                    .whenQuery(new GetContents())
+                    .whenQuery(new GetContents(Collections.emptyList(), null, new Pagination(0, 10)))
                     .expectResult(List::isEmpty);
         }
     }
@@ -146,7 +152,7 @@ class ContentTest extends TestUtilities {
         @Test
         void documentTimestampIsUpdated() {
             testFixture
-                    .whenQuery(new GetContents())
+                    .whenQuery(new GetContents(Collections.emptyList(), null, new Pagination(0, 10)))
                     .mapResult(List::getFirst)
                     .mapResult(ContentDocument::timestamp)
                     .expectResult(timestamp -> withSlack("2025-01-01T00:00:00Z", timestamp))
@@ -154,7 +160,7 @@ class ContentTest extends TestUtilities {
                     .whenTimeElapses(Duration.ofDays(1))
                     .andThen()
                     .givenCommands("publish-content.json")
-                    .whenQuery(new GetContents())
+                    .whenQuery(new GetContents(Collections.emptyList(), null, new Pagination(0, 10)))
                     .mapResult(List::getFirst)
                     .mapResult(ContentDocument::timestamp)
                     .expectResult(timestamp -> withSlack("2025-01-02T00:00:00Z", timestamp));

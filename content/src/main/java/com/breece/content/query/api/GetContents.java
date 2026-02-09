@@ -2,31 +2,27 @@ package com.breece.content.query.api;
 
 import com.breece.content.api.model.Content;
 import com.breece.coreapi.authentication.Sender;
+import com.breece.coreapi.facets.FacetFilter;
+import com.breece.coreapi.facets.FacetedSearch;
+import com.breece.coreapi.facets.Pagination;
 import io.fluxzero.sdk.Fluxzero;
-import io.fluxzero.sdk.tracking.handling.HandleQuery;
-import io.fluxzero.sdk.tracking.handling.Request;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Positive;
-import jakarta.validation.constraints.PositiveOrZero;
+import io.fluxzero.sdk.persisting.search.Search;
+import io.fluxzero.sdk.persisting.search.SearchHit;
 
 import java.util.List;
+import java.util.stream.Stream;
 
-public record GetContents(@NotNull @PositiveOrZero Integer page,
-                          @NotNull @Positive Integer pageSize) implements Request<List<ContentDocument>> {
+public record GetContents(List<FacetFilter> facetFilters, String filter, Pagination pagination) implements FacetedSearch<Content, ContentDocument> {
 
-    public GetContents() {
-        this(0, 10);
+    @Override
+    public Search getSearch(Sender sender) {
+        return Fluxzero.search(Content.class)
+                .lookAhead(filter)
+                .sortByTimestamp(true);
     }
 
-    @HandleQuery
-    List<ContentDocument> find(Sender sender) {
-        return Fluxzero.search(Content.class)
-                .match(sender.isAdmin() ? null : sender.userId(), "ownerId")
-                .sortByTimestamp(true)
-                .skip(page * pageSize)
-                .streamHits(Content.class, pageSize)
-                .map(ContentDocument::new)
-                .limit(pageSize)
-                .toList();
+    @Override
+    public List<ContentDocument> fetch(Stream<SearchHit<Content>> stream, Sender sender) {
+        return stream.map(ContentDocument::new).limit(pagination.pageSize()).toList();
     }
 }

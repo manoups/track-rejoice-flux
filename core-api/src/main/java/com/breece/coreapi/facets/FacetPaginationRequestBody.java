@@ -4,5 +4,5 @@ import jakarta.validation.Valid;
 
 import java.util.List;
 
-public record FacetPaginationRequestBody(String filter, List<FacetFilter> facetFilters, @Valid Pagination pagination) {
+public record FacetPaginationRequestBody(List<FacetFilter> facetFilters, String filter, @Valid Pagination pagination) {
 }
