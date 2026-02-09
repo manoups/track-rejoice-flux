@@ -12,20 +12,21 @@ import org.apache.commons.lang3.StringUtils;
 import java.util.List;
 
 public record GetSightings(@PositiveOrZero Integer page, @Positive Integer pageSize,
-                           String filter) implements Request<List<SightingDocument>> {
+                           String filter, String subtype) implements Request<List<SightingDocument>> {
 
     public GetSightings() {
-        this(0, 10, null);
+        this(0, 10, null, null);
     }
 
     public GetSightings(Integer page, Integer pageSize) {
-        this(page, pageSize, null);
+        this(page, pageSize, null, null);
     }
 
     @HandleQuery
     List<SightingDocument> getSightings() {
         return Fluxzero.search(Sighting.class)
                 .lookAhead(StringUtils.trimToNull(filter), "sightingId")
+                .matchFacet("subtype", subtype)
                 .sortByTimestamp(true)
                 .skip(page * pageSize)
                 .streamHits(Sighting.class, pageSize)

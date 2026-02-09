@@ -2,19 +2,49 @@ package com.breece.sighting;
 
 import com.breece.coreapi.common.SightingDetails;
 import com.breece.coreapi.common.SightingEnum;
+import com.breece.coreapi.facets.FacetFilter;
+import com.breece.coreapi.facets.GetFacets;
+import com.breece.coreapi.facets.Pagination;
 import com.breece.sighting.api.model.SightingId;
 import com.breece.sighting.command.api.CreateSighting;
 import com.breece.sighting.query.api.GetSightingStats;
 import com.breece.sighting.query.api.GetSightings;
+import com.breece.sighting.query.api.GetSightingsWithStats;
 import io.fluxzero.sdk.test.TestFixture;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
+import java.util.Collections;
+import java.util.Objects;
 
 import static org.hamcrest.Matchers.hasSize;
 
 public class SightingTest {
     final TestFixture testFixture = TestFixture.create();
+    static CreateSighting[] contents;
+
+    @BeforeAll
+    static void setUp() {
+        final int SIZE = 25;
+        contents = new CreateSighting[SIZE];
+        for (int i = 0; i < 15; ++i) {
+            SightingId sightingId = new SightingId();
+            contents[i] = new CreateSighting(sightingId, new SightingDetails(BigDecimal.ZERO, BigDecimal.ZERO), i % 2 == 0, i % 2 == 0 ? SightingEnum.DOG : SightingEnum.CAT);
+        }
+        for (int i = 15; i < SIZE; ++i) {
+            SightingId contentId = new SightingId();
+            contents[i] = new CreateSighting(contentId, new SightingDetails(BigDecimal.ZERO, BigDecimal.ZERO), i % 2 == 0, getRandomSightingEnum(i));
+        }
+    }
+
+    static SightingEnum getRandomSightingEnum(int i) {
+        return switch (i % 3) {
+            case 0 -> SightingEnum.JEWELERY;
+            case 1 -> SightingEnum.KEYS;
+            default -> SightingEnum.CARD;
+        };
+    }
 
     @Test
     void createSighting() {
@@ -32,17 +62,6 @@ public class SightingTest {
 
     @Test
     void searchPaginatedContent() {
-        final int SIZE = 25;
-        CreateSighting[] contents = new CreateSighting[SIZE];
-        for (int i = 0; i < 15; ++i) {
-            SightingId sightingId = new SightingId();
-            contents[i] = new CreateSighting(sightingId, new SightingDetails(BigDecimal.ZERO, BigDecimal.ZERO), i % 2 == 0, SightingEnum.DOG);
-        }
-        for (int i = 15; i < SIZE; ++i) {
-            SightingId contentId = new SightingId();
-            contents[i] = new CreateSighting(contentId, new SightingDetails(BigDecimal.ZERO, BigDecimal.ZERO), i % 2 == 0, SightingEnum.KEYS);
-        }
-
         testFixture.givenCommands(contents)
                 .whenQuery(new GetSightings())
                 .expectResult(hasSize(10))
@@ -57,8 +76,25 @@ public class SightingTest {
                 .expectResult(hasSize(25))
                 .andThen()
                 .whenQuery(new GetSightingStats())
-                .expectResult(facetStats -> facetStats.size() == 2 &&
-                        facetStats.stream().filter(it -> it.getValue().equals("DOG")).findFirst().orElseThrow(() -> new AssertionError("No pet facet found")).getCount() == 15 &&
-                        facetStats.stream().filter(it -> it.getValue().equals("KEYS")).findFirst().orElseThrow(() -> new AssertionError("No keys facet found")).getCount() == 10);
+                .expectResult(facetStats -> facetStats.size() == SightingEnum.values().length &&
+                        facetStats.stream().filter(it -> it.getValue().equals(SightingEnum.DOG.name())).findFirst().orElseThrow(() -> new AssertionError("No pet facet found")).getCount() == 8 &&
+                        facetStats.stream().filter(it -> it.getValue().equals(SightingEnum.CAT.name())).findFirst().orElseThrow(() -> new AssertionError("No pet facet found")).getCount() == 7 &&
+                        facetStats.stream().filter(it -> it.getValue().equals(SightingEnum.JEWELERY.name())).findFirst().orElseThrow(() -> new AssertionError("No pet facet found")).getCount() == 4 &&
+                        facetStats.stream().filter(it -> it.getValue().equals(SightingEnum.CARD.name())).findFirst().orElseThrow(() -> new AssertionError("No pet facet found")).getCount() == 3 &&
+                        facetStats.stream().filter(it -> it.getValue().equals(SightingEnum.KEYS.name())).findFirst().orElseThrow(() -> new AssertionError("No keys facet found")).getCount() == 3);
+    }
+
+    @Test
+    void searchPaginatedContentWithFacet() {
+        testFixture.givenCommands(contents)
+                .whenQuery(new GetSightingsWithStats(Collections.singletonList(new FacetFilter("subtype", "DOG")), null, new Pagination(0, 10)))
+                .expectResult(res -> res.size() == 15);
+    }
+
+    @Test
+    void searchPaginatedContentWithFacetStats() {
+        testFixture.givenCommands(contents)
+                .whenQuery(new GetFacets(new GetSightingsWithStats(Collections.singletonList(new FacetFilter("subtype", "DOG")), null, new Pagination(0, 10))))
+                .expectResult(res -> Objects.nonNull(res));
     }
 }
