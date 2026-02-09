@@ -1,20 +1,20 @@
 package com.breece.app.web;
 
+import com.breece.coreapi.facets.FacetPaginationRequestBody;
 import com.breece.coreapi.facets.GetFacets;
-import com.breece.coreapi.facets.Pagination;
 import com.breece.sighting.api.model.Sighting;
 import com.breece.sighting.api.model.SightingId;
 import com.breece.sighting.command.api.CreateSighting;
 import com.breece.sighting.command.api.CreateSightingDTO;
 import com.breece.sighting.command.api.DeleteSighting;
-import com.breece.sighting.query.api.*;
-import io.fluxzero.common.api.search.FacetStats;
+import com.breece.sighting.query.api.GetSighting;
+import com.breece.sighting.query.api.GetSightings;
+import com.breece.sighting.query.api.SightingDocument;
 import io.fluxzero.common.api.search.GetFacetStatsResult;
 import io.fluxzero.sdk.Fluxzero;
 import io.fluxzero.sdk.web.*;
 import org.springframework.stereotype.Component;
 
-import java.util.Collections;
 import java.util.List;
 
 @Component
@@ -27,14 +27,14 @@ public class SightingEndpoint {
         return command.sightingId();
     }
 
-    @HandleGet(value = {"", "/"})
-    List<SightingDocument> getSightings(@QueryParam("page") Integer page, @QueryParam("page-size") Integer pageSize, @QueryParam("filter") String filter, @QueryParam("subtype") String subtype) {
-        return Fluxzero.queryAndWait(new GetSightingsWithStats(Collections.emptyList(), null, new Pagination(0, 10)));
+    @HandlePost(value = {"list", "list/"})
+    List<SightingDocument> getSightings(FacetPaginationRequestBody requestBody) {
+        return Fluxzero.queryAndWait(new GetSightings(requestBody.facetFilters(), requestBody.filter(), requestBody.pagination()));
     }
 
-    @HandleGet(value = {"stats", "stats/"})
-    GetFacetStatsResult getSightingStats() {
-        return Fluxzero.queryAndWait(new GetFacets(new GetSightingsWithStats(Collections.emptyList(), null, new Pagination(0, 10))));
+    @HandlePost(value = {"list/stats", "list/stats/"})
+    GetFacetStatsResult getSightingStats(FacetPaginationRequestBody requestBody) {
+        return Fluxzero.queryAndWait(new GetFacets(new GetSightings(requestBody.facetFilters(), requestBody.filter(), requestBody.pagination())));
     }
 
     @HandleGet(value = {"{id}", "{id}/"})

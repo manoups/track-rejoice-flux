@@ -1,37 +1,29 @@
 package com.breece.sighting.query.api;
 
 
+import com.breece.coreapi.authentication.Sender;
+import com.breece.coreapi.facets.FacetFilter;
+import com.breece.coreapi.facets.FacetedSearch;
+import com.breece.coreapi.facets.Pagination;
 import com.breece.sighting.api.model.Sighting;
 import io.fluxzero.sdk.Fluxzero;
-import io.fluxzero.sdk.tracking.handling.HandleQuery;
-import io.fluxzero.sdk.tracking.handling.Request;
-import jakarta.validation.constraints.Positive;
-import jakarta.validation.constraints.PositiveOrZero;
-import org.apache.commons.lang3.StringUtils;
+import io.fluxzero.sdk.persisting.search.Search;
+import io.fluxzero.sdk.persisting.search.SearchHit;
 
 import java.util.List;
+import java.util.stream.Stream;
 
-public record GetSightings(@PositiveOrZero Integer page, @Positive Integer pageSize,
-                           String filter, String subtype) implements Request<List<SightingDocument>> {
+public record GetSightings(List<FacetFilter> facetFilters, String filter, Pagination pagination) implements FacetedSearch<Sighting, SightingDocument> {
 
-    public GetSightings() {
-        this(0, 10, null, null);
-    }
-
-    public GetSightings(Integer page, Integer pageSize) {
-        this(page, pageSize, null, null);
-    }
-
-    @HandleQuery
-    List<SightingDocument> getSightings() {
+    @Override
+    public Search getSearch(Sender sender) {
         return Fluxzero.search(Sighting.class)
-                .lookAhead(StringUtils.trimToNull(filter), "sightingId")
-                .matchFacet("subtype", subtype)
-                .sortByTimestamp(true)
-                .skip(page * pageSize)
-                .streamHits(Sighting.class, pageSize)
-                .limit(pageSize)
-                .map(SightingDocument::new)
-                .toList();
+                .lookAhead(filter)
+                .sortByTimestamp(true);
+    }
+
+    @Override
+    public List<SightingDocument> fetch(Stream<SearchHit<Sighting>> stream, Sender sender) {
+        return stream.map(SightingDocument::new).limit(pagination.pageSize()).toList();
     }
 }

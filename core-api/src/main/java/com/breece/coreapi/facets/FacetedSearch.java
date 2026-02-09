@@ -44,10 +44,6 @@ public interface FacetedSearch<IN, OUT> extends Request<List<OUT>>, FacetableReq
     }
 
     default List<OUT> fetch(Stream<SearchHit<IN>> stream, Sender sender) {
-        return stream.map(this::mapper).toList();
-    }
-
-    default OUT mapper(SearchHit<IN> hit) {
-        return (OUT) hit.getValue();
+        return stream.map(tgt -> (OUT) tgt.getValue()).limit(ofNullable(pagination()).map(Pagination::pageSize).orElse(10_000)).toList();
     }
 }

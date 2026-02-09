@@ -2,14 +2,12 @@ package com.breece.sighting;
 
 import com.breece.coreapi.common.SightingDetails;
 import com.breece.coreapi.common.SightingEnum;
-import com.breece.coreapi.facets.FacetFilter;
 import com.breece.coreapi.facets.GetFacets;
 import com.breece.coreapi.facets.Pagination;
 import com.breece.sighting.api.model.SightingId;
 import com.breece.sighting.command.api.CreateSighting;
-import com.breece.sighting.query.api.GetSightingStats;
 import com.breece.sighting.query.api.GetSightings;
-import com.breece.sighting.query.api.GetSightingsWithStats;
+import io.fluxzero.common.api.search.GetFacetStatsResult;
 import io.fluxzero.sdk.test.TestFixture;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -56,45 +54,33 @@ public class SightingTest {
     void givenSighting_whenGetSightings_thenOneResults() {
         testFixture
                 .givenCommands("create-sighting.json")
-                .whenQuery(new GetSightings())
+                .whenQuery(new GetSightings(Collections.emptyList(), null, new Pagination(0, 10)))
                 .expectResult(hasSize(1));
     }
 
     @Test
     void searchPaginatedContent() {
         testFixture.givenCommands(contents)
-                .whenQuery(new GetSightings())
+                .whenQuery(new GetSightings(Collections.emptyList(), null, new Pagination(0, 10)))
                 .expectResult(hasSize(10))
                 .andThen()
-                .whenQuery(new GetSightings(1, 10))
+                .whenQuery(new GetSightings(Collections.emptyList(), null, new Pagination(1, 10)))
                 .expectResult(hasSize(10))
                 .andThen()
-                .whenQuery(new GetSightings(2, 10))
+                .whenQuery(new GetSightings(Collections.emptyList(), null, new Pagination(2, 10)))
                 .expectResult(hasSize(5))
                 .andThen()
-                .whenQuery(new GetSightings(0, 30))
+                .whenQuery(new GetSightings(Collections.emptyList(), null, new Pagination(0, 30)))
                 .expectResult(hasSize(25))
                 .andThen()
-                .whenQuery(new GetSightingStats())
+                .whenQuery(new GetFacets(new GetSightings(Collections.emptyList(), null, new Pagination(0, 10))))
+                .expectResult(Objects::nonNull)
+                .mapResult(GetFacetStatsResult::getStats)
                 .expectResult(facetStats -> facetStats.size() == SightingEnum.values().length &&
                         facetStats.stream().filter(it -> it.getValue().equals(SightingEnum.DOG.name())).findFirst().orElseThrow(() -> new AssertionError("No pet facet found")).getCount() == 8 &&
                         facetStats.stream().filter(it -> it.getValue().equals(SightingEnum.CAT.name())).findFirst().orElseThrow(() -> new AssertionError("No pet facet found")).getCount() == 7 &&
                         facetStats.stream().filter(it -> it.getValue().equals(SightingEnum.JEWELERY.name())).findFirst().orElseThrow(() -> new AssertionError("No pet facet found")).getCount() == 4 &&
                         facetStats.stream().filter(it -> it.getValue().equals(SightingEnum.CARD.name())).findFirst().orElseThrow(() -> new AssertionError("No pet facet found")).getCount() == 3 &&
                         facetStats.stream().filter(it -> it.getValue().equals(SightingEnum.KEYS.name())).findFirst().orElseThrow(() -> new AssertionError("No keys facet found")).getCount() == 3);
-    }
-
-    @Test
-    void searchPaginatedContentWithFacet() {
-        testFixture.givenCommands(contents)
-                .whenQuery(new GetSightingsWithStats(Collections.singletonList(new FacetFilter("subtype", "DOG")), null, new Pagination(0, 10)))
-                .expectResult(res -> res.size() == 15);
-    }
-
-    @Test
-    void searchPaginatedContentWithFacetStats() {
-        testFixture.givenCommands(contents)
-                .whenQuery(new GetFacets(new GetSightingsWithStats(Collections.singletonList(new FacetFilter("subtype", "DOG")), null, new Pagination(0, 10))))
-                .expectResult(res -> Objects.nonNull(res));
     }
 }

@@ -4,6 +4,7 @@ import com.breece.content.api.model.ContentId;
 import com.breece.content.command.api.PublishContent;
 import com.breece.content.command.api.UpdateLastSeenPosition;
 import com.breece.coreapi.common.SightingDetails;
+import com.breece.coreapi.facets.Pagination;
 import com.breece.proposal.command.api.AcceptProposal;
 import com.breece.proposal.command.api.CreateProposal;
 import com.breece.proposal.command.api.DeleteLinkedProposal;
@@ -21,6 +22,7 @@ import util.TestUtilities;
 
 import java.math.BigDecimal;
 import java.time.Duration;
+import java.util.Collections;
 import java.util.List;
 
 public class SightingTest extends TestUtilities {
@@ -120,7 +122,7 @@ public class SightingTest extends TestUtilities {
                     .expectNoErrors()
                     .expectOnlyEvents(DeleteSighting.class, com.breece.proposal.command.api.CreateProposal.class, UpdateLastSeenPosition.class, DeleteLinkedProposal.class, AcceptProposal.class)
                     .andThen()
-                    .whenQuery(new GetSightings())
+                    .whenQuery(new GetSightings(Collections.emptyList(),null, new Pagination(0,10)))
                     .expectResult(List::isEmpty);
         }
     }
