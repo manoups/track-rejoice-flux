@@ -4,6 +4,7 @@ import com.breece.coreapi.authentication.Sender;
 import io.fluxzero.sdk.persisting.search.Search;
 import io.fluxzero.sdk.persisting.search.SearchHit;
 import io.fluxzero.sdk.tracking.handling.HandleQuery;
+import io.fluxzero.sdk.tracking.handling.LocalHandler;
 import io.fluxzero.sdk.tracking.handling.Request;
 import org.springframework.util.CollectionUtils;
 
@@ -33,17 +34,21 @@ public interface FacetedSearch<IN, OUT> extends Request<List<OUT>>, FacetableReq
     }
 
     @HandleQuery
+    @LocalHandler(logMetrics = true)
     default List<OUT> handle(Sender sender) {
         Search search = applyFacets(getSearch(sender));
         if (Objects.isNull(search)) {
             return Collections.emptyList();
         }
         Integer from = ofNullable(pagination()).map(pagination -> pagination.page() * pagination.pageSize()).orElse(0);
-        Integer count = ofNullable(pagination()).map(Pagination::pageSize).orElse(10_000);
-        return fetch(search.skip(from).streamHits(count), sender);
+        return fetch(search.skip(from).streamHits(count()), sender);
     }
 
     default List<OUT> fetch(Stream<SearchHit<IN>> stream, Sender sender) {
-        return stream.map(tgt -> (OUT) tgt.getValue()).limit(ofNullable(pagination()).map(Pagination::pageSize).orElse(10_000)).toList();
+        return stream.map(tgt -> (OUT) tgt.getValue()).limit(count()).toList();
+    }
+
+    default Integer count() {
+        return ofNullable(pagination()).map(Pagination::pageSize).orElse(10_000);
     }
 }
