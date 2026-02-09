@@ -1,6 +1,7 @@
 package com.breece.app.web;
 
 import com.breece.coreapi.facets.FacetPaginationRequestBody;
+import com.breece.coreapi.facets.GetFacetStatsResult;
 import com.breece.coreapi.facets.GetFacets;
 import com.breece.sighting.api.model.Sighting;
 import com.breece.sighting.api.model.SightingId;
@@ -10,7 +11,6 @@ import com.breece.sighting.command.api.DeleteSighting;
 import com.breece.sighting.query.api.GetSighting;
 import com.breece.sighting.query.api.GetSightings;
 import com.breece.sighting.query.api.SightingDocument;
-import io.fluxzero.common.api.search.GetFacetStatsResult;
 import io.fluxzero.sdk.Fluxzero;
 import io.fluxzero.sdk.web.*;
 import org.springframework.stereotype.Component;

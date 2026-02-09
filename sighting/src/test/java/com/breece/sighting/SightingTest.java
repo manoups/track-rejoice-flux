@@ -2,12 +2,12 @@ package com.breece.sighting;
 
 import com.breece.coreapi.common.SightingDetails;
 import com.breece.coreapi.common.SightingEnum;
+import com.breece.coreapi.facets.GetFacetStatsResult;
 import com.breece.coreapi.facets.GetFacets;
 import com.breece.coreapi.facets.Pagination;
 import com.breece.sighting.api.model.SightingId;
 import com.breece.sighting.command.api.CreateSighting;
 import com.breece.sighting.query.api.GetSightings;
-import io.fluxzero.common.api.search.GetFacetStatsResult;
 import io.fluxzero.sdk.test.TestFixture;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
