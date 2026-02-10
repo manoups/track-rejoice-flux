@@ -5,15 +5,18 @@ import io.fluxzero.common.api.search.FacetStats;
 import lombok.Value;
 
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Value
 public class GetFacetStatsResult implements JsonType {
 
     public GetFacetStatsResult(List<FacetStats> stats) {
-        this.stats = stats.stream().map(facetStats -> new FacetStatsLocal(facetStats.getName(), facetStats.getValue(), facetStats.getCount())).toList();
+        this.stats = stats.stream()
+                .collect(Collectors.groupingBy(FacetStats::getName, Collectors.mapping(ValueCountPair::new, Collectors.toList())));
     }
 
-    List<FacetStatsLocal> stats;
+    Map<String, List<ValueCountPair>> stats;
 
     /**
      * Timestamp indicating when this result was generated (milliseconds since epoch).
@@ -44,6 +47,9 @@ public class GetFacetStatsResult implements JsonType {
         long timestamp;
     }
 
-    public record FacetStatsLocal(String name, String value, int count) {
+    public record ValueCountPair(String value, int count) {
+        public ValueCountPair(FacetStats stat) {
+            this(stat.getValue(), stat.getCount());
+        }
     }
 }

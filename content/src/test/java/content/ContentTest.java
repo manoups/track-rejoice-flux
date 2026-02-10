@@ -108,6 +108,7 @@ class ContentTest extends TestUtilities {
                     .whenQuery(new GetFacets(new GetContents(Collections.emptyList(), null, new Pagination(0, 10))))
                     .expectResult(Objects::nonNull)
                     .mapResult(GetFacetStatsResult::getStats)
+                    .mapResult(stats -> stats.get("details/type"))
                     .expectResult(facetStats -> facetStats.size() == 2 &&
                             facetStats.stream().filter(it -> it.value().equals("pet")).findFirst().orElseThrow(() -> new AssertionError("No pet facet found")).count() == 15 &&
                             facetStats.stream().filter(it -> it.value().equals("keys")).findFirst().orElseThrow(() -> new AssertionError("No keys facet found")).count() == 10);

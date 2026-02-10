@@ -76,6 +76,7 @@ public class SightingTest {
                 .whenQuery(new GetFacets(new GetSightings(Collections.emptyList(), null, new Pagination(0, 10))))
                 .expectResult(Objects::nonNull)
                 .mapResult(GetFacetStatsResult::getStats)
+                .mapResult(stats -> stats.get("subtype"))
                 .expectResult(facetStats -> facetStats.size() == SightingEnum.values().length &&
                         facetStats.stream().filter(it -> it.value().equals(SightingEnum.DOG.name())).findFirst().orElseThrow(() -> new AssertionError("No pet facet found")).count() == 8 &&
                         facetStats.stream().filter(it -> it.value().equals(SightingEnum.CAT.name())).findFirst().orElseThrow(() -> new AssertionError("No pet facet found")).count() == 7 &&
