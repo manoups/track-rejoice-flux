@@ -1,14 +1,12 @@
-import {Component, inject, signal} from '@angular/core';
-import {debounceTime, distinctUntilChanged, map} from 'rxjs';
+import {Component, inject, Input, input, OnInit, signal} from '@angular/core';
 import {View} from '../../common/view';
-import {Sighting, SightingDocument} from '@trackrejoice/typescriptmodels';
-import {toObservable} from '@angular/core/rxjs-interop';
+import {FacetFilter, FacetPaginationRequestBody, Sighting, SightingDocument} from '@trackrejoice/typescriptmodels';
 import {FormsModule} from '@angular/forms';
 import {HttpClient} from '@angular/common/http';
 import {RouterLink} from '@angular/router';
 import {CdkFixedSizeVirtualScroll, CdkVirtualForOf, CdkVirtualScrollViewport} from '@angular/cdk/scrolling';
-import {FilterSidebarComponent} from '../filter-sidebar/filter-sidebar.component';
 import {DatePipe} from '@angular/common';
+import {Observable} from 'rxjs';
 
 @Component({
   selector: 'track-rejoice-sightings',
@@ -18,41 +16,29 @@ import {DatePipe} from '@angular/common';
     CdkVirtualScrollViewport,
     CdkFixedSizeVirtualScroll,
     CdkVirtualForOf,
-    FilterSidebarComponent,
     DatePipe
   ],
   templateUrl: './sightings.component.html',
   styleUrl: './sightings.component.css',
 })
-export class SightingsComponent extends View {
+export class SightingsComponent extends View implements OnInit{
+  ngOnInit(): void {
+      this.sightingsInput.subscribe(sightings => this.sightings.set(sightings));
+  }
   private http = inject(HttpClient);
+  @Input({required: true}) sightingsInput: Observable<SightingDocument[]>;
 
   // Sidebar inputs
-  term = signal('');
 
   // Virtual/infinite state
-  pageSize = 25;
-  private page = 0;
-  private loading = signal(false);
+  pageSize = 10;
+  page = 0;
+  loading = input.required<boolean>();
+  localLoading = signal<boolean>(false);
+  term=input.required<string>();
   private done = signal(false);
 
   sightings = signal<SightingDocument[]>([]);
-
-  constructor() {
-    super();
-
-    // When term changes: reset + reload first page
-    toObservable(this.term).pipe(
-      map(v => (v ?? '').trim()),
-      debounceTime(300),
-      distinctUntilChanged()
-    ).subscribe(() => {
-      this.resetAndLoad();
-    });
-
-    // initial load
-    this.resetAndLoad();
-  }
 
   onScrollIndexChange(index: number): void {
     // Load next page when user gets close to the end
@@ -85,17 +71,18 @@ export class SightingsComponent extends View {
   }
 
   private loadNextPage(): void {
-    if (this.loading() || this.done()) return;
+    if (this.loading() || this.localLoading() || this.done()) return;
 
-    this.loading.set(true);
+    // this.loading.set(true);
 
     // Backend-side paging/filter is assumed (fits your query model pattern)
-    const term = (this.term() ?? '').trim();
-    const url =
-      `/api/sighting?page=${this.page}&page-size=${this.pageSize}` +
-      (term ? `&filter=${encodeURIComponent(term)}` : '');
-
-    this.http.get<Sighting[]>(url, {withCredentials: true})
+    // const term = (this.term() ?? '').trim();
+    const url = '/api/sighting/list';
+    this.http.post<Sighting[]>(url, <FacetPaginationRequestBody>{
+      facetFilters: <FacetFilter[]>[],
+      filter: this.term(),
+      pagination: {page: this.page, pageSize: this.pageSize}
+    }, {withCredentials: true})
       .subscribe({
         next: (rows) => {
           const nextRows = rows ?? [];
@@ -104,10 +91,10 @@ export class SightingsComponent extends View {
           if (nextRows.length < this.pageSize) {
             this.done.set(true);
           }
-          this.loading.set(false);
+          this.localLoading.set(false);
         },
         error: () => {
-          this.loading.set(false);
+          this.localLoading.set(false);
         }
       });
   }

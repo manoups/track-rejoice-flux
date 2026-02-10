@@ -77,10 +77,10 @@ public class SightingTest {
                 .expectResult(Objects::nonNull)
                 .mapResult(GetFacetStatsResult::getStats)
                 .expectResult(facetStats -> facetStats.size() == SightingEnum.values().length &&
-                        facetStats.stream().filter(it -> it.getValue().equals(SightingEnum.DOG.name())).findFirst().orElseThrow(() -> new AssertionError("No pet facet found")).getCount() == 8 &&
-                        facetStats.stream().filter(it -> it.getValue().equals(SightingEnum.CAT.name())).findFirst().orElseThrow(() -> new AssertionError("No pet facet found")).getCount() == 7 &&
-                        facetStats.stream().filter(it -> it.getValue().equals(SightingEnum.JEWELERY.name())).findFirst().orElseThrow(() -> new AssertionError("No pet facet found")).getCount() == 4 &&
-                        facetStats.stream().filter(it -> it.getValue().equals(SightingEnum.CARD.name())).findFirst().orElseThrow(() -> new AssertionError("No pet facet found")).getCount() == 3 &&
-                        facetStats.stream().filter(it -> it.getValue().equals(SightingEnum.KEYS.name())).findFirst().orElseThrow(() -> new AssertionError("No keys facet found")).getCount() == 3);
+                        facetStats.stream().filter(it -> it.value().equals(SightingEnum.DOG.name())).findFirst().orElseThrow(() -> new AssertionError("No pet facet found")).count() == 8 &&
+                        facetStats.stream().filter(it -> it.value().equals(SightingEnum.CAT.name())).findFirst().orElseThrow(() -> new AssertionError("No pet facet found")).count() == 7 &&
+                        facetStats.stream().filter(it -> it.value().equals(SightingEnum.JEWELERY.name())).findFirst().orElseThrow(() -> new AssertionError("No pet facet found")).count() == 4 &&
+                        facetStats.stream().filter(it -> it.value().equals(SightingEnum.CARD.name())).findFirst().orElseThrow(() -> new AssertionError("No pet facet found")).count() == 3 &&
+                        facetStats.stream().filter(it -> it.value().equals(SightingEnum.KEYS.name())).findFirst().orElseThrow(() -> new AssertionError("No keys facet found")).count() == 3);
     }
 }

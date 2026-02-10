@@ -9,7 +9,11 @@ import java.util.List;
 @Value
 public class GetFacetStatsResult implements JsonType {
 
-    List<FacetStats> stats;
+    public GetFacetStatsResult(List<FacetStats> stats) {
+        this.stats = stats.stream().map(facetStats -> new FacetStatsLocal(facetStats.getName(), facetStats.getValue(), facetStats.getCount())).toList();
+    }
+
+    List<FacetStatsLocal> stats;
 
     /**
      * Timestamp indicating when this result was generated (milliseconds since epoch).
@@ -38,5 +42,8 @@ public class GetFacetStatsResult implements JsonType {
          * Timestamp of result generation.
          */
         long timestamp;
+    }
+
+    public record FacetStatsLocal(String name, String value, int count) {
     }
 }

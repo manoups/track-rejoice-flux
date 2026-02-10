@@ -109,8 +109,8 @@ class ContentTest extends TestUtilities {
                     .expectResult(Objects::nonNull)
                     .mapResult(GetFacetStatsResult::getStats)
                     .expectResult(facetStats -> facetStats.size() == 2 &&
-                            facetStats.stream().filter(it -> it.getValue().equals("pet")).findFirst().orElseThrow(() -> new AssertionError("No pet facet found")).getCount() == 15 &&
-                            facetStats.stream().filter(it -> it.getValue().equals("keys")).findFirst().orElseThrow(() -> new AssertionError("No keys facet found")).getCount() == 10);
+                            facetStats.stream().filter(it -> it.value().equals("pet")).findFirst().orElseThrow(() -> new AssertionError("No pet facet found")).count() == 15 &&
+                            facetStats.stream().filter(it -> it.value().equals("keys")).findFirst().orElseThrow(() -> new AssertionError("No keys facet found")).count() == 10);
         }
     }
 
