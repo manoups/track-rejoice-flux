@@ -17,5 +17,6 @@
       <a routerLink="/sightings/new" class="btn btn-primary">Create Sighting</a>
     </div>
   </aside>
-  <track-rejoice-sightings [sightingsInput]="dataQuery$" [term]="term()" [loading]="loading()" />
+  <track-rejoice-sightings [nextPage$]="dataQuery$" [resetAndFeed$]="resetAndFeed$" (pageChange)="onPageChange($event)"
+                           [term]="term()" [loading]="loading()" [done]="done()" (resetAndLoad)="resetAndLoad()" />
 </div>

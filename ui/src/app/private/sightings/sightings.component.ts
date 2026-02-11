@@ -1,6 +1,6 @@
-import {Component, inject, Input, input, OnInit, signal} from '@angular/core';
+import {Component, inject, Input, input, OnInit, output, signal} from '@angular/core';
 import {View} from '../../common/view';
-import {FacetFilter, FacetPaginationRequestBody, Sighting, SightingDocument} from '@trackrejoice/typescriptmodels';
+import {Sighting, SightingDocument} from '@trackrejoice/typescriptmodels';
 import {FormsModule} from '@angular/forms';
 import {HttpClient} from '@angular/common/http';
 import {RouterLink} from '@angular/router';
@@ -21,22 +21,25 @@ import {Observable} from 'rxjs';
   templateUrl: './sightings.component.html',
   styleUrl: './sightings.component.css',
 })
-export class SightingsComponent extends View implements OnInit{
+export class SightingsComponent extends View implements OnInit {
   ngOnInit(): void {
-      this.sightingsInput.subscribe(sightings => this.sightings.set(sightings));
+    this.resetAndFeed$.subscribe(sightings => {
+      this.sightings.set(sightings)
+    });
+    this.nextPage$.subscribe(sightings => this.sightings.update(existing => existing.concat(sightings)));
   }
-  private http = inject(HttpClient);
-  @Input({required: true}) sightingsInput: Observable<SightingDocument[]>;
 
+  private http = inject(HttpClient);
+  @Input({required: true}) nextPage$: Observable<SightingDocument[]>;
+  @Input({required: true}) resetAndFeed$: Observable<SightingDocument[]>;
+  pageChange = output<any>();
+  resetAndLoad = output<boolean>();
   // Sidebar inputs
 
   // Virtual/infinite state
-  pageSize = 10;
-  page = 0;
   loading = input.required<boolean>();
-  localLoading = signal<boolean>(false);
-  term=input.required<string>();
-  private done = signal(false);
+  term = input.required<string>();
+  done = input.required<boolean>();
 
   sightings = signal<SightingDocument[]>([]);
 
@@ -45,7 +48,7 @@ export class SightingsComponent extends View implements OnInit{
     const buffer = 8;
     if (this.loading() || this.done()) return;
     if (index + buffer >= this.sightings().length) {
-      this.loadNextPage();
+      this.pageChange.emit('');
     }
   }
 
@@ -59,43 +62,7 @@ export class SightingsComponent extends View implements OnInit{
 
     this.http.delete(`/api/sighting/${encodeURIComponent(id)}`, {withCredentials: true})
       .subscribe({
-        next: () => this.resetAndLoad()
-      });
-  }
-
-  private resetAndLoad(): void {
-    this.page = 0;
-    this.done.set(false);
-    this.sightings.set([]);
-    this.loadNextPage();
-  }
-
-  private loadNextPage(): void {
-    if (this.loading() || this.localLoading() || this.done()) return;
-
-    // this.loading.set(true);
-
-    // Backend-side paging/filter is assumed (fits your query model pattern)
-    // const term = (this.term() ?? '').trim();
-    const url = '/api/sighting/list';
-    this.http.post<Sighting[]>(url, <FacetPaginationRequestBody>{
-      facetFilters: <FacetFilter[]>[],
-      filter: this.term(),
-      pagination: {page: this.page, pageSize: this.pageSize}
-    }, {withCredentials: true})
-      .subscribe({
-        next: (rows) => {
-          const nextRows = rows ?? [];
-          this.sightings.update(existing => existing.concat(nextRows));
-          this.page += 1;
-          if (nextRows.length < this.pageSize) {
-            this.done.set(true);
-          }
-          this.localLoading.set(false);
-        },
-        error: () => {
-          this.localLoading.set(false);
-        }
+        next: () => this.resetAndLoad.emit(true)
       });
   }
 
