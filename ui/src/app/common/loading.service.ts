@@ -11,6 +11,7 @@ export class LoadingService {
   loading$ = toObservable(this.loadingSubject);
 
   loadingOn() {
+    debugger;
     this.loadingSubject.set(true);
   }
 

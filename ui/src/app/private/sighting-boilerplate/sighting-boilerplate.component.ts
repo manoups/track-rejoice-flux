@@ -77,7 +77,6 @@ export class SightingBoilerplateComponent implements OnInit {
     if (this.loading() || this.done()) return;
 
     this.loading.set(true);
-    this.loadingService.loadingOn();
 
     // Backend-side paging/filter is assumed (fits your query model pattern)
     const term = (this.term() ?? '').trim();
@@ -93,7 +92,6 @@ export class SightingBoilerplateComponent implements OnInit {
     }).pipe(
       finalize(() => {
         this.loading.set(false);
-        this.loadingService.loadingOff();
       })
     ).subscribe({
       next: ({stats, rows}) => {

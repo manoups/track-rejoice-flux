@@ -13,7 +13,7 @@ export class LoadingInterceptor
   }
 
   intercept(
-    req: HttpRequest<any>,
+    req: HttpRequest<unknown>,
     next: HttpHandler
   ): Observable<HttpEvent<any>> {
     // Check for a custom attribute

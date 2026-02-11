@@ -6,6 +6,7 @@ import {ElementRef} from '@angular/core';
 import {tap} from 'rxjs/operators';
 import {environment} from '../../environments/environments';
 import {HandlerRegistry} from './handler-registry';
+import {AppCommonUtils} from './app-common-utils';
 
 export abstract class RequestGateway extends Gateway {
   private cache: Map<string, ReplaySubject<any>> = new Map();
@@ -44,6 +45,9 @@ export abstract class RequestGateway extends Gateway {
     if (!options.hideError) {
       o = o.pipe(tap({error: e => console.error('Request failed', {type, payload, error: e})}));
     }
+    // if (options.showSpinner) {
+    //   o = AppCommonUtils.waitForProcess(o);
+    // }
     return o;
   }
 
