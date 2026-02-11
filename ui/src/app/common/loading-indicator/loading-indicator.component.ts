@@ -4,6 +4,7 @@ import {LoadingService} from '../loading.service';
 import {Observable} from 'rxjs';
 import {tap} from 'rxjs/operators';
 import {AsyncPipe, NgTemplateOutlet} from '@angular/common';
+import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 
 @Component({
   selector: 'track-rejoice-loading-indicator',

@@ -123,7 +123,7 @@ export class SightingBoilerplateComponent implements OnInit {
 
   }
 
-  protected onPageChange() {
+  protected onPageChange(event: any): void {
     this.loadNextPage(false)
   }
 }
