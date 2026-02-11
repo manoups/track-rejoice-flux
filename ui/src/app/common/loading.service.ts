@@ -1,5 +1,4 @@
 import {Injectable, signal} from '@angular/core';
-import {BehaviorSubject} from 'rxjs';
 import {toObservable} from '@angular/core/rxjs-interop';
 
 @Injectable({
@@ -11,7 +10,6 @@ export class LoadingService {
   loading$ = toObservable(this.loadingSubject);
 
   loadingOn() {
-    debugger;
     this.loadingSubject.set(true);
   }
 
