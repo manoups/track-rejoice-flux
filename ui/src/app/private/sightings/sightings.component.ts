@@ -1,12 +1,13 @@
-import {Component, inject, Input, input, OnInit, output, signal} from '@angular/core';
+import {Component, DestroyRef, inject, Input, OnInit, signal} from '@angular/core';
 import {View} from '../../common/view';
-import {Sighting, SightingDocument} from '@trackrejoice/typescriptmodels';
+import {FacetFilter, FacetPaginationRequestBody, Sighting, SightingDocument} from '@trackrejoice/typescriptmodels';
 import {FormsModule} from '@angular/forms';
 import {HttpClient} from '@angular/common/http';
 import {RouterLink} from '@angular/router';
 import {CdkFixedSizeVirtualScroll, CdkVirtualForOf, CdkVirtualScrollViewport} from '@angular/cdk/scrolling';
 import {DatePipe} from '@angular/common';
-import {Observable} from 'rxjs';
+import {BehaviorSubject, finalize, map, merge, Observable, of, switchMap, withLatestFrom} from 'rxjs';
+import {tap} from 'rxjs/operators';
 
 @Component({
   selector: 'track-rejoice-sightings',
@@ -22,33 +23,80 @@ import {Observable} from 'rxjs';
   styleUrl: './sightings.component.css',
 })
 export class SightingsComponent extends View implements OnInit {
-  ngOnInit(): void {
-    this.resetAndFeed$.subscribe(sightings => {
-      this.sightings.set(sightings)
-    });
-    this.nextPage$.subscribe(sightings => this.sightings.update(existing => existing.concat(sightings)));
-  }
-
   private http = inject(HttpClient);
-  @Input({required: true}) nextPage$: Observable<SightingDocument[]>;
-  @Input({required: true}) resetAndFeed$: Observable<SightingDocument[]>;
-  pageChange = output<any>();
-  resetAndLoad = output<boolean>();
-  // Sidebar inputs
-
+  private destroyRef = inject(DestroyRef);
   // Virtual/infinite state
-  loading = input.required<boolean>();
-  term = input.required<string>();
-  done = input.required<boolean>();
+  loading = signal<boolean>(false);
+  done = signal<boolean>(false);
+  @Input({required: true}) filterUpdate$: Observable<[string, FacetFilter[]]>;
+  private pageSize = 10;
+  page = 0;
+  pageSubject = new BehaviorSubject<number>(0);
 
   sightings = signal<SightingDocument[]>([]);
+
+  constructor() {
+    super();
+    // this.facetUpdate$()
+  }
+
+  ngOnInit(): void {
+    const filterObservable$: Observable<FacetPaginationRequestBody> = this.filterUpdate$
+      .pipe(tap(_ => this.resetListing()),
+        map(([filter, facetFilters]) => {
+          return {filter: filter, facetFilters: facetFilters, pagination: {page: 0, pageSize: this.pageSize}}
+        }));
+
+    const pageObservable$: Observable<FacetPaginationRequestBody> = this.pageSubject.pipe(
+      withLatestFrom(this.filterUpdate$),
+      map(([page, [filter, facetFilters]]) => {
+        return {filter: filter, facetFilters: facetFilters, pagination: {page: page, pageSize: this.pageSize}}
+      }))
+
+    const subscribe = merge(filterObservable$, pageObservable$).pipe(switchMap((body) => this.loadNextPage(body)))
+      .subscribe({
+        next: (rows) => {
+          this.sightings.update(sightings => sightings.concat(rows))
+
+          this.page += 1;
+          if ((rows).length < this.pageSize) {
+            this.done.set(true);
+          }
+        },
+        error: () => {
+          // optional: show error state here; loading already reset by finalize()
+        }
+      });
+
+    this.destroyRef.onDestroy(() => {
+      subscribe.unsubscribe();
+    });
+  }
+
+  resetListing(): void {
+    this.page = 0;
+    this.sightings.set([]);
+    this.done.set(false);
+  }
+
+  private loadNextPage(body: FacetPaginationRequestBody): Observable<Sighting[]> {
+    if (this.loading() || this.done()) return of([]);
+
+    this.loading.set(true);
+
+    return this.http.post<Sighting[]>('/api/sighting/list', body, {withCredentials: true}).pipe(
+      finalize(() => {
+        this.loading.set(false);
+      })
+    )
+  }
 
   onScrollIndexChange(index: number): void {
     // Load next page when user gets close to the end
     const buffer = 8;
     if (this.loading() || this.done()) return;
     if (index + buffer >= this.sightings().length) {
-      this.pageChange.emit('');
+      this.pageSubject.next(this.page + 1);
     }
   }
 
@@ -61,8 +109,9 @@ export class SightingsComponent extends View implements OnInit {
     if (!confirm(`Delete sighting ${id}?`)) return;
 
     this.http.delete(`/api/sighting/${encodeURIComponent(id)}`, {withCredentials: true})
+      .pipe(tap(_ => this.resetListing()))
       .subscribe({
-        next: () => this.resetAndLoad.emit(true)
+        next: () => this.pageSubject.next(0)
       });
   }
 

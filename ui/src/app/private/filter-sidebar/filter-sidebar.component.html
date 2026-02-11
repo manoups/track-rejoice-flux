@@ -1,15 +1,29 @@
-<div class="mb-3">
-  <label class="form-label">Other filters (skeleton)</label>
-  <div class="form-check">
-    <input class="form-check-input" type="checkbox" id="onlyMine" disabled/>
-    <label class="form-check-label" for="onlyMine">Only mine (placeholder)</label>
+  <h2 class="sidebar-title">Filters</h2>
+  <div class="mb-3">
+    <label for="term" class="form-label">Search</label>
+    <input
+      id="term"
+      name="term"
+      class="form-control"
+      [(ngModel)]="term"
+      placeholder="Type to search..."/>
+    <div class="form-text">Sent as query parameter to the listing endpoint.</div>
   </div>
-  @for (filter of (input|async)?.stats|keyvalue; track filter.key) {
-    <div class="form-label">{{ filter.key }}
-      @for (value of filter.value; track value.value) {
-        <input class="form-check-input" type="radio" id="{{value.value}}"/>
-        <label class="form-check-label" for="{{value.value}}">{{ value.value }} ({{ value.count }})</label>
-      }
+  <div class="mb-3">
+    <label class="form-label">Other filters (skeleton)</label>
+    <div class="form-check">
+      <input class="form-check-input" type="checkbox" id="onlyMine" disabled/>
+      <label class="form-check-label" for="onlyMine">Only mine (placeholder)</label>
     </div>
-  }
-</div>
+    @for (filter of (input|async)?.stats|keyvalue; track filter.key) {
+      <div class="form-label">{{ filter.key }}
+        @for (value of filter.value; track value.value) {
+          <input class="form-check-input" type="radio" id="{{value.value}}"/>
+          <label class="form-check-label" for="{{value.value}}">{{ value.value }} ({{ value.count }})</label>
+        }
+      </div>
+    }
+  </div>
+  <div class="d-grid gap-2">
+    <a routerLink="/sightings/new" class="btn btn-primary">Create Sighting</a>
+  </div>

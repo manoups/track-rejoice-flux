@@ -1,22 +1,6 @@
 <div class="listing-layout">
   <aside class="sidebar">
-    <h2 class="sidebar-title">Filters</h2>
-
-    <div class="mb-3">
-      <label for="term" class="form-label">Search</label>
-      <input
-        id="term"
-        name="term"
-        class="form-control"
-        [(ngModel)]="term"
-        placeholder="Type to search..."/>
-      <div class="form-text">Sent as query parameter to the listing endpoint.</div>
-    </div>
-    <track-rejoice-filter-sidebar [input]="facetQuery$"/>
-    <div class="d-grid gap-2">
-      <a routerLink="/sightings/new" class="btn btn-primary">Create Sighting</a>
-    </div>
+    <track-rejoice-filter-sidebar (facetChange)="filterChange$.next($event)"/>
   </aside>
-  <track-rejoice-sightings [nextPage$]="dataQuery$" [resetAndFeed$]="resetAndFeed$" (pageChange)="onPageChange($event)"
-                           [term]="term()" [loading]="loading()" [done]="done()" (resetAndLoad)="resetAndLoad()" />
+  <track-rejoice-sightings [filterUpdate$]="filterChange$"/>
 </div>
