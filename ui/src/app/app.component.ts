@@ -1,10 +1,12 @@
 import {Component} from '@angular/core';
 import {RouterOutlet} from '@angular/router';
+import {LoadingIndicatorComponent} from './common/loading-indicator/loading-indicator.component';
 
 @Component({
   selector: 'track-rejoice-root',
   imports: [
-    RouterOutlet
+    RouterOutlet,
+    LoadingIndicatorComponent
   ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'

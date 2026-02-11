@@ -16,6 +16,7 @@ import {FormsModule} from '@angular/forms';
 import {RouterLink} from '@angular/router';
 import {SightingsComponent} from '../sightings/sightings.component';
 import {toObservable} from '@angular/core/rxjs-interop';
+import {LoadingService} from '../../common/loading.service';
 
 @Component({
   selector: 'track-rejoice-sighting-boilerplate',
@@ -29,7 +30,7 @@ import {toObservable} from '@angular/core/rxjs-interop';
   styleUrl: './sighting-boilerplate.component.css',
 })
 export class SightingBoilerplateComponent implements OnInit {
-
+  private loadingService = inject(LoadingService);
   private http = inject(HttpClient);
   private destroyRef = inject(DestroyRef);
   page = 0;
@@ -76,6 +77,7 @@ export class SightingBoilerplateComponent implements OnInit {
     if (this.loading() || this.done()) return;
 
     this.loading.set(true);
+    this.loadingService.loadingOn();
 
     // Backend-side paging/filter is assumed (fits your query model pattern)
     const term = (this.term() ?? '').trim();
@@ -89,7 +91,10 @@ export class SightingBoilerplateComponent implements OnInit {
       stats: this.http.post<GetFacetStatsResult>('/api/sighting/list/stats', body, {withCredentials: true}),
       rows: this.http.post<Sighting[]>('/api/sighting/list', body, {withCredentials: true}),
     }).pipe(
-      finalize(() => this.loading.set(false))
+      finalize(() => {
+        this.loading.set(false);
+        this.loadingService.loadingOff();
+      })
     ).subscribe({
       next: ({stats, rows}) => {
         this.facetQuery$.next(stats);
