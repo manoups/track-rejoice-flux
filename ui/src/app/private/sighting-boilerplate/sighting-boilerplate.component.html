@@ -1,11 +1,9 @@
-<mat-grid-list cols="4" gutterSize="10px">
-  <mat-toolbar color="primary">Sightings</mat-toolbar>
-  <mat-grid-tile>
+<mat-toolbar color="primary">Sightings</mat-toolbar>
+<mat-sidenav-container class="example-container">
+  <mat-sidenav position="start" mode="side" opened>
     <track-rejoice-filter-sidebar (facetChange)="filterChange$.next($event)"/>
-  </mat-grid-tile>
-  <mat-grid-tile colspan="3">
-    <div style="height: 100%;width: 100%;">
-      <track-rejoice-sightings [filterUpdate$]="filterChange$"/>
-    </div>
-  </mat-grid-tile>
-</mat-grid-list>
+  </mat-sidenav>
+  <mat-sidenav-content>
+    <track-rejoice-sightings [filterUpdate$]="filterChange$"/>
+  </mat-sidenav-content>
+</mat-sidenav-container>
