@@ -1,35 +1,28 @@
-<mat-toolbar color="primary">Fast, infinite scroll list</mat-toolbar>
+<cdk-virtual-scroll-viewport
+  class="viewport"
+  [itemSize]="rowHeight"
+  (scrolledIndexChange)="onScrollIndexChange($event)">
 
-<div class="table-shell mat-elevation-z2">
-  <!-- Fixed header -->
-  <table class="mat-mdc-table header-table" aria-hidden="true">
-    <thead class="mat-mdc-header-row">
-    <tr class="mat-mdc-header-row">
-      <th class="mat-mdc-header-cell col-id">Id</th>
-      <th class="mat-mdc-header-cell col-owner">Owner</th>
-      <th class="mat-mdc-header-cell col-ts">Updated At</th>
-    </tr>
-    </thead>
+  <table mat-table [dataSource]="dataSource" [trackBy]="trackBySightingId" class="mat-elevation-z2" [fixedLayout]="true">
+
+    <ng-container matColumnDef="id">
+      <th mat-header-cell *matHeaderCellDef sticky>Id</th>
+      <td mat-cell *matCellDef="let row">{{ row.sightingId }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="ownerId">
+      <th mat-header-cell *matHeaderCellDef sticky>Owner</th>
+      <td mat-cell *matCellDef="let row">{{ row.ownerId }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="timestamp">
+      <th mat-header-cell *matHeaderCellDef sticky>Updated At</th>
+      <td mat-cell *matCellDef="let row">
+        {{ row.timestamp | date:'yyyy-MM-dd HH:mm:ss' }}
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
   </table>
-
-  <!-- Virtualized body -->
-  <cdk-virtual-scroll-viewport
-    class="viewport"
-    [itemSize]="rowHeight"
-    (scrolledIndexChange)="onScrollIndexChange($event)">
-
-    <table class="mat-mdc-table body-table">
-      <tbody>
-      <tr
-        class="mat-mdc-row"
-        *cdkVirtualFor="let row of sightings(); trackBy: trackBySightingId">
-        <td class="mat-mdc-cell col-id">{{ row.sightingId }}</td>
-        <td class="mat-mdc-cell col-owner">{{ row.ownerId }}</td>
-        <td class="mat-mdc-cell col-ts">
-          {{ row.timestamp | date:'yyyy-MM-dd HH:mm:ss' }}
-        </td>
-      </tr>
-      </tbody>
-    </table>
-  </cdk-virtual-scroll-viewport>
-</div>
+</cdk-virtual-scroll-viewport>

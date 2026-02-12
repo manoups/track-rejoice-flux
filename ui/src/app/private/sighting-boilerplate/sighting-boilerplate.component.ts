@@ -5,6 +5,7 @@ import {FilterSidebarComponent} from '../filter-sidebar/filter-sidebar.component
 import {FormsModule} from '@angular/forms';
 import {SightingsComponent} from '../sightings/sightings.component';
 import {MatGridList, MatGridTile, MatGridTileHeaderCssMatStyler} from '@angular/material/grid-list';
+import {MatToolbar} from '@angular/material/toolbar';
 
 @Component({
   selector: 'track-rejoice-sighting-boilerplate',
@@ -14,7 +15,8 @@ import {MatGridList, MatGridTile, MatGridTileHeaderCssMatStyler} from '@angular/
     SightingsComponent,
     MatGridList,
     MatGridTileHeaderCssMatStyler,
-    MatGridTile
+    MatGridTile,
+    MatToolbar
   ],
   templateUrl: './sighting-boilerplate.component.html',
   styleUrl: './sighting-boilerplate.component.css',

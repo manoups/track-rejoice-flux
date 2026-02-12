@@ -3,20 +3,46 @@ import {View} from '../../common/view';
 import {FacetFilter, FacetPaginationRequestBody, Sighting, SightingDocument} from '@trackrejoice/typescriptmodels';
 import {FormsModule} from '@angular/forms';
 import {HttpClient} from '@angular/common/http';
-import {CdkFixedSizeVirtualScroll, CdkVirtualForOf, CdkVirtualScrollViewport} from '@angular/cdk/scrolling';
+import {CdkFixedSizeVirtualScroll, CdkVirtualScrollViewport} from '@angular/cdk/scrolling';
 import {DatePipe} from '@angular/common';
 import {BehaviorSubject, finalize, map, merge, Observable, of, switchMap, withLatestFrom} from 'rxjs';
 import {tap} from 'rxjs/operators';
 import {MatToolbar} from '@angular/material/toolbar';
+import {DataSource} from '@angular/cdk/collections';
 import {
-  CdkCell,
-  CdkCellDef, CdkColumnDef, CdkHeaderCell,
-  CdkHeaderCellDef,
-  CdkHeaderRow,
-  CdkHeaderRowDef,
-  CdkRow, CdkRowDef,
-  CdkTable
-} from '@angular/cdk/table';
+  MatCell,
+  MatCellDef,
+  MatColumnDef,
+  MatHeaderCell,
+  MatHeaderCellDef,
+  MatHeaderRow, MatHeaderRowDef, MatRow, MatRowDef,
+  MatTable
+} from '@angular/material/table';
+
+class SightingsDataSource extends DataSource<SightingDocument> {
+  private readonly subject = new BehaviorSubject<SightingDocument[]>([]);
+
+  connect(): Observable<SightingDocument[]> {
+    return this.subject.asObservable();
+  }
+
+  disconnect(): void {
+    this.subject.complete();
+  }
+
+  set(rows: SightingDocument[]): void {
+    this.subject.next(rows);
+  }
+
+  append(rows: SightingDocument[]): void {
+    const current = this.subject.value;
+    this.subject.next(current.concat(rows ?? []));
+  }
+
+  get length(): number {
+    return this.subject.value.length;
+  }
+}
 
 @Component({
   selector: 'track-rejoice-sightings',
@@ -24,19 +50,18 @@ import {
     FormsModule,
     CdkVirtualScrollViewport,
     CdkFixedSizeVirtualScroll,
-    CdkVirtualForOf,
     DatePipe,
     MatToolbar,
-    CdkTable,
-    CdkRow,
-    CdkHeaderRow,
-    CdkHeaderRowDef,
-    CdkCell,
-    CdkCellDef,
-    CdkHeaderCellDef,
-    CdkHeaderCell,
-    CdkColumnDef,
-    CdkRowDef
+    MatTable,
+    MatColumnDef,
+    MatHeaderCell,
+    MatCell,
+    MatHeaderCellDef,
+    MatCellDef,
+    MatHeaderRow,
+    MatHeaderRowDef,
+    MatRowDef,
+    MatRow
   ],
   templateUrl: './sightings.component.html',
   styleUrl: './sightings.component.css',
@@ -54,7 +79,7 @@ export class SightingsComponent extends View implements OnInit {
   pageSubject = new BehaviorSubject<number>(0);
 
   sightings = signal<SightingDocument[]>([]);
-
+  dataSource = new SightingsDataSource();
   constructor() {
     super();
     // this.facetUpdate$()
@@ -145,5 +170,5 @@ export class SightingsComponent extends View implements OnInit {
   trackBySightingId = (_index: number, sighting: Sighting): any => {
     return (sighting as any).sightingId;
   };
-  protected displayedColumns=['ID', 'Owner', 'Updated At'];
+  protected displayedColumns=['id', 'ownerId', 'timestamp'];
 }
