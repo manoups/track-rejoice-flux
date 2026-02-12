@@ -7,7 +7,6 @@ import {CdkFixedSizeVirtualScroll, CdkVirtualScrollViewport} from '@angular/cdk/
 import {DatePipe} from '@angular/common';
 import {BehaviorSubject, finalize, map, merge, Observable, of, switchMap, withLatestFrom} from 'rxjs';
 import {tap} from 'rxjs/operators';
-import {MatToolbar} from '@angular/material/toolbar';
 import {DataSource} from '@angular/cdk/collections';
 import {
   MatCell,
@@ -15,7 +14,10 @@ import {
   MatColumnDef,
   MatHeaderCell,
   MatHeaderCellDef,
-  MatHeaderRow, MatHeaderRowDef, MatRow, MatRowDef,
+  MatHeaderRow,
+  MatHeaderRowDef,
+  MatRow,
+  MatRowDef,
   MatTable
 } from '@angular/material/table';
 
@@ -51,7 +53,6 @@ class SightingsDataSource extends DataSource<SightingDocument> {
     CdkVirtualScrollViewport,
     CdkFixedSizeVirtualScroll,
     DatePipe,
-    MatToolbar,
     MatTable,
     MatColumnDef,
     MatHeaderCell,

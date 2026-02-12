@@ -4,7 +4,7 @@ import {FacetFilter} from '@trackrejoice/typescriptmodels';
 import {FilterSidebarComponent} from '../filter-sidebar/filter-sidebar.component';
 import {FormsModule} from '@angular/forms';
 import {SightingsComponent} from '../sightings/sightings.component';
-import {MatGridList, MatGridTile, MatGridTileHeaderCssMatStyler} from '@angular/material/grid-list';
+import {MatGridList, MatGridTile} from '@angular/material/grid-list';
 import {MatToolbar} from '@angular/material/toolbar';
 
 @Component({
@@ -14,7 +14,6 @@ import {MatToolbar} from '@angular/material/toolbar';
     FormsModule,
     SightingsComponent,
     MatGridList,
-    MatGridTileHeaderCssMatStyler,
     MatGridTile,
     MatToolbar
   ],
