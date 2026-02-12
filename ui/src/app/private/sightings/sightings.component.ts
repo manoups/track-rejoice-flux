@@ -3,21 +3,40 @@ import {View} from '../../common/view';
 import {FacetFilter, FacetPaginationRequestBody, Sighting, SightingDocument} from '@trackrejoice/typescriptmodels';
 import {FormsModule} from '@angular/forms';
 import {HttpClient} from '@angular/common/http';
-import {RouterLink} from '@angular/router';
 import {CdkFixedSizeVirtualScroll, CdkVirtualForOf, CdkVirtualScrollViewport} from '@angular/cdk/scrolling';
 import {DatePipe} from '@angular/common';
 import {BehaviorSubject, finalize, map, merge, Observable, of, switchMap, withLatestFrom} from 'rxjs';
 import {tap} from 'rxjs/operators';
+import {MatToolbar} from '@angular/material/toolbar';
+import {
+  CdkCell,
+  CdkCellDef, CdkColumnDef, CdkHeaderCell,
+  CdkHeaderCellDef,
+  CdkHeaderRow,
+  CdkHeaderRowDef,
+  CdkRow, CdkRowDef,
+  CdkTable
+} from '@angular/cdk/table';
 
 @Component({
   selector: 'track-rejoice-sightings',
   imports: [
     FormsModule,
-    RouterLink,
     CdkVirtualScrollViewport,
     CdkFixedSizeVirtualScroll,
     CdkVirtualForOf,
-    DatePipe
+    DatePipe,
+    MatToolbar,
+    CdkTable,
+    CdkRow,
+    CdkHeaderRow,
+    CdkHeaderRowDef,
+    CdkCell,
+    CdkCellDef,
+    CdkHeaderCellDef,
+    CdkHeaderCell,
+    CdkColumnDef,
+    CdkRowDef
   ],
   templateUrl: './sightings.component.html',
   styleUrl: './sightings.component.css',
@@ -31,6 +50,7 @@ export class SightingsComponent extends View implements OnInit {
   @Input({required: true}) filterUpdate$: Observable<[string, FacetFilter[]]>;
   private pageSize = 10;
   page = 0;
+  rowHeight = 48;
   pageSubject = new BehaviorSubject<number>(0);
 
   sightings = signal<SightingDocument[]>([]);
@@ -125,4 +145,5 @@ export class SightingsComponent extends View implements OnInit {
   trackBySightingId = (_index: number, sighting: Sighting): any => {
     return (sighting as any).sightingId;
   };
+  protected displayedColumns=['ID', 'Owner', 'Updated At'];
 }

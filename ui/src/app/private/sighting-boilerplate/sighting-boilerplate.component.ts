@@ -4,13 +4,17 @@ import {FacetFilter} from '@trackrejoice/typescriptmodels';
 import {FilterSidebarComponent} from '../filter-sidebar/filter-sidebar.component';
 import {FormsModule} from '@angular/forms';
 import {SightingsComponent} from '../sightings/sightings.component';
+import {MatGridList, MatGridTile, MatGridTileHeaderCssMatStyler} from '@angular/material/grid-list';
 
 @Component({
   selector: 'track-rejoice-sighting-boilerplate',
   imports: [
     FilterSidebarComponent,
     FormsModule,
-    SightingsComponent
+    SightingsComponent,
+    MatGridList,
+    MatGridTileHeaderCssMatStyler,
+    MatGridTile
   ],
   templateUrl: './sighting-boilerplate.component.html',
   styleUrl: './sighting-boilerplate.component.css',

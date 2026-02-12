@@ -1,6 +1,9 @@
-<div class="listing-layout">
-  <aside class="sidebar">
+<mat-grid-list cols="4" gutterSize="10px">
+  <mat-grid-tile-header><h1>Sightings</h1></mat-grid-tile-header>
+  <mat-grid-tile>
     <track-rejoice-filter-sidebar (facetChange)="filterChange$.next($event)"/>
-  </aside>
-  <track-rejoice-sightings [filterUpdate$]="filterChange$"/>
-</div>
+  </mat-grid-tile>
+  <mat-grid-tile colspan="3">
+    <track-rejoice-sightings [filterUpdate$]="filterChange$"/>
+  </mat-grid-tile>
+</mat-grid-list>
