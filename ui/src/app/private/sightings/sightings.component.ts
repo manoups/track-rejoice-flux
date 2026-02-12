@@ -66,6 +66,7 @@ class SightingsDataSource extends DataSource<SightingDocument> {
   ],
   templateUrl: './sightings.component.html',
   styleUrl: './sightings.component.css',
+  standalone: true
 })
 export class SightingsComponent extends View implements OnInit {
   private http = inject(HttpClient);
@@ -103,7 +104,7 @@ export class SightingsComponent extends View implements OnInit {
       .subscribe({
         next: (rows) => {
           this.sightings.update(sightings => sightings.concat(rows))
-
+          this.dataSource.append(rows);
           this.page += 1;
           if ((rows).length < this.pageSize) {
             this.done.set(true);
@@ -122,6 +123,7 @@ export class SightingsComponent extends View implements OnInit {
   resetListing(): void {
     this.page = 0;
     this.sightings.set([]);
+    this.dataSource.set([]);
     this.done.set(false);
   }
 

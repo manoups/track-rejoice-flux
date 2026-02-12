@@ -7,7 +7,7 @@ import {mockSightings, mockUserIds} from './sightings.mock';
 
 let userIds = mockUserIds;
 
-let users: SightingDocument[] = mockSightings;
+let sightingDocuments: SightingDocument[] = mockSightings;
 
 export function mockBackendInterceptor(
   req: HttpRequest<any>,
@@ -18,35 +18,6 @@ export function mockBackendInterceptor(
 
   if (!url.startsWith('/api/sighting/list')) {
     return next(req);
-  }
-
-  // GET with query params
-  if (method === 'GET') {
-    let result = [...users];
-
-    const name = params.get('name');
-    const email = params.get('email');
-
-    if (name) {
-      result = result.filter(u =>
-        u.name.toLowerCase().includes(name.toLowerCase())
-      );
-    }
-
-    if (email) {
-      result = result.filter(u =>
-        u.email.toLowerCase().includes(email.toLowerCase())
-      );
-    }
-
-    return ok(result);
-  }
-
-  // GET by id
-  if (method === 'GET' && url.match(/\/api\/users\/\d+$/)) {
-    const id = getId(url);
-    const user = users.find(u => u.id === id);
-    return user ? ok(user) : notFound();
   }
 
   // POST
@@ -61,7 +32,7 @@ export function mockBackendInterceptor(
   // DELETE
   if (method === 'DELETE') {
     const id = getId(url);
-    users = users.filter(u => u.id !== id);
+    sightingDocuments = sightingDocuments.filter(u => u.sightingId !== id);
     return ok({});
   }
 

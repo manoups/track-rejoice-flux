@@ -204,6 +204,8 @@
           <outputFileType>implementationFile</outputFileType>
           <jsonLibrary>jackson2</jsonLibrary>
           <customTypeMappings>
+            <customTypeMapping>com.breece.sighting.api.model.SightingId:string</customTypeMapping>
+            <customTypeMapping>com.breece.content.api.model.ContentId:string</customTypeMapping>
             <customTypeMapping>java.time.LocalDate:string</customTypeMapping>
             <customTypeMapping>java.time.LocalDateTime:string</customTypeMapping>
             <customTypeMapping>java.time.Duration:string</customTypeMapping>
