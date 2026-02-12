@@ -22,7 +22,17 @@
       </td>
     </ng-container>
 
+    <ng-container matColumnDef="removeAfterMatching">
+      <th mat-header-cell *matHeaderCellDef sticky>Remove After Matching</th>
+      <td mat-cell *matCellDef="let row">
+        {{ row.removeAfterMatching }}
+      </td>
+    </ng-container>
+
     <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
     <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
   </table>
 </cdk-virtual-scroll-viewport>
+<div>
+  Items fetched: {{sightings()?.length}}
+</div>

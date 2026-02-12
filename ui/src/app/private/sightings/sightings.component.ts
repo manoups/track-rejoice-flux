@@ -75,7 +75,7 @@ export class SightingsComponent extends View implements OnInit {
   loading = signal<boolean>(false);
   done = signal<boolean>(false);
   @Input({required: true}) filterUpdate$: Observable<[string, FacetFilter[]]>;
-  private pageSize = 10;
+  private pageSize = 20;
   page = 0;
   rowHeight = 48;
   pageSubject = new BehaviorSubject<number>(0);
@@ -141,10 +141,10 @@ export class SightingsComponent extends View implements OnInit {
 
   onScrollIndexChange(index: number): void {
     // Load next page when user gets close to the end
-    const buffer = 8;
+    const buffer = 12;
     if (this.loading() || this.done()) return;
     if (index + buffer >= this.sightings().length) {
-      this.pageSubject.next(this.page + 1);
+      this.pageSubject.next(this.page);
     }
   }
 
@@ -173,5 +173,5 @@ export class SightingsComponent extends View implements OnInit {
   trackBySightingId = (_index: number, sighting: Sighting): any => {
     return (sighting as any).sightingId;
   };
-  protected displayedColumns=['id', 'ownerId', 'timestamp'];
+  protected displayedColumns=['id', 'ownerId', 'timestamp', 'removeAfterMatching'];
 }

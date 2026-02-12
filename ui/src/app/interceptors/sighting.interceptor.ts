@@ -51,7 +51,7 @@ export function mockBackendInterceptor(
     }));
   }
 
-  function getId(url: string): number {
-    return Number(url.split('/').pop());
+  function getId(url: string): string {
+    return url.split('/').pop();
   }
 }
