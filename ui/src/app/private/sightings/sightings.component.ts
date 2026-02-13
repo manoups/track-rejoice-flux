@@ -141,9 +141,8 @@ export class SightingsComponent extends View implements OnInit {
 
   onScrollIndexChange(index: number): void {
     // Load next page when user gets close to the end
-    const buffer = 12;
     if (this.loading() || this.done()) return;
-    if (index + buffer >= this.sightings().length) {
+    if (index + this.pageSize >= this.sightings().length) {
       this.pageSubject.next(this.page);
     }
   }
@@ -170,8 +169,7 @@ export class SightingsComponent extends View implements OnInit {
     return String(id);
   }
 
-  trackBySightingId = (_index: number, sighting: Sighting): any => {
-    return (sighting as any).sightingId;
-  };
+  trackBySightingId = (_index: number, sighting: SightingDocument) => (sighting as any).sightingId;
+
   protected displayedColumns=['id', 'ownerId', 'timestamp', 'removeAfterMatching'];
 }
