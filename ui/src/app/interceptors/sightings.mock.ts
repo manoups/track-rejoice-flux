@@ -15,603 +15,1003 @@ export const mockUserIds = ['20ce3ace-82cf-413b-9568-51cc014ad753', '8526da30-59
 export const mockSightings: SightingDocument[] =
   [
     {
-      "ownerId": "8789467f-0450-404c-805f-d8bfce2980a7",
+      "ownerId": "7c2c6c69-2744-472e-9b0f-db41428409b3",
       "removeAfterMatching": true,
-      "sightingId": "9586ced6-eff4-4caf-a2b3-1c889099db87",
-      "timestamp": "2025-07-11T16:21:10.994Z"
+      "sightingId": "eaf41ac5-3dd4-47c4-89ee-0a6b028f2018",
+      "timestamp": "2025-03-19T15:58:34.121Z",
+      "details": {
+        "lat": 34.2565407709398,
+        "lng": 32.368743932073116
+      }
     },
     {
-      "ownerId": "5ad6c4f7-3cf8-41fa-b928-fe255e9fd255",
+      "ownerId": "b9ef58ed-55f3-43dc-be57-74c52ab6d2cf",
       "removeAfterMatching": false,
-      "sightingId": "c3c0d7e0-c895-4590-918c-60d3b570a80b",
-      "timestamp": "2026-01-01T05:04:59.206Z"
+      "sightingId": "fb37693a-9dd4-405a-a4ee-6ac62b657c1c",
+      "timestamp": "2025-12-30T20:09:46.081Z",
+      "details": {
+        "lat": 19.573812749407605,
+        "lng": 6.394632956449237
+      }
     },
     {
-      "ownerId": "aa043656-a197-4d6e-b216-880c3e3fdc76",
+      "ownerId": "0e314856-3622-4b8e-a719-2643bede18d9",
       "removeAfterMatching": false,
-      "sightingId": "8f5028a6-8c68-46b4-8053-216ebc1fb236",
-      "timestamp": "2025-03-27T22:08:05.980Z"
+      "sightingId": "75353843-d908-4e66-99cb-77f1a7b62f96",
+      "timestamp": "2025-08-16T19:38:04.257Z",
+      "details": {
+        "lat": 30.49122226850311,
+        "lng": 46.899210626008525
+      }
     },
     {
-      "ownerId": "5fd9b7b1-4687-42da-af2c-e432d4b2290d",
+      "ownerId": "a06857c9-5ea2-4845-b5ce-493923f6adbd",
       "removeAfterMatching": true,
-      "sightingId": "548c0d22-d715-4c09-9530-71c5764cb76c",
-      "timestamp": "2025-09-03T04:04:47.468Z"
+      "sightingId": "a6416319-9a79-437a-a5d4-1618ebc856b0",
+      "timestamp": "2025-08-15T17:37:44.457Z",
+      "details": {
+        "lat": 12.844081428858317,
+        "lng": 20.219140161148637
+      }
     },
     {
-      "ownerId": "ab895eef-033d-497f-be98-1fc7c902866a",
+      "ownerId": "3edd043a-36c8-4632-8e4a-32672ee4ea3c",
       "removeAfterMatching": false,
-      "sightingId": "bb8eb7b1-c4b5-4951-a7f5-4b6f6b45ece6",
-      "timestamp": "2025-08-04T23:58:55.989Z"
+      "sightingId": "558bf422-b5d8-4bd3-99c7-e865fb392004",
+      "timestamp": "2025-10-26T11:00:15.962Z",
+      "details": {
+        "lat": 36.23720117961708,
+        "lng": 1.1100881162477094
+      }
     },
     {
-      "ownerId": "cda4b4f5-68e9-4425-8501-92a17db5c012",
+      "ownerId": "191492a9-bf69-44f7-bb2f-7a62fe9cbca1",
       "removeAfterMatching": false,
-      "sightingId": "41706cd8-62ca-4fb0-880b-309dd5ac4507",
-      "timestamp": "2025-08-16T00:25:56.413Z"
+      "sightingId": "31878d78-3d5f-4b59-a523-4cbbb6586870",
+      "timestamp": "2025-07-17T09:09:25.675Z",
+      "details": {
+        "lat": 16.610437885385572,
+        "lng": 23.021445300018563
+      }
     },
     {
-      "ownerId": "dbd886b5-72d7-4aa3-8e96-afb221bb6964",
+      "ownerId": "b31ca0b4-dea4-45cc-ad04-4eec004a2134",
       "removeAfterMatching": true,
-      "sightingId": "c328b93c-55da-4f86-9e70-aaa08f710393",
-      "timestamp": "2025-08-07T11:34:53.669Z"
+      "sightingId": "9709f98b-25dd-410d-97a3-9afc5d1e3c13",
+      "timestamp": "2025-11-05T11:26:19.611Z",
+      "details": {
+        "lat": 23.64902694727531,
+        "lng": 45.93013333657296
+      }
     },
     {
-      "ownerId": "1a233e0d-7913-41a9-b586-6b08f3605d2b",
+      "ownerId": "03e02209-2c59-4e49-a6fc-7e6566128e88",
       "removeAfterMatching": false,
-      "sightingId": "ca5797d1-e6d3-43e2-93ce-c63c7acc58b1",
-      "timestamp": "2025-10-23T17:26:59.932Z"
+      "sightingId": "e42e576e-f92a-4726-b36b-82bd246e9998",
+      "timestamp": "2025-07-03T23:57:17.491Z",
+      "details": {
+        "lat": 1.0462970654556314,
+        "lng": 8.377363821073535
+      }
     },
     {
-      "ownerId": "28d31d0f-2c51-425b-90f6-88676918feff",
+      "ownerId": "61dccb57-dd2e-44ec-9ab5-4b12436aa37d",
       "removeAfterMatching": false,
-      "sightingId": "08dc3267-944c-46b6-9128-abe37b762e29",
-      "timestamp": "2025-12-15T22:11:40.752Z"
+      "sightingId": "d8c5cff4-40dc-47f8-b827-67245f7bd6dc",
+      "timestamp": "2025-09-28T19:07:50.869Z",
+      "details": {
+        "lat": 41.88221766891974,
+        "lng": 2.4636619992208675
+      }
     },
     {
-      "ownerId": "6886f55c-f8f3-4ae1-b926-664a6756a523",
+      "ownerId": "2c6baf7b-1a42-49dd-b789-da0e029cb68f",
       "removeAfterMatching": true,
-      "sightingId": "536a55a2-5af1-4b9b-a239-54a8e20826e5",
-      "timestamp": "2025-07-26T10:59:44.226Z"
+      "sightingId": "3e462998-138d-4fd1-97d4-d1c54cb73cbc",
+      "timestamp": "2025-07-25T12:44:31.401Z",
+      "details": {
+        "lat": 39.057182558622486,
+        "lng": 18.71595945543534
+      }
     },
     {
-      "ownerId": "8789467f-0450-404c-805f-d8bfce2980a7",
+      "ownerId": "7c2c6c69-2744-472e-9b0f-db41428409b3",
       "removeAfterMatching": false,
-      "sightingId": "6751e057-0343-40fd-82d5-8271cef41539",
-      "timestamp": "2025-12-06T01:28:23.407Z"
+      "sightingId": "90ea1e4d-d8cf-42a3-90cb-295307bc88d3",
+      "timestamp": "2025-12-07T00:36:02.873Z",
+      "details": {
+        "lat": 39.98399467859212,
+        "lng": 32.123884398414425
+      }
     },
     {
-      "ownerId": "5ad6c4f7-3cf8-41fa-b928-fe255e9fd255",
+      "ownerId": "b9ef58ed-55f3-43dc-be57-74c52ab6d2cf",
       "removeAfterMatching": false,
-      "sightingId": "aed8677e-691e-4dc6-b80a-0a823b32dd56",
-      "timestamp": "2025-02-05T02:53:31.938Z"
+      "sightingId": "026527e6-bff8-4632-a628-d795da752be6",
+      "timestamp": "2025-11-21T10:18:29.239Z",
+      "details": {
+        "lat": 29.864337844289246,
+        "lng": 19.990972371280407
+      }
     },
     {
-      "ownerId": "aa043656-a197-4d6e-b216-880c3e3fdc76",
+      "ownerId": "0e314856-3622-4b8e-a719-2643bede18d9",
       "removeAfterMatching": true,
-      "sightingId": "3cdc8b6c-f95a-4f44-a1b2-43a5259c0bb8",
-      "timestamp": "2026-01-31T11:10:41.748Z"
+      "sightingId": "cdb59ab1-eb4e-4571-9746-659573e302a7",
+      "timestamp": "2025-09-07T23:46:23.992Z",
+      "details": {
+        "lat": 34.48379951053029,
+        "lng": 46.96716325173043
+      }
     },
     {
-      "ownerId": "5fd9b7b1-4687-42da-af2c-e432d4b2290d",
+      "ownerId": "a06857c9-5ea2-4845-b5ce-493923f6adbd",
       "removeAfterMatching": false,
-      "sightingId": "e702004f-7dde-42cd-a8b0-46e3bd0c9da8",
-      "timestamp": "2025-04-28T20:31:40.103Z"
+      "sightingId": "dfa9d69b-567c-437e-9e64-4708d5f7b144",
+      "timestamp": "2026-01-21T17:48:18.639Z",
+      "details": {
+        "lat": 25.139560974479956,
+        "lng": 29.754560980406364
+      }
     },
     {
-      "ownerId": "ab895eef-033d-497f-be98-1fc7c902866a",
+      "ownerId": "3edd043a-36c8-4632-8e4a-32672ee4ea3c",
       "removeAfterMatching": false,
-      "sightingId": "b3dee381-ccc0-4502-9c40-1cf6bd1b76e2",
-      "timestamp": "2025-08-23T12:57:02.194Z"
+      "sightingId": "caae86df-692f-457b-91d8-cfb88d337560",
+      "timestamp": "2025-05-10T17:58:59.672Z",
+      "details": {
+        "lat": 9.403675527226907,
+        "lng": 40.294612178137506
+      }
     },
     {
-      "ownerId": "cda4b4f5-68e9-4425-8501-92a17db5c012",
+      "ownerId": "191492a9-bf69-44f7-bb2f-7a62fe9cbca1",
       "removeAfterMatching": true,
-      "sightingId": "ceed6d17-5da9-481e-bd72-ef71ec77961d",
-      "timestamp": "2025-08-20T17:34:27.144Z"
+      "sightingId": "554d9b04-5d64-4eec-bed5-397590dce6d8",
+      "timestamp": "2026-01-03T18:58:45.431Z",
+      "details": {
+        "lat": 10.43782609836828,
+        "lng": 27.083332433809808
+      }
     },
     {
-      "ownerId": "dbd886b5-72d7-4aa3-8e96-afb221bb6964",
+      "ownerId": "b31ca0b4-dea4-45cc-ad04-4eec004a2134",
       "removeAfterMatching": false,
-      "sightingId": "77002999-4941-4814-8625-4d498334df7f",
-      "timestamp": "2025-06-28T07:01:55.352Z"
+      "sightingId": "7ad5f08d-16ba-47ce-900d-f15d7f86ba23",
+      "timestamp": "2026-01-13T16:15:06.067Z",
+      "details": {
+        "lat": 29.333389333653713,
+        "lng": 13.698657255865127
+      }
     },
     {
-      "ownerId": "1a233e0d-7913-41a9-b586-6b08f3605d2b",
+      "ownerId": "03e02209-2c59-4e49-a6fc-7e6566128e88",
       "removeAfterMatching": false,
-      "sightingId": "fc4e926a-993a-417d-9b74-c9623806d679",
-      "timestamp": "2026-01-23T23:52:34.180Z"
+      "sightingId": "f7405d76-b7fa-4acf-b5f3-6c928231127b",
+      "timestamp": "2025-10-05T10:53:05.966Z",
+      "details": {
+        "lat": 37.620344025998925,
+        "lng": 45.80439145567076
+      }
     },
     {
-      "ownerId": "28d31d0f-2c51-425b-90f6-88676918feff",
+      "ownerId": "61dccb57-dd2e-44ec-9ab5-4b12436aa37d",
       "removeAfterMatching": true,
-      "sightingId": "86f4003f-9188-4d32-9b53-e353e3abc29f",
-      "timestamp": "2025-09-25T08:00:22.669Z"
+      "sightingId": "652bd28d-96f0-40d6-9dd9-c34da8ad25f0",
+      "timestamp": "2025-09-10T18:17:15.222Z",
+      "details": {
+        "lat": 31.09348461387782,
+        "lng": 12.326960449445712
+      }
     },
     {
-      "ownerId": "6886f55c-f8f3-4ae1-b926-664a6756a523",
+      "ownerId": "2c6baf7b-1a42-49dd-b789-da0e029cb68f",
       "removeAfterMatching": false,
-      "sightingId": "d623961b-6367-4f97-b443-4a6e1a553c0c",
-      "timestamp": "2025-02-07T23:12:42.348Z"
+      "sightingId": "6440b55b-291a-4ce4-8a8d-41daa153360a",
+      "timestamp": "2025-03-16T02:34:33.757Z",
+      "details": {
+        "lat": 16.06188127358309,
+        "lng": 7.404690633040811
+      }
     },
     {
-      "ownerId": "8789467f-0450-404c-805f-d8bfce2980a7",
+      "ownerId": "7c2c6c69-2744-472e-9b0f-db41428409b3",
       "removeAfterMatching": false,
-      "sightingId": "9826f5f7-e0d3-4dd8-b550-56a970c2d3e9",
-      "timestamp": "2025-03-26T18:11:28.063Z"
+      "sightingId": "28f3067f-663f-41c3-a4ab-b0942ae35cef",
+      "timestamp": "2025-03-20T22:24:59.813Z",
+      "details": {
+        "lat": 43.16811478741727,
+        "lng": 11.888769254631715
+      }
     },
     {
-      "ownerId": "5ad6c4f7-3cf8-41fa-b928-fe255e9fd255",
+      "ownerId": "b9ef58ed-55f3-43dc-be57-74c52ab6d2cf",
       "removeAfterMatching": true,
-      "sightingId": "4e170edd-be83-40f1-86d7-5ab4aa101fcb",
-      "timestamp": "2025-04-18T18:17:03.973Z"
+      "sightingId": "6cd6fff7-66b3-4ebf-abc0-26d5c6c06f62",
+      "timestamp": "2025-08-22T13:45:45.453Z",
+      "details": {
+        "lat": 16.204905662565512,
+        "lng": 4.090322802375745
+      }
     },
     {
-      "ownerId": "aa043656-a197-4d6e-b216-880c3e3fdc76",
+      "ownerId": "0e314856-3622-4b8e-a719-2643bede18d9",
       "removeAfterMatching": false,
-      "sightingId": "d9d24882-a500-42e1-bff3-19aac95105c0",
-      "timestamp": "2025-04-02T11:53:17.653Z"
+      "sightingId": "27b98a18-661d-452a-9cc1-e7465d93a146",
+      "timestamp": "2025-05-27T06:59:23.691Z",
+      "details": {
+        "lat": 1.2870598164103408,
+        "lng": 46.70038647620963
+      }
     },
     {
-      "ownerId": "5fd9b7b1-4687-42da-af2c-e432d4b2290d",
+      "ownerId": "a06857c9-5ea2-4845-b5ce-493923f6adbd",
       "removeAfterMatching": false,
-      "sightingId": "e174567b-b744-4b53-be52-91c8b9967b13",
-      "timestamp": "2025-10-01T07:57:37.591Z"
+      "sightingId": "30ff976e-f5ff-4d46-993a-fefc6e1dfcfe",
+      "timestamp": "2025-12-06T17:29:35.189Z",
+      "details": {
+        "lat": 41.89891845855538,
+        "lng": 9.640244667840225
+      }
     },
     {
-      "ownerId": "ab895eef-033d-497f-be98-1fc7c902866a",
+      "ownerId": "3edd043a-36c8-4632-8e4a-32672ee4ea3c",
       "removeAfterMatching": true,
-      "sightingId": "24544f8a-5f51-4ef4-80a1-042243f425ae",
-      "timestamp": "2025-04-11T20:26:05.851Z"
+      "sightingId": "e28df5c0-7e0f-4d19-9769-4909b5156c61",
+      "timestamp": "2025-05-03T01:13:33.131Z",
+      "details": {
+        "lat": 22.091951286648083,
+        "lng": 21.358321001018897
+      }
     },
     {
-      "ownerId": "cda4b4f5-68e9-4425-8501-92a17db5c012",
+      "ownerId": "191492a9-bf69-44f7-bb2f-7a62fe9cbca1",
       "removeAfterMatching": false,
-      "sightingId": "e3108fb9-28d6-475a-a72b-98be9b5bcfde",
-      "timestamp": "2026-01-28T21:46:15.181Z"
+      "sightingId": "22b14a90-4f56-434a-8c4d-223e58215b1d",
+      "timestamp": "2025-05-10T13:10:00.016Z",
+      "details": {
+        "lat": 47.27997415895187,
+        "lng": 16.71597580005334
+      }
     },
     {
-      "ownerId": "dbd886b5-72d7-4aa3-8e96-afb221bb6964",
+      "ownerId": "b31ca0b4-dea4-45cc-ad04-4eec004a2134",
       "removeAfterMatching": false,
-      "sightingId": "95f431c9-0879-4c1e-a035-e8e7895fa998",
-      "timestamp": "2025-04-08T16:58:44.045Z"
+      "sightingId": "f248424b-9505-401b-8ea6-c2c38f22ca4c",
+      "timestamp": "2025-10-27T04:56:28.108Z",
+      "details": {
+        "lat": 26.13300919641227,
+        "lng": 9.774700591370312
+      }
     },
     {
-      "ownerId": "1a233e0d-7913-41a9-b586-6b08f3605d2b",
+      "ownerId": "03e02209-2c59-4e49-a6fc-7e6566128e88",
       "removeAfterMatching": true,
-      "sightingId": "7df75fd5-6240-4cab-9000-d597c28b2d3c",
-      "timestamp": "2025-08-07T20:57:09.338Z"
+      "sightingId": "a4567580-a343-43f2-af95-49626a502fd2",
+      "timestamp": "2025-08-08T08:43:29.160Z",
+      "details": {
+        "lat": 5.829448615545147,
+        "lng": 42.487327951713254
+      }
     },
     {
-      "ownerId": "28d31d0f-2c51-425b-90f6-88676918feff",
+      "ownerId": "61dccb57-dd2e-44ec-9ab5-4b12436aa37d",
       "removeAfterMatching": false,
-      "sightingId": "75dad780-6e53-4345-8439-259956001891",
-      "timestamp": "2025-10-11T17:13:36.110Z"
+      "sightingId": "edfb8e8c-a823-43b5-a67a-4ad1e639ac49",
+      "timestamp": "2025-02-22T08:11:54.026Z",
+      "details": {
+        "lat": 48.54051623107865,
+        "lng": 1.0283102456551285
+      }
     },
     {
-      "ownerId": "6886f55c-f8f3-4ae1-b926-664a6756a523",
+      "ownerId": "2c6baf7b-1a42-49dd-b789-da0e029cb68f",
       "removeAfterMatching": false,
-      "sightingId": "ffbc2571-4925-4d78-881e-fdd9956420e5",
-      "timestamp": "2025-11-08T22:56:01.889Z"
+      "sightingId": "9ee302cc-a13d-401e-9337-3857613dff86",
+      "timestamp": "2025-12-14T05:12:50.397Z",
+      "details": {
+        "lat": 41.02953076756907,
+        "lng": 48.28036437710214
+      }
     },
     {
-      "ownerId": "8789467f-0450-404c-805f-d8bfce2980a7",
+      "ownerId": "7c2c6c69-2744-472e-9b0f-db41428409b3",
       "removeAfterMatching": true,
-      "sightingId": "5a8e76e8-69bc-46b9-8ee7-5d6157142294",
-      "timestamp": "2025-11-10T16:22:12.017Z"
+      "sightingId": "e6407bee-6739-4998-abfb-23a13e2ac372",
+      "timestamp": "2025-11-19T00:23:25.717Z",
+      "details": {
+        "lat": 17.25253783254822,
+        "lng": 49.86814000369888
+      }
     },
     {
-      "ownerId": "5ad6c4f7-3cf8-41fa-b928-fe255e9fd255",
+      "ownerId": "b9ef58ed-55f3-43dc-be57-74c52ab6d2cf",
       "removeAfterMatching": false,
-      "sightingId": "bdf8b058-9eff-422e-a57b-8db47e3ea7b4",
-      "timestamp": "2025-05-26T18:57:00.018Z"
+      "sightingId": "4fb1f8e5-6951-41eb-91f0-bd6cd8c8c242",
+      "timestamp": "2025-07-26T13:51:12.676Z",
+      "details": {
+        "lat": 35.20169077809582,
+        "lng": 11.68174740648661
+      }
     },
     {
-      "ownerId": "aa043656-a197-4d6e-b216-880c3e3fdc76",
+      "ownerId": "0e314856-3622-4b8e-a719-2643bede18d9",
       "removeAfterMatching": false,
-      "sightingId": "e620cae7-e624-49a9-aded-43f83d570ed3",
-      "timestamp": "2025-03-03T12:26:05.882Z"
+      "sightingId": "c5d64acf-ed97-494d-a53e-d03b09880722",
+      "timestamp": "2026-02-12T04:07:19.164Z",
+      "details": {
+        "lat": 34.12631198390773,
+        "lng": 6.989483052618772
+      }
     },
     {
-      "ownerId": "5fd9b7b1-4687-42da-af2c-e432d4b2290d",
+      "ownerId": "a06857c9-5ea2-4845-b5ce-493923f6adbd",
       "removeAfterMatching": true,
-      "sightingId": "829f8888-6392-4618-89de-f25b2fe91f04",
-      "timestamp": "2025-02-17T18:47:15.275Z"
+      "sightingId": "7d1c513c-7840-4160-87a2-8159ea8f390a",
+      "timestamp": "2025-10-16T02:52:28.196Z",
+      "details": {
+        "lat": 33.00114350456064,
+        "lng": 27.555427363559048
+      }
     },
     {
-      "ownerId": "ab895eef-033d-497f-be98-1fc7c902866a",
+      "ownerId": "3edd043a-36c8-4632-8e4a-32672ee4ea3c",
       "removeAfterMatching": false,
-      "sightingId": "69486dbd-6143-43e4-96c9-cd614e7210f8",
-      "timestamp": "2025-08-09T14:05:54.224Z"
+      "sightingId": "1d78d4b7-bf44-4624-966e-e09accd5edda",
+      "timestamp": "2025-11-08T17:41:56.350Z",
+      "details": {
+        "lat": 11.605040262576278,
+        "lng": 37.12628581574709
+      }
     },
     {
-      "ownerId": "cda4b4f5-68e9-4425-8501-92a17db5c012",
+      "ownerId": "191492a9-bf69-44f7-bb2f-7a62fe9cbca1",
       "removeAfterMatching": false,
-      "sightingId": "49b47b20-ba91-4f0a-a892-f3b66c6dc7f9",
-      "timestamp": "2026-02-09T05:55:33.424Z"
+      "sightingId": "efec29d4-ccb5-42ac-bedf-791f24739826",
+      "timestamp": "2025-04-30T16:35:48.857Z",
+      "details": {
+        "lat": 15.33567720509007,
+        "lng": 42.75225911759562
+      }
     },
     {
-      "ownerId": "dbd886b5-72d7-4aa3-8e96-afb221bb6964",
+      "ownerId": "b31ca0b4-dea4-45cc-ad04-4eec004a2134",
       "removeAfterMatching": true,
-      "sightingId": "cdba44d6-6844-4908-90e9-47c3f848ff66",
-      "timestamp": "2025-02-15T22:30:50.172Z"
+      "sightingId": "c20ce275-5220-4d7a-bd87-f74fefb235f6",
+      "timestamp": "2025-12-14T08:55:09.455Z",
+      "details": {
+        "lat": 3.362233762247213,
+        "lng": 27.92816694400926
+      }
     },
     {
-      "ownerId": "1a233e0d-7913-41a9-b586-6b08f3605d2b",
+      "ownerId": "03e02209-2c59-4e49-a6fc-7e6566128e88",
       "removeAfterMatching": false,
-      "sightingId": "66a22a42-891a-4b1b-9ff4-3514111c1326",
-      "timestamp": "2025-07-12T04:42:08.024Z"
+      "sightingId": "1487fc14-8e08-43ef-a452-a9074910227e",
+      "timestamp": "2026-01-07T11:14:08.543Z",
+      "details": {
+        "lat": 28.269652772739658,
+        "lng": 11.128428934790568
+      }
     },
     {
-      "ownerId": "28d31d0f-2c51-425b-90f6-88676918feff",
+      "ownerId": "61dccb57-dd2e-44ec-9ab5-4b12436aa37d",
       "removeAfterMatching": false,
-      "sightingId": "6bf1a44b-f2c3-4e1b-85cb-6ae83aff7451",
-      "timestamp": "2025-06-12T01:00:28.339Z"
+      "sightingId": "12a99d8e-00c7-4349-9989-aef6198d436b",
+      "timestamp": "2025-10-14T00:34:25.312Z",
+      "details": {
+        "lat": 11.812863907307763,
+        "lng": 41.484625383984564
+      }
     },
     {
-      "ownerId": "6886f55c-f8f3-4ae1-b926-664a6756a523",
+      "ownerId": "2c6baf7b-1a42-49dd-b789-da0e029cb68f",
       "removeAfterMatching": true,
-      "sightingId": "f9b934f9-221a-48cd-9844-014aef467269",
-      "timestamp": "2025-08-18T20:29:22.058Z"
+      "sightingId": "6f9369f5-d12a-49b2-96ae-b9fda54444f0",
+      "timestamp": "2025-07-07T18:01:33.815Z",
+      "details": {
+        "lat": 45.816539415158125,
+        "lng": 32.30687140140139
+      }
     },
     {
-      "ownerId": "8789467f-0450-404c-805f-d8bfce2980a7",
+      "ownerId": "7c2c6c69-2744-472e-9b0f-db41428409b3",
       "removeAfterMatching": false,
-      "sightingId": "eb6f7625-5e93-4180-9798-fb5d3f849a6d",
-      "timestamp": "2025-08-20T13:53:26.954Z"
+      "sightingId": "a77ddcb9-9586-4971-9543-f37fea47c69f",
+      "timestamp": "2025-08-27T23:39:17.597Z",
+      "details": {
+        "lat": 46.39700031567934,
+        "lng": 22.71031019752947
+      }
     },
     {
-      "ownerId": "5ad6c4f7-3cf8-41fa-b928-fe255e9fd255",
+      "ownerId": "b9ef58ed-55f3-43dc-be57-74c52ab6d2cf",
       "removeAfterMatching": false,
-      "sightingId": "64919f36-8a38-45d6-a954-92e3a04ca0c9",
-      "timestamp": "2025-05-09T17:45:27.215Z"
+      "sightingId": "133d84ab-2dd9-471d-bcac-88c0a5e70e77",
+      "timestamp": "2025-04-27T22:41:49.382Z",
+      "details": {
+        "lat": 13.612601158002736,
+        "lng": 31.020884691345064
+      }
     },
     {
-      "ownerId": "aa043656-a197-4d6e-b216-880c3e3fdc76",
+      "ownerId": "0e314856-3622-4b8e-a719-2643bede18d9",
       "removeAfterMatching": true,
-      "sightingId": "6f6a57ec-6675-4a7e-8816-52748cd17504",
-      "timestamp": "2025-07-25T03:32:11.498Z"
+      "sightingId": "7fb5977b-dcea-48ff-958f-324b00b00c5d",
+      "timestamp": "2025-04-27T17:53:44.119Z",
+      "details": {
+        "lat": 34.391780736568066,
+        "lng": 35.14784728332056
+      }
     },
     {
-      "ownerId": "5fd9b7b1-4687-42da-af2c-e432d4b2290d",
+      "ownerId": "a06857c9-5ea2-4845-b5ce-493923f6adbd",
       "removeAfterMatching": false,
-      "sightingId": "674516af-9000-4a8a-998c-acb100ca23c8",
-      "timestamp": "2025-06-08T11:41:07.447Z"
+      "sightingId": "8a4d13e7-13df-43fe-8994-5c6e7bf3d649",
+      "timestamp": "2025-11-27T07:07:13.000Z",
+      "details": {
+        "lat": 17.10435299906407,
+        "lng": 7.5860761495348425
+      }
     },
     {
-      "ownerId": "ab895eef-033d-497f-be98-1fc7c902866a",
+      "ownerId": "3edd043a-36c8-4632-8e4a-32672ee4ea3c",
       "removeAfterMatching": false,
-      "sightingId": "fc969da5-053d-4299-b001-96dee4ff1d23",
-      "timestamp": "2026-01-24T23:20:46.363Z"
+      "sightingId": "18cc05a9-b3ce-441b-b4f0-390d3007f60e",
+      "timestamp": "2025-03-28T21:28:02.569Z",
+      "details": {
+        "lat": 6.645388038582545,
+        "lng": 47.91972028944191
+      }
     },
     {
-      "ownerId": "cda4b4f5-68e9-4425-8501-92a17db5c012",
+      "ownerId": "191492a9-bf69-44f7-bb2f-7a62fe9cbca1",
       "removeAfterMatching": true,
-      "sightingId": "77a0703a-0f0e-4b81-81b0-6fd7f710c46a",
-      "timestamp": "2026-02-11T17:21:55.614Z"
+      "sightingId": "eabfd082-fb50-4e82-9b0d-7ab927b045c8",
+      "timestamp": "2025-10-07T19:56:19.864Z",
+      "details": {
+        "lat": 29.870772117041238,
+        "lng": 11.61385279379521
+      }
     },
     {
-      "ownerId": "dbd886b5-72d7-4aa3-8e96-afb221bb6964",
+      "ownerId": "b31ca0b4-dea4-45cc-ad04-4eec004a2134",
       "removeAfterMatching": false,
-      "sightingId": "722bff92-3373-4a7a-b167-a00ac707da0e",
-      "timestamp": "2025-05-18T20:26:10.251Z"
+      "sightingId": "e83b766b-4a28-4fef-bbf4-f9f5fb764a09",
+      "timestamp": "2025-09-18T22:40:41.758Z",
+      "details": {
+        "lat": 32.860758720918255,
+        "lng": 20.34565294360017
+      }
     },
     {
-      "ownerId": "1a233e0d-7913-41a9-b586-6b08f3605d2b",
+      "ownerId": "03e02209-2c59-4e49-a6fc-7e6566128e88",
       "removeAfterMatching": false,
-      "sightingId": "73fe4d8e-5bb5-4a87-8e6a-03f2a874ba68",
-      "timestamp": "2025-10-06T14:48:50.070Z"
+      "sightingId": "528dbc19-7e9f-48b9-8122-e46f347fab83",
+      "timestamp": "2025-08-02T04:37:26.183Z",
+      "details": {
+        "lat": 7.63825148596834,
+        "lng": 9.034500579573923
+      }
     },
     {
-      "ownerId": "28d31d0f-2c51-425b-90f6-88676918feff",
+      "ownerId": "61dccb57-dd2e-44ec-9ab5-4b12436aa37d",
       "removeAfterMatching": true,
-      "sightingId": "d6a32404-28d8-4a67-ba56-bc4d938d1f97",
-      "timestamp": "2025-04-17T12:51:15.917Z"
+      "sightingId": "cea98995-d5a6-47ac-b389-059a5ffca2f7",
+      "timestamp": "2025-11-25T06:27:15.552Z",
+      "details": {
+        "lat": 32.28791370156114,
+        "lng": 11.709832393281822
+      }
     },
     {
-      "ownerId": "6886f55c-f8f3-4ae1-b926-664a6756a523",
+      "ownerId": "2c6baf7b-1a42-49dd-b789-da0e029cb68f",
       "removeAfterMatching": false,
-      "sightingId": "8b9289cf-cd49-4078-b9f5-648fa6e9535f",
-      "timestamp": "2025-05-06T22:31:43.482Z"
+      "sightingId": "4f755a67-b103-46e5-936c-fe0d91086e94",
+      "timestamp": "2026-01-11T00:36:34.526Z",
+      "details": {
+        "lat": 30.786978062724945,
+        "lng": 44.99887866260795
+      }
     },
     {
-      "ownerId": "8789467f-0450-404c-805f-d8bfce2980a7",
+      "ownerId": "7c2c6c69-2744-472e-9b0f-db41428409b3",
       "removeAfterMatching": false,
-      "sightingId": "64700830-a85e-4aff-8f0e-036d50cf7fdc",
-      "timestamp": "2025-03-11T22:40:34.739Z"
+      "sightingId": "f797b306-eab4-4d6e-a252-593b1e634d85",
+      "timestamp": "2025-05-11T02:35:14.539Z",
+      "details": {
+        "lat": 35.27780863776619,
+        "lng": 41.577608103509576
+      }
     },
     {
-      "ownerId": "5ad6c4f7-3cf8-41fa-b928-fe255e9fd255",
+      "ownerId": "b9ef58ed-55f3-43dc-be57-74c52ab6d2cf",
       "removeAfterMatching": true,
-      "sightingId": "9e49ef9c-436b-4901-ab71-5dd6d6ab5c28",
-      "timestamp": "2025-07-19T15:58:03.640Z"
+      "sightingId": "337f13ce-723e-429f-8062-ff192d09de28",
+      "timestamp": "2025-06-21T16:22:01.211Z",
+      "details": {
+        "lat": 32.38757913363793,
+        "lng": 46.69060463985157
+      }
     },
     {
-      "ownerId": "aa043656-a197-4d6e-b216-880c3e3fdc76",
+      "ownerId": "0e314856-3622-4b8e-a719-2643bede18d9",
       "removeAfterMatching": false,
-      "sightingId": "d35811c5-4a7d-43bc-a1bc-df030bf5eb94",
-      "timestamp": "2025-05-26T12:06:48.614Z"
+      "sightingId": "e4ce5f6c-55dd-4fd4-9cbf-4f7ab84f6b9f",
+      "timestamp": "2025-03-29T16:10:41.254Z",
+      "details": {
+        "lat": 21.41986919431294,
+        "lng": 21.491973610187546
+      }
     },
     {
-      "ownerId": "5fd9b7b1-4687-42da-af2c-e432d4b2290d",
+      "ownerId": "a06857c9-5ea2-4845-b5ce-493923f6adbd",
       "removeAfterMatching": false,
-      "sightingId": "8e09bbd8-b4d9-428a-a072-18cb5ffa1b69",
-      "timestamp": "2025-12-17T18:47:53.743Z"
+      "sightingId": "a936756f-d908-4846-a187-7ca595328395",
+      "timestamp": "2025-07-30T06:11:40.981Z",
+      "details": {
+        "lat": 35.95464342250736,
+        "lng": 34.86607922039877
+      }
     },
     {
-      "ownerId": "ab895eef-033d-497f-be98-1fc7c902866a",
+      "ownerId": "3edd043a-36c8-4632-8e4a-32672ee4ea3c",
       "removeAfterMatching": true,
-      "sightingId": "abf39514-2a26-4de2-a0c6-66e568c8890d",
-      "timestamp": "2025-02-23T00:22:03.271Z"
+      "sightingId": "3113d321-20e8-4c95-b734-581da57c1481",
+      "timestamp": "2026-01-25T17:27:18.764Z",
+      "details": {
+        "lat": 22.813139577092272,
+        "lng": 47.784629200915376
+      }
     },
     {
-      "ownerId": "cda4b4f5-68e9-4425-8501-92a17db5c012",
+      "ownerId": "191492a9-bf69-44f7-bb2f-7a62fe9cbca1",
       "removeAfterMatching": false,
-      "sightingId": "f4c53af5-6dd0-460c-a398-834fa8952c6d",
-      "timestamp": "2025-05-12T09:54:07.566Z"
+      "sightingId": "412d5058-b665-43cb-a00e-1352f5f8bef3",
+      "timestamp": "2025-06-11T17:18:05.726Z",
+      "details": {
+        "lat": 43.580850729420234,
+        "lng": 24.1145138387954
+      }
     },
     {
-      "ownerId": "dbd886b5-72d7-4aa3-8e96-afb221bb6964",
+      "ownerId": "b31ca0b4-dea4-45cc-ad04-4eec004a2134",
       "removeAfterMatching": false,
-      "sightingId": "329e7856-7021-4b9a-95c6-d782ebbf2795",
-      "timestamp": "2025-04-03T19:01:50.688Z"
+      "sightingId": "1b1cecb9-9ed0-4974-a8cc-b64bb2d0d34f",
+      "timestamp": "2025-12-28T08:19:42.782Z",
+      "details": {
+        "lat": 1.3713873295434442,
+        "lng": 46.705158234445626
+      }
     },
     {
-      "ownerId": "1a233e0d-7913-41a9-b586-6b08f3605d2b",
+      "ownerId": "03e02209-2c59-4e49-a6fc-7e6566128e88",
       "removeAfterMatching": true,
-      "sightingId": "c57e8dcc-7ffc-4ade-abfd-d54a086779fd",
-      "timestamp": "2025-11-13T21:43:55.913Z"
+      "sightingId": "86cec4a9-f44f-4ec6-a54e-3fc25c59c834",
+      "timestamp": "2025-10-25T19:44:37.047Z",
+      "details": {
+        "lat": 11.988112481815788,
+        "lng": 31.728643020196223
+      }
     },
     {
-      "ownerId": "28d31d0f-2c51-425b-90f6-88676918feff",
+      "ownerId": "61dccb57-dd2e-44ec-9ab5-4b12436aa37d",
       "removeAfterMatching": false,
-      "sightingId": "a0823526-7eb0-4140-90ba-abbae9fea0c4",
-      "timestamp": "2025-05-28T21:03:48.136Z"
+      "sightingId": "7c98ad84-4744-487b-8f95-67ea8c184554",
+      "timestamp": "2025-02-17T23:30:51.865Z",
+      "details": {
+        "lat": 4.598249342724891,
+        "lng": 0.7358720471303537
+      }
     },
     {
-      "ownerId": "6886f55c-f8f3-4ae1-b926-664a6756a523",
+      "ownerId": "2c6baf7b-1a42-49dd-b789-da0e029cb68f",
       "removeAfterMatching": false,
-      "sightingId": "0b92534c-d1bc-43bd-aa79-0a5a0e6b25f3",
-      "timestamp": "2025-11-12T10:55:26.099Z"
+      "sightingId": "8b7faa50-d7d6-4139-bf32-e25e35e131d3",
+      "timestamp": "2025-12-03T04:53:26.636Z",
+      "details": {
+        "lat": 27.705501004894195,
+        "lng": 0.02349472471468439
+      }
     },
     {
-      "ownerId": "8789467f-0450-404c-805f-d8bfce2980a7",
+      "ownerId": "7c2c6c69-2744-472e-9b0f-db41428409b3",
       "removeAfterMatching": true,
-      "sightingId": "003ba70d-0771-4863-86f3-521c31ce5d49",
-      "timestamp": "2025-02-05T05:28:49.087Z"
+      "sightingId": "0c68fee0-65f2-46f9-be6d-5a2d255f616b",
+      "timestamp": "2025-08-27T21:54:47.240Z",
+      "details": {
+        "lat": 1.7558543927553016,
+        "lng": 20.933478679966555
+      }
     },
     {
-      "ownerId": "5ad6c4f7-3cf8-41fa-b928-fe255e9fd255",
+      "ownerId": "b9ef58ed-55f3-43dc-be57-74c52ab6d2cf",
       "removeAfterMatching": false,
-      "sightingId": "1df29844-1a40-445b-91f1-e62a05f47612",
-      "timestamp": "2025-05-17T08:16:31.574Z"
+      "sightingId": "c4ab4e93-29f7-4590-a996-eb37a9a38b22",
+      "timestamp": "2025-09-09T06:16:08.045Z",
+      "details": {
+        "lat": 30.435630386772296,
+        "lng": 30.467794144516525
+      }
     },
     {
-      "ownerId": "aa043656-a197-4d6e-b216-880c3e3fdc76",
+      "ownerId": "0e314856-3622-4b8e-a719-2643bede18d9",
       "removeAfterMatching": false,
-      "sightingId": "9944ff38-0533-47e3-afae-4bb619f17a45",
-      "timestamp": "2026-01-10T23:44:54.070Z"
+      "sightingId": "0bba86a2-9a2c-4aa9-8399-9b51a7857bd8",
+      "timestamp": "2025-04-25T19:35:08.893Z",
+      "details": {
+        "lat": 4.786416972744412,
+        "lng": 1.6221949900317612
+      }
     },
     {
-      "ownerId": "5fd9b7b1-4687-42da-af2c-e432d4b2290d",
+      "ownerId": "a06857c9-5ea2-4845-b5ce-493923f6adbd",
       "removeAfterMatching": true,
-      "sightingId": "fc2db438-1e45-4c81-a4a4-0397df947caa",
-      "timestamp": "2026-02-05T18:49:10.283Z"
+      "sightingId": "5b1faef2-5744-4792-8abd-798922309af4",
+      "timestamp": "2025-09-17T13:53:50.928Z",
+      "details": {
+        "lat": 12.862850356558353,
+        "lng": 27.052769909690582
+      }
     },
     {
-      "ownerId": "ab895eef-033d-497f-be98-1fc7c902866a",
+      "ownerId": "3edd043a-36c8-4632-8e4a-32672ee4ea3c",
       "removeAfterMatching": false,
-      "sightingId": "3fbead92-0d43-4102-8ae4-7e3c0f91828e",
-      "timestamp": "2025-07-28T06:03:58.206Z"
+      "sightingId": "056949a0-b024-4b36-b2bc-8a5851075c1a",
+      "timestamp": "2025-10-13T00:33:43.689Z",
+      "details": {
+        "lat": 19.126828181002566,
+        "lng": 6.846175312418029
+      }
     },
     {
-      "ownerId": "cda4b4f5-68e9-4425-8501-92a17db5c012",
+      "ownerId": "191492a9-bf69-44f7-bb2f-7a62fe9cbca1",
       "removeAfterMatching": false,
-      "sightingId": "9bf35aa1-9f52-47d7-bb4f-8e5a6b1697fc",
-      "timestamp": "2025-11-15T11:05:02.170Z"
+      "sightingId": "f9a47737-1292-44f3-9f7d-0aa25676563d",
+      "timestamp": "2026-01-24T03:17:13.261Z",
+      "details": {
+        "lat": 14.259348104242232,
+        "lng": 15.039772022137821
+      }
     },
     {
-      "ownerId": "dbd886b5-72d7-4aa3-8e96-afb221bb6964",
+      "ownerId": "b31ca0b4-dea4-45cc-ad04-4eec004a2134",
       "removeAfterMatching": true,
-      "sightingId": "8d5fc9bf-6621-4f0f-b786-8bee4bba0b10",
-      "timestamp": "2025-09-01T13:49:04.061Z"
+      "sightingId": "65b88219-d93e-4afd-bc59-f9085e2b97b9",
+      "timestamp": "2025-12-22T16:23:34.519Z",
+      "details": {
+        "lat": 4.148933524223219,
+        "lng": 6.284745766319793
+      }
     },
     {
-      "ownerId": "1a233e0d-7913-41a9-b586-6b08f3605d2b",
+      "ownerId": "03e02209-2c59-4e49-a6fc-7e6566128e88",
       "removeAfterMatching": false,
-      "sightingId": "4796733e-3bc5-42df-bee2-f7c9adf1b093",
-      "timestamp": "2025-08-01T12:29:31.170Z"
+      "sightingId": "60df1d4a-5123-4033-be3b-149e9b6cebcc",
+      "timestamp": "2025-09-16T06:53:19.012Z",
+      "details": {
+        "lat": 5.0364412390121345,
+        "lng": 41.48294132346758
+      }
     },
     {
-      "ownerId": "28d31d0f-2c51-425b-90f6-88676918feff",
+      "ownerId": "61dccb57-dd2e-44ec-9ab5-4b12436aa37d",
       "removeAfterMatching": false,
-      "sightingId": "f1cb3526-3b9e-48d8-ab59-24e7fed9e965",
-      "timestamp": "2025-12-07T21:24:06.718Z"
+      "sightingId": "de9852e1-ce77-470b-afc5-07087be19d26",
+      "timestamp": "2025-10-07T05:35:14.006Z",
+      "details": {
+        "lat": 30.253211988294392,
+        "lng": 27.06847544526287
+      }
     },
     {
-      "ownerId": "6886f55c-f8f3-4ae1-b926-664a6756a523",
+      "ownerId": "2c6baf7b-1a42-49dd-b789-da0e029cb68f",
       "removeAfterMatching": true,
-      "sightingId": "26eae8f3-7b52-4931-9231-50420f534170",
-      "timestamp": "2025-07-13T12:53:42.417Z"
+      "sightingId": "0674a553-6147-4670-9b0e-57983bc2d772",
+      "timestamp": "2025-12-16T22:10:25.815Z",
+      "details": {
+        "lat": 3.40721448718368,
+        "lng": 42.1987197693053
+      }
     },
     {
-      "ownerId": "8789467f-0450-404c-805f-d8bfce2980a7",
+      "ownerId": "7c2c6c69-2744-472e-9b0f-db41428409b3",
       "removeAfterMatching": false,
-      "sightingId": "434e2df2-5596-424f-82d2-2b31869ecee2",
-      "timestamp": "2025-11-25T08:48:09.193Z"
+      "sightingId": "ffe4305a-903e-4439-b0d3-5eb0319f6cf5",
+      "timestamp": "2026-01-11T02:44:17.978Z",
+      "details": {
+        "lat": 7.829605573324044,
+        "lng": 39.01579545282347
+      }
     },
     {
-      "ownerId": "5ad6c4f7-3cf8-41fa-b928-fe255e9fd255",
+      "ownerId": "b9ef58ed-55f3-43dc-be57-74c52ab6d2cf",
       "removeAfterMatching": false,
-      "sightingId": "7c7536ec-6b70-4837-9525-1b59c30edcfc",
-      "timestamp": "2025-11-01T21:38:07.544Z"
+      "sightingId": "f0466436-7f3e-4efe-bc9f-88a15237701c",
+      "timestamp": "2025-07-20T23:33:24.006Z",
+      "details": {
+        "lat": 5.595585352456261,
+        "lng": 49.689873007315796
+      }
     },
     {
-      "ownerId": "aa043656-a197-4d6e-b216-880c3e3fdc76",
+      "ownerId": "0e314856-3622-4b8e-a719-2643bede18d9",
       "removeAfterMatching": true,
-      "sightingId": "1bec0bb5-d208-401f-a2a3-aac5414830f3",
-      "timestamp": "2025-12-13T17:48:05.206Z"
+      "sightingId": "0df37278-e927-43c8-9653-195bd642cfd3",
+      "timestamp": "2026-01-09T14:47:38.776Z",
+      "details": {
+        "lat": 10.656775640349903,
+        "lng": 2.450270732115073
+      }
     },
     {
-      "ownerId": "5fd9b7b1-4687-42da-af2c-e432d4b2290d",
+      "ownerId": "a06857c9-5ea2-4845-b5ce-493923f6adbd",
       "removeAfterMatching": false,
-      "sightingId": "940d67c1-3616-4ce5-9de8-b0d0c9bfc670",
-      "timestamp": "2026-01-25T01:51:26.429Z"
+      "sightingId": "83538d6b-03f6-4481-b98e-404ff30db36a",
+      "timestamp": "2025-07-17T06:35:51.207Z",
+      "details": {
+        "lat": 37.88806061800424,
+        "lng": 3.2523915294835835
+      }
     },
     {
-      "ownerId": "ab895eef-033d-497f-be98-1fc7c902866a",
+      "ownerId": "3edd043a-36c8-4632-8e4a-32672ee4ea3c",
       "removeAfterMatching": false,
-      "sightingId": "13b6530d-2103-43c0-922d-46b97bb283b2",
-      "timestamp": "2025-12-06T21:11:06.206Z"
+      "sightingId": "e8c0481c-93d0-4443-b07e-027bbc9c8c14",
+      "timestamp": "2025-07-09T08:05:22.965Z",
+      "details": {
+        "lat": 23.911702897691423,
+        "lng": 21.05397815410158
+      }
     },
     {
-      "ownerId": "cda4b4f5-68e9-4425-8501-92a17db5c012",
+      "ownerId": "191492a9-bf69-44f7-bb2f-7a62fe9cbca1",
       "removeAfterMatching": true,
-      "sightingId": "e725d81a-6c67-4637-a4d2-aa6096b3cfc8",
-      "timestamp": "2025-03-29T16:30:31.859Z"
+      "sightingId": "3193d692-b001-4f45-8f41-34b672dafcda",
+      "timestamp": "2026-01-17T23:59:00.146Z",
+      "details": {
+        "lat": 1.9540102261153325,
+        "lng": 12.308765223617046
+      }
     },
     {
-      "ownerId": "dbd886b5-72d7-4aa3-8e96-afb221bb6964",
+      "ownerId": "b31ca0b4-dea4-45cc-ad04-4eec004a2134",
       "removeAfterMatching": false,
-      "sightingId": "c6bce2c7-7a0b-4dcb-8e69-16bf0c7a5503",
-      "timestamp": "2025-06-23T17:53:39.615Z"
+      "sightingId": "79e2f44d-da61-42f1-98c7-78bc467e56f0",
+      "timestamp": "2026-02-06T19:29:51.233Z",
+      "details": {
+        "lat": 10.916629168880215,
+        "lng": 38.93204566200618
+      }
     },
     {
-      "ownerId": "1a233e0d-7913-41a9-b586-6b08f3605d2b",
+      "ownerId": "03e02209-2c59-4e49-a6fc-7e6566128e88",
       "removeAfterMatching": false,
-      "sightingId": "2ebc762b-3a80-4cca-bb95-ad7b1e9ce0f6",
-      "timestamp": "2025-09-29T07:17:21.955Z"
+      "sightingId": "764d3a21-abbb-47bc-8993-e6f56216b9f9",
+      "timestamp": "2025-03-13T01:00:58.911Z",
+      "details": {
+        "lat": 23.530607606654367,
+        "lng": 35.7054387748747
+      }
     },
     {
-      "ownerId": "28d31d0f-2c51-425b-90f6-88676918feff",
+      "ownerId": "61dccb57-dd2e-44ec-9ab5-4b12436aa37d",
       "removeAfterMatching": true,
-      "sightingId": "6cdd9632-a978-417b-967b-513c91fc7814",
-      "timestamp": "2025-04-22T14:38:58.696Z"
+      "sightingId": "6d5ab881-e1fa-4be0-a0e0-e619ad26dda4",
+      "timestamp": "2025-02-13T01:25:07.377Z",
+      "details": {
+        "lat": 0.8198103684587843,
+        "lng": 30.447574705880665
+      }
     },
     {
-      "ownerId": "6886f55c-f8f3-4ae1-b926-664a6756a523",
+      "ownerId": "2c6baf7b-1a42-49dd-b789-da0e029cb68f",
       "removeAfterMatching": false,
-      "sightingId": "588bf87d-6fb7-44f5-8e44-25e502c84de0",
-      "timestamp": "2026-01-25T14:57:30.874Z"
+      "sightingId": "ded8e8fa-3251-4691-bb13-30d2d4446db5",
+      "timestamp": "2026-01-13T02:30:24.922Z",
+      "details": {
+        "lat": 31.15149332770327,
+        "lng": 45.56113063475524
+      }
     },
     {
-      "ownerId": "8789467f-0450-404c-805f-d8bfce2980a7",
+      "ownerId": "7c2c6c69-2744-472e-9b0f-db41428409b3",
       "removeAfterMatching": false,
-      "sightingId": "0d8b4425-9704-4071-85f1-d6129b210636",
-      "timestamp": "2025-09-17T11:38:10.090Z"
+      "sightingId": "27fc05c1-e9ba-4395-a1f2-b0a0809660ab",
+      "timestamp": "2025-11-05T19:41:13.527Z",
+      "details": {
+        "lat": 14.648631408323636,
+        "lng": 49.78009126303118
+      }
     },
     {
-      "ownerId": "5ad6c4f7-3cf8-41fa-b928-fe255e9fd255",
+      "ownerId": "b9ef58ed-55f3-43dc-be57-74c52ab6d2cf",
       "removeAfterMatching": true,
-      "sightingId": "86115f22-f5aa-4f33-a58c-dd31b2403197",
-      "timestamp": "2025-08-26T23:47:51.383Z"
+      "sightingId": "49963ec8-cd16-426e-b021-111f17c13158",
+      "timestamp": "2025-07-17T19:57:03.484Z",
+      "details": {
+        "lat": 18.58031276590068,
+        "lng": 34.10633655266393
+      }
     },
     {
-      "ownerId": "aa043656-a197-4d6e-b216-880c3e3fdc76",
+      "ownerId": "0e314856-3622-4b8e-a719-2643bede18d9",
       "removeAfterMatching": false,
-      "sightingId": "fa2a5429-c551-4c80-b0d0-d0ed14176c1d",
-      "timestamp": "2025-07-28T09:44:27.489Z"
+      "sightingId": "544e1836-fb6f-429a-82bc-cc7a820b6728",
+      "timestamp": "2025-06-02T18:06:39.082Z",
+      "details": {
+        "lat": 30.099640347166694,
+        "lng": 13.909065717706737
+      }
     },
     {
-      "ownerId": "5fd9b7b1-4687-42da-af2c-e432d4b2290d",
+      "ownerId": "a06857c9-5ea2-4845-b5ce-493923f6adbd",
       "removeAfterMatching": false,
-      "sightingId": "bf9ece4c-d3f3-497b-a4b3-330f033760a1",
-      "timestamp": "2025-08-31T15:19:57.926Z"
+      "sightingId": "2a642722-c6c3-48e7-bf19-ed296f3991f1",
+      "timestamp": "2025-06-09T01:59:21.889Z",
+      "details": {
+        "lat": 28.720668199507138,
+        "lng": 9.922009554008893
+      }
     },
     {
-      "ownerId": "ab895eef-033d-497f-be98-1fc7c902866a",
+      "ownerId": "3edd043a-36c8-4632-8e4a-32672ee4ea3c",
       "removeAfterMatching": true,
-      "sightingId": "8d734360-d25f-42a8-9b94-5c72ab688488",
-      "timestamp": "2026-01-01T07:13:07.418Z"
+      "sightingId": "1ecb8615-8cd9-4696-8599-7d3d0484a521",
+      "timestamp": "2025-07-17T14:55:22.574Z",
+      "details": {
+        "lat": 30.787584899616192,
+        "lng": 13.830340520501554
+      }
     },
     {
-      "ownerId": "cda4b4f5-68e9-4425-8501-92a17db5c012",
+      "ownerId": "191492a9-bf69-44f7-bb2f-7a62fe9cbca1",
       "removeAfterMatching": false,
-      "sightingId": "800ebde9-e16c-43e7-8215-ce7b8c22123e",
-      "timestamp": "2025-09-23T13:44:12.402Z"
+      "sightingId": "88c9b6f5-e3af-4866-bedc-cea35ebe1326",
+      "timestamp": "2025-10-31T09:59:52.617Z",
+      "details": {
+        "lat": 46.52626839716151,
+        "lng": 44.13417835721784
+      }
     },
     {
-      "ownerId": "dbd886b5-72d7-4aa3-8e96-afb221bb6964",
+      "ownerId": "b31ca0b4-dea4-45cc-ad04-4eec004a2134",
       "removeAfterMatching": false,
-      "sightingId": "e0974c8c-dda8-4743-9797-11c8af85b678",
-      "timestamp": "2025-04-05T17:18:20.639Z"
+      "sightingId": "f69e2cb8-1850-48fd-940d-0d58bcc672e4",
+      "timestamp": "2025-09-12T09:40:11.342Z",
+      "details": {
+        "lat": 47.584603772290336,
+        "lng": 0.33011235341399714
+      }
     },
     {
-      "ownerId": "1a233e0d-7913-41a9-b586-6b08f3605d2b",
+      "ownerId": "03e02209-2c59-4e49-a6fc-7e6566128e88",
       "removeAfterMatching": true,
-      "sightingId": "2a366ebd-c1a7-4672-a07b-7c8fcb90f778",
-      "timestamp": "2025-04-15T18:38:12.836Z"
+      "sightingId": "f691f115-2941-4ea6-a99c-616591ca25f4",
+      "timestamp": "2025-11-14T07:52:48.354Z",
+      "details": {
+        "lat": 44.622113652865245,
+        "lng": 37.29848624766913
+      }
     },
     {
-      "ownerId": "28d31d0f-2c51-425b-90f6-88676918feff",
+      "ownerId": "61dccb57-dd2e-44ec-9ab5-4b12436aa37d",
       "removeAfterMatching": false,
-      "sightingId": "3041b4cb-0c1c-402f-acd3-fa4defe43f3d",
-      "timestamp": "2025-07-20T06:00:39.425Z"
+      "sightingId": "0b0c45d7-5fee-46cb-aa3f-cb074fe02fe6",
+      "timestamp": "2025-02-05T21:06:46.762Z",
+      "details": {
+        "lat": 42.921521849295125,
+        "lng": 16.541716554465573
+      }
     },
     {
-      "ownerId": "6886f55c-f8f3-4ae1-b926-664a6756a523",
+      "ownerId": "2c6baf7b-1a42-49dd-b789-da0e029cb68f",
       "removeAfterMatching": false,
-      "sightingId": "b1d2e08c-fcc4-44e3-ad36-fe2cefa3e39b",
-      "timestamp": "2025-06-12T17:02:13.088Z"
+      "sightingId": "220b3c53-ef29-41cf-85cf-f942f8f207b8",
+      "timestamp": "2025-03-10T01:01:56.963Z",
+      "details": {
+        "lat": 49.91207893752525,
+        "lng": 4.301278703463707
+      }
     },
     {
-      "ownerId": "8789467f-0450-404c-805f-d8bfce2980a7",
+      "ownerId": "7c2c6c69-2744-472e-9b0f-db41428409b3",
       "removeAfterMatching": true,
-      "sightingId": "420b51c6-006b-4965-9769-0713db878147",
-      "timestamp": "2025-04-16T15:26:21.954Z"
+      "sightingId": "1897e0b1-80b5-454d-a251-90c41185ca03",
+      "timestamp": "2025-06-13T03:19:16.299Z",
+      "details": {
+        "lat": 35.362187434461745,
+        "lng": 3.59261462056113
+      }
     },
     {
-      "ownerId": "5ad6c4f7-3cf8-41fa-b928-fe255e9fd255",
+      "ownerId": "b9ef58ed-55f3-43dc-be57-74c52ab6d2cf",
       "removeAfterMatching": false,
-      "sightingId": "5d8836b9-38a5-47a8-bb33-eeccccd602b7",
-      "timestamp": "2025-07-13T23:34:13.294Z"
+      "sightingId": "095d3e7d-22d9-4e67-b4fe-9a41c7ad48b9",
+      "timestamp": "2025-07-01T09:19:58.658Z",
+      "details": {
+        "lat": 13.288861225838527,
+        "lng": 16.117880016457054
+      }
     },
     {
-      "ownerId": "aa043656-a197-4d6e-b216-880c3e3fdc76",
+      "ownerId": "0e314856-3622-4b8e-a719-2643bede18d9",
       "removeAfterMatching": false,
-      "sightingId": "d5c7b7b2-8ba2-4971-8ace-1d6116285afc",
-      "timestamp": "2025-05-26T03:33:10.525Z"
+      "sightingId": "1c5158ec-428f-4d62-b5ff-47039dd74a7a",
+      "timestamp": "2025-12-28T22:54:47.760Z",
+      "details": {
+        "lat": 48.968931223626825,
+        "lng": 36.37520447458392
+      }
     },
     {
-      "ownerId": "5fd9b7b1-4687-42da-af2c-e432d4b2290d",
+      "ownerId": "a06857c9-5ea2-4845-b5ce-493923f6adbd",
       "removeAfterMatching": true,
-      "sightingId": "05d80471-87aa-42f0-a8c8-6f7e195fe63b",
-      "timestamp": "2025-05-19T21:19:15.154Z"
+      "sightingId": "b6305fb8-617f-4539-9a4a-12eb701bdcee",
+      "timestamp": "2026-01-28T16:05:04.837Z",
+      "details": {
+        "lat": 9.350102791501131,
+        "lng": 6.065823777760765
+      }
     },
     {
-      "ownerId": "ab895eef-033d-497f-be98-1fc7c902866a",
+      "ownerId": "3edd043a-36c8-4632-8e4a-32672ee4ea3c",
       "removeAfterMatching": false,
-      "sightingId": "c306e2c7-6dfc-4b0c-8337-e9c4d0ee7d4d",
-      "timestamp": "2025-02-03T02:35:32.083Z"
+      "sightingId": "b55714ce-5de7-49a7-a249-cb4253af597b",
+      "timestamp": "2025-04-11T10:36:36.962Z",
+      "details": {
+        "lat": 40.59526772992136,
+        "lng": 39.64074678264788
+      }
     },
     {
-      "ownerId": "cda4b4f5-68e9-4425-8501-92a17db5c012",
+      "ownerId": "191492a9-bf69-44f7-bb2f-7a62fe9cbca1",
       "removeAfterMatching": false,
-      "sightingId": "2457e4c6-0768-4099-8ce1-8fe6ec255564",
-      "timestamp": "2025-05-25T10:22:39.009Z"
+      "sightingId": "37250e2f-1579-4340-b84b-8ec95298a6a8",
+      "timestamp": "2025-02-11T12:21:01.003Z",
+      "details": {
+        "lat": 34.606346428703155,
+        "lng": 37.06444157883123
+      }
     },
     {
-      "ownerId": "dbd886b5-72d7-4aa3-8e96-afb221bb6964",
+      "ownerId": "b31ca0b4-dea4-45cc-ad04-4eec004a2134",
       "removeAfterMatching": true,
-      "sightingId": "01808b24-e926-4c97-81d2-28b8d4949742",
-      "timestamp": "2025-11-20T13:50:26.499Z"
+      "sightingId": "ce6316b1-66ec-402d-87dd-d1800160b539",
+      "timestamp": "2026-01-31T14:10:17.787Z",
+      "details": {
+        "lat": 13.304072724388472,
+        "lng": 26.55733961835125
+      }
     },
     {
-      "ownerId": "1a233e0d-7913-41a9-b586-6b08f3605d2b",
+      "ownerId": "03e02209-2c59-4e49-a6fc-7e6566128e88",
       "removeAfterMatching": false,
-      "sightingId": "5cb92d44-4126-43ac-a53f-e7109626ae55",
-      "timestamp": "2025-05-28T20:07:06.183Z"
+      "sightingId": "0cece2d9-c690-42c8-a4b9-60afafdcbb20",
+      "timestamp": "2026-02-09T20:44:16.305Z",
+      "details": {
+        "lat": 40.62141576669099,
+        "lng": 28.88421263807686
+      }
     },
     {
-      "ownerId": "28d31d0f-2c51-425b-90f6-88676918feff",
+      "ownerId": "61dccb57-dd2e-44ec-9ab5-4b12436aa37d",
       "removeAfterMatching": false,
-      "sightingId": "0c475bb6-4bdd-482e-965e-5e4cbc5b6ae2",
-      "timestamp": "2026-01-07T08:01:52.820Z"
+      "sightingId": "38decdb1-6473-4b6e-b55d-0278506ae98d",
+      "timestamp": "2026-01-12T14:46:22.598Z",
+      "details": {
+        "lat": 18.459794607435498,
+        "lng": 17.104439356166022
+      }
     },
     {
-      "ownerId": "6886f55c-f8f3-4ae1-b926-664a6756a523",
+      "ownerId": "2c6baf7b-1a42-49dd-b789-da0e029cb68f",
       "removeAfterMatching": true,
-      "sightingId": "750a0ed4-f0a9-4a40-8b9f-a118e83e512a",
-      "timestamp": "2026-02-12T00:59:55.878Z"
+      "sightingId": "b46f266a-db97-425a-8738-61dc9d2953c4",
+      "timestamp": "2025-06-16T18:29:12.324Z",
+      "details": {
+        "lat": 26.05580391058459,
+        "lng": 3.2490612785973205
+      }
     }
   ];
