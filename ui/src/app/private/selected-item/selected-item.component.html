@@ -1,0 +1,11 @@
+<mat-drawer-container class="example-container">
+  <mat-drawer-content>
+    <div>{{ selectedItem().sightingId }}</div>
+    <div>{{ selectedItem().timestamp }}</div>
+    <div>Latitude: {{ selectedItem().details.lat }}</div>
+    <div>Longitude: {{ selectedItem().details.lng }}</div>
+  </mat-drawer-content>
+  <mat-drawer mode="side" position="end" opened>
+    <button matButton="filled">Delete</button>
+  </mat-drawer>
+</mat-drawer-container>

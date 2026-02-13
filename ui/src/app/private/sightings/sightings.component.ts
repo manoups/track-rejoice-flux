@@ -20,6 +20,7 @@ import {
   MatRowDef,
   MatTable
 } from '@angular/material/table';
+import {SelectedItemComponent} from '../selected-item/selected-item.component';
 
 class SightingsDataSource extends DataSource<SightingDocument> {
   private readonly subject = new BehaviorSubject<SightingDocument[]>([]);
@@ -62,7 +63,8 @@ class SightingsDataSource extends DataSource<SightingDocument> {
     MatHeaderRow,
     MatHeaderRowDef,
     MatRowDef,
-    MatRow
+    MatRow,
+    SelectedItemComponent
   ],
   templateUrl: './sightings.component.html',
   styleUrl: './sightings.component.css',
@@ -172,5 +174,5 @@ export class SightingsComponent extends View implements OnInit {
   trackBySightingId = (_index: number, sighting: SightingDocument) => (sighting as any).sightingId;
 
   protected displayedColumns=['id', 'ownerId', 'timestamp', 'removeAfterMatching'];
-  clickedRow: SightingDocument;
+  clickedRow= signal<SightingDocument>(null);
 }

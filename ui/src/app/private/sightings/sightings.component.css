@@ -34,3 +34,23 @@ table {
 .row-is-clicked {
   font-weight: bold;
 }
+
+.main-grid {
+  height: 100%;
+  display: grid;
+  grid-template-rows: 1fr 240px; /* table grows, details fixed */
+  gap: 12px;
+  padding: 12px;
+  box-sizing: border-box;
+  min-height: 0; /* critical so the 1fr row can shrink */
+}
+
+.table-pane {
+  min-height: 0; /* critical so inner scrolling works */
+  overflow: hidden; /* let the viewport own the scroll */
+}
+
+.details-pane {
+  overflow: auto;
+  border-top: 1px solid rgba(0,0,0,0.12);
+}
