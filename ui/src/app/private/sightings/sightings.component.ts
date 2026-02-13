@@ -172,4 +172,5 @@ export class SightingsComponent extends View implements OnInit {
   trackBySightingId = (_index: number, sighting: SightingDocument) => (sighting as any).sightingId;
 
   protected displayedColumns=['id', 'ownerId', 'timestamp', 'removeAfterMatching'];
+  clickedRow: SightingDocument;
 }
