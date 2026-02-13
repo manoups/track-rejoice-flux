@@ -1,5 +1,5 @@
 import {Component, DestroyRef, inject, input, OnInit, output, signal} from '@angular/core';
-import {combineLatest, debounceTime, distinctUntilChanged, filter, map, Observable, switchMap} from 'rxjs';
+import {combineLatest, debounceTime, distinctUntilChanged, map, Observable, switchMap} from 'rxjs';
 import {
   FacetFilter,
   FacetPaginationRequestBody,
@@ -12,7 +12,6 @@ import {HttpClient} from '@angular/common/http';
 import {FormsModule} from '@angular/forms';
 import {RouterLink} from '@angular/router';
 import {MatFormField, MatInput, MatLabel} from '@angular/material/input';
-import {forEach} from 'lodash';
 import {MatRadioButton, MatRadioGroup} from '@angular/material/radio';
 
 type FacetStatsMap = Record<string, ValueCountPair[]>;
