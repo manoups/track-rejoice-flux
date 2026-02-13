@@ -16,7 +16,7 @@ export function mockBackendInterceptor(
 
   const {method, url, params, body} = req;
 
-  if (!url.startsWith('/api/sighting/list')) {
+  if (!url.startsWith('/api/sighting') || !url.endsWith('/list')) {
     return next(req);
   }
 

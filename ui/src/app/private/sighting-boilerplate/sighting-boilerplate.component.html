@@ -1,7 +1,7 @@
 <mat-toolbar color="primary">Sightings</mat-toolbar>
 <mat-sidenav-container class="example-container">
   <mat-sidenav position="start" mode="side" opened>
-    <track-rejoice-filter-sidebar (facetChange)="filterChange$.next($event)"/>
+    <track-rejoice-filter-sidebar [facetFields]="facetFields" (facetChange)="filterChange$.next($event)"/>
   </mat-sidenav>
   <mat-sidenav-content>
     <track-rejoice-sightings [filterUpdate$]="filterChange$"/>
