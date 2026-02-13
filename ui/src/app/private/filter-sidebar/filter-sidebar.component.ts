@@ -9,10 +9,11 @@ import {
 import {AsyncPipe, KeyValuePipe, TitleCasePipe} from '@angular/common';
 import {toObservable} from '@angular/core/rxjs-interop';
 import {HttpClient} from '@angular/common/http';
-import {FormsModule} from '@angular/forms';
+import {FormControl, FormGroup, FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {RouterLink} from '@angular/router';
 import {MatFormField, MatInput, MatLabel} from '@angular/material/input';
 import {MatRadioButton, MatRadioGroup} from '@angular/material/radio';
+import {tap} from 'rxjs/operators';
 
 type FacetStatsMap = Record<string, ValueCountPair[]>;
 
@@ -22,14 +23,15 @@ type FacetStatsMap = Record<string, ValueCountPair[]>;
   imports: [
     AsyncPipe,
     KeyValuePipe,
-    FormsModule,
+    ReactiveFormsModule,
     RouterLink,
     MatFormField,
     MatLabel,
     MatInput,
     MatRadioGroup,
     TitleCasePipe,
-    MatRadioButton
+    MatRadioButton,
+    FormsModule
   ],
   templateUrl: './filter-sidebar.component.html',
   styleUrl: './filter-sidebar.component.css',
@@ -43,6 +45,9 @@ export class FilterSidebarComponent implements OnInit {
   facet = signal<FacetFilter[]>([]);
   facetChange = output<[string, FacetFilter[]]>();
   filterChange$: Observable<[string, FacetFilter[]]>;
+  form = new FormGroup({
+                       animal: new FormControl<string | null>(null),
+})
 
   constructor() {
 
@@ -89,10 +94,28 @@ export class FilterSidebarComponent implements OnInit {
           }
           return response;
         }
-      ));
+      ),
+      tap(stats => {
+
+       /* const formGroups = [];
+        for (const [key, valueCountPair] of stats) {
+          formGroups.push(new FormGroup({[key]: new FormControl(null)}));
+        }*/
+        this.form = new FormGroup({
+          animal: new FormControl<string | null>(null),
+        })
+      }));
 
     this.destroyRef.onDestroy(() => {
       subscribe.unsubscribe();
     });
+  }
+
+  toggleOffIfSame(event: MouseEvent, index: number, value: string): void {
+    if (this.form.controls.animal.value === value) {
+      event.preventDefault();
+      event.stopPropagation();
+      this.form.controls.animal.setValue(null);
+    }
   }
 }

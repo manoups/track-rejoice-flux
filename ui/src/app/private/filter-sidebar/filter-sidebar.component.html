@@ -15,14 +15,19 @@
     <input class="form-check-input" type="checkbox" id="onlyMine" disabled/>
     <label class="form-check-label" for="onlyMine">Only mine (placeholder)</label>
   </div>
-  @for (filter of getFacetStats|async|keyvalue; track filter.key) {
+  <form [formGroup]="form">
+  @for (filter of getFacetStats|async|keyvalue; track filter.key; let i = $index) {
     <h2>{{filter.key | titlecase}}</h2>
-    <mat-radio-group aria-label="{{filter.key}}">
+    <mat-radio-group class="radio-stack" aria-label="{{filter.key}}" formControlName="animal">
       @for (value of filter.value; track value.value) {
-        <mat-radio-button labelPosition="before" value="{{value.value}}">{{ value.value }} ({{ value.count }})</mat-radio-button>
+        <mat-radio-button labelPosition="before" value="{{value.value}}"
+                          (click)="toggleOffIfSame($event, i, value.value)"
+                          disabled="{{value.count == 0}}">
+          {{ value.value }} ({{ value.count }})
+        </mat-radio-button>
       }
     </mat-radio-group>
-  }
+  }</form>
 </div>
 <div class="d-grid gap-2">
   <a routerLink="/sightings/new" class="btn btn-primary">Create Sighting</a>
