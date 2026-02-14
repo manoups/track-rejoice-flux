@@ -1,34 +1,43 @@
 <h2 class="sidebar-title">Filters</h2>
-<div class="mb-3">
-  <form class="example-form">
+<form class="example-form" [formGroup]="searchForm">
+  <div class="mb-3">
     <mat-form-field class="example-full-width">
       <mat-label>Search</mat-label>
-      <input matInput placeholder="Type to search..." [(ngModel)]="term" [ngModelOptions]="{standalone: true}">
+      <input matInput placeholder="Type to search..." formControlName="search">
     </mat-form-field>
-  </form>
-  <label for="term" class="form-label">Search</label>
-  <div class="form-text">Sent as query parameter to the listing endpoint.</div>
-</div>
-<div class="mb-3">
-  <label class="form-label">Other filters (skeleton)</label>
-  <div class="form-check">
-    <input class="form-check-input" type="checkbox" id="onlyMine" disabled/>
-    <label class="form-check-label" for="onlyMine">Only mine (placeholder)</label>
+
+    <label for="term" class="form-label">Search</label>
+    <div class="form-text">Sent as query parameter to the listing endpoint.</div>
   </div>
-  <form [formGroup]="form">
-  @for (filter of getFacetStats|async|keyvalue; track filter.key; let i = $index) {
-    <h2>{{filter.key | titlecase}}</h2>
-    <mat-radio-group class="radio-stack" aria-label="{{filter.key}}" formControlName="animal">
-      @for (value of filter.value; track value.value) {
-        <mat-radio-button labelPosition="before" value="{{value.value}}"
-                          (click)="toggleOffIfSame($event, i, value.value)"
-                          disabled="{{value.count == 0}}">
-          {{ value.value }} ({{ value.count }})
-        </mat-radio-button>
+  <div class="mb-3" formGroupName="facets">
+    <label class="form-label">Other filters (skeleton)</label>
+    <div class="form-check">
+      <input class="form-check-input" type="checkbox" id="onlyMine" disabled/>
+      <label class="form-check-label" for="onlyMine">Only mine (placeholder)</label>
+    </div>
+      @for (filter of getFacetStats|async|keyvalue; track filter.key; let i = $index) {
+        <h2>{{ filter.key | titlecase }}</h2>
+        <ul formArrayName="{{filter.key}}">
+          @for (value of filter.value; track value.value) {
+            <li>
+              <mat-checkbox formControlName="{{$index}}">
+                {{ value.value }} ({{ value.count }})
+              </mat-checkbox>
+              </li>
+          }
+        </ul>
+        <!--<mat-radio-group class="radio-stack" aria-label="{{filter.key}}" formControlName="{{filter.key}}">
+          @for (value of filter.value; track value.value) {
+            <mat-radio-button labelPosition="before" value="{{value.value}}"
+                              (click)="toggleOffIfSame($event, i, value.value)"
+                              disabled="{{value.count == 0}}">
+              {{ value.value }} ({{ value.count }})
+            </mat-radio-button>
+          }
+        </mat-radio-group>-->
       }
-    </mat-radio-group>
-  }</form>
-</div>
-<div class="d-grid gap-2">
-  <a routerLink="/sightings/new" class="btn btn-primary">Create Sighting</a>
-</div>
+  </div>
+  <div class="d-grid gap-2">
+    <a routerLink="/sightings/new" class="btn btn-primary">Create Sighting</a>
+  </div>
+</form>

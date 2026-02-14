@@ -9,14 +9,14 @@ import {
 import {AsyncPipe, KeyValuePipe, TitleCasePipe} from '@angular/common';
 import {toObservable} from '@angular/core/rxjs-interop';
 import {HttpClient} from '@angular/common/http';
-import {FormControl, FormGroup, FormsModule, ReactiveFormsModule} from '@angular/forms';
+import {FormArray, FormControl, FormGroup, FormRecord, FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {RouterLink} from '@angular/router';
 import {MatFormField, MatInput, MatLabel} from '@angular/material/input';
-import {MatRadioButton, MatRadioGroup} from '@angular/material/radio';
 import {tap} from 'rxjs/operators';
+import {MatCheckbox} from '@angular/material/checkbox';
 
 type FacetStatsMap = Record<string, ValueCountPair[]>;
-
+type DynamicGroup = FormArray<FormControl<boolean>>;
 
 @Component({
   selector: 'track-rejoice-filter-sidebar',
@@ -28,10 +28,9 @@ type FacetStatsMap = Record<string, ValueCountPair[]>;
     MatFormField,
     MatLabel,
     MatInput,
-    MatRadioGroup,
     TitleCasePipe,
-    MatRadioButton,
-    FormsModule
+    FormsModule,
+    MatCheckbox
   ],
   templateUrl: './filter-sidebar.component.html',
   styleUrl: './filter-sidebar.component.css',
@@ -46,8 +45,14 @@ export class FilterSidebarComponent implements OnInit {
   facetChange = output<[string, FacetFilter[]]>();
   filterChange$: Observable<[string, FacetFilter[]]>;
   form = new FormGroup({
-                       animal: new FormControl<string | null>(null),
-})
+    animal: new FormControl<string | null>(''),
+  });
+  searchForm = new FormGroup({
+    search: new FormControl<string>(''),
+    facets: new FormRecord<DynamicGroup>({}),
+
+  });
+  ready = signal(false);
 
   constructor() {
 
@@ -61,6 +66,13 @@ export class FilterSidebarComponent implements OnInit {
 
 
   ngOnInit(): void {
+    const sub1 = this.searchForm.controls.search.valueChanges.subscribe(val => this.term.set(val))
+    const sub2 = this.searchForm.controls.facets.valueChanges.subscribe(facetsValue => {
+      const filters: FacetFilter[] = Object.entries(facetsValue ?? {})
+        .map(([facetName, v]) => ({facetName, values: v ?? []}))
+        .filter(f => f.values.length > 0);
+      this.facet.set(filters);
+    });
     const subscribe = this.filterChange$.subscribe(([filter, facetFilters]) => this.facetChange.emit([filter, facetFilters]));
 
     this.getFacetStats = this.filterChange$.pipe(map(([filter, facetFilters]) => {
@@ -96,26 +108,27 @@ export class FilterSidebarComponent implements OnInit {
         }
       ),
       tap(stats => {
-
-       /* const formGroups = [];
-        for (const [key, valueCountPair] of stats) {
-          formGroups.push(new FormGroup({[key]: new FormControl(null)}));
-        }*/
-        this.form = new FormGroup({
-          animal: new FormControl<string | null>(null),
-        })
+        if (!this.ready()) {
+          this.ready.set(true);
+          for (const [key, values] of stats.entries()) {
+            this.searchForm.controls.facets.addControl(key, new FormArray(values.map(_ => new FormControl<boolean>(false))));
+            console.log(this.searchForm.controls.facets.controls);
+          }
+        }
       }));
 
     this.destroyRef.onDestroy(() => {
+      sub1.unsubscribe();
+      sub2.unsubscribe();
       subscribe.unsubscribe();
     });
   }
 
-  toggleOffIfSame(event: MouseEvent, index: number, value: string): void {
+  /*toggleOffIfSame(event: MouseEvent, index: number, value: string): void {
     if (this.form.controls.animal.value === value) {
       event.preventDefault();
       event.stopPropagation();
       this.form.controls.animal.setValue(null);
     }
-  }
+  }*/
 }
