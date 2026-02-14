@@ -1,7 +1,7 @@
 import {Component, input} from '@angular/core';
 import {SightingDocument} from '@trackrejoice/typescriptmodels';
 import {MatDrawer, MatDrawerContainer, MatDrawerContent} from '@angular/material/sidenav';
-import {MatButton, MatFabButton} from '@angular/material/button';
+import {MatFabButton} from '@angular/material/button';
 import {MatIcon} from '@angular/material/icon';
 
 @Component({
@@ -10,7 +10,6 @@ import {MatIcon} from '@angular/material/icon';
     MatDrawerContainer,
     MatDrawer,
     MatDrawerContent,
-    MatButton,
     MatFabButton,
     MatIcon
   ],
