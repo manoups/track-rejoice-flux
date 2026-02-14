@@ -15,7 +15,7 @@
         step="any"
         class="form-control"
         [(ngModel)]="lat"
-        placeholder="e.g. 52.1234" />
+        placeholder="e.g. 52.1234"/>
     </div>
 
     <div class="col">
@@ -27,7 +27,7 @@
         step="any"
         class="form-control"
         [(ngModel)]="lng"
-        placeholder="e.g. 4.9876" />
+        placeholder="e.g. 4.9876"/>
     </div>
   </div>
 
@@ -37,13 +37,16 @@
       class="form-check-input"
       type="checkbox"
       [(ngModel)]="removeAfterMatching"
-      name="removeAfterMatching" />
+      name="removeAfterMatching"/>
     <label class="form-check-label" for="removeAfterMatching">
       removeAfterMatching
     </label>
   </div>
-
-  <button class="btn btn-primary" type="submit" [disabled]="submitting()">
-    Create
-  </button>
+  <section>
+    <div class="example-button-row">
+      <button matButton="elevated" type="submit" [disabled]="submitting()">
+        Create
+      </button>
+    </div>
+  </section>
 </form>

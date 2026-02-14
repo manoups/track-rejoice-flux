@@ -6,6 +6,15 @@
     <div>Longitude: {{ selectedItem().details.lng }}</div>
   </mat-drawer-content>
   <mat-drawer mode="side" position="end" opened>
-    <button matButton="filled">Delete</button>
+    <section>
+      <div class="example-button-row">
+        <div class="example-flex-container">
+          <button matFab extended aria-label="Example icon button with a delete icon">
+            Delete
+            <mat-icon>delete</mat-icon>
+          </button>
+        </div>
+      </div>
+    </section>
   </mat-drawer>
 </mat-drawer-container>

@@ -9,8 +9,8 @@ export const routes: Routes = [
   { path: '', pathMatch: 'full', redirectTo: 'sightings' },
 
   { path: 'sightings', component: SightingBoilerplateComponent },
-  { path: 'sightings/:id', component: SightingDetailsComponent },
   { path: 'sightings/new', component: SightingCreateComponent },
+  { path: 'sightings/:id', component: SightingDetailsComponent },
 
   { path: 'contents', component: ContentsComponent },
   { path: 'contents/new', component: ContentCreateComponent },

@@ -2,12 +2,14 @@ import {Component, signal} from '@angular/core';
 import {Router, RouterLink} from '@angular/router';
 import {View} from '../../common/view';
 import {FormsModule} from '@angular/forms';
+import {MatButton} from '@angular/material/button';
 
 @Component({
   selector: 'track-rejoice-sighting-create',
   imports: [
     FormsModule,
-    RouterLink
+    RouterLink,
+    MatButton
   ],
   templateUrl: './sighting-create.component.html',
   styleUrl: './sighting-create.component.css',

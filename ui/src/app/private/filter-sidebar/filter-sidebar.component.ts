@@ -14,6 +14,7 @@ import {RouterLink} from '@angular/router';
 import {MatFormField, MatInput, MatLabel} from '@angular/material/input';
 import {MatCheckbox} from '@angular/material/checkbox';
 import {tap} from 'rxjs/operators';
+import {MatButton} from '@angular/material/button';
 
 type FacetStatsMap = Record<string, ValueCountPair[]>;
 type FacetValueGroup = FormRecord<FormControl<boolean>>;          // valueName -> boolean
@@ -30,7 +31,8 @@ type FacetValueGroup = FormRecord<FormControl<boolean>>;          // valueName -
     MatInput,
     TitleCasePipe,
     FormsModule,
-    MatCheckbox
+    MatCheckbox,
+    MatButton
   ],
   templateUrl: './filter-sidebar.component.html',
   styleUrl: './filter-sidebar.component.css',
