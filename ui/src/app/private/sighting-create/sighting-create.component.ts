@@ -60,6 +60,7 @@ export class SightingCreateComponent extends View {
   }
 
   create(): void {
+    if (this.form.invalid) {return;}
     // const lat = this.lat();
     // const lng = this.lng();
 
@@ -70,6 +71,7 @@ export class SightingCreateComponent extends View {
 
     this.submitting.set(true);
 
+    debugger;
     const payload = {
       // sightingDetails: {
       //   lng,

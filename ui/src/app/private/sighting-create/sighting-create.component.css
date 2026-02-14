@@ -32,6 +32,14 @@ section {
   align-items: flex-start;
 }
 
-.control-error {
+.control-row {
+  align-items: flex-end;
+}
 
+.control {
+  flex: 1;
+}
+
+button {
+  padding: 0.6rem 1.75rem;
 }

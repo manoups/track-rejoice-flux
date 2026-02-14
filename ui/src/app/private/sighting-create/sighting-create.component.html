@@ -1,5 +1,6 @@
+<header>
 <h1>Create Sighting</h1>
-
+</header>
 <div class="example-container">
   <form [formGroup]="form" (ngSubmit)="create()">
     <div>
@@ -32,6 +33,9 @@
         <mat-checkbox formControlName="removeAfterMatching">Remove after matching</mat-checkbox>
       </div>
     </div>
+    @if (form.touched && form.invalid) {
+      <p class="control-error">Form is invalid</p>
+    }
     <section>
       <div class="example-button-row">
         <button matButton="elevated" type="submit" [disabled]="submitting()">
@@ -39,9 +43,7 @@
         </button>
       </div>
     </section>
-    @if (form.touched && form.invalid) {
-      <p class="control-error">Form is invalid</p>
-    }
+
   </form>
 </div>
 
