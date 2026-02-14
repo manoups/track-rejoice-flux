@@ -10,14 +10,3 @@ ul {
   list-style-type: none;
   margin-top: 4px;
 }
-
-.radio-stack {
-  display: flex;
-  flex-direction: column;
-  gap: 0;
-  align-items: flex-start;
-}
-
-.radio-stack mat-radio-button {
-  display: block;
-}

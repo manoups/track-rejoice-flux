@@ -5,25 +5,23 @@
       <mat-label>Search</mat-label>
       <input matInput placeholder="Type to search..." formControlName="search">
     </mat-form-field>
-
-    <label for="term" class="form-label">Search</label>
     <div class="form-text">Sent as query parameter to the listing endpoint.</div>
   </div>
-  @if (ready()) {
-    <div class="mb-3" formGroupName="facets">
-      @for (filter of getFacetStats|async|keyvalue; track filter.key) {
-        <h2>{{ filter.key | titlecase }}</h2>
-        <div [formGroupName]="filter.key">
-          @for (value of filter.value; track value.value) {
-            <mat-checkbox [formControlName]="value.value">
+  <div class="mb-3">
+    @for (filter of getFacetStats|async|keyvalue; track filter.key) {
+      <h2>{{ filter.key | titlecase }}</h2>
+      <ul>
+        @for (value of filter.value; track value.value) {
+          <li>
+            <mat-checkbox [formControl]="facetControl(filter.key, value.value)" labelPosition="before">
               {{ value.value }} ({{ value.count }})
             </mat-checkbox>
-          }
-        </div>
-      }
-    </div>
-    <div class="d-grid gap-2">
-      <a routerLink="/sightings/new" class="btn btn-primary">Create Sighting</a>
-    </div>
-  }
+          </li>
+        }
+      </ul>
+    }
+  </div>
+  <div class="d-grid gap-2">
+    <a routerLink="/sightings/new" class="btn btn-primary">Create Sighting</a>
+  </div>
 </form>
