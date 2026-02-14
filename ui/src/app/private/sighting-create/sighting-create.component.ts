@@ -10,8 +10,7 @@ import {MatCheckbox} from '@angular/material/checkbox';
 import {MatInput} from '@angular/material/input';
 import {MatOption} from '@angular/material/core';
 import {MatSelect} from '@angular/material/select';
-import {MatIcon} from '@angular/material/icon';
-import {JsonPipe} from '@angular/common';
+import {PrintErrorPipe} from '../../common/print-error-pipe';
 
 @Component({
   selector: 'track-rejoice-sighting-create',
@@ -26,9 +25,8 @@ import {JsonPipe} from '@angular/common';
     MatInput,
     MatOption,
     MatSelect,
-    MatIcon,
     MatError,
-    JsonPipe
+    PrintErrorPipe
   ],
   templateUrl: './sighting-create.component.html',
   styleUrl: './sighting-create.component.css',

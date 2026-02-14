@@ -2,20 +2,21 @@
 
 <div class="example-container">
   <form [formGroup]="form" (ngSubmit)="create()">
-
-
     <div>
       <div class="example-form-fields" formGroupName="coords">
         <mat-form-field hideRequiredMarker="true">
           <mat-label>Latitude</mat-label>
           <input type="number" matInput placeholder="e.g. 4.9876" formControlName="lat"/>
-          @if (form.controls.coords.controls.lat.invalid) {
-            <mat-error>{{form.controls.coords.controls.lat.errors | json}}</mat-error>
+          @if (form.controls.coords.controls.lat.errors) {
+            <mat-error>{{ form.controls.coords.controls.lat | printerror }}</mat-error>
           }
         </mat-form-field>
         <mat-form-field hideRequiredMarker="true">
           <mat-label>Longitude</mat-label>
           <input type="number" matInput placeholder="e.g. 52.1234" formControlName="lng"/>
+          @if (form.controls.coords.controls.lng.errors) {
+            <mat-error>{{ form.controls.coords.controls.lng | printerror }}</mat-error>
+          }
         </mat-form-field>
       </div>
       <div class="example-form-fields">
@@ -38,7 +39,7 @@
         </button>
       </div>
     </section>
-    @if(form.touched && form.invalid) {
+    @if (form.touched && form.invalid) {
       <p class="control-error">Form is invalid</p>
     }
   </form>
