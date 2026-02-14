@@ -1,24 +1,21 @@
 <h2 class="sidebar-title">Filters</h2>
-<form class="example-form" [formGroup]="searchForm">
-  <div class="mb-3">
+<form class="example-form" >
+  <div class="mb-3" [formGroup]="searchForm">
     <mat-form-field class="example-full-width">
       <mat-label>Search</mat-label>
       <input matInput placeholder="Type to search..." formControlName="search">
     </mat-form-field>
-    <div class="form-text">Sent as query parameter to the listing endpoint.</div>
   </div>
   <div class="mb-3">
     @for (filter of getFacetStats|async|keyvalue; track filter.key) {
-      <h2>{{ filter.key | titlecase }}</h2>
-      <ul>
-        @for (value of filter.value; track value.value) {
-          <li>
-            <mat-checkbox [formControl]="facetControl(filter.key, value.value)" labelPosition="before">
-              {{ value.value }} ({{ value.count }})
-            </mat-checkbox>
-          </li>
+      <span><h2>{{ filter.key | titlecase }}</h2><button matButton="filled" (click)="clearValues(filter.key)">Clear</button></span>
+      <mat-selection-list [multiple]="true" [formControl]="facetSelectionControl(filter.key)">
+        @for (opt of filter.value; track opt.value) {
+          <mat-list-option [value]="opt.value" [disabled]="opt.count === 0 && !isSelected(filter.key, opt.value)">
+              {{ opt.value }} ({{ opt.count }})
+          </mat-list-option>
         }
-      </ul>
+      </mat-selection-list>
     }
   </div>
   <div class="d-grid gap-2">

@@ -12,12 +12,11 @@ import {HttpClient} from '@angular/common/http';
 import {FormControl, FormGroup, FormRecord, FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {RouterLink} from '@angular/router';
 import {MatFormField, MatInput, MatLabel} from '@angular/material/input';
-import {MatCheckbox} from '@angular/material/checkbox';
 import {tap} from 'rxjs/operators';
 import {MatButton} from '@angular/material/button';
+import {MatListOption, MatSelectionList} from '@angular/material/list';
 
 type FacetStatsMap = Record<string, ValueCountPair[]>;
-type FacetValueGroup = FormRecord<FormControl<boolean>>;          // valueName -> boolean
 
 @Component({
   selector: 'track-rejoice-filter-sidebar',
@@ -31,8 +30,9 @@ type FacetValueGroup = FormRecord<FormControl<boolean>>;          // valueName -
     MatInput,
     TitleCasePipe,
     FormsModule,
-    MatCheckbox,
-    MatButton
+    MatButton,
+    MatSelectionList,
+    MatListOption
   ],
   templateUrl: './filter-sidebar.component.html',
   styleUrl: './filter-sidebar.component.css',
@@ -48,7 +48,7 @@ export class FilterSidebarComponent implements OnInit {
   filterChange$: Observable<[string, FacetFilter[]]>;
   searchForm = new FormGroup({
     search: new FormControl<string>(''),
-    facets: new FormRecord<FacetValueGroup>({}),
+    facets: new FormRecord<FormControl<string[]>>({}),
 
   });
 
@@ -62,20 +62,32 @@ export class FilterSidebarComponent implements OnInit {
     );
   }
 
+  private sanitizeSelectionsAgainstFacetFields(): void {
+    const allowedByFacet: FacetStatsMap = this.facetFields().stats ?? {};
+    const facetsCtrl = this.searchForm.controls.facets;
+
+    for (const [facetName, ctrl] of Object.entries(facetsCtrl.controls)) {
+      const allowedSet = new Set((allowedByFacet[facetName] ?? []).map(p => p.value));
+
+      const current = ctrl.value ?? [];
+      const next = current.filter(v => allowedSet.has(v));
+
+      if (!arrayEqual(current, next)) {
+        ctrl.setValue(next, { emitEvent: false });
+      }
+    }
+  }
 
   ngOnInit(): void {
     this.ensureFacetControlsFromRecord(this.facetFields().stats ?? {});
     const sub1 = this.searchForm.controls.search.valueChanges.subscribe(val => this.term.set(val))
     const sub2 = this.searchForm.controls.facets.valueChanges.subscribe(facetsValue => {
       // facetsValue: Record<facetName, Record<valueName, boolean>>
-      const filters: FacetFilter[] = Object.entries(facetsValue ?? {}).map(([facetName, valueMap]) => {
-        const selectedValues = Object.entries(valueMap ?? {})
-          .filter(([, checked]) => checked === true)
-          .map(([valueName]) => valueName);
-
-        return {facetName, values: selectedValues};
-      }).filter(f => (f.values?.length ?? 0) > 0);
-
+      const filters: FacetFilter[] = Object.entries(facetsValue ?? {})
+        .map(([facetName, selectedValues]) => ({
+          facetName,
+          values: (selectedValues ?? []).filter(v => typeof v === 'string' && v.length > 0),
+        })).filter(f => f.values.length > 0);
       this.facet.set(filters);
     });
 
@@ -91,7 +103,12 @@ export class FilterSidebarComponent implements OnInit {
       switchMap(body =>
         this.http.post<GetFacetStatsResult>('/api/sighting/list/stats', body, {withCredentials: true})),
       map(facetResults => this.mergeStats(facetResults.stats, this.facetFields().stats)),
-      tap(stats => this.applyEnabledStateFromStats(stats)),
+      tap(stats => {
+        for (const [facetName] of stats.entries()) {
+          this.facetSelectionControl(facetName);
+        }
+        this.sanitizeSelectionsAgainstFacetFields();
+      }),
       shareReplay({bufferSize: 1, refCount: true})
     );
 
@@ -103,53 +120,25 @@ export class FilterSidebarComponent implements OnInit {
     });
   }
 
-  facetControl(facetName: string, valueName: string): FormControl<boolean> {
+  facetSelectionControl(facetName: string): FormControl<string[]> {
     const facets = this.searchForm.controls.facets;
-    const group = facets.controls[facetName];
-    const ctrl = group?.controls[valueName];
-    return ctrl ?? new FormControl<boolean>(false, {nonNullable: true});
+    const existing = facets.controls[facetName];
+    if (existing) {
+      return existing;
+    }
+    const created = new FormControl<string[]>([], {nonNullable: true});
+    facets.addControl(facetName, created);
+    return created;
+  }
+
+  isSelected(facetName: string, valueName: string): boolean {
+    const selected = this.searchForm.controls.facets.controls[facetName]?.value ?? [];
+    return selected.includes(valueName);
   }
 
   private ensureFacetControlsFromRecord(record: FacetStatsMap): void {
-    for (const [facetName, pairs] of Object.entries(record)) {
-      const values = (pairs ?? []).map(p => p.value);
-      this.ensureFacetControlsForFacet(facetName, values);
-    }
-  }
-
-  private ensureFacetControlsForFacet(facetName: string, valueNames: string[]): void {
-    const facets = this.searchForm.controls.facets;
-
-    if (!facets.controls[facetName]) {
-      facets.addControl(facetName, new FormRecord<FormControl<boolean>>({}));
-    }
-
-    const group = facets.controls[facetName];
-    for (const valueName of valueNames) {
-      if (!group.controls[valueName]) {
-        group.addControl(valueName, new FormControl<boolean>(false, {nonNullable: true}));
-      }
-    }
-  }
-
-  private applyEnabledStateFromStats(stats: Map<string, ValueCountPair[]>): void {
-    for (const [facetName, pairs] of stats.entries()) {
-      // Ensure controls exist
-      this.ensureFacetControlsForFacet(facetName, pairs.map(p => p.value));
-
-      const group = this.searchForm.controls.facets.controls[facetName];
-
-      for (const {value: valueName, count} of pairs) {
-        const ctrl = group.controls[valueName];
-
-        if (count > 0) {
-          if (ctrl.disabled) ctrl.enable({emitEvent: false});
-        } else {
-          // optional: clear selection when a value becomes unavailable
-          if (ctrl.value === true) ctrl.setValue(false, {emitEvent: false});
-          if (ctrl.enabled) ctrl.disable({emitEvent: false});
-        }
-      }
+    for (const facetName of Object.keys(record ?? {})) {
+      this.facetSelectionControl(facetName);
     }
   }
 
@@ -158,15 +147,25 @@ export class FilterSidebarComponent implements OnInit {
 
     for (const [facetName, allowedPairs] of Object.entries(extraVals ?? {})) {
       const serverPairs = (stats ?? {})[facetName] ?? [];
-
       const merged = (allowedPairs ?? []).map(ap => {
         const found = serverPairs.find(sp => sp.value === ap.value);
         return found ?? ({value: ap.value, count: 0} as ValueCountPair);
       });
-
       response.set(facetName, merged);
     }
 
     return response;
   }
+
+  clearValues = (facetName: string) => this.searchForm.controls.facets.controls[facetName].reset();
+}
+
+function arrayEqual(a: string[], b: string[]): boolean {
+  if (a === b) return true;
+  if (!a || !b) return false;
+  if (a.length !== b.length) return false;
+  for (let i = 0; i < a.length; i += 1) {
+    if (a[i] !== b[i]) return false;
+  }
+  return true;
 }

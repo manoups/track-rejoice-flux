@@ -47,11 +47,11 @@ export class SightingCreateComponent extends View {
     {initialValue: 'auto'},
   );
   form = new FormGroup({
-    coords: new FormGroup({
+    sightingDetails: new FormGroup({
       lat: new FormControl<number>(null, [Validators.required]),
       lng: new FormControl<number>(null, [Validators.required])
     }),
-    type: new FormControl('cat', [Validators.required]),
+    subtype: new FormControl('cat', [Validators.required]),
     removeAfterMatching: new FormControl(false),
   })
 
@@ -61,28 +61,12 @@ export class SightingCreateComponent extends View {
 
   create(): void {
     if (this.form.invalid) {return;}
-    // const lat = this.lat();
-    // const lng = this.lng();
-
-    // if (lat == null || Number.isNaN(lat) || lng == null || Number.isNaN(lng)) {
-    //   alert('Please enter valid numeric lat and lng values');
-    //   return;
-    // }
 
     this.submitting.set(true);
 
-    debugger;
-    const payload = {
-      // sightingDetails: {
-      //   lng,
-      //   lat
-      // },
-      // removeAfterMatching: this.removeAfterMatching()
-    };
-
     this.sendCommand(
       '/api/sighting',
-      payload,
+      this.form.value,
       () => this.router.navigateByUrl('/sightings'),
       () => this.submitting.set(false),
       {eventOnSuccess: true}
