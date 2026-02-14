@@ -1,52 +1,50 @@
 <h1>Create Sighting</h1>
 
+<div class="example-container">
+  <form [formGroup]="form" (ngSubmit)="create()">
+
+
+    <div>
+      <div class="example-form-fields" formGroupName="coords">
+        <mat-form-field hideRequiredMarker="true">
+          <mat-label>Latitude</mat-label>
+          <input type="number" matInput placeholder="e.g. 4.9876" formControlName="lat"/>
+          @if (form.controls.coords.controls.lat.invalid) {
+            <mat-error>{{form.controls.coords.controls.lat.errors | json}}</mat-error>
+          }
+        </mat-form-field>
+        <mat-form-field hideRequiredMarker="true">
+          <mat-label>Longitude</mat-label>
+          <input type="number" matInput placeholder="e.g. 52.1234" formControlName="lng"/>
+        </mat-form-field>
+      </div>
+      <div class="example-form-fields">
+        <mat-form-field hideRequiredMarker="true">
+          <mat-select formControlName="type">
+            <mat-option value="cat">Cat</mat-option>
+            <mat-option value="dog">Dog</mat-option>
+          </mat-select>
+          <mat-label>Type</mat-label>
+        </mat-form-field>
+      </div>
+      <div class="example-form-fields">
+        <mat-checkbox formControlName="removeAfterMatching">Remove after matching</mat-checkbox>
+      </div>
+    </div>
+    <section>
+      <div class="example-button-row">
+        <button matButton="elevated" type="submit" [disabled]="submitting()">
+          Create
+        </button>
+      </div>
+    </section>
+    @if(form.touched && form.invalid) {
+      <p class="control-error">Form is invalid</p>
+    }
+  </form>
+</div>
+
+
 <div style="margin-bottom: 1rem;">
   <a routerLink="/sightings" class="btn btn-link">Back to list</a>
 </div>
-
-<form (ngSubmit)="create()">
-  <div class="row" style="margin-bottom: 1rem;">
-    <div class="col">
-      <label for="lat" class="form-label">lat</label>
-      <input
-        id="lat"
-        name="lat"
-        type="number"
-        step="any"
-        class="form-control"
-        [(ngModel)]="lat"
-        placeholder="e.g. 52.1234"/>
-    </div>
-
-    <div class="col">
-      <label for="lng" class="form-label">lng</label>
-      <input
-        id="lng"
-        name="lng"
-        type="number"
-        step="any"
-        class="form-control"
-        [(ngModel)]="lng"
-        placeholder="e.g. 4.9876"/>
-    </div>
-  </div>
-
-  <div class="form-check" style="margin-bottom: 1rem;">
-    <input
-      id="removeAfterMatching"
-      class="form-check-input"
-      type="checkbox"
-      [(ngModel)]="removeAfterMatching"
-      name="removeAfterMatching"/>
-    <label class="form-check-label" for="removeAfterMatching">
-      removeAfterMatching
-    </label>
-  </div>
-  <section>
-    <div class="example-button-row">
-      <button matButton="elevated" type="submit" [disabled]="submitting()">
-        Create
-      </button>
-    </div>
-  </section>
-</form>

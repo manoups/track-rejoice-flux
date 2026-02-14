@@ -44,12 +44,8 @@ export class FilterSidebarComponent implements OnInit {
   facetFields = input.required<GetFacetStatsResult>();
   term = signal('');
   facet = signal<FacetFilter[]>([]);
-  ready = signal(false);
   facetChange = output<[string, FacetFilter[]]>();
   filterChange$: Observable<[string, FacetFilter[]]>;
-  form = new FormGroup({
-    animal: new FormControl<string | null>(''),
-  });
   searchForm = new FormGroup({
     search: new FormControl<string>(''),
     facets: new FormRecord<FacetValueGroup>({}),
@@ -111,7 +107,7 @@ export class FilterSidebarComponent implements OnInit {
     const facets = this.searchForm.controls.facets;
     const group = facets.controls[facetName];
     const ctrl = group?.controls[valueName];
-    return ctrl ?? new FormControl<boolean>(false, { nonNullable: true });
+    return ctrl ?? new FormControl<boolean>(false, {nonNullable: true});
   }
 
   private ensureFacetControlsFromRecord(record: FacetStatsMap): void {
@@ -131,7 +127,7 @@ export class FilterSidebarComponent implements OnInit {
     const group = facets.controls[facetName];
     for (const valueName of valueNames) {
       if (!group.controls[valueName]) {
-        group.addControl(valueName, new FormControl<boolean>(false, { nonNullable: true }));
+        group.addControl(valueName, new FormControl<boolean>(false, {nonNullable: true}));
       }
     }
   }
@@ -143,15 +139,15 @@ export class FilterSidebarComponent implements OnInit {
 
       const group = this.searchForm.controls.facets.controls[facetName];
 
-      for (const { value: valueName, count } of pairs) {
+      for (const {value: valueName, count} of pairs) {
         const ctrl = group.controls[valueName];
 
         if (count > 0) {
-          if (ctrl.disabled) ctrl.enable({ emitEvent: false });
+          if (ctrl.disabled) ctrl.enable({emitEvent: false});
         } else {
           // optional: clear selection when a value becomes unavailable
-          if (ctrl.value === true) ctrl.setValue(false, { emitEvent: false });
-          if (ctrl.enabled) ctrl.disable({ emitEvent: false });
+          if (ctrl.value === true) ctrl.setValue(false, {emitEvent: false});
+          if (ctrl.enabled) ctrl.disable({emitEvent: false});
         }
       }
     }
@@ -165,7 +161,7 @@ export class FilterSidebarComponent implements OnInit {
 
       const merged = (allowedPairs ?? []).map(ap => {
         const found = serverPairs.find(sp => sp.value === ap.value);
-        return found ?? ({ value: ap.value, count: 0 } as ValueCountPair);
+        return found ?? ({value: ap.value, count: 0} as ValueCountPair);
       });
 
       response.set(facetName, merged);
