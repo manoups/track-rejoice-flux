@@ -40,7 +40,7 @@ table {
   display: grid;
   grid-template-rows: 1fr 240px; /* table grows, details fixed */
   gap: 12px;
-  padding: 12px;
+  padding: 0 6px 6px 6px;
   box-sizing: border-box;
   min-height: 0; /* critical so the 1fr row can shrink */
 }
@@ -48,6 +48,8 @@ table {
 .table-pane {
   min-height: 0; /* critical so inner scrolling works */
   overflow: hidden; /* let the viewport own the scroll */
+  border-radius: 25px 25px 0 0;
+
 }
 
 .details-pane {
