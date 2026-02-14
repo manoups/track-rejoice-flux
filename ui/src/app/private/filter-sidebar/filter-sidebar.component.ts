@@ -1,5 +1,5 @@
 import {Component, DestroyRef, inject, input, OnInit, output, signal} from '@angular/core';
-import {combineLatest, debounceTime, distinctUntilChanged, map, Observable, switchMap} from 'rxjs';
+import {combineLatest, debounceTime, distinctUntilChanged, map, Observable, switchMap, take} from 'rxjs';
 import {
   FacetFilter,
   FacetPaginationRequestBody,
@@ -9,14 +9,14 @@ import {
 import {AsyncPipe, KeyValuePipe, TitleCasePipe} from '@angular/common';
 import {toObservable} from '@angular/core/rxjs-interop';
 import {HttpClient} from '@angular/common/http';
-import {FormArray, FormControl, FormGroup, FormRecord, FormsModule, ReactiveFormsModule} from '@angular/forms';
+import {FormControl, FormGroup, FormRecord, FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {RouterLink} from '@angular/router';
 import {MatFormField, MatInput, MatLabel} from '@angular/material/input';
-import {tap} from 'rxjs/operators';
 import {MatCheckbox} from '@angular/material/checkbox';
 
 type FacetStatsMap = Record<string, ValueCountPair[]>;
-type DynamicGroup = FormArray<FormControl<boolean>>;
+type FacetValueGroup = FormRecord<FormControl<boolean>>;          // valueName -> boolean
+type FacetsGroup = FormRecord<FacetValueGroup>;
 
 @Component({
   selector: 'track-rejoice-filter-sidebar',
@@ -42,6 +42,7 @@ export class FilterSidebarComponent implements OnInit {
   facetFields = input.required<GetFacetStatsResult>();
   term = signal('');
   facet = signal<FacetFilter[]>([]);
+  ready = signal(false);
   facetChange = output<[string, FacetFilter[]]>();
   filterChange$: Observable<[string, FacetFilter[]]>;
   form = new FormGroup({
@@ -49,10 +50,9 @@ export class FilterSidebarComponent implements OnInit {
   });
   searchForm = new FormGroup({
     search: new FormControl<string>(''),
-    facets: new FormRecord<DynamicGroup>({}),
+    facets: new FormRecord<FacetsGroup>({}),
 
   });
-  ready = signal(false);
 
   constructor() {
 
@@ -67,13 +67,20 @@ export class FilterSidebarComponent implements OnInit {
 
   ngOnInit(): void {
     const sub1 = this.searchForm.controls.search.valueChanges.subscribe(val => this.term.set(val))
-    const sub2 = this.searchForm.controls.facets.valueChanges.subscribe(facetsValue => {
-      const filters: FacetFilter[] = Object.entries(facetsValue ?? {})
-        .map(([facetName, v]) => ({facetName, values: v ?? []}))
-        .filter(f => f.values.length > 0);
+    const sub2 = (this.searchForm.controls.facets as unknown as FacetsGroup).valueChanges.subscribe(facetsValue => {
+      // facetsValue: Record<facetName, Record<valueName, boolean>>
+      const filters: FacetFilter[] = Object.entries(facetsValue ?? {}).map(([facetName, valueMap]) => {
+        const selectedValues = Object.entries(valueMap ?? {})
+          .filter(([, checked]) => checked === true)
+          .map(([valueName]) => valueName);
+
+        return {facetName, values: selectedValues};
+      }).filter(f => (f.values?.length ?? 0) > 0);
+
       this.facet.set(filters);
     });
-    const subscribe = this.filterChange$.subscribe(([filter, facetFilters]) => this.facetChange.emit([filter, facetFilters]));
+
+    const sub3 = this.filterChange$.subscribe(([filter, facetFilters]) => this.facetChange.emit([filter, facetFilters]));
 
     this.getFacetStats = this.filterChange$.pipe(map(([filter, facetFilters]) => {
         return {
@@ -106,21 +113,30 @@ export class FilterSidebarComponent implements OnInit {
           }
           return response;
         }
-      ),
-      tap(stats => {
+      ));
+
+    const sub4 = this.getFacetStats.pipe(take(1))
+      .subscribe(stats => {
         if (!this.ready()) {
-          this.ready.set(true);
-          for (const [key, values] of stats.entries()) {
-            this.searchForm.controls.facets.addControl(key, new FormArray(values.map(_ => new FormControl<boolean>(false))));
-            console.log(this.searchForm.controls.facets.controls);
+          const facets = this.searchForm.controls.facets as unknown as FacetsGroup;
+          Object.keys(facets.controls).forEach(facetName => facets.removeControl(facetName));
+
+          for (const [facetName, values] of stats.entries()) {
+            const valueGroup = new FormRecord<FormControl<boolean>>({});
+            for (const v of values) {
+              valueGroup.addControl(v.value, new FormControl<boolean>(false, {nonNullable: true}));
+            }
+            facets.addControl(facetName, valueGroup);
           }
+          this.ready.set(true);
         }
-      }));
+      });
 
     this.destroyRef.onDestroy(() => {
       sub1.unsubscribe();
       sub2.unsubscribe();
-      subscribe.unsubscribe();
+      sub3.unsubscribe();
+      sub4.unsubscribe();
     });
   }
 
@@ -131,4 +147,5 @@ export class FilterSidebarComponent implements OnInit {
       this.form.controls.animal.setValue(null);
     }
   }*/
+
 }
