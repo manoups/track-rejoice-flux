@@ -9,7 +9,7 @@
     <label for="term" class="form-label">Search</label>
     <div class="form-text">Sent as query parameter to the listing endpoint.</div>
   </div>
-  @if (((getFacetStats|async) !=null) && ready()) {
+  @if (ready()) {
     <div class="mb-3" formGroupName="facets">
       @for (filter of getFacetStats|async|keyvalue; track filter.key) {
         <h2>{{ filter.key | titlecase }}</h2>
@@ -20,15 +20,6 @@
             </mat-checkbox>
           }
         </div>
-        <!--<mat-radio-group class="radio-stack" aria-label="{{filter.key}}" formControlName="{{filter.key}}">
-          @for (value of filter.value; track value.value) {
-            <mat-radio-button labelPosition="before" value="{{value.value}}"
-                              (click)="toggleOffIfSame($event, i, value.value)"
-                              disabled="{{value.count == 0}}">
-              {{ value.value }} ({{ value.count }})
-            </mat-radio-button>
-          }
-        </mat-radio-group>-->
       }
     </div>
     <div class="d-grid gap-2">
