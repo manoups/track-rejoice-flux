@@ -5,14 +5,14 @@
   <form [formGroup]="form" (ngSubmit)="create()">
     <div>
       <div class="example-form-fields" formGroupName="sightingDetails">
-        <mat-form-field hideRequiredMarker="true">
+        <mat-form-field [hideRequiredMarker]="hideRequired()" [floatLabel]="floatLabel()">
           <mat-label>Latitude</mat-label>
           <input type="number" matInput placeholder="e.g. 4.9876" formControlName="lat"/>
           @if (form.controls.sightingDetails.controls.lat.errors) {
             <mat-error>{{ form.controls.sightingDetails.controls.lat | printerror }}</mat-error>
           }
         </mat-form-field>
-        <mat-form-field hideRequiredMarker="true">
+        <mat-form-field [hideRequiredMarker]="hideRequired()" [floatLabel]="floatLabel()">
           <mat-label>Longitude</mat-label>
           <input type="number" matInput placeholder="e.g. 52.1234" formControlName="lng"/>
           @if (form.controls.sightingDetails.controls.lng.errors) {
@@ -21,7 +21,7 @@
         </mat-form-field>
       </div>
       <div class="example-form-fields">
-        <mat-form-field hideRequiredMarker="true">
+        <mat-form-field [hideRequiredMarker]="hideRequired()" [floatLabel]="floatLabel()">
           <mat-select formControlName="subtype">
             <mat-option value="cat">Cat</mat-option>
             <mat-option value="dog">Dog</mat-option>

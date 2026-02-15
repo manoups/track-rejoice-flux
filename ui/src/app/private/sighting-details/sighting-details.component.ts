@@ -1,10 +1,10 @@
-import {Component, inject, OnInit, signal} from '@angular/core';
+import {Component, inject, input, OnInit} from '@angular/core';
 import {Sighting} from '@trackrejoice/typescriptmodels';
 import {View} from '../../common/view';
-import {map, Observable, switchMap} from 'rxjs';
+import {Observable, switchMap} from 'rxjs';
 import {AsyncPipe, JsonPipe} from '@angular/common';
-import {ActivatedRoute} from '@angular/router';
 import {HttpClient} from '@angular/common/http';
+import {toObservable} from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'track-rejoice-sighting-details',
@@ -17,26 +17,12 @@ import {HttpClient} from '@angular/common/http';
 })
 export class SightingDetailsComponent extends View implements OnInit {
   data$!: Observable<Sighting>;
-  sightingId = signal<string>('');
   private http = inject(HttpClient);
-
-  constructor(private readonly route: ActivatedRoute) {
-    super();
-  }
+  id = input.required<string>();
+  private id$: Observable<string> = toObservable(this.id);
 
   ngOnInit(): void {
-    this.data$ = this.route.paramMap
-      .pipe(map(params => params.get('id') ?? ''),
-        switchMap(id => this.http.get<Sighting>(`/api/sighting/${encodeURIComponent(id)}`, {withCredentials: true})))
-      /*.subscribe({
-        next: (rows) => {
-          const nextRows = rows ?? [];
-          this.done.set(true);
-          this.loading.set(false);
-        },
-        error: () => {
-          this.loading.set(false);
-        }
-      });*/
+    this.data$ = this.id$
+      .pipe(switchMap(id => this.http.get<Sighting>(`/api/sighting/${encodeURIComponent(id)}`, {withCredentials: true})))
   }
 }
