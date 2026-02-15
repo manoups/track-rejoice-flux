@@ -8,7 +8,7 @@
   </div>
   <div class="mb-3">
     @for (filter of getFacetStats|async|keyvalue; track filter.key) {
-      <span><h2>{{ filter.key | titlecase }}</h2><button matButton="filled" (click)="clearValues(filter.key)">Clear</button></span>
+      <span><h2>{{ filter.key | titlecase }}</h2><button type="button" matButton="filled" (click)="clearValues(filter.key)">Clear</button></span>
       <mat-selection-list [multiple]="true" [formControl]="facetSelectionControl(filter.key)">
         @for (opt of filter.value; track opt.value) {
           <mat-list-option [value]="opt.value" [disabled]="opt.count === 0 && !isSelected(filter.key, opt.value)">

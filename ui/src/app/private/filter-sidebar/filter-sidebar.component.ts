@@ -81,7 +81,13 @@ export class FilterSidebarComponent implements OnInit {
   ngOnInit(): void {
     this.ensureFacetControlsFromRecord(this.facetFields().stats ?? {});
     const sub1 = this.searchForm.controls.search.valueChanges.subscribe(val => this.term.set(val))
-    const sub2 = this.searchForm.controls.facets.valueChanges.subscribe(facetsValue => {
+    const sub2 = this.searchForm.controls.facets.valueChanges
+      .pipe(
+        debounceTime(1000),
+        map(v => (v ?? {})),
+        distinctUntilChanged((a,b) => facetsEqual(a,b)),
+      )
+      .subscribe(facetsValue => {
       // facetsValue: Record<facetName, Record<valueName, boolean>>
       const filters: FacetFilter[] = Object.entries(facetsValue ?? {})
         .map(([facetName, selectedValues]) => ({
@@ -100,6 +106,8 @@ export class FilterSidebarComponent implements OnInit {
           pagination: {page: 0, pageSize: 10},
         } as FacetPaginationRequestBody;
       }),
+      tap(_ => console.log(_.facetFilters)),
+      distinctUntilChanged(),
       switchMap(body =>
         this.http.post<GetFacetStatsResult>('/api/sighting/list/stats', body, {withCredentials: true})),
       map(facetResults => this.mergeStats(facetResults.stats, this.facetFields().stats)),
@@ -167,5 +175,28 @@ function arrayEqual(a: string[], b: string[]): boolean {
   for (let i = 0; i < a.length; i += 1) {
     if (a[i] !== b[i]) return false;
   }
+  return true;
+}
+
+function facetsEqual(
+  a: Partial<Record<string, string[]>>,
+  b: Partial<Record<string, string[]>>
+): boolean {
+  const aKeys = Object.keys(a);
+  const bKeys = Object.keys(b);
+  if (aKeys.length !== bKeys.length) return false;
+
+  for (const key of aKeys) {
+    if (!(key in b)) return false;
+    if (!stringArraySetEqual(a[key] ?? [], b[key] ?? [])) return false;
+  }
+  return true;
+}
+
+function stringArraySetEqual(a: string[], b: string[]): boolean {
+  if (a.length !== b.length) return false;
+  const as = new Set(a);
+  if (as.size !== b.length) return false; // catches duplicates mismatch
+  for (const x of b) if (!as.has(x)) return false;
   return true;
 }

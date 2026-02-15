@@ -18,11 +18,11 @@ export function mockStatsInterceptor(
 
   // POST
   if (method === 'POST') {
-    let typedBody: FacetPaginationRequestBody = req.body;
+    // let typedBody: FacetPaginationRequestBody = req.body;
     // let result = [...mockSightings];
     // const page = typedBody.pagination.page;
     // const pageSize = typedBody.pagination.pageSize;
-    const result = {'@type': 'GetFacetStatsResult', stats: {"type": [{"value": "cat", "count": 12}]}} as GetFacetStatsResult;
+    const result = {'@type': 'GetFacetStatsResult', stats: {"type": [{"value": "cat", "count": 12}, {"value": "keys", "count": 5}]}} as GetFacetStatsResult;
     return ok(result);
   }
 

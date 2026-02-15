@@ -24,7 +24,7 @@ import {MatSidenav, MatSidenavContainer, MatSidenavContent} from '@angular/mater
 export class SightingBoilerplateComponent {
   loading = signal(false);
   filterChange$ = new Subject<[string, FacetFilter[]]>();
-  facetFields: GetFacetStatsResult = {'@type': 'GetFacetStatsResult', stats: {"type": [{"value": "dog", "count": 0}, {"value": "cat", "count": 0}]}} as GetFacetStatsResult;
+  facetFields: GetFacetStatsResult = {'@type': 'GetFacetStatsResult', stats: {"type": [{"value": "dog", "count": 0}, {"value": "cat", "count": 0}, {"value": "keys", "count": 0}]}} as GetFacetStatsResult;
 
   onFilterChange($event: [string, FacetFilter[]]): void {
     console.log('onFilterChange', $event);
