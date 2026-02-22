@@ -2,6 +2,12 @@ package com.breece.content.command.api;
 
 import com.breece.content.api.model.ContentId;
 import com.breece.content.api.model.ContentStatus;
+import com.breece.coreapi.score.association.CreateWeightedAssociation;
+import com.breece.coreapi.score.association.DeleteWeightedAssociation;
+import com.breece.coreapi.score.association.WeightedAssociationId;
+import com.breece.sighting.command.api.CreateSighting;
+import com.breece.sighting.command.api.DeleteSighting;
+import io.fluxzero.sdk.Fluxzero;
 import io.fluxzero.sdk.modeling.EntityId;
 import io.fluxzero.sdk.tracking.Consumer;
 import io.fluxzero.sdk.tracking.handling.Association;
@@ -11,20 +17,27 @@ import lombok.With;
 
 @Stateful
 @Consumer(name = "content-consumer", ignoreSegment = true)
-public record ContentState(@Association @EntityId ContentId contentId, @With ContentStatus status) {
+public record ContentState(@EntityId ContentId contentId, @With ContentStatus status) {
 
+    @Association("contentId")
     @HandleEvent
     static ContentState on(CreateContent event) {
         return new ContentState(event.contentId(), ContentStatus.OFFLINE);
     }
 
+    @Association("contentId")
     @HandleEvent
-    ContentState on(TakeContentOffline event) { return withStatus(ContentStatus.OFFLINE);}
+    ContentState on(TakeContentOffline event) {
+        return withStatus(ContentStatus.OFFLINE);
+    }
 
+    @Association("contentId")
     @HandleEvent
-    ContentState on(PublishContent event) { return withStatus(ContentStatus.ONLINE);}
+    ContentState on(PublishContent event) {
+        return withStatus(ContentStatus.ONLINE);
+    }
     /*Used only for the basic (publishing) service
-    * Cannot buy extra service without the basic service*/
+     * Cannot buy extra service without the basic service*/
 //    TODO: check how to break circular dependency
     /*@HandleEvent
     ContentState on(PlaceOrder order) {
@@ -47,8 +60,21 @@ public record ContentState(@Association @EntityId ContentId contentId, @With Con
         return withStatus(ContentStatus.ENABLED);
     }*/
 
+    @Association("contentId")
     @HandleEvent
     ContentState on(DeleteContent order) {
         return null;
+    }
+
+    @Association("sightingId")
+    @HandleEvent
+    void on(CreateSighting event) {
+        Fluxzero.sendAndForgetCommand(new CreateWeightedAssociation(new WeightedAssociationId(contentId.getId(), event.sightingId().getId()), contentId.getId(), event.sightingId().getId()));
+    }
+
+    @Association("sightingId")
+    @HandleEvent
+    void on(DeleteSighting event) {
+        Fluxzero.sendAndForgetCommand(new DeleteWeightedAssociation(new WeightedAssociationId(contentId.getId(), event.sightingId().getId())));
     }
 }
