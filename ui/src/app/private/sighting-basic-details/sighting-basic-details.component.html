@@ -1,6 +1,6 @@
 <div>
   <div>{{ sighting().sightingId }}</div>
-  <div>{{ sighting().timestamp }}</div>
+  <div>{{ sighting().timestamp | date:'medium' }}</div>
   <div>Latitude: {{ sighting().details.lat }}</div>
   <div>Longitude: {{ sighting().details.lng }}</div>
 </div>
