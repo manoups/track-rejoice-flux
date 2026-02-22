@@ -2,12 +2,6 @@ package com.breece.content.command.api;
 
 import com.breece.content.api.model.ContentId;
 import com.breece.content.api.model.ContentStatus;
-import com.breece.coreapi.score.association.CreateWeightedAssociation;
-import com.breece.coreapi.score.association.DeleteWeightedAssociation;
-import com.breece.coreapi.score.association.WeightedAssociationId;
-import com.breece.sighting.command.api.CreateSighting;
-import com.breece.sighting.command.api.DeleteSighting;
-import io.fluxzero.sdk.Fluxzero;
 import io.fluxzero.sdk.modeling.EntityId;
 import io.fluxzero.sdk.tracking.Consumer;
 import io.fluxzero.sdk.tracking.handling.Association;
@@ -64,17 +58,5 @@ public record ContentState(@EntityId ContentId contentId, @With ContentStatus st
     @HandleEvent
     ContentState on(DeleteContent order) {
         return null;
-    }
-
-    @Association("sightingId")
-    @HandleEvent
-    void on(CreateSighting event) {
-        Fluxzero.sendAndForgetCommand(new CreateWeightedAssociation(new WeightedAssociationId(contentId.getId(), event.sightingId().getId()), contentId.getId(), event.sightingId().getId()));
-    }
-
-    @Association("sightingId")
-    @HandleEvent
-    void on(DeleteSighting event) {
-        Fluxzero.sendAndForgetCommand(new DeleteWeightedAssociation(new WeightedAssociationId(contentId.getId(), event.sightingId().getId())));
     }
 }

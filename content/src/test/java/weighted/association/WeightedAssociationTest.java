@@ -1,7 +1,6 @@
 package weighted.association;
 
-import com.breece.content.command.api.ContentState;
-import com.breece.content.command.api.SightingState;
+import com.breece.content.command.api.WeightedAssociationHandler;
 import com.breece.coreapi.score.association.GetAllAssociations;
 import io.fluxzero.sdk.test.TestFixture;
 import org.junit.jupiter.api.Test;
@@ -12,7 +11,8 @@ import java.util.List;
 import static org.hamcrest.Matchers.hasSize;
 
 public class WeightedAssociationTest  extends TestUtilities {
-    final TestFixture testFixture = TestFixture.createAsync(ContentState.class, SightingState.class).givenCommands(createUserFromProfile(viewer), createUserFromProfile(user2), createUserFromProfile(Alice));
+    final TestFixture testFixture = TestFixture.createAsync(new WeightedAssociationHandler());
+//            .givenCommands(createUserFromProfile(viewer), createUserFromProfile(user2), createUserFromProfile(Alice));
 
     @Test
     void givenSightingWithoutContent_whenQuery_thenEmptyList() {
