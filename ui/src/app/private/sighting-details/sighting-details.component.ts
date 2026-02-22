@@ -2,15 +2,26 @@ import {Component, inject, input, OnInit} from '@angular/core';
 import {Sighting} from '@trackrejoice/typescriptmodels';
 import {View} from '../../common/view';
 import {Observable, switchMap} from 'rxjs';
-import {AsyncPipe, JsonPipe} from '@angular/common';
+import {AsyncPipe} from '@angular/common';
 import {HttpClient} from '@angular/common/http';
 import {toObservable} from '@angular/core/rxjs-interop';
+import {MatSidenav, MatSidenavContainer, MatSidenavContent} from '@angular/material/sidenav';
+import {MatToolbar} from '@angular/material/toolbar';
+import {SightingBasicDetailsComponent} from '../sighting-basic-details/sighting-basic-details.component';
+import {MatButton} from '@angular/material/button';
+import {RouterLink} from '@angular/router';
 
 @Component({
   selector: 'track-rejoice-sighting-details',
   imports: [
     AsyncPipe,
-    JsonPipe
+    MatSidenav,
+    MatSidenavContainer,
+    MatSidenavContent,
+    MatToolbar,
+    SightingBasicDetailsComponent,
+    MatButton,
+    RouterLink
   ],
   templateUrl: './sighting-details.component.html',
   styleUrl: './sighting-details.component.css',

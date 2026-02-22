@@ -1,7 +1,19 @@
-@if (data$ | async; as sighting) {
-  <div>
-    {{sighting | json }}
-  </div>
-} @else {
-  <div>Loading...</div>
-}
+<mat-toolbar color="primary">
+  <span>Sighting Details</span>
+  <span class="spacer"></span>
+  <a matButton="filled" [routerLink]="['/sightings']">Back</a>
+</mat-toolbar>
+<mat-sidenav-container class="example-container">
+  <mat-sidenav position="start" mode="side" opened>
+    @if (data$ | async; as sighting) {
+      <track-rejoice-sighting-basic-details [sighting]="sighting"/>
+    } @else {
+      <div>Loading...</div>
+    }
+  </mat-sidenav>
+  <mat-sidenav-content>
+    <!--    <track-rejoice-sightings [filterUpdate$]="filterChange$"/>-->
+  </mat-sidenav-content>
+</mat-sidenav-container>
+
+

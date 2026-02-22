@@ -1,19 +1,20 @@
 <mat-drawer-container class="example-container">
   <mat-drawer-content>
-    <div>{{ selectedItem().sightingId }}</div>
-    <div>{{ selectedItem().timestamp }}</div>
-    <div>Latitude: {{ selectedItem().details.lat }}</div>
-    <div>Longitude: {{ selectedItem().details.lng }}</div>
+    <track-rejoice-sighting-basic-details [sighting]="selectedItem()"/>
   </mat-drawer-content>
   <mat-drawer mode="side" position="end" opened>
     <section>
       <div class="example-button-row">
         <div class="example-flex-container">
-          <button matFab extended aria-label="Example icon button with a delete icon">
-            Delete
+          <a  matButton="filled" [routerLink]="['/sightings', selectedItem().sightingId]">
+            Link
+          </a>
+          <button matMiniFab aria-label="Delete">
             <mat-icon>delete</mat-icon>
           </button>
+
         </div>
+
       </div>
     </section>
   </mat-drawer>

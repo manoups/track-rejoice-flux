@@ -1,5 +1,5 @@
 <h2 class="sidebar-title">Filters</h2>
-<form class="example-form" >
+<form class="example-form">
   <div class="mb-3" [formGroup]="searchForm">
     <mat-form-field class="example-full-width">
       <mat-label>Search</mat-label>
@@ -8,11 +8,20 @@
   </div>
   <div class="mb-3">
     @for (filter of getFacetStats|async|keyvalue; track filter.key) {
-      <span><h2>{{ filter.key | titlecase }}</h2><button type="button" matButton="filled" (click)="clearValues(filter.key)">Clear</button></span>
+      <div class="divider">
+        <div class="divider-row">
+          <h2>{{ filter.key | titlecase }}</h2>
+          <span class="spacer"></span>
+          <button type="button"
+                  matButton
+                  (click)="clearValues(filter.key)">Clear
+          </button>
+        </div>
+      </div>
       <mat-selection-list [multiple]="true" [formControl]="facetSelectionControl(filter.key)">
         @for (opt of filter.value; track opt.value) {
           <mat-list-option [value]="opt.value" [disabled]="opt.count === 0 && !isSelected(filter.key, opt.value)">
-              {{ opt.value }} ({{ opt.count }})
+            {{ opt.value }} ({{ opt.count }})
           </mat-list-option>
         }
       </mat-selection-list>
