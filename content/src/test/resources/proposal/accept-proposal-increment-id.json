@@ -1,6 +1,6 @@
 {
   "@class": "com.breece.proposal.command.api.AcceptProposal",
-  "linkedSightingId": "2",
+  "weightedAssociationId": "2",
   "contentId": "1",
   "sightingDetails": {
     "@class": "com.breece.coreapi.sighting.model.SightingDetails",

@@ -18,7 +18,7 @@ public record GetLinkedSightingStates(@NotNull @NotEmpty List<WeightedAssociatio
     @HandleQuery
     List<LinkedSightingState> find() {
         return Fluxzero.search(LinkedSightingState.class)
-                .any(ids.stream().map(v -> match(v, "linkedSightingId")).toArray(Constraint[]::new))
+                .any(ids.stream().map(v -> match(v, "weightedAssociationId")).toArray(Constraint[]::new))
                 .any(statuses.stream().map(v -> match(v, "status")).toArray(Constraint[]::new))
                 .fetchAll();
     }

@@ -95,7 +95,7 @@ This example follows FluxZero's event-driven architecture:
 - An order binds together a content with entities
 
 ### Depedencies loops
-- Content -> linkedSightingId -> ProposedSighting -> SightingId -> Sighting -> ContentId -> Content
+- Content -> weightedAssociationId -> ProposedSighting -> SightingId -> Sighting -> ContentId -> Content
 - If we remove the sighting holding ContentId's the cycle is broken
 - Payment does not need to be an aggregate -- it can be a simple payment reference string
 - ~~An order can be an aggregate member of content. We can use projections for "My orders" screen.~~

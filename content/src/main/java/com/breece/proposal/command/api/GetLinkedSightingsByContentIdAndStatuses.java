@@ -24,14 +24,14 @@ public record GetLinkedSightingsByContentIdAndStatuses(@NotNull ContentId conten
         Optional<Content> content = Fluxzero.search(Content.class)
                 .match(contentId, "contentId")
                 .match(sender.isAdmin() ? null : sender.userId(), "ownerId")
-//                .any(ids.stream().map(v -> match(v, "linkedSightingId")).toArray(Constraint[]::new))
+//                .any(ids.stream().map(v -> match(v, "weightedAssociationId")).toArray(Constraint[]::new))
                 .fetchFirst();
-        Optional<List<WeightedAssociationId>> linkedSightingIds = content
+        Optional<List<WeightedAssociationId>> weightedAssociationIds = content
                 .map(Content::weightedAssociations).map(l -> l.stream().map(WeightedAssociation::weightedAssociationId).toList());
-        if (linkedSightingIds.isEmpty() || linkedSightingIds.get().isEmpty()) {
+        if (weightedAssociationIds.isEmpty() || weightedAssociationIds.get().isEmpty()) {
             return Collections.emptyList();
         }
-        List<LinkedSightingState> linkedSightingStates = Fluxzero.queryAndWait(new GetLinkedSightingStates(linkedSightingIds.get(), statuses));
+        List<LinkedSightingState> linkedSightingStates = Fluxzero.queryAndWait(new GetLinkedSightingStates(weightedAssociationIds.get(), statuses));
         return content.get().weightedAssociations().stream().filter(l -> linkedSightingStates.stream().anyMatch(s -> s.weightedAssociationId().equals(l.weightedAssociationId()))).toList();
     }
 

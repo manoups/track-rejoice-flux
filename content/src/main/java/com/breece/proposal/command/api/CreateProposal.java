@@ -25,7 +25,7 @@ import java.util.Objects;
 public record CreateProposal(ContentId contentId, @NotNull SightingId sightingId, WeightedAssociationId weightedAssociationId, @NotNull SightingDetails sightingDetails) implements ContentInteract, LinkedSightingCommand {
     @InterceptApply
     List<ContentCommand> interceptApply(Content content, Sender sender) {
-//        UserId userId = Fluxzero.<Content>loadAggregateFor(linkedSightingId, Content.class).mapIfPresent(Entity::get).map(Content::ownerId).get();
+//        UserId userId = Fluxzero.<Content>loadAggregateFor(weightedAssociationId, Content.class).mapIfPresent(Entity::get).map(Content::ownerId).get();
         if (sender.isAuthorizedFor(content.ownerId())) {
             return List.of(this, new AcceptProposal(contentId, weightedAssociationId()));
         }
