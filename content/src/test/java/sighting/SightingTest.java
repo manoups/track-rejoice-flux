@@ -8,7 +8,7 @@ import com.breece.coreapi.facets.Pagination;
 import com.breece.proposal.command.api.AcceptProposal;
 import com.breece.proposal.command.api.CreateProposal;
 import com.breece.proposal.command.api.DeleteLinkedProposal;
-import com.breece.proposal.command.api.model.LinkedSightingId;
+import com.breece.proposal.command.api.model.WeightedAssociationId;
 import com.breece.proposal.command.api.model.LinkedSightingState;
 import com.breece.sighting.api.SightingErrors;
 import com.breece.sighting.api.model.SightingId;
@@ -56,7 +56,7 @@ public class SightingTest extends TestUtilities {
                     .givenCommands(new PublishContent(contentId, Duration.ofDays(90)))
                     .whenCommandByUser("user2", new com.breece.proposal.command.api.ClaimSighting(contentId, sightingId, new SightingDetails(
                             new BigDecimal("78.901"), new BigDecimal("123.456")
-                    ), new LinkedSightingId(contentId, sightingId)))
+                    ), new WeightedAssociationId(contentId, sightingId)))
                     .expectNoErrors();
         }
 
@@ -67,7 +67,7 @@ public class SightingTest extends TestUtilities {
             testFixture
                     .whenCommand(new com.breece.proposal.command.api.ClaimSighting(contentId, sightingId, new SightingDetails(
                             new BigDecimal("123.456"), new BigDecimal("78.901")
-                    ), new LinkedSightingId(contentId, sightingId)))
+                    ), new WeightedAssociationId(contentId, sightingId)))
                     .expectExceptionalResult(SightingErrors.sightingMismatch)
                     .expectError((e) -> e.getMessage().equals(SightingErrors.sightingMismatch.getMessage()));
         }
@@ -79,7 +79,7 @@ public class SightingTest extends TestUtilities {
             testFixture
                     .whenCommand(new com.breece.proposal.command.api.ClaimSighting(contentId, sightingId, new SightingDetails(
                             new BigDecimal("78.901000"), new BigDecimal("123.456000")),
-                            new LinkedSightingId(contentId, sightingId)))
+                            new WeightedAssociationId(contentId, sightingId)))
                     .expectNoErrors();
         }
     }
@@ -103,7 +103,7 @@ public class SightingTest extends TestUtilities {
                     .givenCommands(new PublishContent(contentId, Duration.ofDays(90)))
                     .whenCommandByUser("user2", new com.breece.proposal.command.api.ClaimSighting(contentId, sightingId, new SightingDetails(
                             new BigDecimal("78.901"), new BigDecimal("123.456")
-                    ), new LinkedSightingId(contentId, sightingId)))
+                    ), new WeightedAssociationId(contentId, sightingId)))
                     .expectExceptionalResult(SightingErrors.notFound)
                     .expectError((e) -> e.getMessage().equals(SightingErrors.notFound.getMessage()));
         }

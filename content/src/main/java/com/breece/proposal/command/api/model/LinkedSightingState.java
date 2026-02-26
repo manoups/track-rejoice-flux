@@ -26,20 +26,20 @@ import lombok.extern.slf4j.Slf4j;
 import java.util.Objects;
 
 @Stateful(commitInBatch = true)
-@Consumer(name = "linked-sighting-state-consumer", ignoreSegment = true)
+@Consumer(name = "weighted-association-state-consumer", ignoreSegment = true)
 @Slf4j
-public record LinkedSightingState(@EntityId LinkedSightingId linkedSightingId, ContentId contentId, SightingId sightingId,
-                                  SightingDetails sightingDetails, @With LinkedSightingStatus status) {
-    @Association("linkedSightingId")
+public record LinkedSightingState(@EntityId WeightedAssociationId weightedAssociationId, ContentId contentId, SightingId sightingId,
+                                  SightingDetails sightingDetails, @With WeightedAssociationStatus status) {
+    @Association("weightedAssociationId")
     @HandleEvent
     static LinkedSightingState on(CreateProposal event) {
-        return new LinkedSightingState(event.linkedSightingId(), event.contentId(), event.sightingId(), event.sightingDetails(), LinkedSightingStatus.CREATED);
+        return new LinkedSightingState(event.weightedAssociationId(), event.contentId(), event.sightingId(), event.sightingDetails(), WeightedAssociationStatus.CREATED);
     }
 
-    @Association("linkedSightingId")
+    @Association("weightedAssociationId")
     @HandleEvent
     LinkedSightingState on(AcceptProposal event, Content content) {
-        if (LinkedSightingStatus.CREATED != status()) {
+        if (WeightedAssociationStatus.CREATED != status()) {
             return this;
         }
         DeleteSighting deleteSighting = Fluxzero.loadAggregate(sightingId())
@@ -56,26 +56,26 @@ public record LinkedSightingState(@EntityId LinkedSightingId linkedSightingId, C
         }
         Fluxzero.sendAndForgetCommand(new UpdateLastSeenPosition(content.contentId(), sightingDetails()));
 
-        return withStatus(LinkedSightingStatus.ACCEPTED);
+        return withStatus(WeightedAssociationStatus.ACCEPTED);
     }
 
-    @Association("linkedSightingId")
+    @Association("weightedAssociationId")
     @HandleEvent
     LinkedSightingState on(RejectProposal event) {
-        if (LinkedSightingStatus.CREATED != status()) {
+        if (WeightedAssociationStatus.CREATED != status()) {
             return this;
         }
-        return withStatus(LinkedSightingStatus.REJECTED);
+        return withStatus(WeightedAssociationStatus.REJECTED);
     }
 
     @Association("sightingId")
     @HandleEvent
     LinkedSightingState on(DeleteSighting event) {
-        Fluxzero.sendAndForgetCommand(new DeleteLinkedProposal(contentId, linkedSightingId()));
+        Fluxzero.sendAndForgetCommand(new DeleteLinkedProposal(contentId, weightedAssociationId()));
         return this;
     }
 
-    @Association("linkedSightingId")
+    @Association("weightedAssociationId")
     @HandleEvent
     LinkedSightingState on(DeleteLinkedProposal event) {
         return null;

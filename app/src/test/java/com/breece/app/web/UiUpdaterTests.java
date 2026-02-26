@@ -27,7 +27,7 @@ public class UiUpdaterTests {
 
     private static <T> T extractEntity(ObjectMapper objectMapper, UiUpdate update, Class<T> type) throws Exception {
         JsonNode base = objectMapper.createObjectNode();
-        JsonNode patched = JsonPatch.apply(update.getPatch(), base);
+        JsonNode patched = JsonPatch.apply(update.patch(), base);
         return objectMapper.treeToValue(patched, type);
     }
 

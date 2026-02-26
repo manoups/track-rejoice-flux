@@ -10,9 +10,9 @@ import com.breece.coreapi.common.SightingDetails;
 import com.breece.coreapi.common.SightingEnum;
 import com.breece.coreapi.util.GeometryUtil;
 import com.breece.proposal.command.api.*;
-import com.breece.proposal.command.api.model.LinkedSightingId;
+import com.breece.proposal.command.api.model.WeightedAssociationId;
 import com.breece.proposal.command.api.model.LinkedSightingState;
-import com.breece.proposal.command.api.model.LinkedSightingStatus;
+import com.breece.proposal.command.api.model.WeightedAssociationStatus;
 import com.breece.sighting.api.SightingErrors;
 import com.breece.sighting.api.model.SightingId;
 import com.breece.sighting.command.api.CreateSighting;
@@ -55,10 +55,10 @@ public class ProposalTest extends TestUtilities {
     void givenIncorrectLinkedSightingId_whenCreateProposal_thenError() {
         testFixture.givenCommandsByUser("viewer", "../content/create-content.json", "../sighting/create-sighting.json")
                 .givenCommands("../content/publish-content.json")
-                .whenCommandByUser("viewer", new CreateProposal(new ContentId("1"), new SightingId("1"), new LinkedSightingId(new ContentId("3"), new SightingId("2")),
+                .whenCommandByUser("viewer", new CreateProposal(new ContentId("1"), new SightingId("1"), new WeightedAssociationId(new ContentId("3"), new SightingId("2")),
                         new SightingDetails(BigDecimal.ZERO, BigDecimal.ZERO)))
-                .expectError(LinkedSightingErrors.malformedKey)
-                .expectExceptionalResult((e) -> e.getMessage().equals(LinkedSightingErrors.malformedKey.getMessage()));
+                .expectError(WeightedProposalErrors.malformedKey)
+                .expectExceptionalResult((e) -> e.getMessage().equals(WeightedProposalErrors.malformedKey.getMessage()));
     }
 
     @Test
@@ -106,7 +106,7 @@ public class ProposalTest extends TestUtilities {
                 .givenCommands("../content/publish-content.json")
                 .givenCommandsByUser("Alice", "create-proposal.json")
                 .givenCommandsByUser("viewer", "reject-proposal.json")
-                .whenQuery(new GetLinkedSightingsByContentIdAndStatuses(new ContentId("1"), List.of(LinkedSightingStatus.CREATED)))
+                .whenQuery(new GetLinkedSightingsByContentIdAndStatuses(new ContentId("1"), List.of(WeightedAssociationStatus.CREATED)))
                 .expectNoErrors()
                 .expectResult(Objects::nonNull)
                 .expectResult(List::isEmpty);
@@ -157,8 +157,8 @@ public class ProposalTest extends TestUtilities {
                 .givenCommands("../content/publish-content.json")
                 .givenCommandsByUser("Alice", new CreateSighting(new SightingId("2"), new SightingDetails(BigDecimal.ZERO, BigDecimal.ZERO), true, SightingEnum.CAT), "create-proposal.json")
                 .whenCommandByUser("viewer", "accept-proposal-increment-id.json")
-                .expectExceptionalResult(LinkedSightingErrors.notFound)
-                .expectError((e) -> e.getMessage().equals(LinkedSightingErrors.notFound.getMessage()));
+                .expectExceptionalResult(WeightedProposalErrors.notFound)
+                .expectError((e) -> e.getMessage().equals(WeightedProposalErrors.notFound.getMessage()));
     }
 
     @Test
@@ -167,8 +167,8 @@ public class ProposalTest extends TestUtilities {
                 .givenCommands("../content/publish-content.json")
                 .givenCommandsByUser("viewer", "../sighting/claim-sighting.json")
                 .whenCommand("create-proposal.json")
-                .expectExceptionalResult(LinkedSightingErrors.alreadyExists)
-                .expectError((e) -> e.getMessage().equals(LinkedSightingErrors.alreadyExists.getMessage()));
+                .expectExceptionalResult(WeightedProposalErrors.alreadyExists)
+                .expectError((e) -> e.getMessage().equals(WeightedProposalErrors.alreadyExists.getMessage()));
     }
 
     @Nested
@@ -185,19 +185,19 @@ public class ProposalTest extends TestUtilities {
                     .expectNoErrors()
                     .expectResult(Objects::nonNull)
                     .andThen()
-                    .whenQuery(new GetLinkedSightingsByContentIdAndStatuses(new ContentId("1"), List.of(LinkedSightingStatus.CREATED)))
+                    .whenQuery(new GetLinkedSightingsByContentIdAndStatuses(new ContentId("1"), List.of(WeightedAssociationStatus.CREATED)))
                     .expectResult(hasSize(1))
                     .andThen()
                     .givenCommands("accept-proposal.json")
-                    .whenQuery(new GetLinkedSightingsByContentIdAndStatuses(new ContentId("1"), List.of(LinkedSightingStatus.CREATED)))
+                    .whenQuery(new GetLinkedSightingsByContentIdAndStatuses(new ContentId("1"), List.of(WeightedAssociationStatus.CREATED)))
                     .expectResult(List::isEmpty);
         }
 
         @Test
         void givenProposal_whenNonExistentProposalRejected_thenError() {
             ContentId contentId = new ContentId("1");
-            testFixture.whenCommand(new DeleteLinkedProposal(contentId, new LinkedSightingId(contentId, new SightingId("2"))))
-                    .expectError(LinkedSightingErrors.notFound);
+            testFixture.whenCommand(new DeleteLinkedProposal(contentId, new WeightedAssociationId(contentId, new SightingId("2"))))
+                    .expectError(WeightedProposalErrors.notFound);
         }
 
         @Test
@@ -238,7 +238,7 @@ public class ProposalTest extends TestUtilities {
 
         @Test
         void givenSighting_whenCreateProposal_thenContentShouldContainTheProposal() {
-            testFixture.whenQuery(new GetLinkedSightingsByContentIdAndStatuses(new ContentId("1"), List.of(LinkedSightingStatus.CREATED)))
+            testFixture.whenQuery(new GetLinkedSightingsByContentIdAndStatuses(new ContentId("1"), List.of(WeightedAssociationStatus.CREATED)))
                     .expectNoErrors()
                     .expectResult(Objects::nonNull)
                     .expectResult(hasSize(1));
@@ -247,7 +247,7 @@ public class ProposalTest extends TestUtilities {
         @Test
         void givenProposal_whenSameProposal_thenError() {
             testFixture.whenCommand("create-proposal.json")
-                    .expectError((e) -> e.getMessage().equals(LinkedSightingErrors.alreadyExists.getMessage()));
+                    .expectError((e) -> e.getMessage().equals(WeightedProposalErrors.alreadyExists.getMessage()));
         }
 
         @Test
@@ -257,7 +257,7 @@ public class ProposalTest extends TestUtilities {
                     .expectEvents("../sighting/delete-sighting.json")
                     .expectCommands(DeleteLinkedProposal.class)
                     .andThen()
-                    .whenQuery(new GetLinkedSightingsByContentIdAndStatuses(new ContentId("1"), List.of(LinkedSightingStatus.CREATED)))
+                    .whenQuery(new GetLinkedSightingsByContentIdAndStatuses(new ContentId("1"), List.of(WeightedAssociationStatus.CREATED)))
                     .expectNoErrors()
                     .expectResult(Objects::nonNull)
                     .expectResult(List::isEmpty);
@@ -275,7 +275,7 @@ public class ProposalTest extends TestUtilities {
                     .whenQuery(new GetContent(new ContentId("1")))
                     .expectNoErrors()
                     .expectResult(Objects::nonNull)
-                    .expectResult(content -> content.linkedSightings().isEmpty())
+                    .expectResult(content -> content.weightedAssociations().isEmpty())
                     .mapResult(Content::lastConfirmedSighting)
                     .expectResult(Objects::nonNull);
         }
@@ -287,7 +287,7 @@ public class ProposalTest extends TestUtilities {
                     .expectNoErrors()
                     .expectCommands(UpdateLastSeenPosition.class)
                     .andThen()
-                    .whenQuery(new GetLinkedSightingsByContentIdAndStatuses(new ContentId("1"), List.of(LinkedSightingStatus.ACCEPTED)))
+                    .whenQuery(new GetLinkedSightingsByContentIdAndStatuses(new ContentId("1"), List.of(WeightedAssociationStatus.ACCEPTED)))
                     .expectNoErrors()
                     .expectResult(Objects::nonNull)
                     .expectResult(hasSize(1));

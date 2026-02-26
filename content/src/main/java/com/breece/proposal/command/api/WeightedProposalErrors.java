@@ -3,7 +3,7 @@ package com.breece.proposal.command.api;
 import io.fluxzero.sdk.common.exception.FunctionalException;
 import io.fluxzero.sdk.tracking.handling.IllegalCommandException;
 
-public interface LinkedSightingErrors {
+public interface WeightedProposalErrors {
     FunctionalException
             alreadyExists = new IllegalCommandException("Linked sighting already exists"),
             notFound = new IllegalCommandException("Linked sighting not found"),

@@ -1,8 +1,8 @@
 package com.breece.proposal.command.api;
 
 import com.breece.content.api.model.ContentId;
-import com.breece.proposal.command.api.model.LinkedSightingId;
-import com.breece.proposal.command.api.model.LinkedSightingUpdateOwner;
+import com.breece.proposal.command.api.model.WeightedAssociationId;
+import com.breece.proposal.command.api.model.WeightedAssociationUpdateOwner;
 
-public record AcceptProposal(ContentId contentId, LinkedSightingId linkedSightingId) implements LinkedSightingUpdateOwner {
+public record AcceptProposal(ContentId contentId, WeightedAssociationId weightedAssociationId) implements WeightedAssociationUpdateOwner {
 }

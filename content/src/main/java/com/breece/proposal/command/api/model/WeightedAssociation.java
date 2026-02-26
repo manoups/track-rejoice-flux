@@ -7,5 +7,5 @@ import com.breece.sighting.api.model.SightingId;
 import io.fluxzero.sdk.modeling.EntityId;
 import jakarta.validation.constraints.NotNull;
 
-public record LinkedSighting(@EntityId LinkedSightingId linkedSightingId, @NotNull UserId finder, @NotNull SightingId sightingId, @NotNull SightingDetails sightingDetails) {
+public record WeightedAssociation(@EntityId WeightedAssociationId weightedAssociationId, @NotNull UserId finder, @NotNull SightingId sightingId, @NotNull SightingDetails sightingDetails) {
 }

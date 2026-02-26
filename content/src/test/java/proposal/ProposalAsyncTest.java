@@ -6,10 +6,10 @@ import com.breece.content.command.api.UpdateLastSeenPosition;
 import com.breece.coreapi.common.SightingDetails;
 import com.breece.proposal.command.api.DeleteLinkedProposal;
 import com.breece.proposal.command.api.GetLinkedSightingsByContentIdAndStatuses;
-import com.breece.proposal.command.api.model.LinkedSighting;
-import com.breece.proposal.command.api.model.LinkedSightingId;
+import com.breece.proposal.command.api.model.WeightedAssociation;
+import com.breece.proposal.command.api.model.WeightedAssociationId;
 import com.breece.proposal.command.api.model.LinkedSightingState;
-import com.breece.proposal.command.api.model.LinkedSightingStatus;
+import com.breece.proposal.command.api.model.WeightedAssociationStatus;
 import com.breece.sighting.api.model.SightingId;
 import com.breece.sighting.command.api.DeleteSighting;
 import io.fluxzero.sdk.test.TestFixture;
@@ -37,20 +37,20 @@ public class ProposalAsyncTest extends TestUtilities {
                 .givenCommands(new PublishContent(contentId, Duration.ofDays(10)))
                 .whenCommandByUser("viewer", new com.breece.proposal.command.api.ClaimSighting(contentId, sightingId, new SightingDetails(new BigDecimal("78.901"),
                         new BigDecimal("123.456")),
-                        new LinkedSightingId(contentId, sightingId)
+                        new WeightedAssociationId(contentId, sightingId)
                 ))
                 .expectOnlyCommands(UpdateLastSeenPosition.class, DeleteSighting.class, DeleteLinkedProposal.class, DeleteLinkedProposal.class)
                 .expectThat(fz -> {
                     List<LinkedSightingState> linkedSightingStates = fz.documentStore().search(LinkedSightingState.class).fetchAll();
                     assertThat(linkedSightingStates).isEmpty();
-                    List<LinkedSighting> linkedSightings = fz.documentStore().search(LinkedSighting.class).fetchAll();
-                    assertThat(linkedSightings).isEmpty();
+                    List<WeightedAssociation> weightedAssociations = fz.documentStore().search(WeightedAssociation.class).fetchAll();
+                    assertThat(weightedAssociations).isEmpty();
                 })
                 .andThen()
-                .whenQuery(new GetLinkedSightingsByContentIdAndStatuses(new ContentId("1"), List.of(LinkedSightingStatus.CREATED)))
+                .whenQuery(new GetLinkedSightingsByContentIdAndStatuses(new ContentId("1"), List.of(WeightedAssociationStatus.CREATED)))
                 .expectResult(List::isEmpty)
                 .andThen()
-                .whenQuery(new GetLinkedSightingsByContentIdAndStatuses(contentId, List.of(LinkedSightingStatus.ACCEPTED)))
+                .whenQuery(new GetLinkedSightingsByContentIdAndStatuses(contentId, List.of(WeightedAssociationStatus.ACCEPTED)))
                 .expectResult(List::isEmpty);
     }
 
@@ -65,7 +65,7 @@ public class ProposalAsyncTest extends TestUtilities {
                 .givenCommands(new PublishContent(contentId, Duration.ofDays(10)))
                 .whenCommandByUser("viewer", new com.breece.proposal.command.api.ClaimSighting(contentId, sightingId, new SightingDetails(new BigDecimal("78.901"),
                         new BigDecimal("123.456")),
-                        new LinkedSightingId(contentId, sightingId)
+                        new WeightedAssociationId(contentId, sightingId)
                 ))
                 .expectOnlyCommands(UpdateLastSeenPosition.class)
                 .expectThat(fz -> {
@@ -73,10 +73,10 @@ public class ProposalAsyncTest extends TestUtilities {
                     assertThat(linkedSightingStates).hasSize(2);
                 })
                 .andThen()
-                .whenQuery(new GetLinkedSightingsByContentIdAndStatuses(new ContentId("1"), List.of(LinkedSightingStatus.CREATED)))
+                .whenQuery(new GetLinkedSightingsByContentIdAndStatuses(new ContentId("1"), List.of(WeightedAssociationStatus.CREATED)))
                 .expectResult(hasSize(1))
                 .andThen()
-                .whenQuery(new GetLinkedSightingsByContentIdAndStatuses(contentId, List.of(LinkedSightingStatus.ACCEPTED)))
+                .whenQuery(new GetLinkedSightingsByContentIdAndStatuses(contentId, List.of(WeightedAssociationStatus.ACCEPTED)))
                 .expectResult(hasSize(1));
     }
 }
