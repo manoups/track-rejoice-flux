@@ -6,10 +6,10 @@ import com.breece.content.command.api.UpdateLastSeenPosition;
 import com.breece.coreapi.common.SightingDetails;
 import com.breece.coreapi.facets.Pagination;
 import com.breece.proposal.command.api.AcceptProposal;
-import com.breece.proposal.command.api.CreateProposal;
+import com.breece.proposal.command.api.CreateWeightedAssociation;
 import com.breece.proposal.command.api.DeleteLinkedProposal;
 import com.breece.proposal.command.api.model.WeightedAssociationId;
-import com.breece.proposal.command.api.model.WeightedAssociationIdState;
+import com.breece.proposal.command.api.model.WeightedAssociationState;
 import com.breece.sighting.api.SightingErrors;
 import com.breece.sighting.api.model.SightingId;
 import com.breece.sighting.command.api.DeleteSighting;
@@ -27,7 +27,7 @@ import java.util.List;
 
 public class SightingTest extends TestUtilities {
 
-    final TestFixture testFixture = TestFixture.create(WeightedAssociationIdState.class)
+    final TestFixture testFixture = TestFixture.create(WeightedAssociationState.class)
             .givenCommands(createUserFromProfile(viewer), createUserFromProfile(user2), createUserFromProfile(Alice));
 
 
@@ -43,7 +43,7 @@ public class SightingTest extends TestUtilities {
         void claimSightingForContentOfOtherUser() {
             testFixture.whenCommandByUser("Alice", "claim-sighting.json")
                     .expectNoCommands()
-                    .expectOnlyEvents(CreateProposal.class)
+                    .expectOnlyEvents(CreateWeightedAssociation.class)
                     .expectNoErrors();
         }
 
@@ -120,7 +120,7 @@ public class SightingTest extends TestUtilities {
         void givenSightingClaimedWithRemovalEnabled_whenGetSightings_thenNoResults() {
             testFixture.whenCommandByUser("viewer", "claim-sighting-removal.json")
                     .expectNoErrors()
-                    .expectOnlyEvents(DeleteSighting.class, com.breece.proposal.command.api.CreateProposal.class, UpdateLastSeenPosition.class, DeleteLinkedProposal.class, AcceptProposal.class)
+                    .expectOnlyEvents(DeleteSighting.class, CreateWeightedAssociation.class, UpdateLastSeenPosition.class, DeleteLinkedProposal.class, AcceptProposal.class)
                     .andThen()
                     .whenQuery(new GetSightings(Collections.emptyList(),null, new Pagination(0,10)))
                     .expectResult(List::isEmpty);

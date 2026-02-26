@@ -5,7 +5,7 @@ import com.breece.content.api.model.ContentId;
 import com.breece.content.command.api.ContentInteract;
 import com.breece.coreapi.authentication.Sender;
 import com.breece.coreapi.common.SightingDetails;
-import com.breece.proposal.command.api.model.LinkedSightingCommand;
+import com.breece.proposal.command.api.model.WeightedAssociationCommand;
 import com.breece.proposal.command.api.model.WeightedAssociationId;
 import com.breece.sighting.api.model.SightingId;
 import io.fluxzero.sdk.persisting.eventsourcing.InterceptApply;
@@ -14,10 +14,10 @@ import jakarta.validation.constraints.NotNull;
 public record ClaimSighting(@NotNull ContentId contentId, @NotNull SightingId sightingId, @NotNull SightingDetails sightingDetails, @NotNull WeightedAssociationId weightedAssociationId) implements ContentInteract {
 
     @InterceptApply
-    LinkedSightingCommand interceptApply(Content content, Sender sender) {
+    WeightedAssociationCommand interceptApply(Content content, Sender sender) {
         if (content.weightedAssociations().stream().anyMatch(ls -> ls.weightedAssociationId().equals(weightedAssociationId))) {
             return new AcceptProposal(contentId, weightedAssociationId);
         }
-        return new CreateProposal(contentId, sightingId, weightedAssociationId, sightingDetails);
+        return new CreateWeightedAssociation(contentId, sightingId, weightedAssociationId, sightingDetails);
     }
 }

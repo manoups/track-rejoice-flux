@@ -1,5 +1,6 @@
 package com.breece.content.api.model;
 
+import com.breece.coreapi.common.SightingEnum;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import io.fluxzero.common.search.Facet;
@@ -13,6 +14,6 @@ import lombok.Getter;
 @Getter
 public abstract class ExtraDetails {
     @Facet
-    String type;
+    SightingEnum subtype;
 
 }

@@ -4,10 +4,7 @@ import com.breece.content.api.model.Content;
 import com.breece.content.api.model.ContentId;
 import com.breece.content.command.api.UpdateLastSeenPosition;
 import com.breece.coreapi.common.SightingDetails;
-import com.breece.proposal.command.api.AcceptProposal;
-import com.breece.proposal.command.api.CreateProposal;
-import com.breece.proposal.command.api.DeleteLinkedProposal;
-import com.breece.proposal.command.api.RejectProposal;
+import com.breece.proposal.command.api.*;
 import com.breece.sighting.api.model.Sighting;
 import com.breece.sighting.api.model.SightingId;
 import com.breece.sighting.command.api.DeleteSighting;
@@ -28,18 +25,27 @@ import java.util.Objects;
 @Stateful(commitInBatch = true)
 @Consumer(name = "weighted-association-state-consumer", ignoreSegment = true)
 @Slf4j
-public record WeightedAssociationIdState(@EntityId WeightedAssociationId weightedAssociationId, ContentId contentId, SightingId sightingId,
-                                         SightingDetails sightingDetails, @With WeightedAssociationStatus status) {
+public record WeightedAssociationState(@EntityId WeightedAssociationId weightedAssociationId, ContentId contentId, SightingId sightingId,
+                                       SightingDetails sightingDetails, @With WeightedAssociationStatus status) {
     @Association("weightedAssociationId")
     @HandleEvent
-    static WeightedAssociationIdState on(CreateProposal event) {
-        return new WeightedAssociationIdState(event.weightedAssociationId(), event.contentId(), event.sightingId(), event.sightingDetails(), WeightedAssociationStatus.CREATED);
+    static WeightedAssociationState on(CreateWeightedAssociation event) {
+        return new WeightedAssociationState(event.weightedAssociationId(), event.contentId(), event.sightingId(), event.sightingDetails(), WeightedAssociationStatus.CREATED);
     }
 
     @Association("weightedAssociationId")
     @HandleEvent
-    WeightedAssociationIdState on(AcceptProposal event, Content content) {
+    WeightedAssociationState on(CreateProposal event) {
         if (WeightedAssociationStatus.CREATED != status()) {
+            return this;
+        }
+        return withStatus(WeightedAssociationStatus.LINKED);
+    }
+
+    @Association("weightedAssociationId")
+    @HandleEvent
+    WeightedAssociationState on(AcceptProposal event, Content content) {
+        if (WeightedAssociationStatus.LINKED != status()) {
             return this;
         }
         DeleteSighting deleteSighting = Fluxzero.loadAggregate(sightingId())
@@ -61,8 +67,8 @@ public record WeightedAssociationIdState(@EntityId WeightedAssociationId weighte
 
     @Association("weightedAssociationId")
     @HandleEvent
-    WeightedAssociationIdState on(RejectProposal event) {
-        if (WeightedAssociationStatus.CREATED != status()) {
+    WeightedAssociationState on(RejectProposal event) {
+        if (WeightedAssociationStatus.LINKED != status()) {
             return this;
         }
         return withStatus(WeightedAssociationStatus.REJECTED);
@@ -70,14 +76,14 @@ public record WeightedAssociationIdState(@EntityId WeightedAssociationId weighte
 
     @Association("sightingId")
     @HandleEvent
-    WeightedAssociationIdState on(DeleteSighting event) {
+    WeightedAssociationState on(DeleteSighting event) {
         Fluxzero.sendAndForgetCommand(new DeleteLinkedProposal(contentId, weightedAssociationId()));
         return this;
     }
 
     @Association("weightedAssociationId")
     @HandleEvent
-    WeightedAssociationIdState on(DeleteLinkedProposal event) {
+    WeightedAssociationState on(DeleteLinkedProposal event) {
         return null;
     }
 }

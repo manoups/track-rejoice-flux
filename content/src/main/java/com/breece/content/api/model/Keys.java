@@ -15,11 +15,8 @@ public class Keys extends ImmobileTarget {
     @NotBlank
     String description;
     @NotNull
-    @NonNull
-    SightingEnum subtype;
 
     public Keys(@NotBlank String description, @NonNull SightingEnum subtype) {
-        this.type = "keys";
         this.description = description;
         this.subtype = subtype;
     }

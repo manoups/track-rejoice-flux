@@ -1,0 +1,30 @@
+package com.breece.proposal.command.api.model;
+
+import com.breece.content.api.model.Content;
+import com.breece.content.command.api.PublishContent;
+import com.breece.coreapi.facets.FacetFilter;
+import com.breece.coreapi.facets.Pagination;
+import com.breece.proposal.command.api.CreateWeightedAssociation;
+import com.breece.sighting.query.api.GetSightings;
+import com.breece.sighting.query.api.SightingDocument;
+import io.fluxzero.sdk.Fluxzero;
+import io.fluxzero.sdk.modeling.Entity;
+import io.fluxzero.sdk.tracking.handling.HandleEvent;
+import org.springframework.stereotype.Component;
+
+import java.util.List;
+
+@Component
+public class WeightedAssociationHandler {
+    @HandleEvent
+    void on(PublishContent event) {
+        Fluxzero.loadAggregate(event.contentId()).mapIfPresent(Entity::get).ifPresent(
+                content ->
+                {
+                    List<SightingDocument> sightingDocuments = Fluxzero.queryAndWait(new GetSightings(List.of(FacetFilter.builder().facetName("subtype").values(List.of(content.details().getSubtype())).build()), "", new Pagination(0, 1_000_000)));
+                    for (SightingDocument sightingDocument : sightingDocuments) {
+                        Fluxzero.sendAndForgetCommand(new CreateWeightedAssociation(content.contentId(), sightingDocument.sightingId(), new WeightedAssociationId(content.contentId(), sightingDocument.sightingId()), sightingDocument.details()));
+                    }
+                });
+    }
+}

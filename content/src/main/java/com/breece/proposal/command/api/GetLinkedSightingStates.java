@@ -1,7 +1,7 @@
 package com.breece.proposal.command.api;
 
 import com.breece.proposal.command.api.model.WeightedAssociationId;
-import com.breece.proposal.command.api.model.WeightedAssociationIdState;
+import com.breece.proposal.command.api.model.WeightedAssociationState;
 import com.breece.proposal.command.api.model.WeightedAssociationStatus;
 import io.fluxzero.common.api.search.Constraint;
 import io.fluxzero.sdk.Fluxzero;
@@ -14,10 +14,10 @@ import java.util.List;
 
 import static io.fluxzero.common.api.search.constraints.MatchConstraint.match;
 
-public record GetLinkedSightingStates(@NotNull @NotEmpty List<WeightedAssociationId> ids, @NotNull @NotEmpty List<WeightedAssociationStatus> statuses) implements Request<List<WeightedAssociationIdState>> {
+public record GetLinkedSightingStates(@NotNull @NotEmpty List<WeightedAssociationId> ids, @NotNull @NotEmpty List<WeightedAssociationStatus> statuses) implements Request<List<WeightedAssociationState>> {
     @HandleQuery
-    List<WeightedAssociationIdState> find() {
-        return Fluxzero.search(WeightedAssociationIdState.class)
+    List<WeightedAssociationState> find() {
+        return Fluxzero.search(WeightedAssociationState.class)
                 .any(ids.stream().map(v -> match(v, "weightedAssociationId")).toArray(Constraint[]::new))
                 .any(statuses.stream().map(v -> match(v, "status")).toArray(Constraint[]::new))
                 .fetchAll();

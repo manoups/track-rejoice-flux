@@ -3,8 +3,9 @@ package sighting;
 import com.breece.content.api.model.ContentId;
 import com.breece.content.command.api.UpdateLastSeenPosition;
 import com.breece.proposal.command.api.AcceptProposal;
+import com.breece.proposal.command.api.CreateWeightedAssociation;
 import com.breece.proposal.command.api.GetLinkedSightingsByContentIdAndStatuses;
-import com.breece.proposal.command.api.model.WeightedAssociationIdState;
+import com.breece.proposal.command.api.model.WeightedAssociationState;
 import com.breece.proposal.command.api.model.WeightedAssociationStatus;
 import io.fluxzero.sdk.test.TestFixture;
 import org.junit.jupiter.api.Test;
@@ -13,7 +14,7 @@ import util.TestUtilities;
 import java.util.List;
 
 public class SightingAsyncTest extends TestUtilities {
-    final TestFixture testFixture = TestFixture.createAsync(WeightedAssociationIdState.class)
+    final TestFixture testFixture = TestFixture.createAsync(WeightedAssociationState.class)
             .givenCommands(createUserFromProfile(viewer), createUserFromProfile(user2), createUserFromProfile(Alice));
 
 
@@ -34,7 +35,7 @@ public class SightingAsyncTest extends TestUtilities {
                 .givenCommands("../content/publish-content.json")
                 .whenCommandByUser("viewer", "claim-sighting.json")
                 .expectNoErrors()
-                .expectOnlyEvents(com.breece.proposal.command.api.CreateProposal.class, AcceptProposal.class, UpdateLastSeenPosition.class)
+                .expectOnlyEvents(CreateWeightedAssociation.class, AcceptProposal.class, UpdateLastSeenPosition.class)
                 .expectCommands(UpdateLastSeenPosition.class);
 //                .andThen()
 //                .whenQuery(new GetLinkedSightingsBySightingIdAndStatuses(new SightingId("1"), List.of(LinkedSightingStatus.ACCEPTED)))

@@ -10,14 +10,16 @@ import com.breece.coreapi.common.SightingDetails;
 import com.breece.coreapi.common.SightingEnum;
 import com.breece.coreapi.util.GeometryUtil;
 import com.breece.proposal.command.api.*;
+import com.breece.proposal.command.api.model.WeightedAssociationHandler;
 import com.breece.proposal.command.api.model.WeightedAssociationId;
-import com.breece.proposal.command.api.model.WeightedAssociationIdState;
+import com.breece.proposal.command.api.model.WeightedAssociationState;
 import com.breece.proposal.command.api.model.WeightedAssociationStatus;
 import com.breece.sighting.api.SightingErrors;
 import com.breece.sighting.api.model.SightingId;
 import com.breece.sighting.command.api.CreateSighting;
 import io.fluxzero.sdk.test.TestFixture;
 import io.fluxzero.sdk.tracking.handling.IllegalCommandException;
+import io.fluxzero.sdk.tracking.handling.authentication.UnauthorizedException;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
@@ -33,7 +35,7 @@ import static org.hamcrest.Matchers.hasSize;
 
 @Slf4j
 public class ProposalTest extends TestUtilities {
-    final TestFixture testFixture = TestFixture.create(WeightedAssociationIdState.class).givenCommands(createUserFromProfile(viewer), createUserFromProfile(user2), createUserFromProfile(Alice));
+    final TestFixture testFixture = TestFixture.create(new WeightedAssociationHandler(), WeightedAssociationState.class).givenCommands(createUserFromProfile(viewer), createUserFromProfile(user2), createUserFromProfile(Alice));
 
     @Test
     void givenNoContent_whenProposalCreated_thenError() {
@@ -55,10 +57,9 @@ public class ProposalTest extends TestUtilities {
     void givenIncorrectLinkedSightingId_whenCreateProposal_thenError() {
         testFixture.givenCommandsByUser("viewer", "../content/create-content.json", "../sighting/create-sighting.json")
                 .givenCommands("../content/publish-content.json")
-                .whenCommandByUser("viewer", new CreateProposal(new ContentId("1"), new SightingId("1"), new WeightedAssociationId(new ContentId("3"), new SightingId("2")),
+                .whenCommandByUser("viewer", new CreateWeightedAssociation(new ContentId("1"), new SightingId("1"), new WeightedAssociationId(new ContentId("3"), new SightingId("2")),
                         new SightingDetails(BigDecimal.ZERO, BigDecimal.ZERO)))
-                .expectError(WeightedProposalErrors.malformedKey)
-                .expectExceptionalResult((e) -> e.getMessage().equals(WeightedProposalErrors.malformedKey.getMessage()));
+                .expectError(UnauthorizedException.class);
     }
 
     @Test
@@ -129,6 +130,13 @@ public class ProposalTest extends TestUtilities {
                 .givenCommandsByUser("user2", "../sighting/create-sighting.json")
                 .whenCommandByUser("Alice", "create-proposal.json")
                 .expectError(SightingErrors.notOwner);
+    }
+
+    @Test
+    void whenPublishContent_then() {
+        testFixture.givenCommandsByUser("viewer", "../sighting/create-sighting.json", "../content/create-content.json")
+                .whenCommand("../content/publish-content.json")
+                .expectOnlyCommands(CreateWeightedAssociation.class);
     }
 
     @Test

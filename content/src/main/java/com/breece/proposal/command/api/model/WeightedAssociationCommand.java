@@ -2,7 +2,7 @@ package com.breece.proposal.command.api.model;
 
 import jakarta.validation.constraints.NotNull;
 
-public interface LinkedSightingCommand {
+public interface WeightedAssociationCommand {
     @NotNull
     WeightedAssociationId weightedAssociationId();
 }

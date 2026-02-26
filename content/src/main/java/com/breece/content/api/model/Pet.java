@@ -11,8 +11,6 @@ import lombok.*;
 public class Pet extends MobileTarget {
     @NotBlank
     String name;
-    @NonNull
-    SightingEnum subtype;
     @NotBlank
     String breed;
     @NonNull
@@ -26,7 +24,6 @@ public class Pet extends MobileTarget {
     String image;
 
     public Pet(String name, String breed, @NonNull GenderEnum gender, @NonNull SightingEnum subtype) {
-        this.type = "pet";
         this.name = name;
         this.breed = breed;
         this.gender = gender;
