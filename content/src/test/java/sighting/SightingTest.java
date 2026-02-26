@@ -9,7 +9,7 @@ import com.breece.proposal.command.api.AcceptProposal;
 import com.breece.proposal.command.api.CreateProposal;
 import com.breece.proposal.command.api.DeleteLinkedProposal;
 import com.breece.proposal.command.api.model.WeightedAssociationId;
-import com.breece.proposal.command.api.model.LinkedSightingState;
+import com.breece.proposal.command.api.model.WeightedAssociationIdState;
 import com.breece.sighting.api.SightingErrors;
 import com.breece.sighting.api.model.SightingId;
 import com.breece.sighting.command.api.DeleteSighting;
@@ -27,7 +27,7 @@ import java.util.List;
 
 public class SightingTest extends TestUtilities {
 
-    final TestFixture testFixture = TestFixture.create(LinkedSightingState.class)
+    final TestFixture testFixture = TestFixture.create(WeightedAssociationIdState.class)
             .givenCommands(createUserFromProfile(viewer), createUserFromProfile(user2), createUserFromProfile(Alice));
 
 

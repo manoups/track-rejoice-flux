@@ -8,7 +8,7 @@ import com.breece.proposal.command.api.DeleteLinkedProposal;
 import com.breece.proposal.command.api.GetLinkedSightingsByContentIdAndStatuses;
 import com.breece.proposal.command.api.model.WeightedAssociation;
 import com.breece.proposal.command.api.model.WeightedAssociationId;
-import com.breece.proposal.command.api.model.LinkedSightingState;
+import com.breece.proposal.command.api.model.WeightedAssociationIdState;
 import com.breece.proposal.command.api.model.WeightedAssociationStatus;
 import com.breece.sighting.api.model.SightingId;
 import com.breece.sighting.command.api.DeleteSighting;
@@ -24,7 +24,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasSize;
 
 public class ProposalAsyncTest extends TestUtilities {
-    final TestFixture testFixture = TestFixture.createAsync(LinkedSightingState.class).givenCommands(createUserFromProfile(viewer), createUserFromProfile(user2), createUserFromProfile(Alice));
+    final TestFixture testFixture = TestFixture.createAsync(WeightedAssociationIdState.class).givenCommands(createUserFromProfile(viewer), createUserFromProfile(user2), createUserFromProfile(Alice));
 
     @Test
     void givenCreateProposalForRemovableSightingContent2_whenClaimSightingForContent1_thenStateOfContent2ShouldBeDeleted() {
@@ -41,8 +41,8 @@ public class ProposalAsyncTest extends TestUtilities {
                 ))
                 .expectOnlyCommands(UpdateLastSeenPosition.class, DeleteSighting.class, DeleteLinkedProposal.class, DeleteLinkedProposal.class)
                 .expectThat(fz -> {
-                    List<LinkedSightingState> linkedSightingStates = fz.documentStore().search(LinkedSightingState.class).fetchAll();
-                    assertThat(linkedSightingStates).isEmpty();
+                    List<WeightedAssociationIdState> weightedAssociationIdStates = fz.documentStore().search(WeightedAssociationIdState.class).fetchAll();
+                    assertThat(weightedAssociationIdStates).isEmpty();
                     List<WeightedAssociation> weightedAssociations = fz.documentStore().search(WeightedAssociation.class).fetchAll();
                     assertThat(weightedAssociations).isEmpty();
                 })
@@ -69,8 +69,8 @@ public class ProposalAsyncTest extends TestUtilities {
                 ))
                 .expectOnlyCommands(UpdateLastSeenPosition.class)
                 .expectThat(fz -> {
-                    List<LinkedSightingState> linkedSightingStates = fz.documentStore().search(LinkedSightingState.class).fetchAll();
-                    assertThat(linkedSightingStates).hasSize(2);
+                    List<WeightedAssociationIdState> weightedAssociationIdStates = fz.documentStore().search(WeightedAssociationIdState.class).fetchAll();
+                    assertThat(weightedAssociationIdStates).hasSize(2);
                 })
                 .andThen()
                 .whenQuery(new GetLinkedSightingsByContentIdAndStatuses(new ContentId("1"), List.of(WeightedAssociationStatus.CREATED)))

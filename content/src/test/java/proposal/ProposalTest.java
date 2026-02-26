@@ -11,7 +11,7 @@ import com.breece.coreapi.common.SightingEnum;
 import com.breece.coreapi.util.GeometryUtil;
 import com.breece.proposal.command.api.*;
 import com.breece.proposal.command.api.model.WeightedAssociationId;
-import com.breece.proposal.command.api.model.LinkedSightingState;
+import com.breece.proposal.command.api.model.WeightedAssociationIdState;
 import com.breece.proposal.command.api.model.WeightedAssociationStatus;
 import com.breece.sighting.api.SightingErrors;
 import com.breece.sighting.api.model.SightingId;
@@ -33,7 +33,7 @@ import static org.hamcrest.Matchers.hasSize;
 
 @Slf4j
 public class ProposalTest extends TestUtilities {
-    final TestFixture testFixture = TestFixture.create(LinkedSightingState.class).givenCommands(createUserFromProfile(viewer), createUserFromProfile(user2), createUserFromProfile(Alice));
+    final TestFixture testFixture = TestFixture.create(WeightedAssociationIdState.class).givenCommands(createUserFromProfile(viewer), createUserFromProfile(user2), createUserFromProfile(Alice));
 
     @Test
     void givenNoContent_whenProposalCreated_thenError() {

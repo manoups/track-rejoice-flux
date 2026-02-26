@@ -5,7 +5,7 @@ import com.breece.content.api.model.ContentId;
 import com.breece.coreapi.authentication.Sender;
 import com.breece.proposal.command.api.model.WeightedAssociation;
 import com.breece.proposal.command.api.model.WeightedAssociationId;
-import com.breece.proposal.command.api.model.LinkedSightingState;
+import com.breece.proposal.command.api.model.WeightedAssociationIdState;
 import com.breece.proposal.command.api.model.WeightedAssociationStatus;
 import io.fluxzero.sdk.Fluxzero;
 import io.fluxzero.sdk.tracking.handling.HandleQuery;
@@ -31,8 +31,8 @@ public record GetLinkedSightingsByContentIdAndStatuses(@NotNull ContentId conten
         if (weightedAssociationIds.isEmpty() || weightedAssociationIds.get().isEmpty()) {
             return Collections.emptyList();
         }
-        List<LinkedSightingState> linkedSightingStates = Fluxzero.queryAndWait(new GetLinkedSightingStates(weightedAssociationIds.get(), statuses));
-        return content.get().weightedAssociations().stream().filter(l -> linkedSightingStates.stream().anyMatch(s -> s.weightedAssociationId().equals(l.weightedAssociationId()))).toList();
+        List<WeightedAssociationIdState> weightedAssociationIdStates = Fluxzero.queryAndWait(new GetLinkedSightingStates(weightedAssociationIds.get(), statuses));
+        return content.get().weightedAssociations().stream().filter(l -> weightedAssociationIdStates.stream().anyMatch(s -> s.weightedAssociationId().equals(l.weightedAssociationId()))).toList();
     }
 
 }
