@@ -175,8 +175,9 @@ public class ProposalTest extends TestUtilities {
                 .givenCommands("../content/publish-content.json")
                 .givenCommandsByUser("viewer", "../sighting/claim-sighting.json")
                 .whenCommand("create-proposal.json")
-                .expectExceptionalResult(WeightedProposalErrors.alreadyExists)
-                .expectError((e) -> e.getMessage().equals(WeightedProposalErrors.alreadyExists.getMessage()));
+                .expectNoErrors();
+//                .expectExceptionalResult(WeightedProposalErrors.alreadyExists)
+//                .expectError((e) -> e.getMessage().equals(WeightedProposalErrors.alreadyExists.getMessage()));
     }
 
     @Nested

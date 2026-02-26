@@ -22,7 +22,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.util.Objects;
 
-@Stateful(commitInBatch = true)
+@Stateful
 @Consumer(name = "weighted-association-state-consumer", ignoreSegment = true)
 @Slf4j
 public record WeightedAssociationState(@EntityId WeightedAssociationId weightedAssociationId, ContentId contentId, SightingId sightingId,

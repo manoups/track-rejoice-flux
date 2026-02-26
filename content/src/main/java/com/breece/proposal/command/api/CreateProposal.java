@@ -4,10 +4,8 @@ import com.breece.content.api.model.Content;
 import com.breece.content.api.model.ContentId;
 import com.breece.content.command.api.ContentCommand;
 import com.breece.coreapi.authentication.Sender;
-import com.breece.proposal.command.api.model.WeightedAssociation;
 import com.breece.proposal.command.api.model.WeightedAssociationId;
 import com.breece.proposal.command.api.model.WeightedAssociationUpdate;
-import io.fluxzero.sdk.modeling.AssertLegal;
 import io.fluxzero.sdk.persisting.eventsourcing.InterceptApply;
 
 import java.util.List;

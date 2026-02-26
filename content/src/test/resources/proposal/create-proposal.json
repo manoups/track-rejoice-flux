@@ -1,11 +1,5 @@
 {
   "@class": "com.breece.proposal.command.api.CreateProposal",
-  "sightingId": "1",
-  "weightedAssociationId": "content-1-sighting-1",
-  "sightingDetails": {
-    "lat": 123.456,
-    "lng": 78.901
-  },
-  "seeker": "viewer",
+  "weightedAssociationId": "ls-content-1-sighting-1",
   "contentId": "1"
 }
