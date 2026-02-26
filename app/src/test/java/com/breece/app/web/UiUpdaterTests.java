@@ -92,8 +92,7 @@ public class UiUpdaterTests {
     }
 
     String createAuthorizationHeader(String user) {
-        return testFixture.getFluxzero().apply(
-                fc -> AuthenticationUtils.createAuthorizationHeader(new UserId(user)));
+        return testFixture.getFluxzero().apply(_ -> AuthenticationUtils.createAuthorizationHeader(new UserId(user)));
     }
 
     static WebRequest openSocket() {
