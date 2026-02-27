@@ -35,7 +35,7 @@ public class WeightedAssociationHandler {
         Fluxzero.loadAggregate(event.sightingId()).mapIfPresent(Entity::get).ifPresent(
                 sighting ->
                 {
-                    List<ContentDocument> contentDocuments = Fluxzero.queryAndWait(new GetContents(List.of(FacetFilter.builder().facetName("subtype").values(List.of(sighting.subtype())).build()), "", new Pagination(0, 1_000_000)));
+                    List<ContentDocument> contentDocuments = Fluxzero.queryAndWait(new GetContents(List.of(FacetFilter.builder().facetName("details/subtype").values(List.of(sighting.subtype())).build()), "", new Pagination(0, 1_000_000)));
                     for (ContentDocument contentDocument : contentDocuments) {
                         Fluxzero.sendAndForgetCommand(new CreateWeightedAssociation(contentDocument.contentId(), event.sightingId(), new WeightedAssociationId(contentDocument.contentId(), event.sightingId()), sighting.details()));
                     }
