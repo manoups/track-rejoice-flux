@@ -5,7 +5,6 @@ import com.breece.content.command.api.PublishContent;
 import com.breece.content.command.api.UpdateLastSeenPosition;
 import com.breece.coreapi.facets.Pagination;
 import com.breece.proposal.command.api.*;
-import com.breece.proposal.command.api.model.WeightedAssociationHandler;
 import com.breece.proposal.command.api.model.WeightedAssociationId;
 import com.breece.proposal.command.api.model.WeightedAssociationState;
 import com.breece.sighting.api.SightingErrors;
@@ -25,7 +24,7 @@ import java.util.List;
 
 public class SightingTest extends TestUtilities {
 
-    final TestFixture testFixture = TestFixture.create(WeightedAssociationState.class, new WeightedAssociationHandler())
+    final TestFixture testFixture = TestFixture.create(WeightedAssociationState.class)
             .givenCommands(createUserFromProfile(viewer), createUserFromProfile(user2), createUserFromProfile(Alice));
 
 

@@ -13,7 +13,6 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 
 import java.time.Duration;
-import java.util.List;
 
 
 public record CreateContent(@NotNull ContentId contentId, @NotNull SightingDetails sightingDetails,
@@ -29,6 +28,6 @@ public record CreateContent(@NotNull ContentId contentId, @NotNull SightingDetai
 
     @Apply
     Content create(Sender sender) {
-        return new Content(contentId, sightingDetails, details, sender.userId(), false, Duration.ofDays(90), List.of());
+        return new Content(contentId, sightingDetails, details, sender.userId(), false, Duration.ofDays(90));
     }
 }

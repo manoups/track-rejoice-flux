@@ -10,8 +10,10 @@ import com.breece.content.query.api.GetSightingHistoryForContent;
 import com.breece.coreapi.common.SightingDetails;
 import com.breece.coreapi.common.SightingEnum;
 import com.breece.coreapi.util.GeometryUtil;
-import com.breece.proposal.command.api.*;
-import com.breece.proposal.command.api.model.WeightedAssociationHandler;
+import com.breece.proposal.command.api.AcceptProposal;
+import com.breece.proposal.command.api.DeleteLinkedProposal;
+import com.breece.proposal.command.api.GetLinkedSightingsByContentIdAndStatuses;
+import com.breece.proposal.command.api.WeightedAssociationErrors;
 import com.breece.proposal.command.api.model.WeightedAssociationId;
 import com.breece.proposal.command.api.model.WeightedAssociationState;
 import com.breece.proposal.command.api.model.WeightedAssociationStatus;
@@ -20,7 +22,6 @@ import com.breece.sighting.api.model.SightingId;
 import com.breece.sighting.command.api.CreateSighting;
 import io.fluxzero.sdk.test.TestFixture;
 import io.fluxzero.sdk.tracking.handling.IllegalCommandException;
-import io.fluxzero.sdk.tracking.handling.authentication.UnauthorizedException;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
@@ -36,7 +37,7 @@ import static org.hamcrest.Matchers.hasSize;
 
 @Slf4j
 public class ProposalTest extends TestUtilities {
-    final TestFixture testFixture = TestFixture.create(new WeightedAssociationHandler(), WeightedAssociationState.class, ContentState.class).givenCommands(createUserFromProfile(viewer), createUserFromProfile(user2), createUserFromProfile(Alice));
+    final TestFixture testFixture = TestFixture.create(WeightedAssociationState.class, ContentState.class).givenCommands(createUserFromProfile(viewer), createUserFromProfile(user2), createUserFromProfile(Alice));
 
     @Test
     void givenNoContent_whenProposalCreated_thenError() {
@@ -54,14 +55,14 @@ public class ProposalTest extends TestUtilities {
                 .expectEvents("create-proposal.json");
     }
 
-    @Test
+   /* @Test
     void givenIncorrectLinkedSightingId_whenCreateProposal_thenError() {
         testFixture.givenCommandsByUser("viewer", "../content/create-content.json", "../sighting/create-sighting.json")
                 .givenCommands("../content/publish-content.json")
                 .whenCommandByUser("viewer", new CreateWeightedAssociation(new ContentId("1"), new WeightedAssociationId(new ContentId("3"), new SightingId("2")), new SightingId("1"),
                         new SightingDetails(BigDecimal.ZERO, BigDecimal.ZERO)))
                 .expectError(UnauthorizedException.class);
-    }
+    }*/
 
     @Test
     void confirmCoords() {
@@ -133,12 +134,12 @@ public class ProposalTest extends TestUtilities {
                 .expectError(SightingErrors.notOwner);
     }
 
-    @Test
+    /*@Test
     void whenPublishContent_then() {
         testFixture.givenCommandsByUser("viewer", "../sighting/create-sighting.json", "../content/create-content.json")
                 .whenCommand("../content/publish-content.json")
                 .expectOnlyCommands(CreateWeightedAssociation.class);
-    }
+    }*/
 
     @Test
     void givenContentOfUserA_whenUserBRemovesProposal_thenError() {
@@ -177,8 +178,6 @@ public class ProposalTest extends TestUtilities {
                 .givenCommandsByUser("viewer", "../sighting/claim-sighting.json")
                 .whenCommand("create-proposal.json")
                 .expectNoErrors();
-//                .expectExceptionalResult(WeightedProposalErrors.alreadyExists)
-//                .expectError((e) -> e.getMessage().equals(WeightedProposalErrors.alreadyExists.getMessage()));
     }
 
     @Nested
@@ -256,8 +255,24 @@ public class ProposalTest extends TestUtilities {
 
         @Test
         void givenProposal_whenSameProposal_thenSilentlyAccept() {
-            testFixture.whenCommand("create-proposal.json")
-                    .expectNoEvents()
+            testFixture.whenCommandByUser("Alice", "create-proposal.json")
+                    .expectNoErrors()
+                    .expectNoCommands();
+        }
+
+        @Test
+        void givenProposal_whenAcceptedProposal_thenCommands() {
+            testFixture.whenCommandByUser("viewer", "accept-proposal.json")
+                    .expectNoErrors()
+                    .expectOnlyEvents(AcceptProposal.class, UpdateLastSeenPosition.class)
+                    .expectOnlyCommands(UpdateLastSeenPosition.class);
+        }
+
+        @Test
+        void givenAcceptedProposal_whenSameProposal_thenNoCommands() {
+            testFixture.givenCommandsByUser("viewer", "accept-proposal.json")
+                    .whenCommandByUser("Alice", "create-proposal.json")
+                    .expectNoErrors()
                     .expectNoCommands();
         }
 
@@ -286,7 +301,6 @@ public class ProposalTest extends TestUtilities {
                     .whenQuery(new GetContent(new ContentId("1")))
                     .expectNoErrors()
                     .expectResult(Objects::nonNull)
-                    .expectResult(content -> content.weightedAssociations().isEmpty())
                     .mapResult(Content::lastConfirmedSighting)
                     .expectResult(Objects::nonNull);
         }

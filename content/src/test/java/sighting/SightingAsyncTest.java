@@ -6,7 +6,6 @@ import com.breece.content.command.api.UpdateLastSeenPosition;
 import com.breece.proposal.command.api.AcceptProposal;
 import com.breece.proposal.command.api.CreateProposal;
 import com.breece.proposal.command.api.GetLinkedSightingsByContentIdAndStatuses;
-import com.breece.proposal.command.api.model.WeightedAssociationHandler;
 import com.breece.proposal.command.api.model.WeightedAssociationState;
 import com.breece.proposal.command.api.model.WeightedAssociationStatus;
 import io.fluxzero.sdk.test.TestFixture;
@@ -16,7 +15,7 @@ import util.TestUtilities;
 import java.util.List;
 
 public class SightingAsyncTest extends TestUtilities {
-    final TestFixture testFixture = TestFixture.createAsync(WeightedAssociationState.class, new WeightedAssociationHandler(), ContentState.class)
+    final TestFixture testFixture = TestFixture.createAsync(WeightedAssociationState.class, ContentState.class)
             .givenCommands(createUserFromProfile(viewer), createUserFromProfile(user2), createUserFromProfile(Alice));
 
 
