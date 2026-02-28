@@ -1,6 +1,6 @@
 {
   "@class": "com.breece.content.command.api.CreateContent",
-  "contentId": "1",
+  "contentId": "3",
   "sightingDetails": {
     "lat": 0.0,
     "lng": 0.0
@@ -8,8 +8,8 @@
   "details": {
     "@class": "Pet",
     "subtype": "CAT",
-    "name": "Kitty",
-    "gender": "FEMALE",
-    "breed": "Apollonian"
+    "name": "Fritz",
+    "gender": "MALE",
+    "breed": "Luxembourgish"
   }
 }

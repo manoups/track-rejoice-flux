@@ -1,3 +1,5 @@
+- [ ] Rename prefix on WeightedAssociation Id
+- [ ] Add a distance and score calculation to the WeightedAssociation
 - [ ] Check facet updates via tracker
 - [ ] Check metrics
 - [ ] Add tags to sightings

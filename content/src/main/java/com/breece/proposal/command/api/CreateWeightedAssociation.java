@@ -1,6 +1,7 @@
 package com.breece.proposal.command.api;
 
 
+import com.breece.content.api.model.Content;
 import com.breece.content.api.model.ContentId;
 import com.breece.content.command.api.ContentInteract;
 import com.breece.coreapi.authentication.RequiresRole;
@@ -21,12 +22,14 @@ import jakarta.validation.constraints.NotNull;
 import java.util.Objects;
 
 @RequiresRole(Role.ADMIN)
-public record CreateWeightedAssociation(ContentId contentId, @NotNull SightingId sightingId, WeightedAssociationId weightedAssociationId, @NotNull SightingDetails sightingDetails) implements ContentInteract, WeightedAssociationCommand {
+public record CreateWeightedAssociation(ContentId contentId, @NotNull WeightedAssociationId weightedAssociationId,
+                                        SightingId sightingId,
+                                        @NotNull SightingDetails sightingDetails) implements ContentInteract, WeightedAssociationCommand {
 
 
     @AssertLegal
     void assertNew(WeightedAssociation weightedAssociation) {
-        throw WeightedProposalErrors.alreadyExists;
+        throw WeightedAssociationErrors.alreadyExists;
     }
 
     /*@AssertLegal
@@ -47,8 +50,8 @@ public record CreateWeightedAssociation(ContentId contentId, @NotNull SightingId
 
     @AssertLegal
     void assertCorrectId() {
-        if (!weightedAssociationId.getId().equals(contentId+"-"+ sightingId)) {
-            throw WeightedProposalErrors.malformedKey;
+        if (!weightedAssociationId.getId().equals(contentId + "-" + sightingId)) {
+            throw WeightedAssociationErrors.malformedKey;
         }
     }
 
@@ -64,7 +67,7 @@ public record CreateWeightedAssociation(ContentId contentId, @NotNull SightingId
     }
 
     @Apply
-    WeightedAssociation propose(Sender sender) {
-        return new WeightedAssociation(weightedAssociationId, sender.userId(), sightingId, sightingDetails);
+    WeightedAssociation propose(Content content, Sender sender) {
+        return new WeightedAssociation(weightedAssociationId, sightingId, sightingDetails);
     }
 }

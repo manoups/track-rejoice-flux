@@ -3,6 +3,7 @@ package proposal;
 import com.breece.content.ContentErrors;
 import com.breece.content.api.model.Content;
 import com.breece.content.api.model.ContentId;
+import com.breece.content.command.api.ContentState;
 import com.breece.content.command.api.UpdateLastSeenPosition;
 import com.breece.content.query.api.GetContent;
 import com.breece.content.query.api.GetSightingHistoryForContent;
@@ -35,7 +36,7 @@ import static org.hamcrest.Matchers.hasSize;
 
 @Slf4j
 public class ProposalTest extends TestUtilities {
-    final TestFixture testFixture = TestFixture.create(new WeightedAssociationHandler(), WeightedAssociationState.class).givenCommands(createUserFromProfile(viewer), createUserFromProfile(user2), createUserFromProfile(Alice));
+    final TestFixture testFixture = TestFixture.create(new WeightedAssociationHandler(), WeightedAssociationState.class, ContentState.class).givenCommands(createUserFromProfile(viewer), createUserFromProfile(user2), createUserFromProfile(Alice));
 
     @Test
     void givenNoContent_whenProposalCreated_thenError() {
@@ -57,7 +58,7 @@ public class ProposalTest extends TestUtilities {
     void givenIncorrectLinkedSightingId_whenCreateProposal_thenError() {
         testFixture.givenCommandsByUser("viewer", "../content/create-content.json", "../sighting/create-sighting.json")
                 .givenCommands("../content/publish-content.json")
-                .whenCommandByUser("viewer", new CreateWeightedAssociation(new ContentId("1"), new SightingId("1"), new WeightedAssociationId(new ContentId("3"), new SightingId("2")),
+                .whenCommandByUser("viewer", new CreateWeightedAssociation(new ContentId("1"), new WeightedAssociationId(new ContentId("3"), new SightingId("2")), new SightingId("1"),
                         new SightingDetails(BigDecimal.ZERO, BigDecimal.ZERO)))
                 .expectError(UnauthorizedException.class);
     }
@@ -165,8 +166,8 @@ public class ProposalTest extends TestUtilities {
                 .givenCommands("../content/publish-content.json")
                 .givenCommandsByUser("Alice", new CreateSighting(new SightingId("2"), new SightingDetails(BigDecimal.ZERO, BigDecimal.ZERO), true, SightingEnum.CAT), "create-proposal.json")
                 .whenCommandByUser("viewer", "accept-proposal-increment-id.json")
-                .expectExceptionalResult(WeightedProposalErrors.notFound)
-                .expectError((e) -> e.getMessage().equals(WeightedProposalErrors.notFound.getMessage()));
+                .expectExceptionalResult(WeightedAssociationErrors.notFound)
+                .expectError((e) -> e.getMessage().equals(WeightedAssociationErrors.notFound.getMessage()));
     }
 
     @Test
@@ -194,11 +195,11 @@ public class ProposalTest extends TestUtilities {
                     .expectNoErrors()
                     .expectResult(Objects::nonNull)
                     .andThen()
-                    .whenQuery(new GetLinkedSightingsByContentIdAndStatuses(new ContentId("1"), List.of(WeightedAssociationStatus.CREATED)))
+                    .whenQuery(new GetLinkedSightingsByContentIdAndStatuses(new ContentId("1"), List.of(WeightedAssociationStatus.LINKED)))
                     .expectResult(hasSize(1))
                     .andThen()
                     .givenCommands("accept-proposal.json")
-                    .whenQuery(new GetLinkedSightingsByContentIdAndStatuses(new ContentId("1"), List.of(WeightedAssociationStatus.CREATED)))
+                    .whenQuery(new GetLinkedSightingsByContentIdAndStatuses(new ContentId("1"), List.of(WeightedAssociationStatus.LINKED)))
                     .expectResult(List::isEmpty);
         }
 
@@ -206,7 +207,7 @@ public class ProposalTest extends TestUtilities {
         void givenProposal_whenNonExistentProposalRejected_thenError() {
             ContentId contentId = new ContentId("1");
             testFixture.whenCommand(new DeleteLinkedProposal(contentId, new WeightedAssociationId(contentId, new SightingId("2"))))
-                    .expectError(WeightedProposalErrors.notFound);
+                    .expectError(WeightedAssociationErrors.notFound);
         }
 
         @Test
@@ -247,16 +248,17 @@ public class ProposalTest extends TestUtilities {
 
         @Test
         void givenSighting_whenCreateProposal_thenContentShouldContainTheProposal() {
-            testFixture.whenQuery(new GetLinkedSightingsByContentIdAndStatuses(new ContentId("1"), List.of(WeightedAssociationStatus.CREATED)))
+            testFixture.whenQuery(new GetLinkedSightingsByContentIdAndStatuses(new ContentId("1"), List.of(WeightedAssociationStatus.LINKED)))
                     .expectNoErrors()
                     .expectResult(Objects::nonNull)
                     .expectResult(hasSize(1));
         }
 
         @Test
-        void givenProposal_whenSameProposal_thenError() {
+        void givenProposal_whenSameProposal_thenSilentlyAccept() {
             testFixture.whenCommand("create-proposal.json")
-                    .expectError((e) -> e.getMessage().equals(WeightedProposalErrors.alreadyExists.getMessage()));
+                    .expectNoEvents()
+                    .expectNoCommands();
         }
 
         @Test

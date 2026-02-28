@@ -1,7 +1,7 @@
 package com.breece.proposal.command.api.model;
 
 import com.breece.content.command.api.ContentInteract;
-import com.breece.proposal.command.api.WeightedProposalErrors;
+import com.breece.proposal.command.api.WeightedAssociationErrors;
 import io.fluxzero.sdk.modeling.AssertLegal;
 import jakarta.annotation.Nullable;
 
@@ -11,7 +11,7 @@ public interface WeightedAssociationUpdate extends WeightedAssociationCommand, C
     @AssertLegal
     default void assertExists(@Nullable WeightedAssociation weightedAssociation) {
         if (Objects.isNull(weightedAssociation)) {
-            throw WeightedProposalErrors.notFound;
+            throw WeightedAssociationErrors.notFound;
         }
     }
 }
