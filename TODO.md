@@ -1,6 +1,7 @@
 - [x] Rename prefix on WeightedAssociation Id
 - [x] Delete all related associations when Content is being taken offline
 - [ ] Add a distance and score calculation to the WeightedAssociation
+- [ ] Recalculate distance on accept/claim Sighting
 - [ ] Move the WeightedAssociation to its own module
 - [ ] Add local data
 - [ ] Check facet updates via tracker

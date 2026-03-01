@@ -9,6 +9,7 @@ import com.breece.content.query.api.GetContents;
 import com.breece.coreapi.common.SightingDetails;
 import com.breece.coreapi.facets.FacetFilter;
 import com.breece.coreapi.facets.Pagination;
+import com.breece.coreapi.util.GeometryUtil;
 import com.breece.proposal.command.api.AcceptProposal;
 import com.breece.proposal.command.api.CreateProposal;
 import com.breece.proposal.command.api.DeleteLinkedProposal;
@@ -42,7 +43,7 @@ import java.util.Objects;
 public record WeightedAssociationState(@EntityId WeightedAssociationId weightedAssociationId, ContentId contentId,
                                        SightingId sightingId,
                                        SightingDetails sightingDetails,
-                                       @With @Facet @Sortable WeightedAssociationStatus status) {
+                                       @With @Facet @Sortable WeightedAssociationStatus status, @With double distance) {
     @Association("contentId")
     @HandleEvent
     static List<WeightedAssociationState> on(PublishContent event, Content content) {
@@ -53,7 +54,7 @@ public record WeightedAssociationState(@EntityId WeightedAssociationId weightedA
         Content content = content1.get();*/
         List<SightingDocument> sightingDocuments = Fluxzero.queryAndWait(new GetSightings(List.of(FacetFilter.builder().facetName("subtype").values(List.of(content.details().getSubtype())).build()), "", new Pagination(0, 1_000_000)));
         return sightingDocuments.stream().map(sightingDocument ->
-                new WeightedAssociationState(new WeightedAssociationId(content.contentId(), sightingDocument.sightingId()), event.contentId(), sightingDocument.sightingId(), sightingDocument.details(), WeightedAssociationStatus.CREATED)
+                new WeightedAssociationState(new WeightedAssociationId(content.contentId(), sightingDocument.sightingId()), event.contentId(), sightingDocument.sightingId(), sightingDocument.details(), WeightedAssociationStatus.CREATED, GeometryUtil.parseLocation(content.lastConfirmedSighting().lat(), content.lastConfirmedSighting().lng()).distance(GeometryUtil.parseLocation(sightingDocument.details().lat(), sightingDocument.details().lng())))
         ).toList();
     }
 
@@ -66,7 +67,8 @@ public record WeightedAssociationState(@EntityId WeightedAssociationId weightedA
             return contentDocuments
                     .stream()
                     .filter(it -> contentStates.stream().anyMatch(state -> state.contentId().equals(it.contentId())))
-                    .map(contentDocument -> new WeightedAssociationState(new WeightedAssociationId(contentDocument.contentId(), event.sightingId()), contentDocument.contentId(), event.sightingId(), sighting.details(), WeightedAssociationStatus.CREATED))
+                    .map(contentDocument -> new WeightedAssociationState(new WeightedAssociationId(contentDocument.contentId(), event.sightingId()), contentDocument.contentId(), event.sightingId(), sighting.details(), WeightedAssociationStatus.CREATED,
+                            GeometryUtil.parseLocation(contentDocument.lastConfirmedSighting().lat(), contentDocument.lastConfirmedSighting().lng()).distance(GeometryUtil.parseLocation(sighting.details().lat(), sighting.details().lng()))))
                     .toList();
         }
         return null;
