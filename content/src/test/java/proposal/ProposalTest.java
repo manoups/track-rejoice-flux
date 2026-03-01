@@ -3,7 +3,11 @@ package proposal;
 import com.breece.content.ContentErrors;
 import com.breece.content.api.model.Content;
 import com.breece.content.api.model.ContentId;
+import com.breece.content.api.model.GenderEnum;
+import com.breece.content.api.model.Pet;
 import com.breece.content.command.api.ContentState;
+import com.breece.content.command.api.CreateContent;
+import com.breece.content.command.api.PublishContent;
 import com.breece.content.command.api.UpdateLastSeenPosition;
 import com.breece.content.query.api.GetContent;
 import com.breece.content.query.api.GetSightingHistoryForContent;
@@ -20,6 +24,7 @@ import com.breece.proposal.command.api.model.WeightedAssociationStatus;
 import com.breece.sighting.api.SightingErrors;
 import com.breece.sighting.api.model.SightingId;
 import com.breece.sighting.command.api.CreateSighting;
+import io.fluxzero.sdk.Fluxzero;
 import io.fluxzero.sdk.test.TestFixture;
 import io.fluxzero.sdk.tracking.handling.IllegalCommandException;
 import lombok.extern.slf4j.Slf4j;
@@ -30,6 +35,7 @@ import org.junit.jupiter.api.Test;
 import util.TestUtilities;
 
 import java.math.BigDecimal;
+import java.time.Duration;
 import java.util.List;
 import java.util.Objects;
 
@@ -178,6 +184,26 @@ public class ProposalTest extends TestUtilities {
                 .givenCommandsByUser("viewer", "../sighting/claim-sighting.json")
                 .whenCommand("create-proposal.json")
                 .expectNoErrors();
+    }
+
+    @Test
+    void givenMultipleContents_whenRelevantSighting_thenMultipleWeightedAssociations() {
+        int SIZE = 15;
+        CreateContent[] contents = new CreateContent[SIZE];
+        PublishContent[] publishContents = new PublishContent[SIZE];
+        for (int i = 0; i < SIZE; ++i) {
+            ContentId contentId = new ContentId();
+            contents[i] = new CreateContent(contentId, new SightingDetails(BigDecimal.ZERO, BigDecimal.ZERO), new Pet("Maya", "Cocker Spaniel", GenderEnum.FEMALE, SightingEnum.CAT));
+        publishContents[i] = new PublishContent(contentId, Duration.ofDays(90));
+        }
+        testFixture.givenCommandsByUser("viewer", contents)
+                .givenCommands(publishContents)
+                .whenNothingHappens()
+                .expectTrue(fz -> Fluxzero.search(WeightedAssociationState.class).count() == 0 )
+                .andThen()
+                .whenCommandByUser("Alice", "../sighting/create-sighting.json")
+                .expectTrue(fz -> Fluxzero.search(WeightedAssociationState.class).count() == SIZE );
+
     }
 
     @Nested

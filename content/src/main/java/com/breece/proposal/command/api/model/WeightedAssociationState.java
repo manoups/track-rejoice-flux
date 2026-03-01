@@ -3,10 +3,7 @@ package com.breece.proposal.command.api.model;
 import com.breece.content.api.model.Content;
 import com.breece.content.api.model.ContentId;
 import com.breece.content.api.model.ContentStatus;
-import com.breece.content.command.api.ContentState;
-import com.breece.content.command.api.GetContentStates;
-import com.breece.content.command.api.PublishContent;
-import com.breece.content.command.api.UpdateLastSeenPosition;
+import com.breece.content.command.api.*;
 import com.breece.content.query.api.ContentDocument;
 import com.breece.content.query.api.GetContents;
 import com.breece.coreapi.common.SightingDetails;
@@ -44,7 +41,8 @@ import java.util.Objects;
 @Slf4j
 public record WeightedAssociationState(@EntityId WeightedAssociationId weightedAssociationId, ContentId contentId,
                                        SightingId sightingId,
-                                       SightingDetails sightingDetails, @With @Facet @Sortable WeightedAssociationStatus status) {
+                                       SightingDetails sightingDetails,
+                                       @With @Facet @Sortable WeightedAssociationStatus status) {
     @Association("contentId")
     @HandleEvent
     static List<WeightedAssociationState> on(PublishContent event, Content content) {
@@ -127,6 +125,21 @@ public record WeightedAssociationState(@EntityId WeightedAssociationId weightedA
         Fluxzero.sendAndForgetCommand(new DeleteLinkedProposal(contentId, weightedAssociationId()));
         return this;
     }
+
+    @Association("contentId")
+    @HandleEvent
+    WeightedAssociationState on(TakeContentOffline event, Content content) {
+        Fluxzero.sendAndForgetCommand(new DeleteLinkedProposal(contentId, weightedAssociationId()));
+        return this;
+    }
+
+    @Association("contentId")
+    @HandleEvent
+    WeightedAssociationState on(DeleteContent event, Content content) {
+        Fluxzero.sendAndForgetCommand(new DeleteLinkedProposal(contentId, weightedAssociationId()));
+        return this;
+    }
+
 
     @Association("weightedAssociationId")
     @HandleEvent
