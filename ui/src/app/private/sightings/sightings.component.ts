@@ -7,7 +7,6 @@ import {CdkFixedSizeVirtualScroll, CdkVirtualScrollViewport} from '@angular/cdk/
 import {DatePipe} from '@angular/common';
 import {BehaviorSubject, finalize, map, merge, Observable, of, switchMap, withLatestFrom} from 'rxjs';
 import {tap} from 'rxjs/operators';
-import {DataSource} from '@angular/cdk/collections';
 import {
   MatCell,
   MatCellDef,
@@ -21,31 +20,7 @@ import {
   MatTable
 } from '@angular/material/table';
 import {SelectedItemComponent} from '../selected-item/selected-item.component';
-
-class SightingsDataSource extends DataSource<SightingDocument> {
-  private readonly subject = new BehaviorSubject<SightingDocument[]>([]);
-
-  connect(): Observable<SightingDocument[]> {
-    return this.subject.asObservable();
-  }
-
-  disconnect(): void {
-    this.subject.complete();
-  }
-
-  set(rows: SightingDocument[]): void {
-    this.subject.next(rows);
-  }
-
-  append(rows: SightingDocument[]): void {
-    const current = this.subject.value;
-    this.subject.next(current.concat(rows ?? []));
-  }
-
-  get length(): number {
-    return this.subject.value.length;
-  }
-}
+import {TrackRejoiceDataSource} from '../../common/datasource';
 
 @Component({
   selector: 'track-rejoice-sightings',
@@ -83,7 +58,7 @@ export class SightingsComponent extends View implements OnInit {
   pageSubject = new BehaviorSubject<number>(0);
 
   sightings = signal<SightingDocument[]>([]);
-  dataSource = new SightingsDataSource();
+  dataSource = new TrackRejoiceDataSource<SightingDocument>();
   constructor() {
     super();
     // this.facetUpdate$()
