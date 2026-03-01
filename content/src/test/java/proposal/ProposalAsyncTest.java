@@ -5,8 +5,8 @@ import com.breece.content.command.api.ContentState;
 import com.breece.content.command.api.PublishContent;
 import com.breece.content.command.api.UpdateLastSeenPosition;
 import com.breece.proposal.command.api.ClaimSighting;
-import com.breece.proposal.command.api.DeleteLinkedProposal;
-import com.breece.proposal.command.api.GetLinkedSightingsByContentIdAndStatuses;
+import com.breece.proposal.command.api.DeleteWeightedAssociation;
+import com.breece.proposal.command.api.GetWeightedAssociationsByContentIdAndStatuses;
 import com.breece.proposal.command.api.model.WeightedAssociationId;
 import com.breece.proposal.command.api.model.WeightedAssociationState;
 import com.breece.proposal.command.api.model.WeightedAssociationStatus;
@@ -37,16 +37,16 @@ public class ProposalAsyncTest extends TestUtilities {
                 .whenCommandByUser("viewer", new ClaimSighting(contentId,
                         new WeightedAssociationId(contentId, sightingId)
                 ))
-                .expectOnlyCommands(UpdateLastSeenPosition.class, DeleteSighting.class, DeleteLinkedProposal.class, DeleteLinkedProposal.class)
+                .expectOnlyCommands(UpdateLastSeenPosition.class, DeleteSighting.class, DeleteWeightedAssociation.class, DeleteWeightedAssociation.class)
                 .expectThat(fz -> {
                     List<WeightedAssociationState> weightedAssociationStates = fz.documentStore().search(WeightedAssociationState.class).fetchAll();
                     assertThat(weightedAssociationStates).isEmpty();
                 })
                 .andThen()
-                .whenQuery(new GetLinkedSightingsByContentIdAndStatuses(new ContentId("1"), List.of(WeightedAssociationStatus.CREATED)))
+                .whenQuery(new GetWeightedAssociationsByContentIdAndStatuses(new ContentId("1"), List.of(WeightedAssociationStatus.CREATED)))
                 .expectResult(List::isEmpty)
                 .andThen()
-                .whenQuery(new GetLinkedSightingsByContentIdAndStatuses(contentId, List.of(WeightedAssociationStatus.ACCEPTED)))
+                .whenQuery(new GetWeightedAssociationsByContentIdAndStatuses(contentId, List.of(WeightedAssociationStatus.ACCEPTED)))
                 .expectResult(List::isEmpty);
     }
 
@@ -69,10 +69,10 @@ public class ProposalAsyncTest extends TestUtilities {
                     assertThat(weightedAssociationStates).hasSize(2);
                 })
                 .andThen()
-                .whenQuery(new GetLinkedSightingsByContentIdAndStatuses(new ContentId("1"), List.of(WeightedAssociationStatus.LINKED)))
+                .whenQuery(new GetWeightedAssociationsByContentIdAndStatuses(new ContentId("1"), List.of(WeightedAssociationStatus.LINKED)))
                 .expectResult(hasSize(1))
                 .andThen()
-                .whenQuery(new GetLinkedSightingsByContentIdAndStatuses(contentId, List.of(WeightedAssociationStatus.ACCEPTED)))
+                .whenQuery(new GetWeightedAssociationsByContentIdAndStatuses(contentId, List.of(WeightedAssociationStatus.ACCEPTED)))
                 .expectResult(hasSize(1));
     }
 }

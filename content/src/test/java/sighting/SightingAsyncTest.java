@@ -5,7 +5,7 @@ import com.breece.content.command.api.ContentState;
 import com.breece.content.command.api.UpdateLastSeenPosition;
 import com.breece.proposal.command.api.AcceptProposal;
 import com.breece.proposal.command.api.CreateProposal;
-import com.breece.proposal.command.api.GetLinkedSightingsByContentIdAndStatuses;
+import com.breece.proposal.command.api.GetWeightedAssociationsByContentIdAndStatuses;
 import com.breece.proposal.command.api.model.WeightedAssociationState;
 import com.breece.proposal.command.api.model.WeightedAssociationStatus;
 import io.fluxzero.sdk.test.TestFixture;
@@ -25,7 +25,7 @@ public class SightingAsyncTest extends TestUtilities {
                         "../content/create-content.json", "create-sighting-removal.json")
                 .givenCommands("../content/publish-content.json")
                 .givenCommandsByUser("viewer", "claim-sighting-removal.json")
-                .whenQuery(new GetLinkedSightingsByContentIdAndStatuses(new ContentId("1"), List.of(WeightedAssociationStatus.CREATED, WeightedAssociationStatus.REJECTED)))
+                .whenQuery(new GetWeightedAssociationsByContentIdAndStatuses(new ContentId("1"), List.of(WeightedAssociationStatus.CREATED, WeightedAssociationStatus.REJECTED)))
                 .expectResult(List::isEmpty);
     }
 

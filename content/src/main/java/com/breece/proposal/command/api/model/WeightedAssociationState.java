@@ -12,7 +12,7 @@ import com.breece.coreapi.facets.Pagination;
 import com.breece.coreapi.util.GeometryUtil;
 import com.breece.proposal.command.api.AcceptProposal;
 import com.breece.proposal.command.api.CreateProposal;
-import com.breece.proposal.command.api.DeleteLinkedProposal;
+import com.breece.proposal.command.api.DeleteWeightedAssociation;
 import com.breece.proposal.command.api.RejectProposal;
 import com.breece.sighting.api.model.Sighting;
 import com.breece.sighting.api.model.SightingId;
@@ -43,7 +43,7 @@ import java.util.Objects;
 public record WeightedAssociationState(@EntityId WeightedAssociationId weightedAssociationId, ContentId contentId,
                                        SightingId sightingId,
                                        SightingDetails sightingDetails,
-                                       @With @Facet @Sortable WeightedAssociationStatus status, @With double distance) {
+                                       @With @Facet WeightedAssociationStatus status, @With double distance, @Sortable double score) {
     @Association("contentId")
     @HandleEvent
     static List<WeightedAssociationState> on(PublishContent event, Content content) {
@@ -54,7 +54,10 @@ public record WeightedAssociationState(@EntityId WeightedAssociationId weightedA
         Content content = content1.get();*/
         List<SightingDocument> sightingDocuments = Fluxzero.queryAndWait(new GetSightings(List.of(FacetFilter.builder().facetName("subtype").values(List.of(content.details().getSubtype())).build()), "", new Pagination(0, 1_000_000)));
         return sightingDocuments.stream().map(sightingDocument ->
-                new WeightedAssociationState(new WeightedAssociationId(content.contentId(), sightingDocument.sightingId()), event.contentId(), sightingDocument.sightingId(), sightingDocument.details(), WeightedAssociationStatus.CREATED, GeometryUtil.parseLocation(content.lastConfirmedSighting().lat(), content.lastConfirmedSighting().lng()).distance(GeometryUtil.parseLocation(sightingDocument.details().lat(), sightingDocument.details().lng())))
+                {
+                    double distance = GeometryUtil.parseLocation(content.lastConfirmedSighting().lat(), content.lastConfirmedSighting().lng()).distance(GeometryUtil.parseLocation(sightingDocument.details().lat(), sightingDocument.details().lng()));
+                    return new WeightedAssociationState(new WeightedAssociationId(content.contentId(), sightingDocument.sightingId()), event.contentId(), sightingDocument.sightingId(), sightingDocument.details(), WeightedAssociationStatus.CREATED, distance, distance);
+                }
         ).toList();
     }
 
@@ -67,8 +70,11 @@ public record WeightedAssociationState(@EntityId WeightedAssociationId weightedA
             return contentDocuments
                     .stream()
                     .filter(it -> contentStates.stream().anyMatch(state -> state.contentId().equals(it.contentId())))
-                    .map(contentDocument -> new WeightedAssociationState(new WeightedAssociationId(contentDocument.contentId(), event.sightingId()), contentDocument.contentId(), event.sightingId(), sighting.details(), WeightedAssociationStatus.CREATED,
-                            GeometryUtil.parseLocation(contentDocument.lastConfirmedSighting().lat(), contentDocument.lastConfirmedSighting().lng()).distance(GeometryUtil.parseLocation(sighting.details().lat(), sighting.details().lng()))))
+                    .map(contentDocument -> {
+                        double distance = GeometryUtil.parseLocation(contentDocument.lastConfirmedSighting().lat(), contentDocument.lastConfirmedSighting().lng()).distance(GeometryUtil.parseLocation(sighting.details().lat(), sighting.details().lng()));
+                        return new WeightedAssociationState(new WeightedAssociationId(contentDocument.contentId(), event.sightingId()), contentDocument.contentId(), event.sightingId(), sighting.details(), WeightedAssociationStatus.CREATED,
+                                distance, distance);
+                    })
                     .toList();
         }
         return null;
@@ -124,28 +130,28 @@ public record WeightedAssociationState(@EntityId WeightedAssociationId weightedA
     @Association("sightingId")
     @HandleEvent
     WeightedAssociationState on(DeleteSighting event) {
-        Fluxzero.sendAndForgetCommand(new DeleteLinkedProposal(contentId, weightedAssociationId()));
+        Fluxzero.sendAndForgetCommand(new DeleteWeightedAssociation(contentId, weightedAssociationId()));
         return this;
     }
 
     @Association("contentId")
     @HandleEvent
     WeightedAssociationState on(TakeContentOffline event, Content content) {
-        Fluxzero.sendAndForgetCommand(new DeleteLinkedProposal(contentId, weightedAssociationId()));
+        Fluxzero.sendAndForgetCommand(new DeleteWeightedAssociation(contentId, weightedAssociationId()));
         return this;
     }
 
     @Association("contentId")
     @HandleEvent
     WeightedAssociationState on(DeleteContent event, Content content) {
-        Fluxzero.sendAndForgetCommand(new DeleteLinkedProposal(contentId, weightedAssociationId()));
+        Fluxzero.sendAndForgetCommand(new DeleteWeightedAssociation(contentId, weightedAssociationId()));
         return this;
     }
 
 
     @Association("weightedAssociationId")
     @HandleEvent
-    WeightedAssociationState on(DeleteLinkedProposal event) {
+    WeightedAssociationState on(DeleteWeightedAssociation event) {
         return null;
     }
 }

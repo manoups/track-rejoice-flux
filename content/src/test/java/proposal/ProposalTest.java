@@ -15,8 +15,8 @@ import com.breece.coreapi.common.SightingDetails;
 import com.breece.coreapi.common.SightingEnum;
 import com.breece.coreapi.util.GeometryUtil;
 import com.breece.proposal.command.api.AcceptProposal;
-import com.breece.proposal.command.api.DeleteLinkedProposal;
-import com.breece.proposal.command.api.GetLinkedSightingsByContentIdAndStatuses;
+import com.breece.proposal.command.api.DeleteWeightedAssociation;
+import com.breece.proposal.command.api.GetWeightedAssociationsByContentIdAndStatuses;
 import com.breece.proposal.command.api.WeightedAssociationErrors;
 import com.breece.proposal.command.api.model.WeightedAssociationId;
 import com.breece.proposal.command.api.model.WeightedAssociationState;
@@ -115,7 +115,7 @@ public class ProposalTest extends TestUtilities {
                 .givenCommands("../content/publish-content.json")
                 .givenCommandsByUser("Alice", "create-proposal.json")
                 .givenCommandsByUser("viewer", "reject-proposal.json")
-                .whenQuery(new GetLinkedSightingsByContentIdAndStatuses(new ContentId("1"), List.of(WeightedAssociationStatus.CREATED)))
+                .whenQuery(new GetWeightedAssociationsByContentIdAndStatuses(new ContentId("1"), List.of(WeightedAssociationStatus.CREATED)))
                 .expectNoErrors()
                 .expectResult(Objects::nonNull)
                 .expectResult(List::isEmpty);
@@ -199,10 +199,10 @@ public class ProposalTest extends TestUtilities {
         testFixture.givenCommandsByUser("viewer", contents)
                 .givenCommands(publishContents)
                 .whenNothingHappens()
-                .expectTrue(fz -> Fluxzero.search(WeightedAssociationState.class).count() == 0 )
+                .expectTrue(_ -> Fluxzero.search(WeightedAssociationState.class).count() == 0 )
                 .andThen()
                 .whenCommandByUser("Alice", "../sighting/create-sighting.json")
-                .expectTrue(fz -> Fluxzero.search(WeightedAssociationState.class).count() == SIZE );
+                .expectTrue(_ -> Fluxzero.search(WeightedAssociationState.class).count() == SIZE );
 
     }
 
@@ -220,18 +220,18 @@ public class ProposalTest extends TestUtilities {
                     .expectNoErrors()
                     .expectResult(Objects::nonNull)
                     .andThen()
-                    .whenQuery(new GetLinkedSightingsByContentIdAndStatuses(new ContentId("1"), List.of(WeightedAssociationStatus.LINKED)))
+                    .whenQuery(new GetWeightedAssociationsByContentIdAndStatuses(new ContentId("1"), List.of(WeightedAssociationStatus.LINKED)))
                     .expectResult(hasSize(1))
                     .andThen()
                     .givenCommands("accept-proposal.json")
-                    .whenQuery(new GetLinkedSightingsByContentIdAndStatuses(new ContentId("1"), List.of(WeightedAssociationStatus.LINKED)))
+                    .whenQuery(new GetWeightedAssociationsByContentIdAndStatuses(new ContentId("1"), List.of(WeightedAssociationStatus.LINKED)))
                     .expectResult(List::isEmpty);
         }
 
         @Test
         void givenProposal_whenNonExistentProposalRejected_thenError() {
             ContentId contentId = new ContentId("1");
-            testFixture.whenCommand(new DeleteLinkedProposal(contentId, new WeightedAssociationId(contentId, new SightingId("2"))))
+            testFixture.whenCommand(new DeleteWeightedAssociation(contentId, new WeightedAssociationId(contentId, new SightingId("2"))))
                     .expectError(WeightedAssociationErrors.notFound);
         }
 
@@ -273,7 +273,7 @@ public class ProposalTest extends TestUtilities {
 
         @Test
         void givenSighting_whenCreateProposal_thenContentShouldContainTheProposal() {
-            testFixture.whenQuery(new GetLinkedSightingsByContentIdAndStatuses(new ContentId("1"), List.of(WeightedAssociationStatus.LINKED)))
+            testFixture.whenQuery(new GetWeightedAssociationsByContentIdAndStatuses(new ContentId("1"), List.of(WeightedAssociationStatus.LINKED)))
                     .expectNoErrors()
                     .expectResult(Objects::nonNull)
                     .expectResult(hasSize(1));
@@ -307,9 +307,9 @@ public class ProposalTest extends TestUtilities {
             testFixture.whenCommand("../sighting/delete-sighting.json")
                     .expectNoErrors()
                     .expectEvents("../sighting/delete-sighting.json")
-                    .expectCommands(DeleteLinkedProposal.class)
+                    .expectCommands(DeleteWeightedAssociation.class)
                     .andThen()
-                    .whenQuery(new GetLinkedSightingsByContentIdAndStatuses(new ContentId("1"), List.of(WeightedAssociationStatus.CREATED)))
+                    .whenQuery(new GetWeightedAssociationsByContentIdAndStatuses(new ContentId("1"), List.of(WeightedAssociationStatus.CREATED)))
                     .expectNoErrors()
                     .expectResult(Objects::nonNull)
                     .expectResult(List::isEmpty);
@@ -322,7 +322,7 @@ public class ProposalTest extends TestUtilities {
                     .whenCommand("../sighting/delete-sighting.json")
                     .expectNoErrors()
                     .expectEvents("../sighting/delete-sighting.json")
-                    .expectOnlyCommands(DeleteLinkedProposal.class)
+                    .expectOnlyCommands(DeleteWeightedAssociation.class)
                     .andThen()
                     .whenQuery(new GetContent(new ContentId("1")))
                     .expectNoErrors()
@@ -338,7 +338,7 @@ public class ProposalTest extends TestUtilities {
                     .expectNoErrors()
                     .expectCommands(UpdateLastSeenPosition.class)
                     .andThen()
-                    .whenQuery(new GetLinkedSightingsByContentIdAndStatuses(new ContentId("1"), List.of(WeightedAssociationStatus.ACCEPTED)))
+                    .whenQuery(new GetWeightedAssociationsByContentIdAndStatuses(new ContentId("1"), List.of(WeightedAssociationStatus.ACCEPTED)))
                     .expectNoErrors()
                     .expectResult(Objects::nonNull)
                     .expectResult(hasSize(1));

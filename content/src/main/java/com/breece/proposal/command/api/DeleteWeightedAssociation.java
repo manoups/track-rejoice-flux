@@ -6,7 +6,7 @@ import com.breece.proposal.command.api.model.WeightedAssociationUpdate;
 import io.fluxzero.sdk.modeling.EventPublicationStrategy;
 import io.fluxzero.sdk.persisting.eventsourcing.Apply;
 
-public record DeleteLinkedProposal(ContentId contentId, WeightedAssociationId weightedAssociationId) implements WeightedAssociationUpdate {
+public record DeleteWeightedAssociation(ContentId contentId, WeightedAssociationId weightedAssociationId) implements WeightedAssociationUpdate {
     @Apply(publicationStrategy = EventPublicationStrategy.PUBLISH_ONLY)
     void apply() {}
 }

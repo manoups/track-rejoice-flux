@@ -18,8 +18,8 @@ import java.util.List;
 import static io.fluxzero.common.api.search.constraints.FacetConstraint.matchFacet;
 
 
-public record GetLinkedSightingsByContentIdAndStatuses(@NotNull ContentId contentId,
-                                                       @NotNull @NotEmpty List<WeightedAssociationStatus> statuses) implements Request<List<WeightedAssociationState>> {
+public record GetWeightedAssociationsByContentIdAndStatuses(@NotNull ContentId contentId,
+                                                            @NotNull @NotEmpty List<WeightedAssociationStatus> statuses) implements Request<List<WeightedAssociationState>> {
     @HandleQuery
     List<WeightedAssociationState> find(Sender sender) {
 //        Ownership check
