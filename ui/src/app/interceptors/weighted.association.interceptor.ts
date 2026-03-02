@@ -1,10 +1,9 @@
-import {FacetPaginationRequestBody, SightingDocument} from '@trackrejoice/typescriptmodels';
+import {FacetPaginationRequestBody} from '@trackrejoice/typescriptmodels';
 import {HttpEvent, HttpHandlerFn, HttpRequest, HttpResponse} from '@angular/common/http';
 import {Observable, of, throwError} from 'rxjs';
 import {delay} from 'rxjs/operators';
 import {weightedAssociations} from './weighted.associations.mock';
 
-let sightingDocuments: SightingDocument[] = weightedAssociations;
 
 export function mockWeightedAssociationsInterceptor(
   req: HttpRequest<any>,

@@ -21,7 +21,7 @@
       <mat-selection-list [multiple]="true" [formControl]="facetSelectionControl(filter.key)">
         @for (opt of filter.value; track opt.value) {
           <mat-list-option [value]="opt.value" [disabled]="opt.count === 0 && !isSelected(filter.key, opt.value)">
-            {{ opt.value }} ({{ opt.count }})
+            {{ opt.value|titlecase }} ({{ opt.count }})
           </mat-list-option>
         }
       </mat-selection-list>

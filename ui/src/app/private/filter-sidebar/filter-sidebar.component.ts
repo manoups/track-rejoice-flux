@@ -69,7 +69,7 @@ export class FilterSidebarComponent implements OnInit {
     for (const [facetName, ctrl] of Object.entries(facetsCtrl.controls)) {
       const allowedSet = new Set((allowedByFacet[facetName] ?? []).map(p => p.value));
 
-      const current = ctrl.value ?? [];
+      const current = ctrl.value?.map(v => v.toLowerCase()) ?? [];
       const next = current.filter(v => allowedSet.has(v));
 
       if (!arrayEqual(current, next)) {
@@ -140,7 +140,8 @@ export class FilterSidebarComponent implements OnInit {
   }
 
   isSelected(facetName: string, valueName: string): boolean {
-    const selected = this.searchForm.controls.facets.controls[facetName]?.value ?? [];
+    const selected = this.searchForm.controls.facets.controls[facetName]?.value?.map(v => v.toLowerCase()) ?? [];
+    console.log(selected, valueName);
     return selected.includes(valueName);
   }
 
@@ -156,8 +157,8 @@ export class FilterSidebarComponent implements OnInit {
     for (const [facetName, allowedPairs] of Object.entries(extraVals ?? {})) {
       const serverPairs = (stats ?? {})[facetName] ?? [];
       const merged = (allowedPairs ?? []).map(ap => {
-        const found = serverPairs.find(sp => sp.value === ap.value);
-        return found ?? ({value: ap.value, count: 0} as ValueCountPair);
+        const found = serverPairs.find(sp => sp.value.toLowerCase() === ap.value.toLowerCase());
+        return found ?? ({value: ap.value.toLowerCase(), count: 0} as ValueCountPair);
       });
       response.set(facetName, merged);
     }

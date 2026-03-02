@@ -22,7 +22,8 @@ export const mockSightings: SightingDocument[] =
       "details": {
         "lat": 34.2565407709398,
         "lng": 32.368743932073116
-      }
+      },
+      "type": "CAT"
     },
     {
       "ownerId": "b9ef58ed-55f3-43dc-be57-74c52ab6d2cf",
@@ -32,7 +33,8 @@ export const mockSightings: SightingDocument[] =
       "details": {
         "lat": 19.573812749407605,
         "lng": 6.394632956449237
-      }
+      },
+      "type": "CAT"
     },
     {
       "ownerId": "0e314856-3622-4b8e-a719-2643bede18d9",
@@ -42,7 +44,8 @@ export const mockSightings: SightingDocument[] =
       "details": {
         "lat": 30.49122226850311,
         "lng": 46.899210626008525
-      }
+      },
+      "type": "CAT"
     },
     {
       "ownerId": "a06857c9-5ea2-4845-b5ce-493923f6adbd",
@@ -52,7 +55,8 @@ export const mockSightings: SightingDocument[] =
       "details": {
         "lat": 12.844081428858317,
         "lng": 20.219140161148637
-      }
+      },
+      "type": "CAT"
     },
     {
       "ownerId": "3edd043a-36c8-4632-8e4a-32672ee4ea3c",
@@ -62,7 +66,8 @@ export const mockSightings: SightingDocument[] =
       "details": {
         "lat": 36.23720117961708,
         "lng": 1.1100881162477094
-      }
+      },
+      "type": "CAT"
     },
     {
       "ownerId": "191492a9-bf69-44f7-bb2f-7a62fe9cbca1",
@@ -72,7 +77,8 @@ export const mockSightings: SightingDocument[] =
       "details": {
         "lat": 16.610437885385572,
         "lng": 23.021445300018563
-      }
+      },
+      "type": "CAT"
     },
     {
       "ownerId": "b31ca0b4-dea4-45cc-ad04-4eec004a2134",
@@ -82,7 +88,8 @@ export const mockSightings: SightingDocument[] =
       "details": {
         "lat": 23.64902694727531,
         "lng": 45.93013333657296
-      }
+      },
+      "type": "CAT"
     },
     {
       "ownerId": "03e02209-2c59-4e49-a6fc-7e6566128e88",
@@ -92,7 +99,8 @@ export const mockSightings: SightingDocument[] =
       "details": {
         "lat": 1.0462970654556314,
         "lng": 8.377363821073535
-      }
+      },
+      "type": "CAT"
     },
     {
       "ownerId": "61dccb57-dd2e-44ec-9ab5-4b12436aa37d",
@@ -102,7 +110,8 @@ export const mockSightings: SightingDocument[] =
       "details": {
         "lat": 41.88221766891974,
         "lng": 2.4636619992208675
-      }
+      },
+      "type": "CAT"
     },
     {
       "ownerId": "2c6baf7b-1a42-49dd-b789-da0e029cb68f",
@@ -112,7 +121,8 @@ export const mockSightings: SightingDocument[] =
       "details": {
         "lat": 39.057182558622486,
         "lng": 18.71595945543534
-      }
+      },
+      "type": "CAT"
     },
     {
       "ownerId": "7c2c6c69-2744-472e-9b0f-db41428409b3",
@@ -122,7 +132,8 @@ export const mockSightings: SightingDocument[] =
       "details": {
         "lat": 39.98399467859212,
         "lng": 32.123884398414425
-      }
+      },
+      "type": "CAT"
     },
     {
       "ownerId": "b9ef58ed-55f3-43dc-be57-74c52ab6d2cf",
@@ -132,7 +143,8 @@ export const mockSightings: SightingDocument[] =
       "details": {
         "lat": 29.864337844289246,
         "lng": 19.990972371280407
-      }
+      },
+      "type": "CAT"
     },
     {
       "ownerId": "0e314856-3622-4b8e-a719-2643bede18d9",
@@ -142,7 +154,8 @@ export const mockSightings: SightingDocument[] =
       "details": {
         "lat": 34.48379951053029,
         "lng": 46.96716325173043
-      }
+      },
+      "type": "CAT"
     },
     {
       "ownerId": "a06857c9-5ea2-4845-b5ce-493923f6adbd",
@@ -152,7 +165,8 @@ export const mockSightings: SightingDocument[] =
       "details": {
         "lat": 25.139560974479956,
         "lng": 29.754560980406364
-      }
+      },
+      "type": "CAT"
     },
     {
       "ownerId": "3edd043a-36c8-4632-8e4a-32672ee4ea3c",
@@ -162,7 +176,8 @@ export const mockSightings: SightingDocument[] =
       "details": {
         "lat": 9.403675527226907,
         "lng": 40.294612178137506
-      }
+      },
+      "type": "CAT"
     },
     {
       "ownerId": "191492a9-bf69-44f7-bb2f-7a62fe9cbca1",
@@ -172,7 +187,8 @@ export const mockSightings: SightingDocument[] =
       "details": {
         "lat": 10.43782609836828,
         "lng": 27.083332433809808
-      }
+      },
+      "type": "KEYS"
     },
     {
       "ownerId": "b31ca0b4-dea4-45cc-ad04-4eec004a2134",
@@ -182,7 +198,8 @@ export const mockSightings: SightingDocument[] =
       "details": {
         "lat": 29.333389333653713,
         "lng": 13.698657255865127
-      }
+      },
+      "type": "KEYS"
     },
     {
       "ownerId": "03e02209-2c59-4e49-a6fc-7e6566128e88",
@@ -192,7 +209,8 @@ export const mockSightings: SightingDocument[] =
       "details": {
         "lat": 37.620344025998925,
         "lng": 45.80439145567076
-      }
+      },
+      "type": "KEYS"
     },
     {
       "ownerId": "61dccb57-dd2e-44ec-9ab5-4b12436aa37d",
@@ -202,7 +220,8 @@ export const mockSightings: SightingDocument[] =
       "details": {
         "lat": 31.09348461387782,
         "lng": 12.326960449445712
-      }
+      },
+      "type": "KEYS"
     },
     {
       "ownerId": "2c6baf7b-1a42-49dd-b789-da0e029cb68f",
@@ -212,7 +231,8 @@ export const mockSightings: SightingDocument[] =
       "details": {
         "lat": 16.06188127358309,
         "lng": 7.404690633040811
-      }
+      },
+      "type": "KEYS"
     },
     {
       "ownerId": "7c2c6c69-2744-472e-9b0f-db41428409b3",
@@ -222,7 +242,8 @@ export const mockSightings: SightingDocument[] =
       "details": {
         "lat": 43.16811478741727,
         "lng": 11.888769254631715
-      }
+      },
+      "type": "KEYS"
     },
     {
       "ownerId": "b9ef58ed-55f3-43dc-be57-74c52ab6d2cf",
@@ -232,7 +253,8 @@ export const mockSightings: SightingDocument[] =
       "details": {
         "lat": 16.204905662565512,
         "lng": 4.090322802375745
-      }
+      },
+      "type": "KEYS"
     },
     {
       "ownerId": "0e314856-3622-4b8e-a719-2643bede18d9",
@@ -242,7 +264,8 @@ export const mockSightings: SightingDocument[] =
       "details": {
         "lat": 1.2870598164103408,
         "lng": 46.70038647620963
-      }
+      },
+      "type": "KEYS"
     },
     {
       "ownerId": "a06857c9-5ea2-4845-b5ce-493923f6adbd",
@@ -252,7 +275,8 @@ export const mockSightings: SightingDocument[] =
       "details": {
         "lat": 41.89891845855538,
         "lng": 9.640244667840225
-      }
+      },
+      "type": "KEYS"
     },
     {
       "ownerId": "3edd043a-36c8-4632-8e4a-32672ee4ea3c",
@@ -262,7 +286,8 @@ export const mockSightings: SightingDocument[] =
       "details": {
         "lat": 22.091951286648083,
         "lng": 21.358321001018897
-      }
+      },
+      "type": "KEYS"
     },
     {
       "ownerId": "191492a9-bf69-44f7-bb2f-7a62fe9cbca1",
@@ -272,7 +297,8 @@ export const mockSightings: SightingDocument[] =
       "details": {
         "lat": 47.27997415895187,
         "lng": 16.71597580005334
-      }
+      },
+      "type": "KEYS"
     },
     {
       "ownerId": "b31ca0b4-dea4-45cc-ad04-4eec004a2134",
@@ -282,7 +308,8 @@ export const mockSightings: SightingDocument[] =
       "details": {
         "lat": 26.13300919641227,
         "lng": 9.774700591370312
-      }
+      },
+      "type": "KEYS"
     },
     {
       "ownerId": "03e02209-2c59-4e49-a6fc-7e6566128e88",
@@ -292,7 +319,8 @@ export const mockSightings: SightingDocument[] =
       "details": {
         "lat": 5.829448615545147,
         "lng": 42.487327951713254
-      }
+      },
+      "type": "KEYS"
     },
     {
       "ownerId": "61dccb57-dd2e-44ec-9ab5-4b12436aa37d",
@@ -302,7 +330,8 @@ export const mockSightings: SightingDocument[] =
       "details": {
         "lat": 48.54051623107865,
         "lng": 1.0283102456551285
-      }
+      },
+      "type": "KEYS"
     },
     {
       "ownerId": "2c6baf7b-1a42-49dd-b789-da0e029cb68f",
@@ -312,7 +341,8 @@ export const mockSightings: SightingDocument[] =
       "details": {
         "lat": 41.02953076756907,
         "lng": 48.28036437710214
-      }
+      },
+      "type": "KEYS"
     },
     {
       "ownerId": "7c2c6c69-2744-472e-9b0f-db41428409b3",
@@ -322,7 +352,8 @@ export const mockSightings: SightingDocument[] =
       "details": {
         "lat": 17.25253783254822,
         "lng": 49.86814000369888
-      }
+      },
+      "type": "KEYS"
     },
     {
       "ownerId": "b9ef58ed-55f3-43dc-be57-74c52ab6d2cf",
@@ -332,7 +363,8 @@ export const mockSightings: SightingDocument[] =
       "details": {
         "lat": 35.20169077809582,
         "lng": 11.68174740648661
-      }
+      },
+      "type": "KEYS"
     },
     {
       "ownerId": "0e314856-3622-4b8e-a719-2643bede18d9",
@@ -342,7 +374,8 @@ export const mockSightings: SightingDocument[] =
       "details": {
         "lat": 34.12631198390773,
         "lng": 6.989483052618772
-      }
+      },
+      "type": "KEYS"
     },
     {
       "ownerId": "a06857c9-5ea2-4845-b5ce-493923f6adbd",
@@ -352,7 +385,8 @@ export const mockSightings: SightingDocument[] =
       "details": {
         "lat": 33.00114350456064,
         "lng": 27.555427363559048
-      }
+      },
+      "type": "KEYS"
     },
     {
       "ownerId": "3edd043a-36c8-4632-8e4a-32672ee4ea3c",
@@ -362,7 +396,8 @@ export const mockSightings: SightingDocument[] =
       "details": {
         "lat": 11.605040262576278,
         "lng": 37.12628581574709
-      }
+      },
+      "type": "KEYS"
     },
     {
       "ownerId": "191492a9-bf69-44f7-bb2f-7a62fe9cbca1",
@@ -372,7 +407,8 @@ export const mockSightings: SightingDocument[] =
       "details": {
         "lat": 15.33567720509007,
         "lng": 42.75225911759562
-      }
+      },
+      "type": "KEYS"
     },
     {
       "ownerId": "b31ca0b4-dea4-45cc-ad04-4eec004a2134",
@@ -382,7 +418,8 @@ export const mockSightings: SightingDocument[] =
       "details": {
         "lat": 3.362233762247213,
         "lng": 27.92816694400926
-      }
+      },
+      "type": "KEYS"
     },
     {
       "ownerId": "03e02209-2c59-4e49-a6fc-7e6566128e88",
@@ -392,7 +429,8 @@ export const mockSightings: SightingDocument[] =
       "details": {
         "lat": 28.269652772739658,
         "lng": 11.128428934790568
-      }
+      },
+      "type": "KEYS"
     },
     {
       "ownerId": "61dccb57-dd2e-44ec-9ab5-4b12436aa37d",
@@ -402,7 +440,8 @@ export const mockSightings: SightingDocument[] =
       "details": {
         "lat": 11.812863907307763,
         "lng": 41.484625383984564
-      }
+      },
+      "type": "KEYS"
     },
     {
       "ownerId": "2c6baf7b-1a42-49dd-b789-da0e029cb68f",
@@ -412,7 +451,8 @@ export const mockSightings: SightingDocument[] =
       "details": {
         "lat": 45.816539415158125,
         "lng": 32.30687140140139
-      }
+      },
+      "type": "KEYS"
     },
     {
       "ownerId": "7c2c6c69-2744-472e-9b0f-db41428409b3",
@@ -422,7 +462,8 @@ export const mockSightings: SightingDocument[] =
       "details": {
         "lat": 46.39700031567934,
         "lng": 22.71031019752947
-      }
+      },
+      "type": "KEYS"
     },
     {
       "ownerId": "b9ef58ed-55f3-43dc-be57-74c52ab6d2cf",
@@ -432,7 +473,8 @@ export const mockSightings: SightingDocument[] =
       "details": {
         "lat": 13.612601158002736,
         "lng": 31.020884691345064
-      }
+      },
+      "type": "KEYS"
     },
     {
       "ownerId": "0e314856-3622-4b8e-a719-2643bede18d9",
@@ -442,7 +484,8 @@ export const mockSightings: SightingDocument[] =
       "details": {
         "lat": 34.391780736568066,
         "lng": 35.14784728332056
-      }
+      },
+      "type": "KEYS"
     },
     {
       "ownerId": "a06857c9-5ea2-4845-b5ce-493923f6adbd",
@@ -452,7 +495,8 @@ export const mockSightings: SightingDocument[] =
       "details": {
         "lat": 17.10435299906407,
         "lng": 7.5860761495348425
-      }
+      },
+      "type": "KEYS"
     },
     {
       "ownerId": "3edd043a-36c8-4632-8e4a-32672ee4ea3c",
@@ -462,7 +506,8 @@ export const mockSightings: SightingDocument[] =
       "details": {
         "lat": 6.645388038582545,
         "lng": 47.91972028944191
-      }
+      },
+      "type": "KEYS"
     },
     {
       "ownerId": "191492a9-bf69-44f7-bb2f-7a62fe9cbca1",
@@ -472,7 +517,8 @@ export const mockSightings: SightingDocument[] =
       "details": {
         "lat": 29.870772117041238,
         "lng": 11.61385279379521
-      }
+      },
+      "type": "KEYS"
     },
     {
       "ownerId": "b31ca0b4-dea4-45cc-ad04-4eec004a2134",
@@ -482,7 +528,8 @@ export const mockSightings: SightingDocument[] =
       "details": {
         "lat": 32.860758720918255,
         "lng": 20.34565294360017
-      }
+      },
+      "type": "KEYS"
     },
     {
       "ownerId": "03e02209-2c59-4e49-a6fc-7e6566128e88",
@@ -492,7 +539,8 @@ export const mockSightings: SightingDocument[] =
       "details": {
         "lat": 7.63825148596834,
         "lng": 9.034500579573923
-      }
+      },
+      "type": "KEYS"
     },
     {
       "ownerId": "61dccb57-dd2e-44ec-9ab5-4b12436aa37d",
@@ -502,7 +550,8 @@ export const mockSightings: SightingDocument[] =
       "details": {
         "lat": 32.28791370156114,
         "lng": 11.709832393281822
-      }
+      },
+      "type": "KEYS"
     },
     {
       "ownerId": "2c6baf7b-1a42-49dd-b789-da0e029cb68f",
@@ -512,7 +561,8 @@ export const mockSightings: SightingDocument[] =
       "details": {
         "lat": 30.786978062724945,
         "lng": 44.99887866260795
-      }
+      },
+      "type": "KEYS"
     },
     {
       "ownerId": "7c2c6c69-2744-472e-9b0f-db41428409b3",
@@ -522,7 +572,8 @@ export const mockSightings: SightingDocument[] =
       "details": {
         "lat": 35.27780863776619,
         "lng": 41.577608103509576
-      }
+      },
+      "type": "KEYS"
     },
     {
       "ownerId": "b9ef58ed-55f3-43dc-be57-74c52ab6d2cf",
@@ -532,7 +583,8 @@ export const mockSightings: SightingDocument[] =
       "details": {
         "lat": 32.38757913363793,
         "lng": 46.69060463985157
-      }
+      },
+      "type": "KEYS"
     },
     {
       "ownerId": "0e314856-3622-4b8e-a719-2643bede18d9",
@@ -542,7 +594,8 @@ export const mockSightings: SightingDocument[] =
       "details": {
         "lat": 21.41986919431294,
         "lng": 21.491973610187546
-      }
+      },
+      "type": "KEYS"
     },
     {
       "ownerId": "a06857c9-5ea2-4845-b5ce-493923f6adbd",
@@ -552,7 +605,8 @@ export const mockSightings: SightingDocument[] =
       "details": {
         "lat": 35.95464342250736,
         "lng": 34.86607922039877
-      }
+      },
+      "type": "KEYS"
     },
     {
       "ownerId": "3edd043a-36c8-4632-8e4a-32672ee4ea3c",
@@ -562,7 +616,8 @@ export const mockSightings: SightingDocument[] =
       "details": {
         "lat": 22.813139577092272,
         "lng": 47.784629200915376
-      }
+      },
+      "type": "KEYS"
     },
     {
       "ownerId": "191492a9-bf69-44f7-bb2f-7a62fe9cbca1",
@@ -572,7 +627,8 @@ export const mockSightings: SightingDocument[] =
       "details": {
         "lat": 43.580850729420234,
         "lng": 24.1145138387954
-      }
+      },
+      "type": "KEYS"
     },
     {
       "ownerId": "b31ca0b4-dea4-45cc-ad04-4eec004a2134",
@@ -582,7 +638,8 @@ export const mockSightings: SightingDocument[] =
       "details": {
         "lat": 1.3713873295434442,
         "lng": 46.705158234445626
-      }
+      },
+      "type": "KEYS"
     },
     {
       "ownerId": "03e02209-2c59-4e49-a6fc-7e6566128e88",
@@ -592,7 +649,8 @@ export const mockSightings: SightingDocument[] =
       "details": {
         "lat": 11.988112481815788,
         "lng": 31.728643020196223
-      }
+      },
+      "type": "KEYS"
     },
     {
       "ownerId": "61dccb57-dd2e-44ec-9ab5-4b12436aa37d",
@@ -602,7 +660,8 @@ export const mockSightings: SightingDocument[] =
       "details": {
         "lat": 4.598249342724891,
         "lng": 0.7358720471303537
-      }
+      },
+      "type": "KEYS"
     },
     {
       "ownerId": "2c6baf7b-1a42-49dd-b789-da0e029cb68f",
@@ -612,7 +671,8 @@ export const mockSightings: SightingDocument[] =
       "details": {
         "lat": 27.705501004894195,
         "lng": 0.02349472471468439
-      }
+      },
+      "type": "KEYS"
     },
     {
       "ownerId": "7c2c6c69-2744-472e-9b0f-db41428409b3",
@@ -622,7 +682,8 @@ export const mockSightings: SightingDocument[] =
       "details": {
         "lat": 1.7558543927553016,
         "lng": 20.933478679966555
-      }
+      },
+      "type": "KEYS"
     },
     {
       "ownerId": "b9ef58ed-55f3-43dc-be57-74c52ab6d2cf",
@@ -632,7 +693,8 @@ export const mockSightings: SightingDocument[] =
       "details": {
         "lat": 30.435630386772296,
         "lng": 30.467794144516525
-      }
+      },
+      "type": "KEYS"
     },
     {
       "ownerId": "0e314856-3622-4b8e-a719-2643bede18d9",
@@ -642,7 +704,8 @@ export const mockSightings: SightingDocument[] =
       "details": {
         "lat": 4.786416972744412,
         "lng": 1.6221949900317612
-      }
+      },
+      "type": "KEYS"
     },
     {
       "ownerId": "a06857c9-5ea2-4845-b5ce-493923f6adbd",
@@ -652,7 +715,8 @@ export const mockSightings: SightingDocument[] =
       "details": {
         "lat": 12.862850356558353,
         "lng": 27.052769909690582
-      }
+      },
+      "type": "KEYS"
     },
     {
       "ownerId": "3edd043a-36c8-4632-8e4a-32672ee4ea3c",
@@ -662,7 +726,8 @@ export const mockSightings: SightingDocument[] =
       "details": {
         "lat": 19.126828181002566,
         "lng": 6.846175312418029
-      }
+      },
+      "type": "KEYS"
     },
     {
       "ownerId": "191492a9-bf69-44f7-bb2f-7a62fe9cbca1",
@@ -672,7 +737,8 @@ export const mockSightings: SightingDocument[] =
       "details": {
         "lat": 14.259348104242232,
         "lng": 15.039772022137821
-      }
+      },
+      "type": "KEYS"
     },
     {
       "ownerId": "b31ca0b4-dea4-45cc-ad04-4eec004a2134",
@@ -682,7 +748,8 @@ export const mockSightings: SightingDocument[] =
       "details": {
         "lat": 4.148933524223219,
         "lng": 6.284745766319793
-      }
+      },
+      "type": "KEYS"
     },
     {
       "ownerId": "03e02209-2c59-4e49-a6fc-7e6566128e88",
@@ -692,7 +759,8 @@ export const mockSightings: SightingDocument[] =
       "details": {
         "lat": 5.0364412390121345,
         "lng": 41.48294132346758
-      }
+      },
+      "type": "KEYS"
     },
     {
       "ownerId": "61dccb57-dd2e-44ec-9ab5-4b12436aa37d",
@@ -702,7 +770,8 @@ export const mockSightings: SightingDocument[] =
       "details": {
         "lat": 30.253211988294392,
         "lng": 27.06847544526287
-      }
+      },
+      "type": "KEYS"
     },
     {
       "ownerId": "2c6baf7b-1a42-49dd-b789-da0e029cb68f",
@@ -712,7 +781,8 @@ export const mockSightings: SightingDocument[] =
       "details": {
         "lat": 3.40721448718368,
         "lng": 42.1987197693053
-      }
+      },
+      "type": "KEYS"
     },
     {
       "ownerId": "7c2c6c69-2744-472e-9b0f-db41428409b3",
@@ -722,7 +792,8 @@ export const mockSightings: SightingDocument[] =
       "details": {
         "lat": 7.829605573324044,
         "lng": 39.01579545282347
-      }
+      },
+      "type": "KEYS"
     },
     {
       "ownerId": "b9ef58ed-55f3-43dc-be57-74c52ab6d2cf",
@@ -732,7 +803,8 @@ export const mockSightings: SightingDocument[] =
       "details": {
         "lat": 5.595585352456261,
         "lng": 49.689873007315796
-      }
+      },
+      "type": "KEYS"
     },
     {
       "ownerId": "0e314856-3622-4b8e-a719-2643bede18d9",
@@ -742,7 +814,8 @@ export const mockSightings: SightingDocument[] =
       "details": {
         "lat": 10.656775640349903,
         "lng": 2.450270732115073
-      }
+      },
+      "type": "KEYS"
     },
     {
       "ownerId": "a06857c9-5ea2-4845-b5ce-493923f6adbd",
@@ -752,7 +825,8 @@ export const mockSightings: SightingDocument[] =
       "details": {
         "lat": 37.88806061800424,
         "lng": 3.2523915294835835
-      }
+      },
+      "type": "KEYS"
     },
     {
       "ownerId": "3edd043a-36c8-4632-8e4a-32672ee4ea3c",
@@ -762,7 +836,8 @@ export const mockSightings: SightingDocument[] =
       "details": {
         "lat": 23.911702897691423,
         "lng": 21.05397815410158
-      }
+      },
+      "type": "KEYS"
     },
     {
       "ownerId": "191492a9-bf69-44f7-bb2f-7a62fe9cbca1",
@@ -772,7 +847,8 @@ export const mockSightings: SightingDocument[] =
       "details": {
         "lat": 1.9540102261153325,
         "lng": 12.308765223617046
-      }
+      },
+      "type": "KEYS"
     },
     {
       "ownerId": "b31ca0b4-dea4-45cc-ad04-4eec004a2134",
@@ -782,7 +858,8 @@ export const mockSightings: SightingDocument[] =
       "details": {
         "lat": 10.916629168880215,
         "lng": 38.93204566200618
-      }
+      },
+      "type": "KEYS"
     },
     {
       "ownerId": "03e02209-2c59-4e49-a6fc-7e6566128e88",
@@ -792,7 +869,8 @@ export const mockSightings: SightingDocument[] =
       "details": {
         "lat": 23.530607606654367,
         "lng": 35.7054387748747
-      }
+      },
+      "type": "KEYS"
     },
     {
       "ownerId": "61dccb57-dd2e-44ec-9ab5-4b12436aa37d",
@@ -802,7 +880,8 @@ export const mockSightings: SightingDocument[] =
       "details": {
         "lat": 0.8198103684587843,
         "lng": 30.447574705880665
-      }
+      },
+      "type": "KEYS"
     },
     {
       "ownerId": "2c6baf7b-1a42-49dd-b789-da0e029cb68f",
@@ -812,7 +891,8 @@ export const mockSightings: SightingDocument[] =
       "details": {
         "lat": 31.15149332770327,
         "lng": 45.56113063475524
-      }
+      },
+      "type": "KEYS"
     },
     {
       "ownerId": "7c2c6c69-2744-472e-9b0f-db41428409b3",
@@ -822,7 +902,8 @@ export const mockSightings: SightingDocument[] =
       "details": {
         "lat": 14.648631408323636,
         "lng": 49.78009126303118
-      }
+      },
+      "type": "KEYS"
     },
     {
       "ownerId": "b9ef58ed-55f3-43dc-be57-74c52ab6d2cf",
@@ -832,7 +913,8 @@ export const mockSightings: SightingDocument[] =
       "details": {
         "lat": 18.58031276590068,
         "lng": 34.10633655266393
-      }
+      },
+      "type": "KEYS"
     },
     {
       "ownerId": "0e314856-3622-4b8e-a719-2643bede18d9",
@@ -842,7 +924,8 @@ export const mockSightings: SightingDocument[] =
       "details": {
         "lat": 30.099640347166694,
         "lng": 13.909065717706737
-      }
+      },
+      "type": "KEYS"
     },
     {
       "ownerId": "a06857c9-5ea2-4845-b5ce-493923f6adbd",
@@ -852,7 +935,8 @@ export const mockSightings: SightingDocument[] =
       "details": {
         "lat": 28.720668199507138,
         "lng": 9.922009554008893
-      }
+      },
+      "type": "KEYS"
     },
     {
       "ownerId": "3edd043a-36c8-4632-8e4a-32672ee4ea3c",
@@ -862,7 +946,8 @@ export const mockSightings: SightingDocument[] =
       "details": {
         "lat": 30.787584899616192,
         "lng": 13.830340520501554
-      }
+      },
+      "type": "KEYS"
     },
     {
       "ownerId": "191492a9-bf69-44f7-bb2f-7a62fe9cbca1",
@@ -872,7 +957,8 @@ export const mockSightings: SightingDocument[] =
       "details": {
         "lat": 46.52626839716151,
         "lng": 44.13417835721784
-      }
+      },
+      "type": "KEYS"
     },
     {
       "ownerId": "b31ca0b4-dea4-45cc-ad04-4eec004a2134",
@@ -882,7 +968,8 @@ export const mockSightings: SightingDocument[] =
       "details": {
         "lat": 47.584603772290336,
         "lng": 0.33011235341399714
-      }
+      },
+      "type": "KEYS"
     },
     {
       "ownerId": "03e02209-2c59-4e49-a6fc-7e6566128e88",
@@ -892,7 +979,8 @@ export const mockSightings: SightingDocument[] =
       "details": {
         "lat": 44.622113652865245,
         "lng": 37.29848624766913
-      }
+      },
+      "type": "KEYS"
     },
     {
       "ownerId": "61dccb57-dd2e-44ec-9ab5-4b12436aa37d",
@@ -902,7 +990,8 @@ export const mockSightings: SightingDocument[] =
       "details": {
         "lat": 42.921521849295125,
         "lng": 16.541716554465573
-      }
+      },
+      "type": "KEYS"
     },
     {
       "ownerId": "2c6baf7b-1a42-49dd-b789-da0e029cb68f",
@@ -912,7 +1001,8 @@ export const mockSightings: SightingDocument[] =
       "details": {
         "lat": 49.91207893752525,
         "lng": 4.301278703463707
-      }
+      },
+      "type": "KEYS"
     },
     {
       "ownerId": "7c2c6c69-2744-472e-9b0f-db41428409b3",
@@ -922,7 +1012,8 @@ export const mockSightings: SightingDocument[] =
       "details": {
         "lat": 35.362187434461745,
         "lng": 3.59261462056113
-      }
+      },
+      "type": "KEYS"
     },
     {
       "ownerId": "b9ef58ed-55f3-43dc-be57-74c52ab6d2cf",
@@ -932,7 +1023,8 @@ export const mockSightings: SightingDocument[] =
       "details": {
         "lat": 13.288861225838527,
         "lng": 16.117880016457054
-      }
+      },
+      "type": "KEYS"
     },
     {
       "ownerId": "0e314856-3622-4b8e-a719-2643bede18d9",
@@ -942,7 +1034,8 @@ export const mockSightings: SightingDocument[] =
       "details": {
         "lat": 48.968931223626825,
         "lng": 36.37520447458392
-      }
+      },
+      "type": "KEYS"
     },
     {
       "ownerId": "a06857c9-5ea2-4845-b5ce-493923f6adbd",
@@ -952,7 +1045,8 @@ export const mockSightings: SightingDocument[] =
       "details": {
         "lat": 9.350102791501131,
         "lng": 6.065823777760765
-      }
+      },
+      "type": "KEYS"
     },
     {
       "ownerId": "3edd043a-36c8-4632-8e4a-32672ee4ea3c",
@@ -962,7 +1056,8 @@ export const mockSightings: SightingDocument[] =
       "details": {
         "lat": 40.59526772992136,
         "lng": 39.64074678264788
-      }
+      },
+      "type": "KEYS"
     },
     {
       "ownerId": "191492a9-bf69-44f7-bb2f-7a62fe9cbca1",
@@ -972,7 +1067,8 @@ export const mockSightings: SightingDocument[] =
       "details": {
         "lat": 34.606346428703155,
         "lng": 37.06444157883123
-      }
+      },
+      "type": "KEYS"
     },
     {
       "ownerId": "b31ca0b4-dea4-45cc-ad04-4eec004a2134",
@@ -982,7 +1078,8 @@ export const mockSightings: SightingDocument[] =
       "details": {
         "lat": 13.304072724388472,
         "lng": 26.55733961835125
-      }
+      },
+      "type": "KEYS"
     },
     {
       "ownerId": "03e02209-2c59-4e49-a6fc-7e6566128e88",
@@ -992,7 +1089,8 @@ export const mockSightings: SightingDocument[] =
       "details": {
         "lat": 40.62141576669099,
         "lng": 28.88421263807686
-      }
+      },
+      "type": "KEYS"
     },
     {
       "ownerId": "61dccb57-dd2e-44ec-9ab5-4b12436aa37d",
@@ -1002,7 +1100,8 @@ export const mockSightings: SightingDocument[] =
       "details": {
         "lat": 18.459794607435498,
         "lng": 17.104439356166022
-      }
+      },
+      "type": "KEYS"
     },
     {
       "ownerId": "2c6baf7b-1a42-49dd-b789-da0e029cb68f",
@@ -1012,7 +1111,8 @@ export const mockSightings: SightingDocument[] =
       "details": {
         "lat": 26.05580391058459,
         "lng": 3.2490612785973205
-      }
+      },
+      "type": "KEYS"
     }
   ];
 

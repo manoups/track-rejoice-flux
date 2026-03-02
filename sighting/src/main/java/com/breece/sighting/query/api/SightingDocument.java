@@ -10,12 +10,12 @@ import lombok.Builder;
 import java.time.Instant;
 
 @Builder
-public record SightingDocument(SightingId sightingId, UserId ownerId, SightingDetails details, boolean removeAfterMatching, Instant timestamp) {
+public record SightingDocument(SightingId sightingId, UserId ownerId, SightingDetails details, boolean removeAfterMatching, String type, Instant timestamp) {
     public SightingDocument(SearchHit<Sighting> searchHit) {
         this(searchHit.getValue(), searchHit.getTimestamp());
     }
 
     public SightingDocument(Sighting sighting, Instant timestamp) {
-        this(sighting.sightingId(), sighting.ownerId(), sighting.details(), sighting.removeAfterMatching(), timestamp);
+        this(sighting.sightingId(), sighting.ownerId(), sighting.details(), sighting.removeAfterMatching(), sighting.subtype().name(), timestamp);
     }
 }

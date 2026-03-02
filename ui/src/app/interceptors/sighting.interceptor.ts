@@ -24,6 +24,9 @@ export function mockBackendInterceptor(
   if (method === 'POST') {
     let typedBody:FacetPaginationRequestBody = req.body;
     let result = [...mockSightings];
+    if(typedBody.facetFilters && typedBody.facetFilters.length > 0){
+      result = result.filter(it => typedBody.facetFilters.every(ff => ff.values.every(it2 => it[ff.facetName].toLowerCase()==it2.toLowerCase())));
+    }
     const page =typedBody.pagination.page;
     const pageSize = typedBody.pagination.pageSize;
     return ok(result.slice(page * pageSize, (page + 1) * pageSize));
