@@ -1,0 +1,58 @@
+.viewport {
+  height: calc(100vh - 180px);
+  width: 100%;
+}
+
+table {
+  width: 100%;
+}
+
+/* keep viewport math correct */
+.mat-mdc-row,
+.mat-mdc-header-row {
+  height: 48px;
+}
+
+/* sticky header within the viewport scroll */
+.sticky {
+  position: sticky;
+  top: 0;
+  z-index: 3;
+  background: var(--mat-sys-surface, #fff);
+}
+
+.mat-mdc-row .mat-mdc-cell {
+  border-bottom: 1px solid transparent;
+  border-top: 1px solid transparent;
+  cursor: pointer;
+}
+
+.mat-mdc-row:hover .mat-mdc-cell {
+  border-color: currentColor;
+}
+
+.row-is-clicked {
+  font-weight: bold;
+}
+
+.main-grid {
+  height: 100%;
+  display: grid;
+  grid-template-rows: 1fr 240px; /* table grows, details fixed */
+  gap: 12px;
+  padding: 0 6px 6px 6px;
+  box-sizing: border-box;
+  min-height: 0; /* critical so the 1fr row can shrink */
+}
+
+.table-pane {
+  min-height: 0; /* critical so inner scrolling works */
+  overflow: hidden; /* let the viewport own the scroll */
+  border-radius: 25px 25px 0 0;
+
+}
+
+.details-pane {
+  overflow: auto;
+  border-top: 1px solid rgba(0,0,0,0.12);
+}

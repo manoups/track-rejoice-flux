@@ -10,6 +10,7 @@ import {MatToolbar} from '@angular/material/toolbar';
 import {SightingBasicDetailsComponent} from '../sighting-basic-details/sighting-basic-details.component';
 import {MatButton} from '@angular/material/button';
 import {RouterLink} from '@angular/router';
+import {WeightedAssociationsComponent} from '../weighted-associations/weighted-associations.component';
 
 @Component({
   selector: 'track-rejoice-sighting-details',
@@ -21,7 +22,8 @@ import {RouterLink} from '@angular/router';
     MatToolbar,
     SightingBasicDetailsComponent,
     MatButton,
-    RouterLink
+    RouterLink,
+    WeightedAssociationsComponent
   ],
   templateUrl: './sighting-details.component.html',
   styleUrl: './sighting-details.component.css',

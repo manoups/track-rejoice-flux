@@ -12,9 +12,10 @@ import {environment} from '../environments/environments';
 import {mockStatsInterceptor} from './interceptors/sighting.stats.interceptor';
 import {mockSightingCreateInterceptor} from './interceptors/sighting.create.interceptor';
 import {mockBackendDetailsInterceptor} from './interceptors/sighting.details.interceptor';
+import {mockWeightedAssociationsInterceptor} from './interceptors/weighted.association.interceptor';
 
 export const appConfig: ApplicationConfig = {
   providers: [provideZoneChangeDetection({ eventCoalescing: true }), provideRouter(routes, withComponentInputBinding(), withRouterConfig({paramsInheritanceStrategy: 'always'})), provideHttpClient(environment.mock
-    ? withInterceptors([mockBackendInterceptor, mockStatsInterceptor, mockSightingCreateInterceptor, mockBackendDetailsInterceptor])
+    ? withInterceptors([mockBackendInterceptor, mockStatsInterceptor, mockSightingCreateInterceptor, mockBackendDetailsInterceptor, mockWeightedAssociationsInterceptor])
     : withInterceptorsFromDi()), QueryGateway, CommandGateway, HandlerRegistry, {provide: HTTP_INTERCEPTORS, useClass: LoadingInterceptor, multi: true}]
 };
