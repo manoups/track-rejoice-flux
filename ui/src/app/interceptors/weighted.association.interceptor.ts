@@ -33,7 +33,7 @@ export function mockWeightedAssociationsInterceptor(
   // POST
   if (method === 'POST') {
     let typedBody:FacetPaginationRequestBody = req.body;
-    let result = [...weightedAssociations.filter(it => it.sightingId == typedBody.filter)];
+    let result = [...weightedAssociations.filter(it => it.sightingId == typedBody.filter).sort((a, b) => a.score - b.score)];
     const page =typedBody.pagination.page;
     const pageSize = typedBody.pagination.pageSize;
     return ok(result.slice(page * pageSize, (page + 1) * pageSize));
