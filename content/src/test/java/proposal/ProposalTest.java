@@ -10,14 +10,16 @@ import com.breece.content.command.api.CreateContent;
 import com.breece.content.command.api.PublishContent;
 import com.breece.content.command.api.UpdateLastSeenPosition;
 import com.breece.content.query.api.GetContent;
+import com.breece.content.query.api.GetContents;
 import com.breece.content.query.api.GetSightingHistoryForContent;
 import com.breece.coreapi.common.SightingDetails;
 import com.breece.coreapi.common.SightingEnum;
+import com.breece.coreapi.facets.FacetFilter;
+import com.breece.coreapi.facets.GetFacetStatsResult;
+import com.breece.coreapi.facets.GetFacets;
+import com.breece.coreapi.facets.Pagination;
 import com.breece.coreapi.util.GeometryUtil;
-import com.breece.proposal.command.api.AcceptProposal;
-import com.breece.proposal.command.api.DeleteWeightedAssociation;
-import com.breece.proposal.command.api.GetWeightedAssociationsByContentIdAndStatuses;
-import com.breece.proposal.command.api.WeightedAssociationErrors;
+import com.breece.proposal.command.api.*;
 import com.breece.proposal.command.api.model.WeightedAssociationId;
 import com.breece.proposal.command.api.model.WeightedAssociationState;
 import com.breece.proposal.command.api.model.WeightedAssociationStatus;
@@ -194,16 +196,60 @@ public class ProposalTest extends TestUtilities {
         for (int i = 0; i < SIZE; ++i) {
             ContentId contentId = new ContentId();
             contents[i] = new CreateContent(contentId, new SightingDetails(BigDecimal.ZERO, BigDecimal.ZERO), new Pet("Maya", "Cocker Spaniel", GenderEnum.FEMALE, SightingEnum.CAT));
-        publishContents[i] = new PublishContent(contentId, Duration.ofDays(90));
+            publishContents[i] = new PublishContent(contentId, Duration.ofDays(90));
         }
         testFixture.givenCommandsByUser("viewer", contents)
                 .givenCommands(publishContents)
                 .whenNothingHappens()
-                .expectTrue(_ -> Fluxzero.search(WeightedAssociationState.class).count() == 0 )
+                .expectTrue(_ -> Fluxzero.search(WeightedAssociationState.class).count() == 0)
                 .andThen()
                 .whenCommandByUser("Alice", "../sighting/create-sighting.json")
-                .expectTrue(_ -> Fluxzero.search(WeightedAssociationState.class).count() == SIZE );
+                .expectTrue(_ -> Fluxzero.search(WeightedAssociationState.class).count() == SIZE);
 
+    }
+
+    @Nested
+    class FacetStatsTest {
+        CreateContent[] contents;
+        PublishContent[] publishContents;
+        CreateSighting[] sightings;
+        List<SightingEnum> targetSightingTypes = List.of(SightingEnum.CAT, SightingEnum.DOG);
+
+        @BeforeEach
+        void setUp() {
+            int SIZE = 7;
+            contents = new CreateContent[SIZE];
+            publishContents = new PublishContent[SIZE];
+            sightings = new CreateSighting[SIZE];
+            for (int i = 0; i < SIZE; ++i) {
+                ContentId contentId = new ContentId();
+                contents[i] = new CreateContent(contentId, new SightingDetails(BigDecimal.ZERO, BigDecimal.ZERO), new Pet("Maya", "Cocker Spaniel", GenderEnum.FEMALE, targetSightingTypes.get(i % targetSightingTypes.size())));
+                publishContents[i] = new PublishContent(contentId, Duration.ofDays(90));
+                sightings[i] = new CreateSighting(new SightingId(), new SightingDetails(BigDecimal.ZERO, BigDecimal.ZERO), true, targetSightingTypes.get(i % targetSightingTypes.size()));
+            }
+        }
+
+        @Test
+        void checkFacetStats() {
+            testFixture.givenCommands(contents, publishContents, sightings)
+                    .whenQuery(new GetFacets(new GetContents(List.of(), "", new Pagination(0, 10))))
+                    .expectNoErrors()
+                    .expectResult(Objects::nonNull)
+                    .mapResult(GetFacetStatsResult::getStats)
+                    .mapResult(l -> l.get("details/subtype"))
+                    .expectResult(hasSize(targetSightingTypes.size()));
+        }
+
+        @Test
+        void checkFacetStatsWithFilter() {
+            testFixture.givenCommands(contents, publishContents, sightings)
+                    .whenQuery(new GetFacets(new GetContents(List.of(new FacetFilter("details/subtype", SightingEnum.CAT)), "", new Pagination(0, 10))))
+                    .expectNoErrors()
+                    .expectResult(Objects::nonNull)
+                    .mapResult(GetFacetStatsResult::getStats)
+                    .mapResult(l -> l.get("details/subtype"))
+                    .expectResult(hasSize(1));
+        }
     }
 
     @Nested
