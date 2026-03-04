@@ -1,0 +1,30 @@
+.example-section {
+  margin: 12px 0;
+}
+
+.example-margin {
+  margin: 0 12px;
+}
+
+ul {
+  list-style-type: none;
+  margin-top: 4px;
+}
+
+.spacer {
+  flex: 1 1 auto;
+}
+
+.divider-row {
+  display: flex;
+  align-items: center;   /* vertical alignment */
+  gap: 12px;             /* spacing between items */
+}
+
+.spacer {
+  flex: 1 1 auto;        /* pushes the button to the right */
+}
+
+.divider-title {
+  margin: 0;             /* remove default h2 margins so it stays aligned */
+}

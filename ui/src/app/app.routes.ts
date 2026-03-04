@@ -4,6 +4,7 @@ import {SightingCreateComponent} from './private/sighting-create/sighting-create
 import {ContentCreateComponent} from './private/content-create/content-create.component';
 import {SightingDetailsComponent} from './private/sighting-details/sighting-details.component';
 import {SightingBoilerplateComponent} from './private/sighting-boilerplate/sighting-boilerplate.component';
+import {SidebarComponent} from './private/sidebar/sidebar.component';
 
 export const routes: Routes = [
   { path: '', pathMatch: 'full', redirectTo: 'sightings' },
@@ -14,6 +15,6 @@ export const routes: Routes = [
 
   { path: 'contents', component: ContentsComponent },
   { path: 'contents/new', component: ContentCreateComponent },
-
+  {path: 'sidebar', component: SidebarComponent},
   { path: '**', redirectTo: 'sightings' }
 ];

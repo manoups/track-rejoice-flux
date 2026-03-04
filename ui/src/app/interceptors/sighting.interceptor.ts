@@ -23,7 +23,7 @@ export function mockBackendInterceptor(
   // POST
   if (method === 'POST') {
     let typedBody:FacetPaginationRequestBody = req.body;
-    let result = [...mockSightings];
+    let result = typedBody.filter?.trim().length > 0 ? [...mockSightings.filter(val => val.sightingId.includes(typedBody.filter))] : [...mockSightings];
     if(typedBody.facetFilters && typedBody.facetFilters.length > 0){
       result = result.filter(it => typedBody.facetFilters.every(ff => ff.values.every(it2 => it[ff.facetName].toLowerCase()==it2.toLowerCase())));
     }
