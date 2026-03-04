@@ -102,6 +102,7 @@ export class SightingsComponent extends View implements OnInit {
     this.sightings.set([]);
     this.dataSource.set([]);
     this.done.set(false);
+    this.clickedRow.set(null);
   }
 
   private loadNextPage(body: FacetPaginationRequestBody): Observable<Sighting[]> {
