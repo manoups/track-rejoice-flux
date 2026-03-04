@@ -7,7 +7,7 @@ import {
   ValueCountPair
 } from '@trackrejoice/typescriptmodels';
 import {AsyncPipe, KeyValuePipe, TitleCasePipe} from '@angular/common';
-import {toObservable} from '@angular/core/rxjs-interop';
+import {toObservable, toSignal} from '@angular/core/rxjs-interop';
 import {HttpClient} from '@angular/common/http';
 import {FormControl, FormGroup, FormRecord, FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {RouterLink} from '@angular/router';
@@ -41,7 +41,13 @@ export class FilterSidebarComponent implements OnInit {
   private http = inject(HttpClient);
   private destroyRef = inject(DestroyRef);
   getFacetStats: Observable<Map<string, ValueCountPair[]>>;
-  facetFields = input.required<GetFacetStatsResult>();
+  statsEndpoint = input.required<string>();
+  initBody: FacetPaginationRequestBody = {facetFilters: [], filter: "", pagination: {page: 0, pageSize: 10}}
+  // Convert URL signal → Observable → API call
+  private data$ = toObservable(this.statsEndpoint).pipe(
+    switchMap(url => this.http.post<GetFacetStatsResult>(url, this.initBody, {withCredentials: true}))
+  );
+  facetFields = toSignal(this.data$, {initialValue: {stats: {}} as GetFacetStatsResult})
   term = signal('');
   facet = signal<FacetFilter[]>([]);
   facetChange = output<[string, FacetFilter[]]>();
@@ -73,7 +79,7 @@ export class FilterSidebarComponent implements OnInit {
       const next = current.filter(v => allowedSet.has(v));
 
       if (!arrayEqual(current, next)) {
-        ctrl.setValue(next, { emitEvent: false });
+        ctrl.setValue(next, {emitEvent: false});
       }
     }
   }
@@ -85,17 +91,17 @@ export class FilterSidebarComponent implements OnInit {
       .pipe(
         debounceTime(1000),
         map(v => (v ?? {})),
-        distinctUntilChanged((a,b) => facetsEqual(a,b)),
+        distinctUntilChanged((a, b) => facetsEqual(a, b)),
       )
       .subscribe(facetsValue => {
-      // facetsValue: Record<facetName, Record<valueName, boolean>>
-      const filters: FacetFilter[] = Object.entries(facetsValue ?? {})
-        .map(([facetName, selectedValues]) => ({
-          facetName,
-          values: (selectedValues ?? []).filter(v => typeof v === 'string' && v.length > 0),
-        })).filter(f => f.values.length > 0);
-      this.facet.set(filters);
-    });
+        // facetsValue: Record<facetName, Record<valueName, boolean>>
+        const filters: FacetFilter[] = Object.entries(facetsValue ?? {})
+          .map(([facetName, selectedValues]) => ({
+            facetName,
+            values: (selectedValues ?? []).filter(v => typeof v === 'string' && v.length > 0),
+          })).filter(f => f.values.length > 0);
+        this.facet.set(filters);
+      });
 
     const sub3 = this.filterChange$.subscribe(([filter, facetFilters]) => this.facetChange.emit([filter, facetFilters]));
 
@@ -109,7 +115,7 @@ export class FilterSidebarComponent implements OnInit {
       tap(_ => console.log(_.facetFilters)),
       distinctUntilChanged(),
       switchMap(body =>
-        this.http.post<GetFacetStatsResult>('/api/sighting/list/stats', body, {withCredentials: true})),
+        this.http.post<GetFacetStatsResult>(this.statsEndpoint(), body, {withCredentials: true})),
       map(facetResults => this.mergeStats(facetResults.stats, this.facetFields().stats)),
       tap(stats => {
         for (const [facetName] of stats.entries()) {
