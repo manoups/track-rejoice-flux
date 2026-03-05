@@ -43,15 +43,10 @@ import java.util.Objects;
 public record WeightedAssociationState(@EntityId WeightedAssociationId weightedAssociationId, ContentId contentId,
                                        SightingId sightingId,
                                        SightingDetails sightingDetails,
-                                       @With @Facet WeightedAssociationStatus status, @With double distance, @Sortable double score) {
+                                       @With @Facet WeightedAssociationStatus status, @With double distance, @With @Sortable double score) {
     @Association("contentId")
     @HandleEvent
     static List<WeightedAssociationState> on(PublishContent event, Content content) {
-        /*Optional<Content> content1 = Fluxzero.loadAggregate(event.contentId()).mapIfPresent(Entity::get);
-        if (content1.isEmpty()) {
-            return null;
-        }
-        Content content = content1.get();*/
         List<SightingDocument> sightingDocuments = Fluxzero.queryAndWait(new GetSightings(List.of(FacetFilter.builder().facetName("subtype").values(List.of(content.details().getSubtype())).build()), "", new Pagination(0, 1_000_000)));
         return sightingDocuments.stream().map(sightingDocument ->
                 {
@@ -116,6 +111,13 @@ public record WeightedAssociationState(@EntityId WeightedAssociationId weightedA
         Fluxzero.sendAndForgetCommand(new UpdateLastSeenPosition(content.contentId(), sightingDetails()));
 
         return withStatus(WeightedAssociationStatus.ACCEPTED);
+    }
+
+    @Association("contentId")
+    @HandleEvent
+    WeightedAssociationState on(UpdateLastSeenPosition event) {
+        double distance = GeometryUtil.parseLocation(event.sightingDetails().lat(), event.sightingDetails().lng()).distance(GeometryUtil.parseLocation(sightingDetails().lat(), sightingDetails().lng()));
+        return withDistance(distance).withScore(distance);
     }
 
     @Association("weightedAssociationId")

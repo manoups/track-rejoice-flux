@@ -209,6 +209,55 @@ public class ProposalTest extends TestUtilities {
     }
 
     @Nested
+    class AcceptProposalTests {
+        CreateContent content;
+        PublishContent publishContent;
+        CreateSighting[] sightings;
+        final int SIZE = 7;
+
+        @BeforeEach
+        void setUp() {
+            sightings = new CreateSighting[SIZE];
+            for (int i = 0; i < SIZE; ++i) {
+                sightings[i] = new CreateSighting(new SightingId(String.valueOf(i)), new SightingDetails(BigDecimal.valueOf(i), BigDecimal.valueOf(i*0.1)), true, SightingEnum.DOG);
+            }
+            ContentId contentId = new ContentId("1");
+            publishContent = new PublishContent(contentId, Duration.ofDays(90));
+            content = new CreateContent(contentId, new SightingDetails(BigDecimal.ZERO, BigDecimal.ZERO), new Pet("Maya", "Cocker Spaniel", GenderEnum.FEMALE, SightingEnum.DOG));
+        }
+
+        @Test
+        void givenProposal_whenQueryContent_thenDistanceOfOtherProposedSightingsChange() {
+            testFixture.givenCommands(sightings, content, publishContent)
+                    .whenQuery(new GetWeightedAssociationStates(List.of(new FacetFilter("status", List.of(WeightedAssociationStatus.CREATED))), "", new Pagination(0, 10)))
+                    .expectNoErrors()
+                    .expectResult(hasSize(SIZE));
+        }
+
+        @Test
+        void givenContentThenSightingCreated_whenQuerySightings_thenDistanceOfOtherProposedSightingsChange() {
+            testFixture.givenCommands(content, publishContent, sightings[0], sightings[1], sightings[2], sightings[3], sightings[4], sightings[5], sightings[6])
+                    .whenQuery(new GetWeightedAssociationStates(List.of(new FacetFilter("status", List.of(WeightedAssociationStatus.CREATED))), "", new Pagination(0, 10)))
+                    .expectNoErrors()
+                    .expectResult(hasSize(SIZE));
+        }
+
+        @Test
+        void givenProposal_whenAcceptContent_thenDistanceOfOtherProposedSightingsChange() {
+            testFixture.givenCommands(content, publishContent, sightings)
+                    .givenCommands(new ClaimSighting(content.contentId(), new WeightedAssociationId(content.contentId(), sightings[0].sightingId())))
+                    .whenQuery(new GetWeightedAssociationStates(List.of(new FacetFilter("status", List.of(WeightedAssociationStatus.CREATED))), "", new Pagination(0, 10)))
+                    .expectNoErrors()
+                    .expectResult(hasSize(SIZE-1))
+                    .andThen()
+                    .whenQuery(new GetWeightedAssociationStates(List.of(), "", new Pagination(0, 10)))
+                    .expectNoErrors()
+                    .expectResult(hasSize(1))
+                    .andThen();
+        }
+    }
+
+    @Nested
     class FacetStatsTest {
         CreateContent[] contents;
         PublishContent[] publishContents;
