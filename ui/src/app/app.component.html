@@ -1,3 +1,19 @@
+<mat-toolbar>
+  <div class="theme-switcher">
+    <button mat-icon-button>
+      <mat-icon>light_mode</mat-icon>
+    </button>
+
+    <mat-slide-toggle
+      [checked]="theme() === 'dark'"
+      (change)="theme.set($event.checked ? 'dark' : 'light')"
+    ></mat-slide-toggle>
+
+    <button mat-icon-button>
+      <mat-icon>dark_mode</mat-icon>
+    </button>
+  </div>
+</mat-toolbar>
 <router-outlet/>
 
 <track-rejoice-loading-indicator [detectRouteTransitions]="true"/>
