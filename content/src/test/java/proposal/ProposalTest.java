@@ -30,10 +30,7 @@ import io.fluxzero.sdk.Fluxzero;
 import io.fluxzero.sdk.test.TestFixture;
 import io.fluxzero.sdk.tracking.handling.IllegalCommandException;
 import lombok.extern.slf4j.Slf4j;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
-import org.junit.jupiter.api.Nested;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import util.TestUtilities;
 
 import java.math.BigDecimal;
@@ -210,7 +207,7 @@ public class ProposalTest extends TestUtilities {
 
     @Nested
     class AcceptProposalTests {
-        CreateContent content;
+        CreateContent createContent;
         PublishContent publishContent;
         CreateSighting[] sightings;
         final int SIZE = 7;
@@ -219,16 +216,16 @@ public class ProposalTest extends TestUtilities {
         void setUp() {
             sightings = new CreateSighting[SIZE];
             for (int i = 0; i < SIZE; ++i) {
-                sightings[i] = new CreateSighting(new SightingId(String.valueOf(i)), new SightingDetails(BigDecimal.valueOf(i), BigDecimal.valueOf(i*0.1)), true, SightingEnum.DOG);
+                sightings[i] = new CreateSighting(new SightingId(), new SightingDetails(BigDecimal.valueOf(i), BigDecimal.valueOf(i * 0.1)), false, SightingEnum.DOG);
             }
-            ContentId contentId = new ContentId("1");
+            ContentId contentId = new ContentId();
             publishContent = new PublishContent(contentId, Duration.ofDays(90));
-            content = new CreateContent(contentId, new SightingDetails(BigDecimal.ZERO, BigDecimal.ZERO), new Pet("Maya", "Cocker Spaniel", GenderEnum.FEMALE, SightingEnum.DOG));
+            createContent = new CreateContent(contentId, new SightingDetails(new BigDecimal("-1"), new BigDecimal("-1")), new Pet("Maya", "Cocker Spaniel", GenderEnum.FEMALE, SightingEnum.DOG));
         }
 
         @Test
         void givenProposal_whenQueryContent_thenDistanceOfOtherProposedSightingsChange() {
-            testFixture.givenCommands(sightings, content, publishContent)
+            testFixture.givenCommands(sightings, createContent, publishContent)
                     .whenQuery(new GetWeightedAssociationStates(List.of(new FacetFilter("status", List.of(WeightedAssociationStatus.CREATED))), "", new Pagination(0, 10)))
                     .expectNoErrors()
                     .expectResult(hasSize(SIZE));
@@ -236,24 +233,55 @@ public class ProposalTest extends TestUtilities {
 
         @Test
         void givenContentThenSightingCreated_whenQuerySightings_thenDistanceOfOtherProposedSightingsChange() {
-            testFixture.givenCommands(content, publishContent, sightings[0], sightings[1], sightings[2], sightings[3], sightings[4], sightings[5], sightings[6])
+            testFixture.givenCommands(createContent, publishContent, sightings)
                     .whenQuery(new GetWeightedAssociationStates(List.of(new FacetFilter("status", List.of(WeightedAssociationStatus.CREATED))), "", new Pagination(0, 10)))
                     .expectNoErrors()
                     .expectResult(hasSize(SIZE));
         }
 
         @Test
-        void givenProposal_whenAcceptContent_thenDistanceOfOtherProposedSightingsChange() {
-            testFixture.givenCommands(content, publishContent, sightings)
-                    .givenCommands(new ClaimSighting(content.contentId(), new WeightedAssociationId(content.contentId(), sightings[0].sightingId())))
+        void givenProposal_whenAcceptContent_thenStateOfWeightedAssociationChange() {
+            testFixture.givenCommands(createContent, publishContent, sightings)
+                    .givenCommands(new ClaimSighting(createContent.contentId(), new WeightedAssociationId(createContent.contentId(), sightings[0].sightingId())))
                     .whenQuery(new GetWeightedAssociationStates(List.of(new FacetFilter("status", List.of(WeightedAssociationStatus.CREATED))), "", new Pagination(0, 10)))
                     .expectNoErrors()
-                    .expectResult(hasSize(SIZE-1))
+                    .expectResult(hasSize(SIZE - 1))
                     .andThen()
-                    .whenQuery(new GetWeightedAssociationStates(List.of(), "", new Pagination(0, 10)))
+                    .whenQuery(new GetWeightedAssociationStates(List.of(new FacetFilter("status", List.of(WeightedAssociationStatus.ACCEPTED))), "", new Pagination(0, 10)))
                     .expectNoErrors()
-                    .expectResult(hasSize(1))
-                    .andThen();
+                    .expectResult(hasSize(1));
+        }
+
+        @Test
+        void givenProposal_whenAcceptContent_thenLastSeenLocationIsUpdated() {
+            testFixture.givenCommands(createContent, publishContent, sightings, new ClaimSighting(createContent.contentId(), new WeightedAssociationId(createContent.contentId(), sightings[0].sightingId())))
+                    .whenQuery(new GetContent(createContent.contentId()))
+                    .expectNoErrors()
+                    .mapResult(Content::lastConfirmedSighting)
+                    .expectResult(details -> GeometryUtil.parseLocation(details.lat(), details.lng()).within(GeometryUtil.parseLocation(sightings[0].sightingDetails().lat(), sightings[0].sightingDetails().lng())));
+        }
+
+        @Test
+        void givenProposal_whenAcceptContent_thenDistanceOfOtherProposedSightingsChange() {
+            SightingId targetSightingId = sightings[1].sightingId();
+            testFixture.givenCommands(createContent, publishContent, sightings)
+                    .whenQuery(new GetWeightedAssociationsBySightingIdAndStatuses(targetSightingId, List.of(WeightedAssociationStatus.CREATED)))
+                    .expectThat(fz -> {
+                        WeightedAssociationState weightedAssociationState = fz.queryGateway().sendAndWait(new GetWeightedAssociationsBySightingIdAndStatuses(targetSightingId, List.of(WeightedAssociationStatus.CREATED))).getFirst();
+                        Content content = fz.queryGateway().sendAndWait(new GetContent(createContent.contentId()));
+                         Assertions.assertTrue(Math.abs(weightedAssociationState.distance() - distance(content.lastConfirmedSighting().lat(), content.lastConfirmedSighting().lng(), sightings[1].sightingDetails().lat(), sightings[1].sightingDetails().lng())) < 0.00001);
+                    })
+                    .andThen()
+                    .whenCommand(new ClaimSighting(createContent.contentId(), new WeightedAssociationId(createContent.contentId(), sightings[0].sightingId())))
+                    .expectThat(fz -> {
+                        WeightedAssociationState weightedAssociationState = fz.queryGateway().sendAndWait(new GetWeightedAssociationsBySightingIdAndStatuses(targetSightingId, List.of(WeightedAssociationStatus.CREATED))).getFirst();
+                        Content content = fz.queryGateway().sendAndWait(new GetContent(createContent.contentId()));
+                        Assertions.assertTrue(Math.abs(weightedAssociationState.distance() - distance(content.lastConfirmedSighting().lat(), content.lastConfirmedSighting().lng(), sightings[1].sightingDetails().lat(), sightings[1].sightingDetails().lng())) < 0.00001);
+                    });
+        }
+
+        private double distance(BigDecimal sourceLat, BigDecimal sourceLng, BigDecimal targetLat, BigDecimal targetLng) {
+            return GeometryUtil.parseLocation(sourceLat, sourceLng).distance(GeometryUtil.parseLocation(targetLat, targetLng));
         }
     }
 
