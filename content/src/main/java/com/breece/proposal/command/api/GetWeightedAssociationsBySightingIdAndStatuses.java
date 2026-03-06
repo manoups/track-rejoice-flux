@@ -1,7 +1,5 @@
 package com.breece.proposal.command.api;
 
-import com.breece.content.api.model.Content;
-import com.breece.content.api.model.ContentId;
 import com.breece.coreapi.authentication.Sender;
 import com.breece.proposal.command.api.model.WeightedAssociationState;
 import com.breece.proposal.command.api.model.WeightedAssociationStatus;
