@@ -138,16 +138,16 @@ export class SidebarComponent implements OnInit {
     })
   }
 
-  facetSelectionControl(facetName: string): FormControl<string[]> {
+  facetSelectionControl(facetName: string, value: ValueCountPair[]): FormControl<string[]> {
     const facets = this.searchForm.controls.facets;
     const existing = facets.controls[facetName];
     if (existing) {
       return existing;
     }
-    const created = new FormControl<string[]>([], {nonNullable: true});
+    const created = new FormControl<string[]>(value.map(v => v.value), {nonNullable: true});
     facets.addControl(facetName, created, {emitEvent: false});
     return created;
   }
 
-  clearValues = (facetName: string) => this.searchForm.controls.facets.controls[facetName].reset();
+  resetValues = (facetName: string) => this.searchForm.controls.facets.controls[facetName].setValue(this.filterMap.get(facetName)?.map(v => v.value) ?? []);
 }

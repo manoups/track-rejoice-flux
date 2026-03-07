@@ -14,11 +14,11 @@
           <span class="spacer"></span>
           <button type="button"
                   matButton
-                  (click)="clearValues(filter.key)">Clear
+                  (click)="resetValues(filter.key)">Reset
           </button>
         </div>
       </div>
-      <mat-selection-list [multiple]="true" [formControl]="facetSelectionControl(filter.key)">
+      <mat-selection-list [multiple]="true" [formControl]="facetSelectionControl(filter.key, filter.value)">
         @for (opt of filter.value; track opt.value) {
           <mat-list-option [value]="opt.value">
             {{ opt.value|titlecase }} ({{ opt.count }})

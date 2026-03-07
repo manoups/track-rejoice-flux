@@ -15,6 +15,5 @@ export const routes: Routes = [
 
   { path: 'contents', component: ContentsComponent },
   { path: 'contents/new', component: ContentCreateComponent },
-  {path: 'sidebar', component: SidebarComponent},
   { path: '**', redirectTo: 'sightings' }
 ];
