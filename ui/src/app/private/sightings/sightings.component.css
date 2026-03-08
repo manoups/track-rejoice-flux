@@ -1,55 +1,65 @@
+:host {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+}
+
+.main-grid {
+  flex: 1;
+  display: grid;
+  grid-template-rows: 1fr 240px;
+  min-height: 0;
+}
+
+.table-pane {
+  min-height: 0;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
 .viewport {
-  height: calc(100vh - 180px);
+  flex: 1;
   width: 100%;
 }
 
-table {
-  width: 100%;
-}
-
-/* keep viewport math correct */
-.mat-mdc-row,
-.mat-mdc-header-row {
+.table-header {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
   height: 48px;
-}
-
-/* sticky header within the viewport scroll */
-.sticky {
+  align-items: center;
+  font-weight: 600;
   position: sticky;
   top: 0;
+  background: var(--mat-sys-surface);
+  color: var(--mat-sys-on-surface);
   z-index: 3;
-  background: var(--mat-sys-surface, #fff);
 }
 
-.mat-mdc-row .mat-mdc-cell {
-  border-bottom: 1px solid transparent;
-  border-top: 1px solid transparent;
+.header-cell {
+  padding: 0 16px;
+}
+
+.table-row {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  height: 48px;
+  align-items: center;
   cursor: pointer;
+  border-bottom: 1px solid var(--mat-sys-outline-variant);
 }
 
-.mat-mdc-row:hover .mat-mdc-cell {
-  border-color: currentColor;
+.cell {
+  padding: 0 16px;
+}
+
+.table-row:hover {
+  background: rgba(0,0,0,0.03);
 }
 
 .row-is-clicked {
   font-weight: bold;
-}
-
-.main-grid {
-  height: 100%;
-  display: grid;
-  grid-template-rows: 1fr 240px; /* table grows, details fixed */
-  gap: 12px;
-  padding: 0 6px 6px 6px;
-  box-sizing: border-box;
-  min-height: 0; /* critical so the 1fr row can shrink */
-}
-
-.table-pane {
-  min-height: 0; /* critical so inner scrolling works */
-  overflow: hidden; /* let the viewport own the scroll */
-  border-radius: 25px 25px 0 0;
-
 }
 
 .details-pane {

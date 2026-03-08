@@ -6,5 +6,12 @@
 
 .example-container {
   flex: 1;
-  background: #eee;
+  background: var(--mat-sys-background);
+  color: var(--mat-sys-on-background);
+}
+
+mat-sidenav-content {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
 }
