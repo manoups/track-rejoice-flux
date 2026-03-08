@@ -39,7 +39,7 @@ body {
 
 
 // Customize the entire app. Change :root to your selector if you want to scope the styles.
-:root {
+p.warn {
   @include mat.fab-overrides((
     small-container-color: #d9534f,
     small-foreground-color: #ffffff,

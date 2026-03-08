@@ -6,6 +6,8 @@ import {SightingsComponent} from '../sightings/sightings.component';
 import {MatToolbar} from '@angular/material/toolbar';
 import {MatSidenav, MatSidenavContainer, MatSidenavContent} from '@angular/material/sidenav';
 import {SidebarComponent} from '../sidebar/sidebar.component';
+import {MatIcon} from '@angular/material/icon';
+import {MatMiniFabButton} from '@angular/material/button';
 
 @Component({
   selector: 'track-rejoice-sighting-boilerplate',
@@ -16,7 +18,9 @@ import {SidebarComponent} from '../sidebar/sidebar.component';
     MatSidenav,
     MatSidenavContainer,
     MatSidenavContent,
-    SidebarComponent
+    SidebarComponent,
+    MatIcon,
+    MatMiniFabButton
   ],
   templateUrl: './sighting-boilerplate.component.html',
   styleUrl: './sighting-boilerplate.component.css',
@@ -24,4 +28,6 @@ import {SidebarComponent} from '../sidebar/sidebar.component';
 export class SightingBoilerplateComponent {
   loading = signal(false);
   filterChange$ = new Subject<[string, FacetFilter[]]>();
+  events: string[] = [];
+  opened = true;
 }

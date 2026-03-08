@@ -6,12 +6,16 @@
     <section>
       <div class="example-button-row">
         <div class="example-flex-container">
-          <a  matButton="filled" [routerLink]="['/sightings', selectedItem().sightingId]">
-            Link
-          </a>
-          <button matMiniFab aria-label="Delete">
-            <mat-icon>delete</mat-icon>
-          </button>
+          <p>
+            <a matButton="filled" [routerLink]="['/sightings', selectedItem().sightingId]">
+              Link
+            </a>
+          </p>
+          <p class="warn">
+            <button matMiniFab aria-label="Delete">
+              <mat-icon>delete</mat-icon>
+            </button>
+          </p>
 
         </div>
 
