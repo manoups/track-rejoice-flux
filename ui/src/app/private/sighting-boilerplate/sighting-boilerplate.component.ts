@@ -1,4 +1,4 @@
-import {Component, signal} from '@angular/core';
+import {Component, input, signal} from '@angular/core';
 import {Subject} from 'rxjs';
 import {FacetFilter} from '@trackrejoice/typescriptmodels';
 import {FormsModule} from '@angular/forms';
@@ -27,6 +27,7 @@ import {MatMiniFabButton} from '@angular/material/button';
 })
 export class SightingBoilerplateComponent {
   loading = signal(false);
+  statsEndpoint = input.required<string>();
   filterChange$ = new Subject<[string, FacetFilter[]]>();
   events: string[] = [];
   opened = true;

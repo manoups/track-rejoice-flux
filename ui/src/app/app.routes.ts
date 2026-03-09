@@ -4,12 +4,11 @@ import {SightingCreateComponent} from './private/sighting-create/sighting-create
 import {ContentCreateComponent} from './private/content-create/content-create.component';
 import {SightingDetailsComponent} from './private/sighting-details/sighting-details.component';
 import {SightingBoilerplateComponent} from './private/sighting-boilerplate/sighting-boilerplate.component';
-import {SidebarComponent} from './private/sidebar/sidebar.component';
 
 export const routes: Routes = [
   { path: '', pathMatch: 'full', redirectTo: 'sightings' },
 
-  { path: 'sightings', component: SightingBoilerplateComponent },
+  { path: 'sightings', component: SightingBoilerplateComponent, data: {statsEndpoint: '/api/sighting/list/stats'} },
   { path: 'sightings/new', component: SightingCreateComponent },
   { path: 'sightings/:id', component: SightingDetailsComponent },
 
