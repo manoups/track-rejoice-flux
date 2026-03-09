@@ -1,5 +1,5 @@
 import {Component, inject, input, signal} from '@angular/core';
-import {map, Observable, Subject, take} from 'rxjs';
+import {map, Subject} from 'rxjs';
 import {
   FacetFilter,
   FacetPaginationRequestBody,
@@ -41,13 +41,13 @@ export class SightingBoilerplateComponent {
   opened = true;
 }
 
-export const resolveFilters: ResolveFn<Observable<Map<string, ValueCountPair[]>>> = (activatedRoute: ActivatedRouteSnapshot, routerState: RouterStateSnapshot) => {
+export const resolveFilters: ResolveFn<Map<string, ValueCountPair[]>> = (activatedRoute: ActivatedRouteSnapshot, routerState: RouterStateSnapshot) => {
   const http = inject(HttpClient);
   const initBody: FacetPaginationRequestBody = {facetFilters: [], filter: "", pagination: {page: 0, pageSize: 10}}
   return http.post<GetFacetStatsResult>(activatedRoute.data["statsEndpoint"], initBody, {withCredentials: true}).pipe(
-    map(facetResults => facetResults.stats), take(1),
+    map(facetResults => facetResults.stats),
     map(facetResults => {
-      const filterMap: Map<string, ValueCountPair[]> = new Map();
+      const filterMap = new Map<string, ValueCountPair[]>();
       for (const [facetName, allowedPairs] of Object.entries(facetResults ?? {})) {
         filterMap.set(facetName, allowedPairs);
       }
