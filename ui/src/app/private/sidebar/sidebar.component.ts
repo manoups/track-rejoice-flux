@@ -1,5 +1,5 @@
 import {Component, DestroyRef, inject, input, OnInit, output, signal} from '@angular/core';
-import {combineLatest, debounceTime, distinctUntilChanged, map, Observable, Subject, switchMap, take} from 'rxjs';
+import {combineLatest, debounceTime, distinctUntilChanged, map, Observable, ReplaySubject, switchMap} from 'rxjs';
 import {
   FacetFilter,
   FacetPaginationRequestBody,
@@ -15,7 +15,6 @@ import {MatFormField, MatInput, MatLabel} from '@angular/material/input';
 import {MatListOption, MatSelectionList} from '@angular/material/list';
 import {RouterLink} from '@angular/router';
 
-type FacetStatsMap = Record<string, ValueCountPair[]>;
 
 @Component({
   selector: 'track-rejoice-sidebar',
@@ -42,12 +41,11 @@ export class SidebarComponent implements OnInit {
   statsEndpoint = input.required<string>();
   term = signal('');
   facet = signal<FacetFilter[]>([]);
+  initValues = input.required<Map<string, ValueCountPair[]>>();
   filterChange = output<[string, FacetFilter[]]>();
-  createOrUpdateFacets = new Subject<Map<string, ValueCountPair[]>>();
-  getFacetStats: Observable<FacetStatsMap>;
+  createOrUpdateFacets = new ReplaySubject<Map<string, ValueCountPair[]>>(1);
   filterChange$: Observable<[string, FacetFilter[]]>;
-  initBody: FacetPaginationRequestBody = {facetFilters: [], filter: "", pagination: {page: 0, pageSize: 10}}
-  private filterMap: Map<string, ValueCountPair[]> = new Map();
+  private filterMap: Map<string, ValueCountPair[]>;
   searchForm = new FormGroup({
     search: new FormControl<string>(''),
     facets: new FormRecord<FormControl<string[]>>({}),
@@ -65,17 +63,8 @@ export class SidebarComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    // 1. Initialize
-    this.getFacetStats = this.http.post<GetFacetStatsResult>(this.statsEndpoint(), this.initBody, {withCredentials: true}).pipe(
-      map(facetResults => facetResults.stats));
-    this.getFacetStats.pipe(take(1))
-      .subscribe(facetResults => {
-        // const values: FacetStatsMap = facetResults ?? {};
-        for (const [facetName, allowedPairs] of Object.entries(facetResults ?? {})) {
-          this.filterMap.set(facetName, allowedPairs);
-        }
-        this.createOrUpdateFacets.next(this.filterMap);
-      })
+    this.filterMap = this.initValues();
+    this.createOrUpdateFacets.next(this.filterMap);
 
     // 2. On filter change, recalculate count
 
