@@ -1,13 +1,14 @@
-import {AfterViewInit, Component, DestroyRef, effect, inject, Input, OnInit, signal, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, DestroyRef, effect, inject, input, OnInit, signal, ViewChild} from '@angular/core';
 import {View} from '../../common/view';
 import {FacetFilter, FacetPaginationRequestBody, SightingDocument} from '@trackrejoice/typescriptmodels';
 import {FormsModule} from '@angular/forms';
 import {CdkFixedSizeVirtualScroll, CdkVirtualForOf, CdkVirtualScrollViewport} from '@angular/cdk/scrolling';
 import {DatePipe} from '@angular/common';
-import {map, merge, Observable, switchMap, withLatestFrom} from 'rxjs';
+import {fromEvent, map, merge, Observable, switchMap, withLatestFrom} from 'rxjs';
 import {tap} from 'rxjs/operators';
 import {SelectedItemComponent} from '../selected-item/selected-item.component';
 import {SightingListingService} from '../sighting-listing.service';
+import {takeUntilDestroyed, toObservable} from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'track-rejoice-sightings',
@@ -26,17 +27,24 @@ import {SightingListingService} from '../sighting-listing.service';
 export class SightingsComponent extends View implements OnInit, AfterViewInit {
   private destroyRef = inject(DestroyRef);
   private sightingListingService = inject(SightingListingService);
+
   dataSource = this.sightingListingService.dataSource;
   sightings = this.sightingListingService.sightings;
   // Virtual/infinite state
   loading = this.sightingListingService.loading.asReadonly()
   done = this.sightingListingService.done;
-  @Input({required: true}) filterUpdate$: Observable<[string, FacetFilter[]]>;
+
+  filterState = input.required<[string, FacetFilter[]]>();
+  filterUpdate$ = toObservable(this.filterState);
   @ViewChild(CdkVirtualScrollViewport)
   viewport!: CdkVirtualScrollViewport;
+
   private pageSize = 20;
-  readonly page = this.sightingListingService.page;
+  // readonly page = this.sightingListingService.page;
   rowHeight = 48;
+
+  protected displayedColumns = ['id', 'ownerId', 'timestamp', 'type', 'removeAfterMatching'];
+  clickedRow = signal<SightingDocument>(null);
 
   constructor() {
     super();
@@ -53,19 +61,17 @@ export class SightingsComponent extends View implements OnInit, AfterViewInit {
 
 
   ngOnInit(): void {
-    const filterObservable$: Observable<FacetPaginationRequestBody> = this.filterUpdate$
+    const filterRequests$: Observable<FacetPaginationRequestBody> = this.filterUpdate$
       .pipe(tap(_ => this.sightingListingService.resetListing()),
-        map(([filter, facetFilters]) => {
-          return {filter: filter, facetFilters: facetFilters, pagination: {page: 0, pageSize: this.pageSize}}
-        }));
+        map(([filter, facetFilters]) => this.toRequestBody(filter, facetFilters, 0)));
 
-    const pageObservable$: Observable<FacetPaginationRequestBody> = this.sightingListingService.pageSubject.pipe(
+    const pageRequests$: Observable<FacetPaginationRequestBody> = this.sightingListingService.pageSubject.pipe(
       withLatestFrom(this.filterUpdate$),
-      map(([page, [filter, facetFilters]]) => {
-        return {filter: filter, facetFilters: facetFilters, pagination: {page: page, pageSize: this.pageSize}}
-      }))
+      map(([page, [filter, facetFilters]]) => this.toRequestBody(filter, facetFilters, page)))
 
-    const subscribe = merge(filterObservable$, pageObservable$).pipe(switchMap((body) => this.sightingListingService.loadNextPage(body)))
+    merge(filterRequests$, pageRequests$)
+      .pipe(switchMap((body) => this.sightingListingService.loadNextPage(body)),
+        takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (rows) => {
           this.sightings.update(sightings => sightings.concat(rows))
@@ -79,10 +85,6 @@ export class SightingsComponent extends View implements OnInit, AfterViewInit {
           // optional: show error state here; loading already reset by finalize()
         }
       });
-
-    this.destroyRef.onDestroy(() => {
-      subscribe.unsubscribe();
-    });
   }
 
   ngAfterViewInit() {
@@ -91,28 +93,33 @@ export class SightingsComponent extends View implements OnInit, AfterViewInit {
     });
 
     resizeObserver.observe(this.viewport.elementRef.nativeElement);
-
-    const viewSubscription = this.filterUpdate$.subscribe(() => {
-      this.viewport.scrollToIndex(0);
-      this.viewport.checkViewportSize();
-    })
-
-    window.addEventListener('resize', () => {
-      this.viewport.checkViewportSize();
-    });
-
     this.destroyRef.onDestroy(() => {
-      viewSubscription.unsubscribe();
+      resizeObserver.disconnect()
     })
+
+    this.filterUpdate$
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(() => {
+        this.viewport.scrollToIndex(0);
+        this.viewport.checkViewportSize();
+      })
+
+    fromEvent(window, 'resize')
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(() => {
+        this.viewport.checkViewportSize();
+      });
   }
 
   onScrollIndexChange(index: number): void {
     this.sightingListingService.onScrollIndexChange(index);
   }
 
+  private toRequestBody = (filter: string, facetFilters: FacetFilter[], page: number) => {
+    return {filter, facetFilters, pagination: {page, pageSize: this.pageSize}};
+  }
 
   trackBySightingId = (_index: number, sighting: SightingDocument) => (sighting as any).sightingId;
 
-  protected displayedColumns = ['id', 'ownerId', 'timestamp', 'type', 'removeAfterMatching'];
-  clickedRow = signal<SightingDocument>(null);
+
 }

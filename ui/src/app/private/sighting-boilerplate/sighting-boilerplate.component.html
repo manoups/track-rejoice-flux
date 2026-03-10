@@ -1,7 +1,7 @@
 <mat-toolbar color="primary">Sightings</mat-toolbar>
 <mat-sidenav-container class="example-container">
   <mat-sidenav position="start" mode="side" #sidenav [(opened)]="opened">
-    <track-rejoice-sidebar (filterChange)="filterChange$.next($event)" [statsEndpoint]=statsEndpoint() [initValues]="initFilterValues()" />
+    <track-rejoice-sidebar (filterChange)="updateFilter($event)" [statsEndpoint]=statsEndpoint() [initValues]="initFilterValues()" />
   </mat-sidenav>
   <mat-sidenav-content>
     <!--    <p><mat-checkbox [(ngModel)]="opened">sidenav.opened</mat-checkbox></p>-->
@@ -10,6 +10,6 @@
         <mat-icon>menu</mat-icon>
       </button>
     </p>
-    <track-rejoice-sightings [filterUpdate$]="filterChange$"/>
+    <track-rejoice-sightings [filterState]="filterState()"/>
   </mat-sidenav-content>
 </mat-sidenav-container>

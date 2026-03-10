@@ -1,5 +1,5 @@
 import {Component, inject, input, signal} from '@angular/core';
-import {map, Subject} from 'rxjs';
+import {map} from 'rxjs';
 import {
   FacetFilter,
   FacetPaginationRequestBody,
@@ -36,9 +36,12 @@ export class SightingBoilerplateComponent {
   loading = signal(false);
   statsEndpoint = input.required<string>();
   initFilterValues = input.required<Map<string, ValueCountPair[]>>();
-  filterChange$ = new Subject<[string, FacetFilter[]]>();
+  filterState = signal<[string, FacetFilter[]]>(['', []]);
   events: string[] = [];
   opened = true;
+  updateFilter = (value: [string, FacetFilter[]]) => {
+    this.filterState.set(value);
+  };
 }
 
 export const resolveFilters: ResolveFn<Map<string, ValueCountPair[]>> = (activatedRoute: ActivatedRouteSnapshot, routerState: RouterStateSnapshot) => {
