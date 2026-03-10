@@ -45,7 +45,6 @@ export class SidebarComponent implements OnInit {
   filterChange = output<[string, FacetFilter[]]>();
   createOrUpdateFacets = new ReplaySubject<Map<string, ValueCountPair[]>>(1);
   filterChange$: Observable<[string, FacetFilter[]]>;
-  private filterMap: Map<string, ValueCountPair[]>;
   searchForm = new FormGroup({
     search: new FormControl<string>(''),
     facets: new FormRecord<FormControl<string[]>>({}),
@@ -63,8 +62,9 @@ export class SidebarComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.filterMap = this.initValues();
-    this.createOrUpdateFacets.next(this.filterMap);
+    const initialValues = this.initValues();
+    this.syncFacetControls(initialValues);
+    this.createOrUpdateFacets.next(this.initValues());
 
     // 2. On filter change, recalculate count
 
@@ -87,7 +87,7 @@ export class SidebarComponent implements OnInit {
       .subscribe(facetResults => {
         const response = new Map<string, ValueCountPair[]>();
 
-        for (const [facetName, allowedPairs] of this.filterMap) {
+        for (const [facetName, allowedPairs] of this.initValues()) {
           for (const [fetchedFacetName, fetchedAllowedPairs] of Object.entries(facetResults ?? {})) {
             if (fetchedFacetName === facetName) {
               const merged = (allowedPairs ?? []).map(ap => {
@@ -99,8 +99,8 @@ export class SidebarComponent implements OnInit {
 
           }
         }
-        this.filterMap = response;
-        this.createOrUpdateFacets.next(this.filterMap);
+        this.syncFacetControls(response);
+        this.createOrUpdateFacets.next(response);
       });
 
     const facetFilterChange = this.searchForm.controls.facets.valueChanges.pipe(
@@ -127,16 +127,37 @@ export class SidebarComponent implements OnInit {
     })
   }
 
-  facetSelectionControl(facetName: string, value: ValueCountPair[]): FormControl<string[]> {
+  private syncFacetControls(facetMap: Map<string, ValueCountPair[]>): void {
     const facets = this.searchForm.controls.facets;
-    const existing = facets.controls[facetName];
-    if (existing) {
-      return existing;
+
+    for (const facetName of Object.keys(facets.controls)) {
+      if (!facetMap.has(facetName)) {
+        facets.removeControl(facetName, {emitEvent: false});
+      }
     }
-    const created = new FormControl<string[]>(value.map(v => v.value), {nonNullable: true});
-    facets.addControl(facetName, created, {emitEvent: false});
-    return created;
+
+    for (const [facetName, values] of facetMap) {
+      const allowedValues = values.map(v => v.value);
+      const existing = facets.controls[facetName];
+
+      if (!existing) {
+        facets.addControl(
+          facetName,
+          new FormControl<string[]>(allowedValues, {nonNullable: true}),
+          {emitEvent: false}
+        );
+        continue;
+      }
+
+      const currentValue = existing.getRawValue() ?? [];
+      const nextValue = currentValue.filter(value => allowedValues.includes(value));
+
+      if (currentValue.length !== nextValue.length ||
+        currentValue.some((value, index) => value !== nextValue[index])) {
+        existing.setValue(nextValue, {emitEvent: false});
+      }
+    }
   }
 
-  resetValues = (facetName: string) => this.searchForm.controls.facets.controls[facetName].setValue(this.filterMap.get(facetName)?.map(v => v.value) ?? []);
+  resetValues = (facetName: string) => this.searchForm.controls.facets.controls[facetName].setValue(this.initValues().get(facetName)?.map(v => v.value) ?? []);
 }
