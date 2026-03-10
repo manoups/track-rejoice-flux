@@ -7,7 +7,7 @@ import {
   ValueCountPair
 } from '@trackrejoice/typescriptmodels';
 import {HttpClient} from '@angular/common/http';
-import {toObservable} from '@angular/core/rxjs-interop';
+import {takeUntilDestroyed, toObservable} from '@angular/core/rxjs-interop';
 import {FormControl, FormGroup, FormRecord, FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {AsyncPipe, KeyValuePipe, TitleCasePipe} from '@angular/common';
 import {MatButton} from '@angular/material/button';
@@ -43,6 +43,7 @@ export class SidebarComponent implements OnInit {
   facet = signal<FacetFilter[]>([]);
   initValues = input.required<Map<string, ValueCountPair[]>>();
   filterChange = output<[string, FacetFilter[]]>();
+  private initialFacetMap!: Map<string, ValueCountPair[]>;
   createOrUpdateFacets = new ReplaySubject<Map<string, ValueCountPair[]>>(1);
   filterChange$: Observable<[string, FacetFilter[]]>;
   searchForm = new FormGroup({
@@ -62,69 +63,84 @@ export class SidebarComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    const initialValues = this.initValues();
-    this.syncFacetControls(initialValues);
-    this.createOrUpdateFacets.next(this.initValues());
+    this.initialFacetMap = this.initValues();
 
-    // 2. On filter change, recalculate count
+    this.syncFacetControls(this.initialFacetMap);
+    this.createOrUpdateFacets.next(this.initialFacetMap);
 
     const searchValueChange$ = this.searchForm.controls.search.valueChanges.pipe(
       map(v => (v ?? '').trim()),
       debounceTime(500),
-      distinctUntilChanged());
+      distinctUntilChanged()
+    );
 
-    const termChange = searchValueChange$.subscribe(v => this.term.set(v));
+    searchValueChange$
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(value => this.term.set(value));
 
-    const updateFacetCount$ = searchValueChange$.pipe(switchMap(val => {
-      let body = {
-        facetFilters: this.facet(),
-        filter: val,
-        pagination: {page: 0, pageSize: 10}
-      } as FacetPaginationRequestBody;
-      return this.http.post<GetFacetStatsResult>('/api/sighting/list/stats', body, {withCredentials: true})
-        .pipe(map(facetResults => facetResults.stats))
-    }))
-      .subscribe(facetResults => {
-        const response = new Map<string, ValueCountPair[]>();
+    searchValueChange$
+      .pipe(
+        switchMap(filter => {
+          const body: FacetPaginationRequestBody = {
+            facetFilters: this.facet(),
+            filter,
+            pagination: {page: 0, pageSize: 10}
+          };
 
-        for (const [facetName, allowedPairs] of this.initValues()) {
-          for (const [fetchedFacetName, fetchedAllowedPairs] of Object.entries(facetResults ?? {})) {
-            if (fetchedFacetName === facetName) {
-              const merged = (allowedPairs ?? []).map(ap => {
-                const found = fetchedAllowedPairs.find(sp => sp.value.toLowerCase() === ap.value.toLowerCase());
-                return found ?? ({value: ap.value.toLowerCase(), count: 0} as ValueCountPair);
-              });
-              response.set(facetName, merged);
-            }
-
-          }
-        }
-        this.syncFacetControls(response);
-        this.createOrUpdateFacets.next(response);
+          return this.http.post<GetFacetStatsResult>(this.statsEndpoint(), body, {withCredentials: true}).pipe(
+            map(result => result.stats),
+            map(stats => this.mergeWithInitialValues(stats))
+          );
+        }),
+        takeUntilDestroyed(this.destroyRef)
+      )
+      .subscribe(mergedFacetMap => {
+        this.syncFacetControls(mergedFacetMap);
+        this.createOrUpdateFacets.next(mergedFacetMap);
       });
 
-    const facetFilterChange = this.searchForm.controls.facets.valueChanges.pipe(
-      map((facetsValue) => {
-        return Object.entries(facetsValue ?? {})
+    this.searchForm.controls.facets.valueChanges
+      .pipe(
+        map(facetsValue => Object.entries(facetsValue ?? {})
           .map(([facetName, selectedValues]) => ({
             facetName,
             values: (selectedValues ?? []).filter(v => typeof v === 'string' && v.length > 0),
-          })).filter(f => f.values.length > 0) as FacetFilter[];
-      }))
-      .subscribe((facetFilters) => {
+          }))
+          .filter(f => f.values.length > 0) as FacetFilter[]),
+        takeUntilDestroyed(this.destroyRef)
+      )
+      .subscribe(facetFilters => {
         this.facet.set(facetFilters);
       });
 
-    const sub3 = this.filterChange$.subscribe(ff => {
-      this.filterChange.emit(ff);
-    });
+    this.filterChange$
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(value => {
+        this.filterChange.emit(value);
+      });
+  }
 
-    this.destroyRef.onDestroy(() => {
-      updateFacetCount$.unsubscribe();
-      termChange.unsubscribe();
-      facetFilterChange.unsubscribe();
-      sub3.unsubscribe();
-    })
+  private mergeWithInitialValues(
+    stats: Record<string, ValueCountPair[]> | null | undefined
+  ): Map<string, ValueCountPair[]> {
+    const merged = new Map<string, ValueCountPair[]>();
+
+    for (const [facetName, initialPairs] of this.initialFacetMap) {
+      const fetchedPairs = stats?.[facetName] ?? [];
+
+      merged.set(
+        facetName,
+        (initialPairs ?? []).map(initialPair => {
+          const found = fetchedPairs.find(
+            fetched => fetched.value.toLowerCase() === initialPair.value.toLowerCase()
+          );
+
+          return found ?? ({value: initialPair.value, count: 0} as ValueCountPair);
+        })
+      );
+    }
+
+    return merged;
   }
 
   private syncFacetControls(facetMap: Map<string, ValueCountPair[]>): void {
@@ -152,12 +168,18 @@ export class SidebarComponent implements OnInit {
       const currentValue = existing.getRawValue() ?? [];
       const nextValue = currentValue.filter(value => allowedValues.includes(value));
 
-      if (currentValue.length !== nextValue.length ||
-        currentValue.some((value, index) => value !== nextValue[index])) {
+      if (
+        currentValue.length !== nextValue.length ||
+        currentValue.some((value, index) => value !== nextValue[index])
+      ) {
         existing.setValue(nextValue, {emitEvent: false});
       }
     }
   }
 
-  resetValues = (facetName: string) => this.searchForm.controls.facets.controls[facetName].setValue(this.initValues().get(facetName)?.map(v => v.value) ?? []);
+  resetValues = (facetName: string) => {
+    const control = this.searchForm.controls.facets.controls[facetName];
+    const initialValues = this.initialFacetMap.get(facetName)?.map(v => v.value) ?? [];
+    control?.setValue(initialValues);
+  };
 }
