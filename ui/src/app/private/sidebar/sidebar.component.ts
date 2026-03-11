@@ -101,6 +101,9 @@ export class SidebarComponent implements OnInit {
 
     this.searchForm.controls.facets.valueChanges
       .pipe(
+        map(v => (v ?? {})),
+        debounceTime(1000),
+        distinctUntilChanged((a, b) => facetsEqual(a, b)),
         map(facetsValue => Object.entries(facetsValue ?? {})
           .map(([facetName, selectedValues]) => ({
             facetName,
@@ -114,7 +117,7 @@ export class SidebarComponent implements OnInit {
       });
 
     this.filterChange$
-      .pipe(skip(1),takeUntilDestroyed(this.destroyRef))
+      .pipe(skip(1), takeUntilDestroyed(this.destroyRef))
       .subscribe(value => {
         this.filterChange.emit(value);
       });
@@ -182,4 +185,27 @@ export class SidebarComponent implements OnInit {
     const initialValues = this.initialFacetMap.get(facetName)?.map(v => v.value) ?? [];
     control?.setValue(initialValues);
   };
+}
+
+function facetsEqual(
+  a: Partial<Record<string, string[]>>,
+  b: Partial<Record<string, string[]>>
+): boolean {
+  const aKeys = Object.keys(a);
+  const bKeys = Object.keys(b);
+  if (aKeys.length !== bKeys.length) return false;
+
+  for (const key of aKeys) {
+    if (!(key in b)) return false;
+    if (!stringArraySetEqual(a[key] ?? [], b[key] ?? [])) return false;
+  }
+  return true;
+}
+
+function stringArraySetEqual(a: string[], b: string[]): boolean {
+  if (a.length !== b.length) return false;
+  const as = new Set(a);
+  if (as.size !== b.length) return false; // catches duplicates mismatch
+  for (const x of b) if (!as.has(x)) return false;
+  return true;
 }
