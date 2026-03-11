@@ -1,5 +1,5 @@
 import {Component, DestroyRef, inject, input, OnInit, output, signal} from '@angular/core';
-import {combineLatest, debounceTime, distinctUntilChanged, map, Observable, ReplaySubject, switchMap} from 'rxjs';
+import {combineLatest, debounceTime, distinctUntilChanged, map, Observable, ReplaySubject, skip, switchMap} from 'rxjs';
 import {
   FacetFilter,
   FacetPaginationRequestBody,
@@ -114,7 +114,7 @@ export class SidebarComponent implements OnInit {
       });
 
     this.filterChange$
-      .pipe(takeUntilDestroyed(this.destroyRef))
+      .pipe(skip(1),takeUntilDestroyed(this.destroyRef))
       .subscribe(value => {
         this.filterChange.emit(value);
       });
