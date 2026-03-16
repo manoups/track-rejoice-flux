@@ -70,8 +70,6 @@ export class SidebarNewComponent {
 
   valueMap = computed(() => this.valueMapResource.hasValue() ? this.mergeWithInitialValues(this.valueMapResource.value()) : undefined)
 
-  // computed(() => console.log(this.requestParams()));
-
   constructor() {
     effect(() => {
       this.filterChange.emit([this.term(), this.facetFilters()]);
