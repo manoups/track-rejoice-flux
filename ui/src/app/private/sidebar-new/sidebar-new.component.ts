@@ -68,7 +68,7 @@ export class SidebarNewComponent {
     stream: ({params}) => this.service.getStats(params.filter, params.facetFilters, this.statsEndpoint())
   });
 
-  valueMap = computed(() => this.mergeWithInitialValues(this.valueMapResource.value()))
+  valueMap = computed(() => this.valueMapResource.hasValue() ? this.mergeWithInitialValues(this.valueMapResource.value()) : undefined)
 
   // computed(() => console.log(this.requestParams()));
 
@@ -79,11 +79,8 @@ export class SidebarNewComponent {
     });
   }
 
-  private mergeWithInitialValues(
-    stats: Record<string, ValueCountPair[]> | null | undefined
-  ): Map<string, ValueCountPair[]> {
-    if (stats === undefined) return new Map<string, ValueCountPair[]>()
-    else if (this.initialFacetMap === undefined) {
+  private mergeWithInitialValues(stats: Record<string, ValueCountPair[]>): Map<string, ValueCountPair[]> {
+    if (this.initialFacetMap === undefined) {
       const filterMap = new Map<string, ValueCountPair[]>();
       for (const [facetName, allowedPairs] of Object.entries(stats ?? {})) {
         filterMap.set(facetName, allowedPairs);
@@ -111,7 +108,8 @@ export class SidebarNewComponent {
     return merged;
   }
 
-  private syncFacetControls(facetMap: Map<string, ValueCountPair[]>): void {
+  private syncFacetControls(facetMap: Map<string, ValueCountPair[]> | undefined): void {
+    if (facetMap === undefined) return;
     const facets = this.searchForm.controls.facets;
 
     for (const facetName of Object.keys(facets.controls)) {
