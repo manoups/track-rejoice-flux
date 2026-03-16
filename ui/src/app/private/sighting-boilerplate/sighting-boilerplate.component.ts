@@ -10,11 +10,11 @@ import {FormsModule} from '@angular/forms';
 import {SightingsComponent} from '../sightings/sightings.component';
 import {MatToolbar} from '@angular/material/toolbar';
 import {MatSidenav, MatSidenavContainer, MatSidenavContent} from '@angular/material/sidenav';
-import {SidebarComponent} from '../sidebar/sidebar.component';
 import {MatIcon} from '@angular/material/icon';
 import {MatMiniFabButton} from '@angular/material/button';
 import {ActivatedRouteSnapshot, ResolveFn, RouterStateSnapshot} from '@angular/router';
 import {HttpClient} from '@angular/common/http';
+import {SidebarNewComponent} from '../sidebar-new/sidebar-new.component';
 
 @Component({
   selector: 'track-rejoice-sighting-boilerplate',
@@ -25,9 +25,9 @@ import {HttpClient} from '@angular/common/http';
     MatSidenav,
     MatSidenavContainer,
     MatSidenavContent,
-    SidebarComponent,
     MatIcon,
-    MatMiniFabButton
+    MatMiniFabButton,
+    SidebarNewComponent
   ],
   templateUrl: './sighting-boilerplate.component.html',
   styleUrl: './sighting-boilerplate.component.css',
