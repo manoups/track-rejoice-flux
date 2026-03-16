@@ -32,6 +32,7 @@ export class SightingDetailsComponent extends View implements OnInit {
   data$!: Observable<Sighting>;
   private http = inject(HttpClient);
   id = input.required<string>();
+  title = input.required<string>();
   private id$: Observable<string> = toObservable(this.id);
 
   ngOnInit(): void {

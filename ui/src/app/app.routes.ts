@@ -7,10 +7,11 @@ import {
   resolveFilters,
   SightingBoilerplateComponent
 } from './private/sighting-boilerplate/sighting-boilerplate.component';
+import {WelcomeComponent} from './welcome/welcome.component';
 
 export const routes: Routes = [
-  {path: '', pathMatch: 'full', redirectTo: 'sightings'},
-
+  {path: '', pathMatch: 'full', redirectTo: 'welcome'},
+  {path: 'welcome', component: WelcomeComponent},
   {
     path: 'sightings',
     component: SightingBoilerplateComponent,
@@ -20,7 +21,12 @@ export const routes: Routes = [
     }
   },
   {path: 'sightings/new', component: SightingCreateComponent},
-  {path: 'sightings/:id', component: SightingDetailsComponent},
+  {
+    path: 'sightings/:id',
+    component: SightingDetailsComponent,
+    data: {title: 'Sighting Matches', statsEndpoint: '/api/sighting/list/stats'},
+    title: 'Sighting Matches'
+  },
 
   {path: 'contents', component: ContentsComponent},
   {path: 'contents/new', component: ContentCreateComponent},
