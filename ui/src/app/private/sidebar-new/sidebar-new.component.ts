@@ -1,4 +1,4 @@
-import {Component, computed, effect, inject, input, output} from '@angular/core';
+import {Component, computed, effect, inject, input, output, signal} from '@angular/core';
 import {SidebarNewService} from './sidebar-new.service';
 import {RouterLink} from '@angular/router';
 import {FacetFilter, FacetPaginationRequestBody, ValueCountPair} from '@trackrejoice/typescriptmodels';
@@ -61,18 +61,25 @@ export class SidebarNewComponent {
         .filter(f => f.values.length > 0) as FacetFilter[])
     ), {initialValue: []});
 
-  requestParams = computed(() => ({...this.defaultParams, filter: this.term()}))
+  requestParams = computed(() => ({...this.defaultParams, filter: this.term(), facetFilters: this.facetFilters()}))
 
   valueMapResource = rxResource({
     params: () => this.requestParams(),
     stream: ({params}) => this.service.getStats(params.filter, params.facetFilters, this.statsEndpoint())
   });
 
-  valueMap = computed(() => this.valueMapResource.hasValue() ? this.mergeWithInitialValues(this.valueMapResource.value()) : undefined)
+  valueMap = signal<Map<string, ValueCountPair[]>>(new Map());
 
   constructor() {
     effect(() => {
+      if (this.valueMapResource.hasValue()) {
+        this.valueMap.set(this.mergeWithInitialValues(this.valueMapResource.value()));
+      }
+    });
+    effect(() => {
       this.filterChange.emit([this.term(), this.facetFilters()]);
+    })
+    effect(() => {
       this.syncFacetControls(this.valueMap());
     });
   }
