@@ -7,8 +7,8 @@ import {rxResource, toSignal} from '@angular/core/rxjs-interop';
 import {FormControl, FormGroup, FormRecord, FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {KeyValuePipe, TitleCasePipe} from '@angular/common';
 import {MatButton} from '@angular/material/button';
-import {MatFormField, MatInput, MatLabel} from '@angular/material/input';
 import {MatListOption, MatSelectionList} from '@angular/material/list';
+import {FilterComponent} from './filter/filter.component';
 
 @Component({
   selector: 'track-rejoice-sidebar-new',
@@ -16,14 +16,12 @@ import {MatListOption, MatSelectionList} from '@angular/material/list';
     FormsModule,
     KeyValuePipe,
     MatButton,
-    MatFormField,
-    MatInput,
-    MatLabel,
     MatListOption,
     MatSelectionList,
     ReactiveFormsModule,
     RouterLink,
-    TitleCasePipe
+    TitleCasePipe,
+    FilterComponent
   ],
   templateUrl: './sidebar-new.component.html',
   styleUrl: './sidebar-new.component.css',
@@ -33,20 +31,11 @@ export class SidebarNewComponent {
   defaultParams: FacetPaginationRequestBody = {facetFilters: [], filter: "", pagination: {page: 0, pageSize: 10}};
   statsEndpoint = input.required<string>();
   searchForm = new FormGroup({
-    search: new FormControl<string>(''),
     facets: new FormRecord<FormControl<string[]>>({}),
-
   });
   private initialFacetMap: Map<string, ValueCountPair[]>;
   filterChange = output<[string, FacetFilter[]]>();
-  term = toSignal(
-    this.searchForm.controls.search.valueChanges.pipe(
-      map(v => (v ?? '').trim()),
-      debounceTime(500),
-      distinctUntilChanged()
-    ),
-    {initialValue: ''}
-  )
+  term = signal<string>('');
 
   facetFilters = toSignal(this.searchForm.controls.facets.valueChanges
     .pipe(
@@ -153,6 +142,11 @@ export class SidebarNewComponent {
     const initialValues = this.valueMap().get(facetName)?.map(v => v.value) ?? [];
     control?.setValue(initialValues);
   };
+
+  protected onSearchTermChange($event: string) {
+    console.log("onSearchTermChange", $event);
+    this.term.set($event);
+  }
 }
 
 function facetsEqual(
