@@ -30,14 +30,13 @@ export class SidebarNewComponent {
   service = inject(SidebarNewService)
   defaultParams: FacetPaginationRequestBody = {facetFilters: [], filter: "", pagination: {page: 0, pageSize: 10}};
   statsEndpoint = input.required<string>();
-  searchForm = new FormGroup({
+  form = new FormGroup({
     facets: new FormRecord<FormControl<string[]>>({}),
   });
   private initialFacetMap: Map<string, ValueCountPair[]>;
   filterChange = output<[string, FacetFilter[]]>();
-  term = signal<string>('');
-
-  facetFilters = toSignal(this.searchForm.controls.facets.valueChanges
+  term = signal<string| null>(null);
+  facetFilters = toSignal(this.form.controls.facets.valueChanges
     .pipe(
       map(v => (v ?? {})),
       debounceTime(1000),
@@ -50,7 +49,11 @@ export class SidebarNewComponent {
         .filter(f => f.values.length > 0) as FacetFilter[])
     ), {initialValue: []});
 
-  requestParams = computed(() => ({...this.defaultParams, filter: this.term(), facetFilters: this.facetFilters()}))
+  requestParams = computed(() => ({
+    ...this.defaultParams,
+    filter: this.term() ?? '',
+    facetFilters: this.facetFilters()
+  }))
 
   valueMapResource = rxResource({
     params: () => this.requestParams(),
@@ -65,8 +68,17 @@ export class SidebarNewComponent {
         this.valueMap.set(this.mergeWithInitialValues(this.valueMapResource.value()));
       }
     });
+    let isFirst = true;
     effect(() => {
-      this.filterChange.emit([this.term(), this.facetFilters()]);
+      const term = this.term();
+      const facets = this.facetFilters();
+
+      if (isFirst) {
+        isFirst = false;
+        return;
+      }
+
+      this.filterChange.emit([term, facets]);
     })
     effect(() => {
       this.syncFacetControls(this.valueMap());
@@ -104,7 +116,7 @@ export class SidebarNewComponent {
 
   private syncFacetControls(facetMap: Map<string, ValueCountPair[]> | undefined): void {
     if (facetMap === undefined) return;
-    const facets = this.searchForm.controls.facets;
+    const facets = this.form.controls.facets;
 
     for (const facetName of Object.keys(facets.controls)) {
       if (!facetMap.has(facetName)) {
@@ -138,13 +150,12 @@ export class SidebarNewComponent {
   }
 
   resetValues = (facetName: string) => {
-    const control = this.searchForm.controls.facets.controls[facetName];
+    const control = this.form.controls.facets.controls[facetName];
     const initialValues = this.valueMap().get(facetName)?.map(v => v.value) ?? [];
     control?.setValue(initialValues);
   };
 
   protected onSearchTermChange($event: string) {
-    console.log("onSearchTermChange", $event);
     this.term.set($event);
   }
 }

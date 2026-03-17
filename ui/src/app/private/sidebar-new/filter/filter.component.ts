@@ -18,12 +18,12 @@ import {debounceTime, distinctUntilChanged, map} from 'rxjs';
 export class FilterComponent implements OnInit {
   private destroyRef = inject(DestroyRef);
   searchTerm = output<string>();
-  searchForm = new FormGroup({
+  form = new FormGroup({
     search: new FormControl<string>(''),
   });
 
   ngOnInit(): void {
-    this.searchForm.controls.search.valueChanges.pipe(
+    this.form.controls.search.valueChanges.pipe(
       map(v => (v ?? '').trim()),
       debounceTime(500),
       distinctUntilChanged(),

@@ -13,7 +13,7 @@
           </button>
         </div>
       </div>
-      <mat-selection-list [multiple]="true" [formControl]="searchForm.controls.facets.controls[filter.key]">
+      <mat-selection-list [multiple]="true" [formControl]="form.controls.facets.controls[filter.key]">
         @for (opt of filter.value; track opt.value) {
           <mat-list-option [value]="opt.value">
             {{ opt.value|titlecase }} ({{ opt.count }})
