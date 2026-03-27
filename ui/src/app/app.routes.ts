@@ -8,17 +8,19 @@ import {
   SightingBoilerplateComponent
 } from './private/sighting-boilerplate/sighting-boilerplate.component';
 import {WelcomeComponent} from './welcome/welcome.component';
+import {authGuard} from '@edgeflare/ngx-oidc';
 
 export const routes: Routes = [
   {path: '', pathMatch: 'full', redirectTo: 'welcome'},
-  {path: 'welcome', component: WelcomeComponent},
+  {path: 'welcome', component: WelcomeComponent, canActivate: [authGuard]},
   {
     path: 'sightings',
     component: SightingBoilerplateComponent,
     data: {statsEndpoint: '/api/sighting/list/stats'},
     resolve: {
       initFilterValues: resolveFilters
-    }
+    },
+    canActivate: [authGuard],
   },
   {path: 'sightings/new', component: SightingCreateComponent},
   {
@@ -30,5 +32,9 @@ export const routes: Routes = [
 
   {path: 'contents', component: ContentsComponent},
   {path: 'contents/new', component: ContentCreateComponent},
+  {
+    path: 'auth/callback',
+    redirectTo: 'sightings',
+  },
   {path: '**', redirectTo: 'sightings'}
 ];

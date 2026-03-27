@@ -11,6 +11,7 @@ import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
   imports: [MatProgressSpinnerModule, AsyncPipe, NgTemplateOutlet],
   templateUrl: './loading-indicator.component.html',
   styleUrl: './loading-indicator.component.css',
+  standalone: true,
 })
 export class LoadingIndicatorComponent {
   detectRouteTransitions = input<boolean>(false);
@@ -25,7 +26,7 @@ export class LoadingIndicatorComponent {
   }
 
   ngOnInit() {
-    if (this.detectRouteTransitions) {
+    if (this.detectRouteTransitions()) {
       this.router.events
         .pipe(
           tap((event) => {
