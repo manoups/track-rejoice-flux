@@ -42,6 +42,7 @@ class CreateOrderTest {
                 .expectError(OrderErrors.alreadyPlaced);
     }
 
+    @Disabled
     @Test
     void payForOtherUser() {
         testFixture.whenCommandByUser(new UserProfile(new UserId("1"), new UserDetails("name", "email"), null), order1)

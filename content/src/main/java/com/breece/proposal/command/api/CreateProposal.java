@@ -22,5 +22,5 @@ public record CreateProposal(ContentId contentId, WeightedAssociationId weighted
     }
 
     @Apply(publicationStrategy = EventPublicationStrategy.PUBLISH_ONLY)
-    void apply() {}
+    void apply(Content content) {}
 }

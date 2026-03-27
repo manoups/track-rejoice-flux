@@ -9,7 +9,7 @@ import org.wildfly.common.annotation.NotNull;
 public record DeleteContent(@NotNull ContentId contentId) implements ContentUpdateOwner {
 
     @Apply
-    Content create(Sender sender) {
+    Content delete(Content content) {
         return null;
     }
 }
