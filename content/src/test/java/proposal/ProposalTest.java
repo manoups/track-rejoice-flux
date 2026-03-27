@@ -48,7 +48,7 @@ public class ProposalTest extends TestUtilities {
     void givenNoContent_whenProposalCreated_thenError() {
         testFixture.givenCommands("../sighting/create-sighting.json")
                 .whenCommand("create-proposal.json")
-                .expectError(WeightedAssociationErrors.notFound);
+                .expectError(ContentErrors.notFound);
     }
 
     @Test
