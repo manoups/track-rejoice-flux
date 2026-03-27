@@ -8,6 +8,7 @@ import {
   SightingBoilerplateComponent
 } from './private/sighting-boilerplate/sighting-boilerplate.component';
 import {WelcomeComponent} from './welcome/welcome.component';
+import {AuthComponent} from './auth/auth.component';
 
 export const routes: Routes = [
   {path: '', pathMatch: 'full', redirectTo: 'welcome'},
@@ -30,5 +31,6 @@ export const routes: Routes = [
 
   {path: 'contents', component: ContentsComponent},
   {path: 'contents/new', component: ContentCreateComponent},
+  {path: 'auth', component: AuthComponent},
   {path: '**', redirectTo: 'sightings'}
 ];

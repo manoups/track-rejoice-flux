@@ -1,0 +1,43 @@
+<form [formGroup]="form" (ngSubmit)="onSubmit()">
+  <div class="container-box">
+    <div class="example-container">
+      <mat-form-field>
+        <mat-label>Enter your email</mat-label>
+        <input
+          matInput
+          placeholder="pat@example.com"
+          formControlName="email"
+          (blur)="updateEmailErrorMessage()"
+          autocomplete="username"
+        />
+        @if (form.controls.email.invalid) {
+          <mat-error>{{ emailErrorMessage() }}</mat-error>
+        }
+      </mat-form-field>
+    </div>
+    <div class="example-container">
+      <mat-form-field>
+        <mat-label>Enter your password</mat-label>
+        <input matInput [type]="hide() ? 'password' : 'text'" formControlName="password"
+               (blur)="passwordErrorMessage()"
+               autocomplete="current-password"/>
+        <button
+          matIconButton
+          matSuffix
+          (click)="clickEvent($event)"
+          [attr.aria-label]="'Hide password'"
+          [attr.aria-pressed]="hide()"
+        >
+          <mat-icon>{{ hide() ? 'visibility_off' : 'visibility' }}</mat-icon>
+        </button>
+        @if (form.controls.password.invalid) {
+          <mat-error>{{ passwordErrorMessage() }}</mat-error>
+        }
+      </mat-form-field>
+    </div>
+    <div>
+      <ng-content />
+      <button matButton="filled" class="btn btn-primary" type="submit" [disabled]="!form.valid">Login</button>
+    </div>
+  </div>
+</form>

@@ -1,0 +1,14 @@
+@if (isLoginMode()) {
+  <track-rejoice-login>
+    <button matButton="filled" class="btn btn-primary" (click)="onSwitchMode()" type="button">Switch
+      to {{ isLoginMode() ? 'Sign Up' : 'Login' }}
+    </button>
+  </track-rejoice-login>
+} @else {
+  <track-rejoice-signup>
+    <button matButton="filled" class="btn btn-primary" (click)="onSwitchMode()" type="button">Switch
+      to {{ isLoginMode() ? 'Sign Up' : 'Login' }}
+    </button>
+  </track-rejoice-signup>
+}
+

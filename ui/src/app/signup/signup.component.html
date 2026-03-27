@@ -1,0 +1,180 @@
+<form [formGroup]="form">
+  <h2>Welcome on board!</h2>
+  <p>We just need a little bit of data from you to get you started 🚀</p>
+
+  <div class="example-container">
+    <mat-form-field>
+      <mat-label>Enter your email</mat-label>
+      <input
+        matInput
+        type="email"
+        placeholder="pat@example.com"
+        formControlName="email"
+        (blur)="updateEmailErrorMessage()"
+        autocomplete="username"
+      />
+    </mat-form-field>
+  </div>
+
+  <div class="control-row" formGroupName="passwords">
+    <div class="example-container">
+      <mat-form-field>
+        <mat-label>Enter your password</mat-label>
+        <input matInput [type]="hide() ? 'password' : 'text'" formControlName="password"
+               (blur)="passwordErrorMessage()"/>
+        <button
+          matIconButton
+          matSuffix
+          (click)="clickEvent($event)"
+          [attr.aria-label]="'Hide password'"
+          [attr.aria-pressed]="hide()"
+        >
+          <mat-icon>{{ hide() ? 'visibility_off' : 'visibility' }}</mat-icon>
+        </button>
+        @if (form.controls.passwords.controls.password.invalid) {
+          <mat-error>{{ passwordErrorMessage() }}</mat-error>
+        }
+      </mat-form-field>
+    </div>
+
+    <div class="example-container">
+      <mat-form-field>
+        <mat-label>Enter your password</mat-label>
+        <input matInput [type]="hideConfirm() ? 'password' : 'text'" formControlName='confirmPassword'
+               (blur)="confirmPasswordErrorMessage()"/>
+        <button
+          matIconButton
+          matSuffix
+          (click)="clickEventConfirm($event)"
+          [attr.aria-label]="'Hide password'"
+          [attr.aria-pressed]="hideConfirm()"
+        >
+          <mat-icon>{{ hideConfirm() ? 'visibility_off' : 'visibility' }}</mat-icon>
+        </button>
+        @if (form.controls.passwords.controls.confirmPassword.invalid) {
+          <mat-error>{{ confirmPasswordErrorMessage() }}</mat-error>
+        }
+      </mat-form-field>
+    </div>
+  </div>
+
+  <hr />
+
+  <div>
+    <div class="control-row">
+      <div class="example-container">
+        <mat-form-field>
+          <mat-label>First Name</mat-label>
+          <input
+            matInput
+            type="text"
+            placeholder="Patrick"
+            formControlName="firstName"
+          />
+        </mat-form-field>
+      </div>
+
+      <div class="example-container">
+        <mat-form-field>
+          <mat-label>Last Name</mat-label>
+          <input
+            matInput
+            type="text"
+            placeholder="Starfish"
+            formControlName="lastName"
+          />
+        </mat-form-field>
+      </div>
+    </div>
+
+    <!--<fieldset>
+      <legend>Your Address</legend>
+
+      <div class="control-row">
+        <div class="control">
+          <label for="street">Street</label>
+          <input type="text" id="street" name="street" />
+        </div>
+
+        <div class="control">
+          <label for="number">Number</label>
+          <input type="text" id="number" name="number" />
+        </div>
+      </div>
+
+      <div class="control-row">
+        <div class="control">
+          <label for="postal-code">Postal Code</label>
+          <input type="text" id="postal-code" name="postal-code" />
+        </div>
+
+        <div class="control">
+          <label for="city">City</label>
+          <input type="text" id="city" name="city" />
+        </div>
+      </div>
+    </fieldset>-->
+  </div>
+
+  <hr />
+
+  <!--<div class="control-row">
+    <div class="control">
+      <label for="role">What best describes your role?</label>
+      <select id="role" name="role">
+        <option value="student">Student</option>
+        <option value="teacher">Teacher</option>
+        <option value="employee">Employee</option>
+        <option value="founder">Founder</option>
+        <option value="other">Other</option>
+      </select>
+    </div>
+  </div>
+
+  <fieldset>
+    <legend>How did you find us?</legend>
+    <div class="control">
+      <input
+        type="checkbox"
+        id="google"
+        name="acquisition"
+        value="google"
+      />
+      <label for="google">Google</label>
+    </div>
+
+    <div class="control">
+      <input
+        type="checkbox"
+        id="friend"
+        name="acquisition"
+        value="friend"
+      />
+      <label for="friend">Referred by friend</label>
+    </div>
+
+    <div class="control">
+      <input
+        type="checkbox"
+        id="other"
+        name="acquisition"
+        value="other"
+      />
+      <label for="other">Other</label>
+    </div>
+  </fieldset>-->
+
+  <div class="control-row">
+    <div class="example-container">
+      <mat-checkbox>
+        I agree to the terms and conditions
+      </mat-checkbox>
+    </div>
+  </div>
+
+  <p class="form-actions">
+    <ng-content />
+    <button matButton="filled" type="reset" class="button button-flat">Reset</button>
+    <button matButton="filled" type="submit" class="button" [disabled]="!form.valid">Sign up</button>
+  </p>
+</form>
