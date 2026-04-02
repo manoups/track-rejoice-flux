@@ -2,24 +2,13 @@ package com.breece.proposal.command.api.model;
 
 import com.breece.content.api.model.Content;
 import com.breece.content.api.model.ContentId;
-import com.breece.content.api.model.ContentStatus;
 import com.breece.content.command.api.*;
-import com.breece.content.query.api.ContentDocument;
-import com.breece.content.query.api.GetContents;
 import com.breece.coreapi.common.SightingDetails;
-import com.breece.coreapi.facets.FacetFilter;
-import com.breece.coreapi.facets.Pagination;
 import com.breece.coreapi.util.GeometryUtil;
-import com.breece.proposal.command.api.AcceptProposal;
-import com.breece.proposal.command.api.CreateProposal;
-import com.breece.proposal.command.api.DeleteWeightedAssociation;
-import com.breece.proposal.command.api.RejectProposal;
+import com.breece.proposal.command.api.*;
 import com.breece.sighting.api.model.Sighting;
 import com.breece.sighting.api.model.SightingId;
-import com.breece.sighting.command.api.CreateSighting;
 import com.breece.sighting.command.api.DeleteSighting;
-import com.breece.sighting.query.api.GetSightings;
-import com.breece.sighting.query.api.SightingDocument;
 import io.fluxzero.common.search.Facet;
 import io.fluxzero.common.search.Sortable;
 import io.fluxzero.sdk.Fluxzero;
@@ -34,17 +23,16 @@ import io.fluxzero.sdk.tracking.handling.authentication.UnauthorizedException;
 import lombok.With;
 import lombok.extern.slf4j.Slf4j;
 
-import java.util.List;
 import java.util.Objects;
 
-@Stateful(commitInBatch = true)
+@Stateful
 @Consumer(name = "weighted-association-state-consumer", ignoreSegment = true)
 @Slf4j
 public record WeightedAssociationState(@EntityId WeightedAssociationId weightedAssociationId, ContentId contentId,
                                        SightingId sightingId,
                                        SightingDetails sightingDetails,
                                        @With @Facet WeightedAssociationStatus status, @With double distance, @With @Sortable double score) {
-    @Association("contentId")
+    /*@Association("contentId")
     @HandleEvent
     static List<WeightedAssociationState> on(PublishContent event, Content content) {
         List<SightingDocument> sightingDocuments = Fluxzero.queryAndWait(new GetSightings(List.of(FacetFilter.builder().facetName("subtype").values(List.of(content.details().getSubtype())).build()), "", new Pagination(0, 1_000_000)));
@@ -73,13 +61,15 @@ public record WeightedAssociationState(@EntityId WeightedAssociationId weightedA
                     .toList();
         }
         return null;
-    }
+    }*/
 
-    /*@Association("weightedAssociationId")
+    @Association("weightedAssociationId")
     @HandleEvent
     static WeightedAssociationState on(CreateWeightedAssociation event) {
-        return new WeightedAssociationState(event.weightedAssociationId(), event.contentId(), event.sightingId(), event.sightingDetails(), WeightedAssociationStatus.CREATED);
-    }*/
+        Content content = Fluxzero.loadAggregate(event.contentId()).get();
+        double distance = GeometryUtil.parseLocation(content.lastConfirmedSighting().lat(), content.lastConfirmedSighting().lng()).distance(GeometryUtil.parseLocation(event.sightingDetails().lat(), event.sightingDetails().lng()));
+        return new WeightedAssociationState(event.weightedAssociationId(), event.contentId(), event.sightingId(), event.sightingDetails(), WeightedAssociationStatus.CREATED, distance, distance);
+    }
 
     @Association("weightedAssociationId")
     @HandleEvent
@@ -92,7 +82,7 @@ public record WeightedAssociationState(@EntityId WeightedAssociationId weightedA
 
     @Association("weightedAssociationId")
     @HandleEvent
-    WeightedAssociationState on(AcceptProposal event, Content content) {
+    WeightedAssociationState on(AcceptProposal event) {
         if (WeightedAssociationStatus.LINKED != status()) {
             return this;
         }
@@ -108,7 +98,7 @@ public record WeightedAssociationState(@EntityId WeightedAssociationId weightedA
                 return this;
             }
         }
-        Fluxzero.sendAndForgetCommand(new UpdateLastSeenPosition(content.contentId(), sightingDetails()));
+        Fluxzero.sendAndForgetCommand(new UpdateLastSeenPosition(event.contentId(), sightingDetails()));
 
         return withStatus(WeightedAssociationStatus.ACCEPTED);
     }

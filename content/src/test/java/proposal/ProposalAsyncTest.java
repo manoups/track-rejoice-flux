@@ -30,13 +30,17 @@ public class ProposalAsyncTest extends TestUtilities {
         ContentId contentId = new ContentId("3");
         SightingId sightingId = new SightingId("1");
         testFixture.givenCommandsByUser("viewer", "../content/create-content.json").givenCommands("../content/publish-content.json")
-                .givenCommandsByUser("Alice", "../sighting/create-sighting-removal.json", "create-proposal.json")
+                .givenCommandsByUser("Alice", "../sighting/create-sighting-removal.json")
+                .givenCommands("create-weighted-association.json")
+                .givenCommandsByUser("Alice","create-proposal.json")
 //            create C2
                 .givenCommandsByUser("viewer", "../content/create-content-cat.json")
                 .givenCommands(new PublishContent(contentId, Duration.ofDays(10)))
+                .givenCommands("create-weighted-association-for-content-3.json")
                 .whenCommandByUser("viewer", new ClaimSighting(contentId,
-                        new WeightedAssociationId(contentId, sightingId)
+                        new WeightedAssociationId(String.format("%s-%s", contentId, sightingId))
                 ))
+                .expectNoErrors()
                 .expectOnlyCommands(UpdateLastSeenPosition.class, DeleteSighting.class, DeleteWeightedAssociation.class, DeleteWeightedAssociation.class)
                 .expectThat(fz -> {
                     List<WeightedAssociationState> weightedAssociationStates = fz.documentStore().search(WeightedAssociationState.class).fetchAll();
@@ -56,12 +60,15 @@ public class ProposalAsyncTest extends TestUtilities {
         SightingId sightingId = new SightingId("1");
         testFixture.givenCommandsByUser("viewer", "../content/create-content.json")
                 .givenCommands("../content/publish-content.json")
-                .givenCommandsByUser("Alice", "../sighting/create-sighting.json", "create-proposal.json")
+                .givenCommandsByUser("Alice", "../sighting/create-sighting.json")
+                .givenCommands("create-weighted-association.json")
+                .givenCommandsByUser("Alice", "create-proposal.json")
 //            create C2
                 .givenCommandsByUser("viewer", "../content/create-content-cat.json")
+                .givenCommands("create-weighted-association-for-content-3.json")
                 .givenCommands(new PublishContent(contentId, Duration.ofDays(10)))
                 .whenCommandByUser("viewer", new ClaimSighting(contentId,
-                        new WeightedAssociationId(contentId, sightingId)
+                        new WeightedAssociationId("content-3-sighting-1")
                 ))
                 .expectOnlyCommands(UpdateLastSeenPosition.class)
                 .expectThat(fz -> {

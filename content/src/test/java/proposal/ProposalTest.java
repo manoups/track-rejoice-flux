@@ -54,7 +54,7 @@ public class ProposalTest extends TestUtilities {
     @Test
     void createProposal() {
         testFixture.givenCommandsByUser("viewer", "../content/create-content.json", "../sighting/create-sighting.json")
-                .givenCommands("../content/publish-content.json")
+                .givenCommands("../content/publish-content.json", "create-weighted-association.json")
                 .whenCommand("create-proposal.json")
                 .expectNoErrors()
                 .expectEvents("create-proposal.json");
@@ -91,7 +91,7 @@ public class ProposalTest extends TestUtilities {
     @Test
     void givenProposal_whenLinkedProposalByDifferentUser_thenEmptyList() {
         testFixture.givenCommandsByUser("viewer", "../sighting/create-sighting.json", "../content/create-content.json")
-                .givenCommands("../content/publish-content.json")
+                .givenCommands("../content/publish-content.json", "create-weighted-association.json")
                 .whenCommandByUser("Alice", "create-proposal.json")
                 .expectNoErrors()
                 .expectCommands()
@@ -101,7 +101,7 @@ public class ProposalTest extends TestUtilities {
     @Test
     void ProposalShouldBeLinkedToContentIfUserMatch() {
         testFixture.givenCommandsByUser("viewer", "../sighting/create-sighting.json", "../content/create-content.json")
-                .givenCommands("../content/publish-content.json")
+                .givenCommands("../content/publish-content.json", "create-weighted-association.json")
                 .whenCommandByUser("viewer", "create-proposal.json")
                 .expectNoErrors()
                 .expectCommands(UpdateLastSeenPosition.class)
@@ -111,7 +111,7 @@ public class ProposalTest extends TestUtilities {
     @Test
     void givenRejectProposal_whenQueryProposedSightings_thenEmptyList() {
         testFixture.givenCommandsByUser("viewer", "../sighting/create-sighting.json", "../content/create-content.json")
-                .givenCommands("../content/publish-content.json")
+                .givenCommands("../content/publish-content.json", "create-weighted-association.json")
                 .givenCommandsByUser("Alice", "create-proposal.json")
                 .givenCommandsByUser("viewer", "reject-proposal.json")
                 .whenQuery(new GetWeightedAssociationsByContentIdAndStatuses(new ContentId("1"), List.of(WeightedAssociationStatus.CREATED)))
@@ -124,7 +124,7 @@ public class ProposalTest extends TestUtilities {
     void givenContentOfUserA_whenUserBCreatesProposal_thenNoError() {
         testFixture.givenCommandsByUser("viewer", "../content/create-content.json")
                 .givenCommandsByUser("user2", "../sighting/create-sighting.json")
-                .givenCommands("../content/publish-content.json")
+                .givenCommands("../content/publish-content.json", "create-weighted-association.json")
                 .whenCommandByUser("user2", "create-proposal.json")
                 .expectNoErrors()
                 .expectOnlyEvents("create-proposal.json");
@@ -149,7 +149,7 @@ public class ProposalTest extends TestUtilities {
     @Test
     void givenContentOfUserA_whenUserBRemovesProposal_thenError() {
         testFixture.givenCommandsByUser("viewer", "../sighting/create-sighting.json", "../content/create-content.json")
-                .givenCommands("../content/publish-content.json")
+                .givenCommands("../content/publish-content.json", "create-weighted-association.json")
                 .givenCommandsByUser("viewer", "create-proposal.json")
                 .whenCommandByUser("user2", "reject-proposal.json")
                 .expectError(ContentErrors.unauthorized)
@@ -159,7 +159,7 @@ public class ProposalTest extends TestUtilities {
     @Test
     void givenContentOfUserA_whenUserBAcceptsProposal_thenError() {
         testFixture.givenCommandsByUser("viewer", "../sighting/create-sighting.json", "../content/create-content.json")
-                .givenCommands("../content/publish-content.json")
+                .givenCommands("../content/publish-content.json", "create-weighted-association.json")
                 .givenCommandsByUser("viewer", "create-proposal.json")
                 .whenCommandByUser("user2", "accept-proposal.json")
                 .expectError(ContentErrors.unauthorized)
@@ -169,7 +169,7 @@ public class ProposalTest extends TestUtilities {
     @Test
     void givenContent_whenAcceptsDifferentProposal_thenError() {
         testFixture.givenCommandsByUser("viewer", "../sighting/create-sighting.json", "../content/create-content.json")
-                .givenCommands("../content/publish-content.json")
+                .givenCommands("../content/publish-content.json", "create-weighted-association.json")
                 .givenCommandsByUser("Alice", new CreateSighting(new SightingId("2"), new SightingDetails(BigDecimal.ZERO, BigDecimal.ZERO), true, SightingEnum.CAT), "create-proposal.json")
                 .whenCommandByUser("viewer", "accept-proposal-increment-id.json")
                 .expectExceptionalResult(WeightedAssociationErrors.notFound)
@@ -179,7 +179,7 @@ public class ProposalTest extends TestUtilities {
     @Test
     void givenClaim_whenSameProposal_thenError() {
         testFixture.givenCommandsByUser("viewer", "../sighting/create-sighting.json", "../content/create-content.json")
-                .givenCommands("../content/publish-content.json")
+                .givenCommands("../content/publish-content.json", "create-weighted-association.json")
                 .givenCommandsByUser("viewer", "../sighting/claim-sighting.json")
                 .whenCommand("create-proposal.json")
                 .expectNoErrors();
@@ -190,10 +190,12 @@ public class ProposalTest extends TestUtilities {
         int SIZE = 15;
         CreateContent[] contents = new CreateContent[SIZE];
         PublishContent[] publishContents = new PublishContent[SIZE];
+        CreateWeightedAssociation[] creteWeighedAssociations = new CreateWeightedAssociation[SIZE];
         for (int i = 0; i < SIZE; ++i) {
             ContentId contentId = new ContentId();
             contents[i] = new CreateContent(contentId, new SightingDetails(BigDecimal.ZERO, BigDecimal.ZERO), new Pet("Maya", "Cocker Spaniel", GenderEnum.FEMALE, SightingEnum.CAT));
             publishContents[i] = new PublishContent(contentId, Duration.ofDays(90));
+            creteWeighedAssociations[i] = new CreateWeightedAssociation(contentId, new WeightedAssociationId(), new SightingId("2"), new SightingDetails(BigDecimal.ZERO, BigDecimal.ZERO));
         }
         testFixture.givenCommandsByUser("viewer", contents)
                 .givenCommands(publishContents)
@@ -201,6 +203,9 @@ public class ProposalTest extends TestUtilities {
                 .expectTrue(_ -> Fluxzero.search(WeightedAssociationState.class).count() == 0)
                 .andThen()
                 .whenCommandByUser("Alice", "../sighting/create-sighting.json")
+                .andThen()
+                .givenCommands(creteWeighedAssociations)
+                .whenNothingHappens()
                 .expectTrue(_ -> Fluxzero.search(WeightedAssociationState.class).count() == SIZE);
 
     }
@@ -210,22 +215,25 @@ public class ProposalTest extends TestUtilities {
         CreateContent createContent;
         PublishContent publishContent;
         CreateSighting[] sightings;
+        CreateWeightedAssociation[] createWeighedAssociations;
         final int SIZE = 7;
 
         @BeforeEach
         void setUp() {
             sightings = new CreateSighting[SIZE];
+            createWeighedAssociations = new CreateWeightedAssociation[SIZE];
+            ContentId contentId = new ContentId();
             for (int i = 0; i < SIZE; ++i) {
                 sightings[i] = new CreateSighting(new SightingId(), new SightingDetails(BigDecimal.valueOf(i), BigDecimal.valueOf(i * 0.1)), false, SightingEnum.DOG);
+                createWeighedAssociations[i] = new CreateWeightedAssociation(contentId, new WeightedAssociationId(), sightings[i].sightingId(), sightings[i].sightingDetails());
             }
-            ContentId contentId = new ContentId();
             publishContent = new PublishContent(contentId, Duration.ofDays(90));
             createContent = new CreateContent(contentId, new SightingDetails(new BigDecimal("-1"), new BigDecimal("-1")), new Pet("Maya", "Cocker Spaniel", GenderEnum.FEMALE, SightingEnum.DOG));
         }
 
         @Test
         void givenProposal_whenQueryContent_thenDistanceOfOtherProposedSightingsChange() {
-            testFixture.givenCommands(sightings, createContent, publishContent)
+            testFixture.givenCommands(sightings, createContent, publishContent, createWeighedAssociations)
                     .whenQuery(new GetWeightedAssociationStates(List.of(new FacetFilter("status", List.of(WeightedAssociationStatus.CREATED))), "", new Pagination(0, 10)))
                     .expectNoErrors()
                     .expectResult(hasSize(SIZE));
@@ -233,7 +241,7 @@ public class ProposalTest extends TestUtilities {
 
         @Test
         void givenContentThenSightingCreated_whenQuerySightings_thenDistanceOfOtherProposedSightingsChange() {
-            testFixture.givenCommands(createContent, publishContent, sightings)
+            testFixture.givenCommands(createContent, publishContent, sightings, createWeighedAssociations)
                     .whenQuery(new GetWeightedAssociationStates(List.of(new FacetFilter("status", List.of(WeightedAssociationStatus.CREATED))), "", new Pagination(0, 10)))
                     .expectNoErrors()
                     .expectResult(hasSize(SIZE));
@@ -241,11 +249,11 @@ public class ProposalTest extends TestUtilities {
 
         @Test
         void givenProposal_whenAcceptContent_thenStateOfWeightedAssociationChange() {
-            testFixture.givenCommands(createContent, publishContent, sightings)
-                    .givenCommands(new ClaimSighting(createContent.contentId(), new WeightedAssociationId(createContent.contentId(), sightings[0].sightingId())))
+            testFixture.givenCommands(createContent, publishContent, sightings, createWeighedAssociations)
+                    .givenCommands(new ClaimSighting(createContent.contentId(), createWeighedAssociations[0].weightedAssociationId()))
                     .whenQuery(new GetWeightedAssociationStates(List.of(new FacetFilter("status", List.of(WeightedAssociationStatus.CREATED))), "", new Pagination(0, 10)))
                     .expectNoErrors()
-                    .expectResult(hasSize(SIZE - 1))
+                    .expectResult(tr -> tr.size() == SIZE - 1)
                     .andThen()
                     .whenQuery(new GetWeightedAssociationStates(List.of(new FacetFilter("status", List.of(WeightedAssociationStatus.ACCEPTED))), "", new Pagination(0, 10)))
                     .expectNoErrors()
@@ -254,7 +262,7 @@ public class ProposalTest extends TestUtilities {
 
         @Test
         void givenProposal_whenAcceptContent_thenLastSeenLocationIsUpdated() {
-            testFixture.givenCommands(createContent, publishContent, sightings, new ClaimSighting(createContent.contentId(), new WeightedAssociationId(createContent.contentId(), sightings[0].sightingId())))
+            testFixture.givenCommands(createContent, publishContent, sightings, new ClaimSighting(createContent.contentId(), new WeightedAssociationId()))
                     .whenQuery(new GetContent(createContent.contentId()))
                     .expectNoErrors()
                     .mapResult(Content::lastConfirmedSighting)
@@ -269,10 +277,10 @@ public class ProposalTest extends TestUtilities {
                     .expectThat(fz -> {
                         WeightedAssociationState weightedAssociationState = fz.queryGateway().sendAndWait(new GetWeightedAssociationsBySightingIdAndStatuses(targetSightingId, List.of(WeightedAssociationStatus.CREATED))).getFirst();
                         Content content = fz.queryGateway().sendAndWait(new GetContent(createContent.contentId()));
-                         Assertions.assertTrue(Math.abs(weightedAssociationState.distance() - distance(content.lastConfirmedSighting().lat(), content.lastConfirmedSighting().lng(), sightings[1].sightingDetails().lat(), sightings[1].sightingDetails().lng())) < 0.00001);
+                        Assertions.assertTrue(Math.abs(weightedAssociationState.distance() - distance(content.lastConfirmedSighting().lat(), content.lastConfirmedSighting().lng(), sightings[1].sightingDetails().lat(), sightings[1].sightingDetails().lng())) < 0.00001);
                     })
                     .andThen()
-                    .whenCommand(new ClaimSighting(createContent.contentId(), new WeightedAssociationId(createContent.contentId(), sightings[0].sightingId())))
+                    .whenCommand(new ClaimSighting(createContent.contentId(), new WeightedAssociationId()))
                     .expectThat(fz -> {
                         WeightedAssociationState weightedAssociationState = fz.queryGateway().sendAndWait(new GetWeightedAssociationsBySightingIdAndStatuses(targetSightingId, List.of(WeightedAssociationStatus.CREATED))).getFirst();
                         Content content = fz.queryGateway().sendAndWait(new GetContent(createContent.contentId()));
@@ -354,7 +362,7 @@ public class ProposalTest extends TestUtilities {
         @Test
         void givenProposal_whenNonExistentProposalRejected_thenError() {
             ContentId contentId = new ContentId("1");
-            testFixture.whenCommand(new DeleteWeightedAssociation(contentId, new WeightedAssociationId(contentId, new SightingId("2"))))
+            testFixture.whenCommand(new DeleteWeightedAssociation(contentId, new WeightedAssociationId()))
                     .expectError(WeightedAssociationErrors.notFound);
         }
 

@@ -1,0 +1,10 @@
+{
+  "@class": "com.breece.proposal.command.api.CreateWeightedAssociation",
+  "weightedAssociationId": "content-1-sighting-1",
+  "contentId": "1",
+  "sightingId": "1",
+  "sightingDetails": {
+    "lat": 51.507351,
+    "lng": -0.127758
+  }
+}

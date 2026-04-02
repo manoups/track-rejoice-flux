@@ -52,7 +52,7 @@ public class SightingTest extends TestUtilities {
                     .givenCommandsByUser("user2", "../content/create-content-cat.json")
                     .givenCommands(new PublishContent(contentId, Duration.ofDays(90)))
                     .whenCommandByUser("user2", new ClaimSighting(contentId,
-                            new WeightedAssociationId(contentId, sightingId)))
+                            new WeightedAssociationId()))
                     .expectNoErrors();
         }
 
@@ -62,7 +62,7 @@ public class SightingTest extends TestUtilities {
             ContentId contentId = new ContentId("1");
             SightingId sightingId = new SightingId("1");
             testFixture
-                    .whenCommand(new com.breece.proposal.command.api.ClaimSighting(contentId, new WeightedAssociationId(contentId, sightingId)))
+                    .whenCommand(new com.breece.proposal.command.api.ClaimSighting(contentId, new WeightedAssociationId()))
                     .expectExceptionalResult(SightingErrors.sightingMismatch)
                     .expectError((e) -> e.getMessage().equals(SightingErrors.sightingMismatch.getMessage()));
         }
@@ -74,7 +74,7 @@ public class SightingTest extends TestUtilities {
             SightingId sightingId = new SightingId("1");
             testFixture
                     .whenCommand(new com.breece.proposal.command.api.ClaimSighting(contentId,
-                            new WeightedAssociationId(contentId, sightingId)))
+                            new WeightedAssociationId()))
                     .expectNoErrors();
         }
     }
@@ -97,7 +97,7 @@ public class SightingTest extends TestUtilities {
                     .givenCommandsByUser("user2", "../content/create-content-cat.json")
                     .givenCommands(new PublishContent(contentId, Duration.ofDays(90)))
                     .whenCommandByUser("user2", new ClaimSighting(contentId,
-                            new WeightedAssociationId(contentId, sightingId)))
+                            new WeightedAssociationId()))
                     .expectExceptionalResult(WeightedAssociationErrors.notFound)
                     .expectError((e) -> e.getMessage().equals(WeightedAssociationErrors.notFound.getMessage()));
         }

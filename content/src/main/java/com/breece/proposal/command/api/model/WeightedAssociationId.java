@@ -1,10 +1,10 @@
 package com.breece.proposal.command.api.model;
 
-import com.breece.content.api.model.ContentId;
-import com.breece.sighting.api.model.SightingId;
+import com.breece.content.api.model.WeightedAssociation;
+import io.fluxzero.sdk.Fluxzero;
 import io.fluxzero.sdk.modeling.Id;
 
-public class WeightedAssociationId extends Id<String> {
-    public WeightedAssociationId(ContentId contentId, SightingId sightingId) {this(contentId.toString()+"-"+sightingId.toString());}
-    private WeightedAssociationId(String id) {super(id, "wa-");}
+public class WeightedAssociationId extends Id<WeightedAssociation> {
+    public WeightedAssociationId(String id) {super(id, "wa-");}
+    public WeightedAssociationId() {this(Fluxzero.generateId());}
 }
