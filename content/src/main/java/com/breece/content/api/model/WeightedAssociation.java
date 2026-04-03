@@ -5,6 +5,7 @@ import com.breece.proposal.command.api.model.WeightedAssociationId;
 import com.breece.proposal.command.api.model.WeightedAssociationStatus;
 import com.breece.sighting.api.model.SightingId;
 import io.fluxzero.sdk.modeling.EntityId;
+import lombok.With;
 
-public record WeightedAssociation(@EntityId WeightedAssociationId weightedAssociationId, SightingId sightingId, SightingDetails sightingDetails, WeightedAssociationStatus status) {
+public record WeightedAssociation(@EntityId WeightedAssociationId weightedAssociationId, SightingId sightingId, SightingDetails sightingDetails, @With WeightedAssociationStatus status) {
 }
