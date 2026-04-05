@@ -1,25 +1,6 @@
 services:
-  postgres:
-    # see https://hub.docker.com/_/postgres for list of postgres image versions on docker hub
-    #image: postgres:latest # To download the latest image
-    #image: postgres:17.4-alpine # To download a specific version, here the version 17.4 of Postgresql under an alpine linux distribution
-    image: postgis/postgis:16-3.4 # To download a specific version, here the version 17.4 of Postgresql
-    container_name: postgres-track-rejoice
-    volumes:
-      - postgresql_data:/var/lib/postgresql/data
-      - ./initdb.d:/docker-entrypoint-initdb.d
-    env_file:
-      - .env
-    environment:
-      POSTGRES_DB: ${POSTGRES_DB}
-      POSTGRES_USER: ${POSTGRES_USER}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-    ports:
-      - "5432:5432" # HOST_PORT:CONTAINER_PORT
-
-
   fluxzero-runtime:
-    image: ghcr.io/fluxzero-io/fluxzero-sdk-java/fluxzero-test:1.20.0
+    image: ghcr.io/fluxzero-io/fluxzero-sdk-java/fluxzero-test:1.95.2
     environment:
       - FLUXZERO_LOG_RETENTION=PT30M
     healthcheck:
@@ -29,7 +10,7 @@ services:
       - "8888:8888"
 
   track-rejoice:
-    image: ghcr.io/fluxzero-io/fluxzero-sdk-java/fluxzero-proxy:1.20.0
+    image: ghcr.io/fluxzero-io/fluxzero-sdk-java/fluxzero-proxy:1.95.2
     environment:
       - FLUXZERO_BASE_URL=http://fluxzero-runtime:8888
       - FLUXZERO_APPLICATION_NAME=track-rejoice-proxy

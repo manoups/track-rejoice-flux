@@ -1,0 +1,34 @@
+POST {{baseUrl}}/content
+Content-Type: application/json
+
+{
+  "name": "my user"
+}
+
+###
+
+POST {{baseUrl}}/content/list
+Content-Type: application/json
+
+{
+  "facetFilters": [],
+  "filter": "",
+  "pagination": {
+    "page": 0,
+    "pageSize": 10
+  }
+}
+
+###
+
+
+POST {{baseUrl}}/content/list/stats
+Accept: application/json
+
+###
+
+
+GET {{baseUrl}}/content/5a91c089f8764177bcb9bfbf8b36baff
+Accept: application/json
+
+###
