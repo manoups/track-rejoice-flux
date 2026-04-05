@@ -7,25 +7,20 @@ import com.breece.content.command.api.CreateContent;
 import com.breece.content.command.api.PublishContent;
 import com.breece.coreapi.common.SightingDetails;
 import com.breece.coreapi.common.SightingEnum;
-import com.breece.proposal.command.api.ClaimSighting;
-import com.breece.proposal.command.api.CreateWeightedAssociation;
-import com.breece.proposal.command.api.model.WeightedAssociationId;
 import com.breece.sighting.api.model.SightingId;
 import com.breece.sighting.command.api.CreateSighting;
-import io.fluxzero.common.serialization.JsonUtils;
 import io.fluxzero.sdk.Fluxzero;
-import io.fluxzero.sdk.configuration.spring.FluxzeroSpringConfig;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.annotation.Import;
+import org.springframework.context.annotation.ComponentScan;
 
 import java.math.BigDecimal;
 import java.time.Duration;
 
 @SpringBootApplication
-@Import(FluxzeroSpringConfig.class)
 @Slf4j
+@ComponentScan(basePackages = "com.breece")
 public class App {
 
     public static void main(String[] args) {

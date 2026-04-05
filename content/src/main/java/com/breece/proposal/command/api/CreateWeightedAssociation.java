@@ -23,6 +23,13 @@ public record CreateWeightedAssociation(ContentId contentId, @NotNull WeightedAs
         throw WeightedAssociationErrors.alreadyExists;
     }
 
+    @AssertLegal
+    public void assertNewSighting(Content content) {
+        if(content.weightedAssociations().stream().map(WeightedAssociation::sightingId).anyMatch(sightingId::equals)) {
+            throw WeightedAssociationErrors.alreadyExists;
+        }
+    }
+
     @Apply
     public WeightedAssociation apply(Content content) {
         return new WeightedAssociation(weightedAssociationId, sightingId, sightingDetails, WeightedAssociationStatus.CREATED);

@@ -1,16 +1,25 @@
 services:
   fluxzero-runtime:
-    image: ghcr.io/fluxzero-io/fluxzero-sdk-java/fluxzero-test:1.95.2
+    image: ghcr.io/fluxzero-io/fluxzero-sdk-java/fluxzero-test:1.144.0
     environment:
       - FLUXZERO_LOG_RETENTION=PT30M
-    healthcheck:
-      test: "wget --spider -q http://localhost:8888/health"
-      interval: 5s
     ports:
       - "8888:8888"
 
+  fluxzero-runtime-ready:
+    image: alpine:3.20
+    depends_on:
+      - fluxzero-runtime
+    command: >
+      sh -c "apk add --no-cache curl >/dev/null &&
+             until curl -fs http://fluxzero-runtime:8888/health; do
+               echo 'waiting for fluxzero-runtime...';
+               sleep 2;
+             done"
+    restart: "no"
+
   track-rejoice:
-    image: ghcr.io/fluxzero-io/fluxzero-sdk-java/fluxzero-proxy:1.95.2
+    image: ghcr.io/fluxzero-io/fluxzero-sdk-java/fluxzero-proxy:1.144.0
     environment:
       - FLUXZERO_BASE_URL=http://fluxzero-runtime:8888
       - FLUXZERO_APPLICATION_NAME=track-rejoice-proxy
@@ -41,7 +50,7 @@ services:
       test: "curl -fs http://localhost:5601/api/status"
 
   auditlog:
-    image: ghcr.io/fluxzero-io/fluxzero-auditlog-opensearch:v1.2.1
+    image: ghcr.io/fluxzero-io/fluxzero-auditlog-opensearch:v1.8.1
     environment:
       - FLUXZERO_BASE_URL=http://fluxzero-runtime:8888
       - OPENSEARCH_URL=http://opensearch:9200
@@ -50,15 +59,13 @@ services:
       - DASHBOARDS_URL=http://dashboards:5601
       - DASHBOARDS_USER=admin
       - DASHBOARDS_PASSWORD=0pen_Search
+      - DASHBOARDS_TENANT=fluxzero
     depends_on:
       dashboards:
         condition: service_healthy
-      fluxzero-runtime:
-        condition: service_healthy
+      fluxzero-runtime-ready:
+        condition: service_completed_successfully
 
-volumes:
-  postgresql_data:
-    driver: local
 
 networks:
   postgres_network:

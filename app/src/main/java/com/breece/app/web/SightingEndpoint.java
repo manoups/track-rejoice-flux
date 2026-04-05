@@ -3,6 +3,7 @@ package com.breece.app.web;
 import com.breece.coreapi.facets.FacetPaginationRequestBody;
 import com.breece.coreapi.facets.GetFacetStatsResult;
 import com.breece.coreapi.facets.GetFacets;
+import com.breece.proposal.command.api.ClaimSighting;
 import com.breece.sighting.api.model.Sighting;
 import com.breece.sighting.api.model.SightingId;
 import com.breece.sighting.command.api.CreateSighting;
@@ -46,5 +47,11 @@ public class SightingEndpoint {
     SightingId deleteSighting(@PathParam SightingId id) {
         Fluxzero.sendCommandAndWait(new DeleteSighting(id));
         return id;
+    }
+
+    @HandlePost(value = {"claim", "claim/"})
+    ClaimSighting claimSighting(ClaimSighting claimSighting) {
+        Fluxzero.sendCommandAndWait(claimSighting);
+        return claimSighting;
     }
 }

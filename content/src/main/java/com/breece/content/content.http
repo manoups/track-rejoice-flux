@@ -28,7 +28,17 @@ Accept: application/json
 ###
 
 
-GET {{baseUrl}}/content/5a91c089f8764177bcb9bfbf8b36baff
+GET {{baseUrl}}/content/0d0a58caefb1409c8a0fff1957d7e019
 Accept: application/json
 
+###
+
+
+POST {{baseUrl}}/sighting/claim
+Content-Type: application/json
+
+{
+  "contentId": "0d0a58caefb1409c8a0fff1957d7e019",
+  "weightedAssociationId":"5ed01fbdc89541aaa53386c51b500426"
+}
 ###
