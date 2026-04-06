@@ -23,13 +23,13 @@ import org.junit.jupiter.api.Test;
 
 import java.time.Duration;
 import java.time.Instant;
+import java.util.List;
 import java.util.UUID;
 import java.util.function.Supplier;
 
 import static io.fluxzero.common.ObjectUtils.memoize;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
-import static org.hibernate.internal.util.collections.CollectionHelper.listOf;
 
 class PaypalAuthenticateTest {
     @Nested
@@ -97,7 +97,7 @@ class PaypalAuthenticateTest {
 
         @Test
         void sendOrder() {
-            CreateOrder createOrder = new CreateOrder(new OrderId("1"), new ContentId("1"), new OrderDetails(listOf(new ServiceId("1")), Instant.now()), UUID.randomUUID().toString());
+            CreateOrder createOrder = new CreateOrder(new OrderId("1"), new ContentId("1"), new OrderDetails(List.of(new ServiceId("1")), Instant.now()), UUID.randomUUID().toString());
             testFixture.givenCommands("../content/create-content.json").whenCommand(createOrder)
                     .expectEvents(createOrder)
                     .expectOnlyCommands(CreateOrderRemote.class);

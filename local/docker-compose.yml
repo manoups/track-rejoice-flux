@@ -18,6 +18,17 @@ services:
              done"
     restart: "no"
 
+  seed-data:
+    build:
+      context: ..
+      dockerfile: local-seed/Dockerfile
+    depends_on:
+      fluxzero-runtime-ready:
+        condition: service_completed_successfully
+    environment:
+      - FLUXZERO_BASE_URL=http://fluxzero-runtime:8888
+      - SEED_MODE=default
+
   track-rejoice:
     image: ghcr.io/fluxzero-io/fluxzero-sdk-java/fluxzero-proxy:1.144.0
     environment:

@@ -93,7 +93,6 @@
   </dependencies>
   <build>
     <finalName>Track Rejoice</finalName>
-    <resources/>
     <plugins>
       <!--<plugin>
                     <groupId>org.springframework.boot</groupId>
@@ -184,5 +183,6 @@
     <module>order</module>
     <module>service</module>
     <module>local-auth</module>
+    <module>local-seed</module>
   </modules>
 </project>
