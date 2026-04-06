@@ -16,16 +16,16 @@ import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.time.Instant;
+import java.util.List;
 
-import static org.hibernate.internal.util.collections.CollectionHelper.listOf;
 
 class CreateOrderTest {
     TestFixture testFixture = TestFixture.create(ContentState.class, new MockQueryHandler()).givenCommands("../content/create-content.json");
 
     CreateOrder order1 = new CreateOrder(new OrderId("1"), new ContentId("1"), new OrderDetails(
-            listOf(new ServiceId("1")), Instant.now()), "1");
+            List.of(new ServiceId("1")), Instant.now()), "1");
     CreateOrder order2 = new CreateOrder(new OrderId("2"), new ContentId("1"), new OrderDetails(
-            listOf(new ServiceId("1")), Instant.now()), "2");
+            List.of(new ServiceId("1")), Instant.now()), "2");
 
     @Test
     void duplicateCreation() {
@@ -53,7 +53,7 @@ class CreateOrderTest {
     void placeOrderForOfflineService() {
         testFixture
                 .whenCommand(new CreateOrder(new OrderId("1"), new ContentId("1"), new OrderDetails(
-                        listOf(new ServiceId("2")), Instant.now()), "1"))
+                        List.of(new ServiceId("2")), Instant.now()), "1"))
                 .expectError(OrderErrors.serviceNotFound);
     }
 }
