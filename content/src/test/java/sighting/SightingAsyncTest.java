@@ -33,7 +33,7 @@ public class SightingAsyncTest extends TestUtilities {
     @Test
     void claimSightingWithCorrectContentOwner() {
         testFixture.givenCommandsByUser("viewer", "../content/create-content.json", "create-sighting.json")
-                .givenCommands("../content/publish-content.json")
+                .givenCommands("../content/publish-content.json", "../proposal/create-weighted-association.json")
                 .whenCommandByUser("viewer", "claim-sighting.json")
                 .expectNoErrors()
                 .expectOnlyEvents(CreateProposal.class, AcceptProposal.class, UpdateLastSeenPosition.class)

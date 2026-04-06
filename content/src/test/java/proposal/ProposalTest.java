@@ -182,7 +182,7 @@ public class ProposalTest extends TestUtilities {
                 .givenCommands("../content/publish-content.json", "create-weighted-association.json")
                 .givenCommandsByUser("viewer", "../sighting/claim-sighting.json")
                 .whenCommand("create-proposal.json")
-                .expectNoErrors();
+                .expectError(WeightedAssociationErrors.incorrectState);
     }
 
     @Test
@@ -342,7 +342,9 @@ public class ProposalTest extends TestUtilities {
         @BeforeEach
         void setUp() {
             testFixture.givenCommandsByUser("viewer", "../content/create-content.json").givenCommands("../content/publish-content.json")
-                    .givenCommandsByUser("Alice", "../sighting/create-sighting.json", "create-proposal.json");
+                    .givenCommandsByUser("Alice", "../sighting/create-sighting.json")
+                    .givenCommands("create-weighted-association.json")
+                    .givenCommandsByUser("Alice", "create-proposal.json");
         }
 
         @Test

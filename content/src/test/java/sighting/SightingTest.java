@@ -33,7 +33,7 @@ public class SightingTest extends TestUtilities {
         @BeforeEach
         void setUp() {
             testFixture.givenCommandsByUser("viewer", "../content/create-content.json", "create-sighting.json")
-                    .givenCommands("../content/publish-content.json");
+                    .givenCommands("../content/publish-content.json", "../proposal/create-weighted-association.json");
         }
 
         @Test
@@ -50,9 +50,9 @@ public class SightingTest extends TestUtilities {
             SightingId sightingId = new SightingId("1");
             testFixture.givenCommandsByUser("viewer", "claim-sighting.json")
                     .givenCommandsByUser("user2", "../content/create-content-cat.json")
-                    .givenCommands(new PublishContent(contentId, Duration.ofDays(90)))
+                    .givenCommands(new PublishContent(contentId, Duration.ofDays(90)), "../proposal/create-weighted-association-for-content-3.json")
                     .whenCommandByUser("user2", new ClaimSighting(contentId,
-                            new WeightedAssociationId()))
+                            new WeightedAssociationId("content-3-sighting-1")))
                     .expectNoErrors();
         }
 
@@ -62,7 +62,7 @@ public class SightingTest extends TestUtilities {
             ContentId contentId = new ContentId("1");
             SightingId sightingId = new SightingId("1");
             testFixture
-                    .whenCommand(new com.breece.proposal.command.api.ClaimSighting(contentId, new WeightedAssociationId()))
+                    .whenCommand(new ClaimSighting(contentId, new WeightedAssociationId()))
                     .expectExceptionalResult(SightingErrors.sightingMismatch)
                     .expectError((e) -> e.getMessage().equals(SightingErrors.sightingMismatch.getMessage()));
         }
@@ -73,7 +73,7 @@ public class SightingTest extends TestUtilities {
             ContentId contentId = new ContentId("1");
             SightingId sightingId = new SightingId("1");
             testFixture
-                    .whenCommand(new com.breece.proposal.command.api.ClaimSighting(contentId,
+                    .whenCommand(new ClaimSighting(contentId,
                             new WeightedAssociationId()))
                     .expectNoErrors();
         }
@@ -85,7 +85,7 @@ public class SightingTest extends TestUtilities {
         void setUp() {
             testFixture.givenCommandsByUser("viewer",
                             "../content/create-content.json", "create-sighting-removal.json")
-                    .givenCommands("../content/publish-content.json");
+                    .givenCommands("../content/publish-content.json", "../proposal/create-weighted-association.json");
         }
 
         @Test
