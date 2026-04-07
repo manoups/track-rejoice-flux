@@ -23,7 +23,7 @@ public class SightingAsyncTest extends TestUtilities {
     void givenSightingClaimed_whenGetSightingsWithRemovalEnabled_thenNoResults() {
         testFixture.givenCommandsByUser("viewer",
                         "../content/create-content.json", "create-sighting-removal.json")
-                .givenCommands("../content/publish-content.json")
+                .givenCommands("../content/publish-content.json", "../proposal/create-weighted-association.json")
                 .givenCommandsByUser("viewer", "claim-sighting-removal.json")
                 .whenQuery(new GetWeightedAssociationsByContentIdAndStatuses(new ContentId("1"), List.of(WeightedAssociationStatus.CREATED, WeightedAssociationStatus.REJECTED)))
                 .expectResult(List::isEmpty);

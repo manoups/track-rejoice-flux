@@ -262,7 +262,7 @@ public class ProposalTest extends TestUtilities {
 
         @Test
         void givenProposal_whenAcceptContent_thenLastSeenLocationIsUpdated() {
-            testFixture.givenCommands(createContent, publishContent, sightings, new ClaimSighting(createContent.contentId(), new WeightedAssociationId()))
+            testFixture.givenCommands(createContent, publishContent, sightings, createWeighedAssociations, new ClaimSighting(createContent.contentId(), createWeighedAssociations[0].weightedAssociationId()))
                     .whenQuery(new GetContent(createContent.contentId()))
                     .expectNoErrors()
                     .mapResult(Content::lastConfirmedSighting)
@@ -272,7 +272,7 @@ public class ProposalTest extends TestUtilities {
         @Test
         void givenProposal_whenAcceptContent_thenDistanceOfOtherProposedSightingsChange() {
             SightingId targetSightingId = sightings[1].sightingId();
-            testFixture.givenCommands(createContent, publishContent, sightings)
+            testFixture.givenCommands(createContent, publishContent, sightings, createWeighedAssociations)
                     .whenQuery(new GetWeightedAssociationsBySightingIdAndStatuses(targetSightingId, List.of(WeightedAssociationStatus.CREATED)))
                     .expectThat(fz -> {
                         WeightedAssociationState weightedAssociationState = fz.queryGateway().sendAndWait(new GetWeightedAssociationsBySightingIdAndStatuses(targetSightingId, List.of(WeightedAssociationStatus.CREATED))).getFirst();
@@ -415,7 +415,7 @@ public class ProposalTest extends TestUtilities {
         @Test
         void givenProposal_whenSameProposal_thenSilentlyAccept() {
             testFixture.whenCommandByUser("Alice", "create-proposal.json")
-                    .expectNoErrors()
+                    .expectError(WeightedAssociationErrors.incorrectState)
                     .expectNoCommands();
         }
 
@@ -431,7 +431,7 @@ public class ProposalTest extends TestUtilities {
         void givenAcceptedProposal_whenSameProposal_thenNoCommands() {
             testFixture.givenCommandsByUser("viewer", "accept-proposal.json")
                     .whenCommandByUser("Alice", "create-proposal.json")
-                    .expectNoErrors()
+                    .expectError(WeightedAssociationErrors.incorrectState)
                     .expectNoCommands();
         }
 

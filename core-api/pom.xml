@@ -40,4 +40,7 @@
       <version>0.22.1</version>
     </dependency>
   </dependencies>
+  <build>
+    <finalName>core-api</finalName>
+  </build>
 </project>
