@@ -18,7 +18,11 @@ public class SenderProvider extends AbstractUserProvider {
     @Override
     public User fromMessage(HasMessage message) {
         if (message instanceof DeserializingMessage dm && dm.getMessageType() == MessageType.WEBREQUEST) {
-            return AuthenticationUtils.getSender(dm);
+            try {
+                return AuthenticationUtils.getSender(dm);
+            } catch (Exception e) {
+                return null;
+            }
         }
         return super.fromMessage(message);
     }

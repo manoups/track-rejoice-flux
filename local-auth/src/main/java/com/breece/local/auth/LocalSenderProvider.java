@@ -10,8 +10,6 @@ import io.fluxzero.sdk.modeling.Entity;
 import io.fluxzero.sdk.tracking.handling.authentication.AbstractUserProvider;
 import io.fluxzero.sdk.tracking.handling.authentication.User;
 
-import static java.lang.System.getProperty;
-
 public class LocalSenderProvider extends AbstractUserProvider {
 
     public LocalSenderProvider() {
@@ -20,12 +18,9 @@ public class LocalSenderProvider extends AbstractUserProvider {
 
     @Override
     public User fromMessage(HasMessage message) {
-        if(getProperty("trackrejoice.auth") == null) {
-            return null;
+        if (message instanceof DeserializingMessage dm && dm.getMessageType() == MessageType.WEBREQUEST) {
+            return getSystemUser();
         }
-            if (message instanceof DeserializingMessage dm && dm.getMessageType() == MessageType.WEBREQUEST) {
-                return getSystemUser();
-            }
         return super.fromMessage(message);
     }
 
@@ -33,7 +28,7 @@ public class LocalSenderProvider extends AbstractUserProvider {
     public User getUserById(Object userId) {
         return Fluxzero.loadAggregate(userId, UserProfile.class)
                 .mapIfPresent(Entity::get)
-                .map( userProfile -> Sender.builder().userId(userProfile.userId()).userRole(userProfile.role()).build())
+                .map(userProfile -> Sender.builder().userId(userProfile.userId()).userRole(userProfile.role()).build())
                 .orElse(null);
     }
 
