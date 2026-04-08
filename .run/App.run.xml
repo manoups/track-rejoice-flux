@@ -1,0 +1,16 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="App" type="Application" factoryName="Application">
+    <option name="ALTERNATIVE_JRE_PATH" value="openjdk-25" />
+    <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
+    <envs>
+      <env name="ENVIRONMENT" value="local" />
+      <env name="FLUX_APPLICATION_NAME" value="Track-rejoice" />
+      <env name="FLUX_BASE_URL" value="ws://localhost:8888" />
+    </envs>
+    <option name="MAIN_CLASS_NAME" value="com.breece.app.App" />
+    <module name="app" />
+    <method v="2">
+      <option name="Make" enabled="true" />
+    </method>
+  </configuration>
+</component>

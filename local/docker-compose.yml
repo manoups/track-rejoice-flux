@@ -27,8 +27,9 @@ services:
       fluxzero-runtime-ready:
         condition: service_completed_successfully
     environment:
-      - FLUXZERO_BASE_URL=http://fluxzero-runtime:8888
-      - SEED_MODE=default
+      - ENVIRONMENT=local
+      - FLUX_APPLICATION_NAME=Seed-data
+      - FLUX_BASE_URL=ws://fluxzero-runtime:8888
 
   track-rejoice:
     image: ghcr.io/fluxzero-io/fluxzero-sdk-java/fluxzero-proxy:1.144.0
