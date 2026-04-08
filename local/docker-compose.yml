@@ -22,6 +22,7 @@ services:
     build:
       context: ..
       dockerfile: local-seed/Dockerfile
+    # Requires: mvn -pl local-seed -am clean package -DskipTests
     depends_on:
       fluxzero-runtime-ready:
         condition: service_completed_successfully
