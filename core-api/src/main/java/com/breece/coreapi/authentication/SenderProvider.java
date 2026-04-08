@@ -18,11 +18,7 @@ public class SenderProvider extends AbstractUserProvider {
     @Override
     public User fromMessage(HasMessage message) {
         if (message instanceof DeserializingMessage dm && dm.getMessageType() == MessageType.WEBREQUEST) {
-            try {
-                return AuthenticationUtils.getSender(dm);
-            } catch (Exception e) {
-                return null;
-            }
+            return AuthenticationUtils.getSender(dm);
         }
         return super.fromMessage(message);
     }
@@ -31,7 +27,7 @@ public class SenderProvider extends AbstractUserProvider {
     public User getUserById(Object userId) {
         return Fluxzero.loadAggregate(userId, UserProfile.class)
                 .mapIfPresent(Entity::get)
-                .map( userProfile -> Sender.builder().userId(userProfile.userId()).userRole(userProfile.role()).build())
+                .map(userProfile -> Sender.builder().userId(userProfile.userId()).userRole(userProfile.role()).build())
                 .orElse(null);
     }
 
