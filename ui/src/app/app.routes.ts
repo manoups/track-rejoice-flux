@@ -10,10 +10,30 @@ import {
 import {WelcomeComponent} from './welcome/welcome.component';
 import {authGuard} from '@edgeflare/ngx-oidc';
 import {PetContentDashboardComponent} from './private/pet-content-dashboard/pet-content-dashboard.component';
+import {
+  ContentCreationJourneyComponent
+} from './private/content-creation-journey/content-creation-journey.component';
 
 export const routes: Routes = [
   {path: '', pathMatch: 'full', redirectTo: 'welcome'},
   {path: 'welcome', component: WelcomeComponent, canActivate: [authGuard]},
+  {
+    path: 'content/new',
+    component: ContentCreationJourneyComponent,
+    canActivate: [authGuard],
+    children: [
+      {
+        path: '',
+        loadComponent: () => import('./private/content-creation-journey/pet-details-form/pet-details-form.component')
+          .then(m => m.PetDetailsFormComponent),
+      },
+      {
+        path: 'payment/:contentId',
+        loadComponent: () => import('./private/content-creation-journey/payment-screen/payment-screen.component')
+          .then(m => m.PaymentScreenComponent),
+      },
+    ],
+  },
   {
     path: 'sightings',
     component: SightingBoilerplateComponent,

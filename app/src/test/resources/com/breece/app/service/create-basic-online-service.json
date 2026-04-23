@@ -1,9 +1,0 @@
-{
-  "@class": "com.breece.service.api.CreateService",
-  "serviceId": "1",
-  "name": "Basic Service",
-  "description": "Basic online service",
-  "price": 100,
-  "basic": true,
-  "online": true
-}

@@ -1,0 +1,21 @@
+@if (!mapFailed()) {
+  <div #mapContainer class="map-container"></div>
+} @else {
+  <div class="fallback-container">
+    <p class="fallback-message">Map could not be loaded. Please enter coordinates manually.</p>
+    <div class="fallback-inputs">
+      <mat-form-field>
+        <mat-label>Longitude</mat-label>
+        <input type="number" matInput [(ngModel)]="fallbackLng" placeholder="e.g. 4.9876"/>
+      </mat-form-field>
+      <mat-form-field>
+        <mat-label>Latitude</mat-label>
+        <input type="number" matInput [(ngModel)]="fallbackLat" placeholder="e.g. 52.1234"/>
+      </mat-form-field>
+      <button matButton="elevated" type="button" (click)="onFallbackSubmit()"
+              [disabled]="fallbackLng == null || fallbackLat == null">
+        Set Location
+      </button>
+    </div>
+  </div>
+}

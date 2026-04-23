@@ -6,52 +6,52 @@ Build a two-step Angular wizard for creating lost/found pet content with PayPal 
 
 ## Tasks
 
-- [ ] 1. Add backend endpoint for basic service lookup
+- [x] 1. Add backend endpoint for basic service lookup
   - [x] 1.1 Implement `GET /api/services/basic` endpoint
     - Add a `@HandleGet` method in `app/src/main/java/com/breece/app/web/` (new `ServiceEndpoint` class or extend existing) that queries for the basic online service
     - Create a `GetBasicService` query record in `service/src/main/java/com/breece/service/api/` that implements `Request<Service>` and returns the `Service` where `basic == true` and `online == true`
     - Register the query handler in `ServiceHandler` using `@HandleQuery`
     - _Requirements: 6.1, 6.2_
 
-  - [ ] 1.2 Write unit test for basic service endpoint
+  - [x] 1.2 Write unit test for basic service endpoint
     - Test that `GET /api/services/basic` returns the correct service when a basic online service exists
     - Test that it returns an appropriate error when no basic online service exists
     - Add test in `app/src/test/java/com/breece/app/` following existing test patterns (e.g., `ContentEndpointTests.java`)
     - _Requirements: 6.1_
 
-- [ ] 2. Rebuild TypeScript models
+- [x] 2. Rebuild TypeScript models
   - Run `./mvnw package -pl app` to regenerate TypeScript models from the new/updated Java records so the frontend has access to the `Service` type via `@trackrejoice/typescriptmodels`
   - _Requirements: 6.1, 6.2_
 
-- [ ] 3. Checkpoint — Verify backend
+- [x] 3. Checkpoint — Verify backend
   - Ensure all tests pass, ask the user if questions arise.
 
-- [ ] 4. Create journey shell and routing
-  - [ ] 4.1 Create `ContentCreationJourneyComponent` with child router outlet
+- [x] 4. Create journey shell and routing
+  - [x] 4.1 Create `ContentCreationJourneyComponent` with child router outlet
     - Create `ui/src/app/private/content-creation-journey/` directory
     - Implement `ContentCreationJourneyComponent` (selector: `track-rejoice-content-creation-journey`) as a standalone component with a `<router-outlet>` for child steps
     - Track `currentStep` (1 or 2) based on active child route
     - _Requirements: 9.1_
 
-  - [ ] 4.2 Create `StepIndicatorComponent`
+  - [x] 4.2 Create `StepIndicatorComponent`
     - Create `ui/src/app/private/content-creation-journey/step-indicator/` directory
     - Implement `StepIndicatorComponent` (selector: `track-rejoice-step-indicator`) with `@Input() currentStep: number`
     - Display two steps: "Pet Details" and "Payment" with active highlighting based on `currentStep`
     - Use Angular Material stepper styling or Bootstrap progress indicator
     - _Requirements: 9.1, 9.2, 9.3_
 
-  - [ ] 4.3 Register routes with auth guard
+  - [x] 4.3 Register routes with auth guard
     - In `ui/src/app/app.routes.ts`, add route `/content/new` pointing to `ContentCreationJourneyComponent` with `canActivate: [authGuard]`
     - Add child routes: default child for `PetDetailsFormComponent`, and `payment/:contentId` for `PaymentScreenComponent`
     - _Requirements: 8.1, 8.2, 8.3_
 
-  - [ ] 4.4 Write unit tests for routing and step indicator
+  - [x] 4.4 Write unit tests for routing and step indicator
     - Test that `StepIndicatorComponent` highlights step 1 when `currentStep` is 1 and step 2 when `currentStep` is 2
     - Test that `authGuard` is configured on the `/content/new` route
     - _Requirements: 8.1, 8.2, 9.2, 9.3_
 
 - [ ] 5. Implement pet details form (Step 1)
-  - [ ] 5.1 Create `PetDetailsFormComponent` with reactive form
+  - [x] 5.1 Create `PetDetailsFormComponent` with reactive form
     - Create `ui/src/app/private/content-creation-journey/pet-details-form/` directory
     - Implement `PetDetailsFormComponent` (selector: `track-rejoice-pet-details-form`) extending `View`
     - Build reactive form with `FormGroup` matching the design: `sightingDetails` group (`lng`, `lat` — both required) and `details` group (`@class: 'Pet'`, `subtype`, `name`, `breed`, `gender` — all required; `age`, `size`, `color`, `condition`, `description`, `location`, `image` — optional)
@@ -59,7 +59,7 @@ Build a two-step Angular wizard for creating lost/found pet content with PayPal 
     - Disable submit button when form is invalid; show validation messages for missing required fields
     - _Requirements: 1.1, 1.2, 1.3, 1.4, 3.1, 3.2, 3.3_
 
-  - [ ] 5.2 Create `MapboxLocationPickerComponent`
+  - [x] 5.2 Create `MapboxLocationPickerComponent`
     - Create `ui/src/app/private/content-creation-journey/mapbox-location-picker/` directory
     - Implement `MapboxLocationPickerComponent` (selector: `track-rejoice-mapbox-location-picker`) as a standalone component
     - Accept `@Input() initialCenter?: [number, number]` for default map center
@@ -67,7 +67,7 @@ Build a two-step Angular wizard for creating lost/found pet content with PayPal 
     - Include fallback message with manual lng/lat inputs if Mapbox fails to load
     - _Requirements: 2.1, 2.2, 2.3_
 
-  - [ ] 5.3 Wire map picker into pet details form
+  - [x] 5.3 Wire map picker into pet details form
     - Embed `MapboxLocationPickerComponent` in `PetDetailsFormComponent` template
     - On `locationSelected` event, patch `sightingDetails.lng` and `sightingDetails.lat` form controls with emitted coordinates
     - Show validation message when location is not selected on submit attempt

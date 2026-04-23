@@ -1,0 +1,59 @@
+:host {
+  display: block;
+}
+
+.form-container {
+  max-width: 700px;
+  margin: 0 auto;
+}
+
+h1 {
+  margin-bottom: 1.5rem;
+}
+
+h2 {
+  font-size: 1.25rem;
+  margin-bottom: 1rem;
+  margin-top: 0.5rem;
+}
+
+section {
+  margin-bottom: 1.5rem;
+}
+
+.form-row {
+  display: flex;
+  gap: 1rem;
+  align-items: flex-start;
+}
+
+.form-row mat-form-field {
+  flex: 1;
+}
+
+.form-row.full-width {
+  display: block;
+}
+
+.full-width-field {
+  width: 100%;
+}
+
+track-rejoice-mapbox-location-picker {
+  display: block;
+  margin-bottom: 1rem;
+}
+
+.control-error {
+  color: #f44336;
+  font-size: 0.875rem;
+  margin-top: 0.5rem;
+}
+
+.button-row {
+  margin-top: 1rem;
+}
+
+.button-row button {
+  padding: 0.6rem 1.75rem;
+}

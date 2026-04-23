@@ -1,0 +1,141 @@
+<header>
+  <h1>Pet Details</h1>
+</header>
+
+<div class="form-container">
+  <form [formGroup]="form" (ngSubmit)="onSubmit()">
+
+    <!-- Pet Details Section -->
+    <section formGroupName="details">
+      <h2>Pet Information</h2>
+
+      <div class="form-row">
+        <mat-form-field>
+          <mat-label>Name</mat-label>
+          <input matInput formControlName="name" placeholder="e.g. Buddy"/>
+          @if (form.controls.details.controls.name.errors) {
+            <mat-error>{{ form.controls.details.controls.name | printerror }}</mat-error>
+          }
+        </mat-form-field>
+
+        <mat-form-field>
+          <mat-label>Subtype</mat-label>
+          <mat-select formControlName="subtype">
+            <mat-option value="DOG">Dog</mat-option>
+            <mat-option value="CAT">Cat</mat-option>
+          </mat-select>
+          @if (form.controls.details.controls.subtype.errors) {
+            <mat-error>{{ form.controls.details.controls.subtype | printerror }}</mat-error>
+          }
+        </mat-form-field>
+      </div>
+
+      <div class="form-row">
+        <mat-form-field>
+          <mat-label>Breed</mat-label>
+          <input matInput formControlName="breed" placeholder="e.g. Golden Retriever"/>
+          @if (form.controls.details.controls.breed.errors) {
+            <mat-error>{{ form.controls.details.controls.breed | printerror }}</mat-error>
+          }
+        </mat-form-field>
+
+        <mat-form-field>
+          <mat-label>Gender</mat-label>
+          <mat-select formControlName="gender">
+            <mat-option value="MALE">Male</mat-option>
+            <mat-option value="FEMALE">Female</mat-option>
+          </mat-select>
+          @if (form.controls.details.controls.gender.errors) {
+            <mat-error>{{ form.controls.details.controls.gender | printerror }}</mat-error>
+          }
+        </mat-form-field>
+      </div>
+
+      <div class="form-row">
+        <mat-form-field>
+          <mat-label>Age</mat-label>
+          <input matInput formControlName="age" placeholder="e.g. 3 years"/>
+        </mat-form-field>
+
+        <mat-form-field>
+          <mat-label>Size</mat-label>
+          <input matInput formControlName="size" placeholder="e.g. Medium"/>
+        </mat-form-field>
+      </div>
+
+      <div class="form-row">
+        <mat-form-field>
+          <mat-label>Color</mat-label>
+          <input matInput formControlName="color" placeholder="e.g. Golden"/>
+        </mat-form-field>
+
+        <mat-form-field>
+          <mat-label>Condition</mat-label>
+          <input matInput formControlName="condition" placeholder="e.g. Healthy"/>
+        </mat-form-field>
+      </div>
+
+      <div class="form-row full-width">
+        <mat-form-field class="full-width-field">
+          <mat-label>Description</mat-label>
+          <textarea matInput formControlName="description" rows="3"
+                    placeholder="Describe your pet..."></textarea>
+        </mat-form-field>
+      </div>
+
+      <div class="form-row">
+        <mat-form-field>
+          <mat-label>Location description</mat-label>
+          <input matInput formControlName="location" placeholder="e.g. Near Central Park"/>
+        </mat-form-field>
+
+        <mat-form-field>
+          <mat-label>Image URL</mat-label>
+          <input matInput formControlName="image" placeholder="https://..."/>
+        </mat-form-field>
+      </div>
+    </section>
+
+    <!-- Location Section -->
+    <section formGroupName="sightingDetails">
+      <h2>Last Known Location</h2>
+
+      <track-rejoice-mapbox-location-picker
+        (locationSelected)="onLocationSelected($event)">
+      </track-rejoice-mapbox-location-picker>
+
+      @if (form.controls.sightingDetails.touched
+        && (form.controls.sightingDetails.controls.lng.errors || form.controls.sightingDetails.controls.lat.errors)) {
+        <p class="control-error">Please select a location on the map.</p>
+      }
+
+      <div class="form-row">
+        <mat-form-field>
+          <mat-label>Longitude</mat-label>
+          <input type="number" matInput formControlName="lng" placeholder="e.g. 4.9876"/>
+          @if (form.controls.sightingDetails.controls.lng.errors) {
+            <mat-error>{{ form.controls.sightingDetails.controls.lng | printerror }}</mat-error>
+          }
+        </mat-form-field>
+
+        <mat-form-field>
+          <mat-label>Latitude</mat-label>
+          <input type="number" matInput formControlName="lat" placeholder="e.g. 52.1234"/>
+          @if (form.controls.sightingDetails.controls.lat.errors) {
+            <mat-error>{{ form.controls.sightingDetails.controls.lat | printerror }}</mat-error>
+          }
+        </mat-form-field>
+      </div>
+    </section>
+
+    @if (form.touched && form.invalid) {
+      <p class="control-error">Please fill in all required fields before submitting.</p>
+    }
+
+    <div class="button-row">
+      <button matButton="elevated" type="submit" [disabled]="form.invalid || submitting()">
+        Continue to Payment
+      </button>
+    </div>
+  </form>
+</div>

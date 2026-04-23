@@ -1,0 +1,31 @@
+<nav aria-label="Progress" class="step-indicator">
+  <ol class="list-unstyled d-flex align-items-center justify-content-center mb-0 gap-3">
+    @for (step of steps; track step.number) {
+      <li class="d-flex align-items-center gap-2">
+        <span
+          class="badge rounded-circle d-inline-flex align-items-center justify-content-center"
+          [class.bg-primary]="step.number <= currentStep"
+          [class.text-white]="step.number <= currentStep"
+          [class.bg-light]="step.number > currentStep"
+          [class.text-muted]="step.number > currentStep"
+          [class.border]="step.number > currentStep"
+          [attr.aria-current]="step.number === currentStep ? 'step' : null"
+          style="width: 2rem; height: 2rem; font-size: 0.875rem;">
+          {{ step.number }}
+        </span>
+        <span
+          [class.fw-semibold]="step.number === currentStep"
+          [class.text-muted]="step.number > currentStep">
+          {{ step.label }}
+        </span>
+      </li>
+      @if (!$last) {
+        <li class="flex-grow-1" style="max-width: 4rem;">
+          <hr class="m-0"
+              [class.border-primary]="currentStep > 1"
+              [class.opacity-100]="currentStep > 1">
+        </li>
+      }
+    }
+  </ol>
+</nav>
