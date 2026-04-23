@@ -8,10 +8,13 @@ import com.breece.content.command.api.DeleteContent;
 import com.breece.content.query.api.ContentDocument;
 import com.breece.content.query.api.GetContent;
 import com.breece.content.query.api.GetContents;
+import com.breece.content.query.api.GetSightingHistoryForContent;
+import com.breece.content.query.api.KeyValuePair;
 import com.breece.coreapi.facets.FacetPaginationRequestBody;
 import com.breece.coreapi.facets.GetFacetStatsResult;
 import com.breece.coreapi.facets.GetFacets;
 import io.fluxzero.sdk.Fluxzero;
+import io.fluxzero.sdk.tracking.handling.IllegalCommandException;
 import io.fluxzero.sdk.web.*;
 import org.springframework.stereotype.Component;
 
@@ -46,5 +49,13 @@ public class ContentEndpoint {
     ContentId deleteContent(@PathParam ContentId id) {
         Fluxzero.sendCommandAndWait(new DeleteContent(id));
         return id;
+    }
+
+    @HandleGet(value = {"{contentId}/sighting-history", "{contentId}/sighting-history/"})
+    List<KeyValuePair> getSightingHistory(@PathParam ContentId contentId) {
+        if (!Fluxzero.loadAggregate(contentId).isPresent()) {
+            throw new IllegalCommandException("Content not found");
+        }
+        return Fluxzero.queryAndWait(new GetSightingHistoryForContent(contentId));
     }
 }

@@ -1,0 +1,10 @@
+@if (loading()) {
+  <div class="placeholder-container">
+    <p>Loading map...</p>
+  </div>
+} @else if (noLocationData()) {
+  <div class="placeholder-container">
+    <p>No location data available</p>
+  </div>
+}
+<div #mapContainer class="map-container" [class.hidden]="noLocationData() || loading()"></div>

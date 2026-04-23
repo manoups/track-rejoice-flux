@@ -91,6 +91,12 @@
       <artifactId>spring-modulith-starter-test</artifactId>
       <scope>test</scope>
     </dependency>
+    <dependency>
+      <groupId>net.jqwik</groupId>
+      <artifactId>jqwik</artifactId>
+      <version>1.9.3</version>
+      <scope>test</scope>
+    </dependency>
   </dependencies>
 
   <build>
@@ -222,6 +228,7 @@
             <excludeClassPattern>java.lang.Class</excludeClassPattern>
             <excludeClassPattern>com.fasterxml.**</excludeClassPattern>
             <excludeClassPattern>io.fluxzero.**</excludeClassPattern>
+            <excludeClassPattern>com.breece.service.ServiceEndpoint</excludeClassPattern>
           </excludeClassPatterns>
           <outputKind>module</outputKind>
           <!-- See: src/main/typescript-generator/package.json -->

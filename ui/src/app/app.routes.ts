@@ -9,6 +9,7 @@ import {
 } from './private/sighting-boilerplate/sighting-boilerplate.component';
 import {WelcomeComponent} from './welcome/welcome.component';
 import {authGuard} from '@edgeflare/ngx-oidc';
+import {PetContentDashboardComponent} from './private/pet-content-dashboard/pet-content-dashboard.component';
 
 export const routes: Routes = [
   {path: '', pathMatch: 'full', redirectTo: 'welcome'},
@@ -30,6 +31,7 @@ export const routes: Routes = [
     title: 'Sighting Matches'
   },
 
+  {path: 'contents/:id', component: PetContentDashboardComponent, canActivate: [authGuard]},
   {path: 'contents', component: ContentsComponent},
   {path: 'contents/new', component: ContentCreateComponent},
   {

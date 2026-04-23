@@ -1,0 +1,23 @@
+@if (isPet()) {
+  <div class="pet-details">
+    @if (pet.image) {
+      <img [src]="pet.image" [alt]="pet.name + ' - ' + pet.breed" class="pet-image"/>
+    }
+    <div class="fields">
+      <div class="field"><span class="label">Name</span><span class="value">{{ pet.name }}</span></div>
+      <div class="field"><span class="label">Breed</span><span class="value">{{ pet.breed }}</span></div>
+      <div class="field"><span class="label">Gender</span><span class="value">{{ pet.gender }}</span></div>
+      <div class="field"><span class="label">Age</span><span class="value">{{ pet.age }}</span></div>
+      <div class="field"><span class="label">Size</span><span class="value">{{ pet.size }}</span></div>
+      <div class="field"><span class="label">Color</span><span class="value">{{ pet.color }}</span></div>
+      <div class="field"><span class="label">Condition</span><span class="value">{{ pet.condition }}</span></div>
+      <div class="field"><span class="label">Description</span><span class="value">{{ pet.description }}</span></div>
+      <div class="field"><span class="label">Online</span><span class="value">{{ content().online }}</span></div>
+      <div class="field"><span class="label">Duration</span><span class="value">{{ content().duration }}</span></div>
+    </div>
+  </div>
+} @else {
+  <div class="fallback">
+    <p>Detailed view is only available for pet content</p>
+  </div>
+}

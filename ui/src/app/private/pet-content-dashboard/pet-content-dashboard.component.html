@@ -1,0 +1,21 @@
+@if (notFound()) {
+  <div class="error-container">
+    <p>Content not found</p>
+  </div>
+} @else if (loading()) {
+  <div class="loading-container">
+    <p>Loading...</p>
+  </div>
+} @else if (content(); as c) {
+  <div class="dashboard-grid">
+    <div class="panel panel-details">
+      <track-rejoice-content-details-panel [content]="c"/>
+    </div>
+    <div class="panel panel-map">
+      <track-rejoice-sighting-history-map [contentId]="id()" [lastConfirmedSighting]="c.lastConfirmedSighting ?? null"/>
+    </div>
+    <div class="panel panel-proposals">
+      <track-rejoice-proposals-table [contentId]="id()"/>
+    </div>
+  </div>
+}

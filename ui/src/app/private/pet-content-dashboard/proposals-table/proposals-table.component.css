@@ -1,0 +1,46 @@
+:host {
+  display: block;
+  height: 100%;
+  overflow: auto;
+}
+
+table {
+  width: 100%;
+}
+
+.mat-mdc-row,
+.mat-mdc-header-row {
+  height: 48px;
+}
+
+.mat-mdc-row .mat-mdc-cell {
+  border-bottom: 1px solid transparent;
+  border-top: 1px solid transparent;
+}
+
+.mat-mdc-row:hover .mat-mdc-cell {
+  border-color: currentColor;
+}
+
+.row-highlight {
+  animation: highlight-fade 2s ease-out;
+}
+
+@keyframes highlight-fade {
+  from {
+    background-color: rgba(255, 235, 59, 0.4);
+  }
+  to {
+    background-color: transparent;
+  }
+}
+
+.disconnected-indicator {
+  padding: 8px 16px;
+  background-color: #fff3cd;
+  color: #856404;
+  border: 1px solid #ffc107;
+  border-radius: 4px;
+  margin-bottom: 8px;
+  font-size: 0.875rem;
+}

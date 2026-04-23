@@ -1,0 +1,42 @@
+:host {
+  display: block;
+  height: 100vh;
+}
+
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr 1fr;
+  gap: 16px;
+  padding: 16px;
+  height: 100%;
+  box-sizing: border-box;
+}
+
+.panel-details {
+  grid-column: 1;
+  grid-row: 1;
+  overflow: auto;
+}
+
+.panel-map {
+  grid-column: 2;
+  grid-row: 1;
+  overflow: hidden;
+}
+
+.panel-proposals {
+  grid-column: 1 / -1;
+  grid-row: 2;
+  overflow: auto;
+}
+
+.error-container,
+.loading-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  font-size: 1.2rem;
+  color: #666;
+}
