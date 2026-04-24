@@ -74,7 +74,7 @@ export class SightingHistoryMapComponent implements OnInit {
   }
 
   private createMap(lng: number, lat: number, zoom: number): void {
-    (mapboxgl as any).accessToken = '<acces_token>';
+    (mapboxgl as any).accessToken = 'pk.eyJ1IjoiYnJlZWNlIiwiYSI6ImNtYnRhcjRhNjBhNjcya3B3ZGRtMGRqNjkifQ.GJfMBpHxSMHOPGG-GcGMjQ';
 
     this.map = new mapboxgl.Map({
       container: this.mapContainer.nativeElement,
