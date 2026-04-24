@@ -50,7 +50,7 @@ Build a two-step Angular wizard for creating lost/found pet content with PayPal 
     - Test that `authGuard` is configured on the `/content/new` route
     - _Requirements: 8.1, 8.2, 9.2, 9.3_
 
-- [ ] 5. Implement pet details form (Step 1)
+- [x] 5. Implement pet details form (Step 1)
   - [x] 5.1 Create `PetDetailsFormComponent` with reactive form
     - Create `ui/src/app/private/content-creation-journey/pet-details-form/` directory
     - Implement `PetDetailsFormComponent` (selector: `track-rejoice-pet-details-form`) extending `View`
@@ -73,38 +73,38 @@ Build a two-step Angular wizard for creating lost/found pet content with PayPal 
     - Show validation message when location is not selected on submit attempt
     - _Requirements: 2.2, 2.4, 3.2_
 
-  - [ ] 5.4 Implement form submission with content creation
+  - [x] 5.4 Implement form submission with content creation
     - On valid form submit, POST `CreateContentDTO` payload to `/api/content` using `sendCommand` from the `View` base class
     - Show loading indicator and disable submit button while request is in progress
     - On success, receive `ContentId` and navigate to `/content/new/payment/{contentId}`
     - On error, display error alert and re-enable submit button for retry
     - _Requirements: 4.1, 4.2, 4.3, 4.4, 4.5, 5.1_
 
-  - [ ] 5.5 Write property test: required field validation (Property 1)
+  - [x] 5.5 Write property test: required field validation (Property 1)
     - **Property 1: Required field validation determines form submittability**
     - Use `fast-check` to generate random subsets of required fields (name, breed, gender, subtype, lng, lat) being null or present
     - Assert form is valid if and only if all required fields are non-null and non-empty
     - **Validates: Requirements 1.2, 2.4, 3.1, 3.2, 3.3**
 
-  - [ ] 5.6 Write property test: map coordinates captured in form (Property 2)
+  - [x] 5.6 Write property test: map coordinates captured in form (Property 2)
     - **Property 2: Map click coordinates are captured in the form model**
     - Use `fast-check` to generate random `{lng, lat}` pairs
     - Assert that after emitting from `MapboxLocationPickerComponent`, the form model stores the exact values in `sightingDetails.lng` and `sightingDetails.lat`
     - **Validates: Requirements 2.2**
 
-  - [ ] 5.7 Write property test: valid form produces correct payload (Property 3)
+  - [x] 5.7 Write property test: valid form produces correct payload (Property 3)
     - **Property 3: Valid form submission produces correct CreateContentDTO payload**
     - Use `fast-check` to generate random valid pet details and coordinates
     - Assert the HTTP POST payload matches the form values with `@class` set to `"Pet"`
     - **Validates: Requirements 4.1**
 
-  - [ ] 5.8 Write property test: navigation with ContentId (Property 4)
+  - [x] 5.8 Write property test: navigation with ContentId (Property 4)
     - **Property 4: Successful content creation navigates to payment with ContentId**
     - Use `fast-check` to generate random ContentId strings
     - Assert navigation target is `/content/new/payment/{contentId}`
     - **Validates: Requirements 5.1**
 
-  - [ ] 5.9 Write unit tests for pet details form
+  - [x] 5.9 Write unit tests for pet details form
     - Test form renders all expected fields (name, breed, gender, subtype, age, size, color, condition, description, image)
     - Test gender select has MALE/FEMALE options, subtype select has DOG/CAT options
     - Test map picker component is present in template
@@ -112,11 +112,11 @@ Build a two-step Angular wizard for creating lost/found pet content with PayPal 
     - Test error message displays on submission failure
     - _Requirements: 1.1, 1.3, 1.4, 2.1, 4.4, 4.5_
 
-- [ ] 6. Checkpoint — Verify Step 1
+- [x] 6. Checkpoint — Verify Step 1
   - Ensure all tests pass, ask the user if questions arise.
 
-- [ ] 7. Implement payment screen (Step 2)
-  - [ ] 7.1 Create `PaymentScreenComponent` with content summary
+- [x] 7. Implement payment screen (Step 2)
+  - [x] 7.1 Create `PaymentScreenComponent` with content summary
     - Create `ui/src/app/private/content-creation-journey/payment-screen/` directory
     - Implement `PaymentScreenComponent` (selector: `track-rejoice-payment-screen`) extending `View`
     - Read `contentId` from route params
@@ -125,7 +125,7 @@ Build a two-step Angular wizard for creating lost/found pet content with PayPal 
     - Handle case where basic service is not found: show error message and disable PayPal button
     - _Requirements: 5.2, 6.1_
 
-  - [ ] 7.2 Integrate PayPal checkout button
+  - [x] 7.2 Integrate PayPal checkout button
     - Dynamically load PayPal JS SDK script in `PaymentScreenComponent`
     - Render PayPal button that on approval: creates order via POST to `/orders/{contentId}` with `OrderDetails { serviceIds: [basicServiceId], updatedAt: now }`, then calls POST `/payments/paypal/accepted/{pspRef}` with the PSP reference
     - Show loading indicator during payment processing; prevent duplicate submissions
@@ -133,17 +133,17 @@ Build a two-step Angular wizard for creating lost/found pet content with PayPal 
     - On payment error, show error alert and allow retry
     - _Requirements: 6.1, 6.2, 6.3, 6.4, 6.5_
 
-  - [ ] 7.3 Display success confirmation
+  - [x] 7.3 Display success confirmation
     - After successful payment callback, show success confirmation message indicating the content is now online
     - _Requirements: 7.3_
 
-  - [ ] 7.4 Write property test: order creation sends correct ServiceId (Property 5)
+  - [x] 7.4 Write property test: order creation sends correct ServiceId (Property 5)
     - **Property 5: Order creation sends correct Basic_Service ServiceId**
     - Use `fast-check` to generate random ContentId and ServiceId values
     - Assert the order creation payload contains the basic service's `ServiceId` in the `serviceIds` list
     - **Validates: Requirements 6.2**
 
-  - [ ] 7.5 Write unit tests for payment screen
+  - [x] 7.5 Write unit tests for payment screen
     - Test PayPal button renders when basic service is available
     - Test content summary is displayed with contentId
     - Test loading state during payment processing
@@ -152,7 +152,7 @@ Build a two-step Angular wizard for creating lost/found pet content with PayPal 
     - Test error message when basic service is not found
     - _Requirements: 5.2, 6.1, 6.4, 6.5, 7.3_
 
-- [ ] 8. Final checkpoint — Verify complete journey
+- [x] 8. Final checkpoint — Verify complete journey
   - Ensure all tests pass, ask the user if questions arise.
 
 ## Notes

@@ -1,5 +1,6 @@
-import {Component, signal} from '@angular/core';
+import {Component, inject, signal} from '@angular/core';
 import {FormControl, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
+import {Router} from '@angular/router';
 import {View} from '../../../common/view';
 import {MatButton} from '@angular/material/button';
 import {MatError, MatFormField, MatLabel} from '@angular/material/form-field';
@@ -27,7 +28,9 @@ import {MapboxLocationPickerComponent} from '../mapbox-location-picker/mapbox-lo
   styleUrl: './pet-details-form.component.css',
 })
 export class PetDetailsFormComponent extends View {
+  private router = inject(Router);
   submitting = signal(false);
+  errorMessage = signal<string | null>(null);
 
   form = new FormGroup({
     sightingDetails: new FormGroup({
@@ -62,6 +65,22 @@ export class PetDetailsFormComponent extends View {
       this.form.markAllAsTouched();
       return;
     }
-    // Submission logic will be implemented in task 5.4
+
+    this.submitting.set(true);
+    this.errorMessage.set(null);
+
+    this.sendCommand(
+      '/api/content',
+      this.form.value,
+      (contentId) => {
+        const id = typeof contentId === 'string' ? contentId : (contentId?.id ?? contentId?.value ?? contentId);
+        this.router.navigate(['/content/new/payment', id], {replaceUrl: true});
+      },
+      () => {
+        this.submitting.set(false);
+        this.errorMessage.set('Failed to create content. Please try again.');
+      },
+      {eventOnSuccess: true}
+    );
   }
 }

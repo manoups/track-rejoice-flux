@@ -1,0 +1,71 @@
+:host {
+  display: block;
+}
+
+.payment-container {
+  max-width: 700px;
+  margin: 0 auto;
+}
+
+h1 {
+  margin-bottom: 1.5rem;
+}
+
+h2 {
+  font-size: 1.25rem;
+  margin-bottom: 1rem;
+  margin-top: 0.5rem;
+}
+
+.content-summary {
+  margin-bottom: 1.5rem;
+}
+
+.content-summary p {
+  margin: 0.25rem 0;
+}
+
+.loading-indicator {
+  font-size: 0.875rem;
+  color: #666;
+  margin: 1rem 0;
+}
+
+.control-error {
+  color: #f44336;
+  font-size: 0.875rem;
+  margin-top: 0.5rem;
+}
+
+.paypal-section {
+  margin-top: 1.5rem;
+}
+
+.service-info {
+  margin-bottom: 1rem;
+  color: #555;
+}
+
+.paypal-button-container {
+  min-height: 50px;
+  margin-top: 1rem;
+}
+
+.paypal-button-container.hidden {
+  display: none;
+}
+
+.payment-cancelled {
+  color: #ff9800;
+  font-size: 0.875rem;
+  margin: 0.5rem 0;
+}
+
+.success-section {
+  margin-top: 1.5rem;
+}
+
+.success-message {
+  color: #4caf50;
+  font-size: 1rem;
+}

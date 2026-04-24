@@ -5,6 +5,7 @@ export const environment = {
   apiDomain: "",
   apiPath: "/api",
   mapboxToken: "",
+  paypalClientId: "",
   auth: {
     domain: "https://track-rejoice-dev-7kxie6.us1.zitadel.cloud",
     clientId: "365704552508327461",

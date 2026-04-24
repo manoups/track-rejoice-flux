@@ -20,10 +20,10 @@ describe('AppComponent', () => {
     expect(app.title).toEqual('track-rejoice-ui');
   });
 
-  it('should render title', () => {
+  it('should render toolbar', () => {
     const fixture = TestBed.createComponent(AppComponent);
     fixture.detectChanges();
     const compiled = fixture.nativeElement as HTMLElement;
-    expect(compiled.querySelector('h1')?.textContent).toContain('Hello, track-rejoice-ui');
+    expect(compiled.querySelector('mat-toolbar')).toBeTruthy();
   });
 });

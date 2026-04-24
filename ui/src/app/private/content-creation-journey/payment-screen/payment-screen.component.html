@@ -1,0 +1,65 @@
+<header>
+  <h1>Payment</h1>
+</header>
+
+<div class="payment-container">
+  <!-- Content Summary -->
+  <section class="content-summary">
+    <h2>Content Summary</h2>
+    <p>Content ID: <strong>{{ contentId() }}</strong></p>
+    <p>Your pet listing has been created and is currently offline. Complete payment below to publish it.</p>
+  </section>
+
+  @if (loading()) {
+    <div class="loading-indicator">
+      <span>Loading payment options…</span>
+    </div>
+  }
+
+  @if (errorMessage()) {
+    <p class="control-error">{{ errorMessage() }}</p>
+  }
+
+  @if (!loading() && !paymentSuccess()) {
+    <section class="paypal-section">
+      <h2>Complete Payment</h2>
+      @if (basicService()) {
+        <p class="service-info">
+          Service: {{ basicService()!.serviceDetails?.name ?? 'Basic Service' }}
+          @if (basicService()!.serviceDetails?.price != null) {
+            — {{ basicService()!.serviceDetails!.price | number:'1.2-2' }} EUR
+          }
+        </p>
+
+        @if (paymentCancelled()) {
+          <p class="payment-cancelled">{{ paymentCancelled() }}</p>
+        }
+
+        @if (paymentError()) {
+          <p class="control-error">{{ paymentError() }}</p>
+        }
+
+        @if (processing()) {
+          <div class="loading-indicator">
+            <span>Processing payment…</span>
+          </div>
+        }
+
+        <div #paypalButtonContainer
+             id="paypal-button-container"
+             class="paypal-button-container"
+             [class.hidden]="processing()">
+        </div>
+      } @else {
+        <button matButton="elevated" disabled>Pay with PayPal</button>
+      }
+    </section>
+  }
+
+  @if (paymentSuccess()) {
+    <section class="success-section">
+      <h2>Payment Successful</h2>
+      <p class="success-message">Your pet listing is now online. Thank you for your payment!</p>
+    </section>
+  }
+</div>

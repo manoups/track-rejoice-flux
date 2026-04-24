@@ -132,7 +132,14 @@
       <p class="control-error">Please fill in all required fields before submitting.</p>
     }
 
+    @if (errorMessage()) {
+      <p class="control-error">{{ errorMessage() }}</p>
+    }
+
     <div class="button-row">
+      @if (submitting()) {
+        <span class="loading-indicator">Creating content…</span>
+      }
       <button matButton="elevated" type="submit" [disabled]="form.invalid || submitting()">
         Continue to Payment
       </button>
